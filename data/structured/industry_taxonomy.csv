@@ -1,0 +1,158 @@
+Sector_ID,Sector_Name,Category_ID,Category_Name,SubCategory_ID,SubCategory_Name,Description,Risk_Profile,Strategic_Importance
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB001,Rice Bran Oil,Heart-healthy cooking oil extracted from rice bran,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB002,Sunflower Oil,Light neutral cooking oil from sunflower seeds,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB003,Palm Oil,Versatile oil for food processing and cosmetics,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB004,Olive Oil,Premium Mediterranean cooking and finishing oil,LOW,MEDIUM
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB005,Soybean Oil,Cost-effective oil for large-scale food production,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB006,Canola Oil,Low saturated fat cooking oil,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB007,Coconut Oil,Tropical oil for cooking and personal care,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT001,Edible Oils,SUB008,Peanut Oil,High smoke point oil for frying,LOW,LOW
+SEC001,Food & Beverages,CAT002,Grains & Cereals,SUB009,Wheat,Primary grain for flour and bread production,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT002,Grains & Cereals,SUB010,Rice,Staple grain for global consumption,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT002,Grains & Cereals,SUB011,Corn/Maize,Versatile grain for food and industrial use,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT002,Grains & Cereals,SUB012,Barley,Grain for beverages and animal feed,LOW,MEDIUM
+SEC001,Food & Beverages,CAT002,Grains & Cereals,SUB013,Oats,Health-focused grain for breakfast products,LOW,MEDIUM
+SEC001,Food & Beverages,CAT003,Proteins,SUB014,Poultry,Chicken and turkey meat products,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT003,Proteins,SUB015,Beef,Cattle meat products,HIGH,HIGH
+SEC001,Food & Beverages,CAT003,Proteins,SUB016,Pork,Swine meat products,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT003,Proteins,SUB017,Seafood,Fish and shellfish products,HIGH,HIGH
+SEC001,Food & Beverages,CAT003,Proteins,SUB018,Plant-Based Proteins,Alternative meat products,LOW,MEDIUM
+SEC001,Food & Beverages,CAT004,Dairy Products,SUB019,Milk & Cream,Fresh dairy products,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT004,Dairy Products,SUB020,Cheese,Processed dairy products,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT004,Dairy Products,SUB021,Butter,Dairy fat products,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT004,Dairy Products,SUB022,Yogurt,Cultured dairy products,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT005,Sweeteners,SUB023,Sugar,Refined cane and beet sugar,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT005,Sweeteners,SUB024,High Fructose Corn Syrup,Industrial sweetener,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT005,Sweeteners,SUB025,Honey,Natural sweetener,LOW,LOW
+SEC001,Food & Beverages,CAT005,Sweeteners,SUB026,Artificial Sweeteners,Zero-calorie sweeteners,LOW,MEDIUM
+SEC001,Food & Beverages,CAT006,Beverages,SUB027,Coffee,Roasted coffee beans and instant coffee,HIGH,CRITICAL
+SEC001,Food & Beverages,CAT006,Beverages,SUB028,Tea,Processed tea leaves,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT006,Beverages,SUB029,Fruit Juices,Processed fruit beverages,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT006,Beverages,SUB030,Soft Drink Concentrates,Carbonated beverage ingredients,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT007,Spices & Seasonings,SUB031,Pepper,Black and white pepper,MEDIUM,MEDIUM
+SEC001,Food & Beverages,CAT007,Spices & Seasonings,SUB032,Vanilla,Premium flavoring extract,HIGH,MEDIUM
+SEC001,Food & Beverages,CAT007,Spices & Seasonings,SUB033,Cinnamon,Aromatic bark spice,LOW,LOW
+SEC001,Food & Beverages,CAT007,Spices & Seasonings,SUB034,Industrial Seasonings,Bulk flavoring compounds,LOW,MEDIUM
+SEC001,Food & Beverages,CAT008,Packaging Materials,SUB035,Food-Grade Plastics,Food-safe plastic packaging,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT008,Packaging Materials,SUB036,Glass Containers,Bottles and jars for food,LOW,MEDIUM
+SEC001,Food & Beverages,CAT008,Packaging Materials,SUB037,Aluminum Cans,Beverage and food cans,MEDIUM,HIGH
+SEC001,Food & Beverages,CAT008,Packaging Materials,SUB038,Cardboard & Paper,Cartons and paper packaging,LOW,MEDIUM
+SEC002,Information Technology,CAT009,Hardware,SUB039,Laptops,Portable computing devices,MEDIUM,CRITICAL
+SEC002,Information Technology,CAT009,Hardware,SUB040,Desktops,Stationary computing devices,LOW,HIGH
+SEC002,Information Technology,CAT009,Hardware,SUB041,Servers,Enterprise computing infrastructure,HIGH,CRITICAL
+SEC002,Information Technology,CAT009,Hardware,SUB042,Network Equipment,Routers switches and networking gear,HIGH,CRITICAL
+SEC002,Information Technology,CAT009,Hardware,SUB043,Storage Systems,Data storage hardware,MEDIUM,HIGH
+SEC002,Information Technology,CAT009,Hardware,SUB044,Peripherals,Monitors keyboards mice,LOW,MEDIUM
+SEC002,Information Technology,CAT010,Cloud Services,SUB045,IaaS,Infrastructure as a Service,HIGH,CRITICAL
+SEC002,Information Technology,CAT010,Cloud Services,SUB046,PaaS,Platform as a Service,MEDIUM,HIGH
+SEC002,Information Technology,CAT010,Cloud Services,SUB047,SaaS,Software as a Service,MEDIUM,CRITICAL
+SEC002,Information Technology,CAT010,Cloud Services,SUB048,Cloud Storage,Online data storage services,MEDIUM,HIGH
+SEC002,Information Technology,CAT011,Software,SUB049,Enterprise Software,ERP CRM business applications,HIGH,CRITICAL
+SEC002,Information Technology,CAT011,Software,SUB050,Productivity Software,Office and collaboration tools,LOW,HIGH
+SEC002,Information Technology,CAT011,Software,SUB051,Development Tools,IDEs and programming software,LOW,MEDIUM
+SEC002,Information Technology,CAT011,Software,SUB052,Database Software,Data management systems,HIGH,CRITICAL
+SEC002,Information Technology,CAT012,Cybersecurity,SUB053,Endpoint Security,Device protection software,HIGH,CRITICAL
+SEC002,Information Technology,CAT012,Cybersecurity,SUB054,Network Security,Firewall and intrusion prevention,HIGH,CRITICAL
+SEC002,Information Technology,CAT012,Cybersecurity,SUB055,Identity Management,Authentication and access control,HIGH,CRITICAL
+SEC002,Information Technology,CAT012,Cybersecurity,SUB056,Security Operations,SIEM and threat monitoring,MEDIUM,HIGH
+SEC002,Information Technology,CAT013,Telecommunications,SUB057,Mobile Services,Cellular connectivity,MEDIUM,CRITICAL
+SEC002,Information Technology,CAT013,Telecommunications,SUB058,Fixed Line Services,Landline and fiber connectivity,LOW,HIGH
+SEC002,Information Technology,CAT013,Telecommunications,SUB059,Internet Services,Broadband connectivity,MEDIUM,CRITICAL
+SEC002,Information Technology,CAT013,Telecommunications,SUB060,VoIP Services,Voice over IP solutions,LOW,MEDIUM
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB061,Steel,Carbon and alloy steel,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB062,Aluminum,Primary and recycled aluminum,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB063,Copper,Electrical and industrial copper,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB064,Zinc,Galvanizing and alloy metal,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB065,Nickel,Stainless steel and battery metal,HIGH,HIGH
+SEC003,Manufacturing & Industrial,CAT014,Raw Materials - Metals,SUB066,Precious Metals,Gold silver platinum,HIGH,MEDIUM
+SEC003,Manufacturing & Industrial,CAT015,Raw Materials - Plastics,SUB067,Polyethylene,PE packaging and containers,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT015,Raw Materials - Plastics,SUB068,Polypropylene,PP automotive and packaging,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT015,Raw Materials - Plastics,SUB069,PVC,Construction and piping plastic,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT015,Raw Materials - Plastics,SUB070,Engineering Plastics,High-performance polymers,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT016,Chemicals,SUB071,Industrial Chemicals,Basic chemical compounds,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT016,Chemicals,SUB072,Specialty Chemicals,Formulated chemical products,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT016,Chemicals,SUB073,Petrochemicals,Oil-derived chemicals,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT016,Chemicals,SUB074,Adhesives & Sealants,Bonding materials,MEDIUM,MEDIUM
+SEC003,Manufacturing & Industrial,CAT017,Equipment & Machinery,SUB075,Manufacturing Equipment,Production line machinery,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT017,Equipment & Machinery,SUB076,Industrial Machinery,Heavy machinery and tools,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT017,Equipment & Machinery,SUB077,Robotics & Automation,Industrial robots and systems,HIGH,CRITICAL
+SEC003,Manufacturing & Industrial,CAT017,Equipment & Machinery,SUB078,Material Handling,Forklifts conveyors cranes,MEDIUM,HIGH
+SEC003,Manufacturing & Industrial,CAT018,MRO Supplies,SUB079,Industrial Tools,Hand and power tools,LOW,MEDIUM
+SEC003,Manufacturing & Industrial,CAT018,MRO Supplies,SUB080,Safety Equipment,PPE and safety gear,MEDIUM,CRITICAL
+SEC003,Manufacturing & Industrial,CAT018,MRO Supplies,SUB081,Lubricants & Fluids,Machine oils and coolants,LOW,HIGH
+SEC003,Manufacturing & Industrial,CAT018,MRO Supplies,SUB082,Spare Parts,Replacement components,MEDIUM,HIGH
+SEC004,Healthcare & Life Sciences,CAT019,Pharmaceuticals,SUB083,Branded Drugs,Patented pharmaceutical products,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT019,Pharmaceuticals,SUB084,Generic Drugs,Off-patent medications,MEDIUM,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT019,Pharmaceuticals,SUB085,Vaccines,Preventive immunizations,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT019,Pharmaceuticals,SUB086,Biologics,Protein-based therapies,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT019,Pharmaceuticals,SUB087,OTC Medications,Over-the-counter drugs,LOW,HIGH
+SEC004,Healthcare & Life Sciences,CAT020,Medical Devices,SUB088,Diagnostic Equipment,Imaging and testing devices,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT020,Medical Devices,SUB089,Surgical Instruments,Operating room tools,MEDIUM,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT020,Medical Devices,SUB090,Implants,Orthopedic and cardiac implants,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT020,Medical Devices,SUB091,Patient Monitoring,Vital signs equipment,MEDIUM,HIGH
+SEC004,Healthcare & Life Sciences,CAT021,Medical Supplies,SUB092,Disposable Supplies,Gloves gowns syringes,MEDIUM,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT021,Medical Supplies,SUB093,Lab Supplies,Laboratory consumables,MEDIUM,HIGH
+SEC004,Healthcare & Life Sciences,CAT021,Medical Supplies,SUB094,Wound Care,Bandages and dressings,LOW,HIGH
+SEC004,Healthcare & Life Sciences,CAT022,Laboratory Equipment,SUB095,Analytical Instruments,Spectrometers chromatographs,HIGH,CRITICAL
+SEC004,Healthcare & Life Sciences,CAT022,Laboratory Equipment,SUB096,Lab Automation,Robotic lab systems,MEDIUM,HIGH
+SEC005,Energy & Utilities,CAT023,Electricity,SUB097,Grid Electricity,Utility power supply,MEDIUM,CRITICAL
+SEC005,Energy & Utilities,CAT023,Electricity,SUB098,Renewable Electricity,Solar wind hydro power,MEDIUM,HIGH
+SEC005,Energy & Utilities,CAT023,Electricity,SUB099,Backup Power,Generators UPS systems,MEDIUM,HIGH
+SEC005,Energy & Utilities,CAT024,Fuels,SUB100,Natural Gas,Pipeline and LNG gas,HIGH,CRITICAL
+SEC005,Energy & Utilities,CAT024,Fuels,SUB101,Diesel,Industrial and transport fuel,MEDIUM,HIGH
+SEC005,Energy & Utilities,CAT024,Fuels,SUB102,Aviation Fuel,Jet fuel and avgas,HIGH,CRITICAL
+SEC005,Energy & Utilities,CAT024,Fuels,SUB103,Biofuels,Renewable fuel alternatives,MEDIUM,MEDIUM
+SEC005,Energy & Utilities,CAT025,Renewable Equipment,SUB104,Solar Panels,Photovoltaic systems,MEDIUM,HIGH
+SEC005,Energy & Utilities,CAT025,Renewable Equipment,SUB105,Wind Turbines,Wind power generation,HIGH,HIGH
+SEC005,Energy & Utilities,CAT025,Renewable Equipment,SUB106,Battery Storage,Energy storage systems,HIGH,CRITICAL
+SEC006,Construction & Real Estate,CAT026,Building Materials,SUB107,Cement,Portland and specialty cements,HIGH,CRITICAL
+SEC006,Construction & Real Estate,CAT026,Building Materials,SUB108,Concrete,Ready-mix and precast,HIGH,CRITICAL
+SEC006,Construction & Real Estate,CAT026,Building Materials,SUB109,Lumber,Structural and finish wood,MEDIUM,HIGH
+SEC006,Construction & Real Estate,CAT026,Building Materials,SUB110,Structural Steel,Building frame materials,HIGH,CRITICAL
+SEC006,Construction & Real Estate,CAT026,Building Materials,SUB111,Glass,Architectural glazing,MEDIUM,HIGH
+SEC006,Construction & Real Estate,CAT027,MEP Systems,SUB112,HVAC Equipment,Heating ventilation AC,MEDIUM,HIGH
+SEC006,Construction & Real Estate,CAT027,MEP Systems,SUB113,Electrical Systems,Wiring panels lighting,MEDIUM,HIGH
+SEC006,Construction & Real Estate,CAT027,MEP Systems,SUB114,Plumbing Systems,Pipes fixtures fittings,MEDIUM,HIGH
+SEC006,Construction & Real Estate,CAT028,Construction Equipment,SUB115,Heavy Equipment,Excavators cranes dozers,HIGH,CRITICAL
+SEC006,Construction & Real Estate,CAT028,Construction Equipment,SUB116,Power Tools,Construction hand tools,LOW,MEDIUM
+SEC006,Construction & Real Estate,CAT028,Construction Equipment,SUB117,Scaffolding,Temporary structures,LOW,MEDIUM
+SEC007,Logistics & Transportation,CAT029,Freight Services,SUB118,Ocean Freight,Container and bulk shipping,HIGH,CRITICAL
+SEC007,Logistics & Transportation,CAT029,Freight Services,SUB119,Air Freight,Express cargo delivery,HIGH,CRITICAL
+SEC007,Logistics & Transportation,CAT029,Freight Services,SUB120,Road Freight,Trucking and LTL services,MEDIUM,HIGH
+SEC007,Logistics & Transportation,CAT029,Freight Services,SUB121,Rail Freight,Intermodal rail transport,MEDIUM,HIGH
+SEC007,Logistics & Transportation,CAT030,Warehousing,SUB122,Distribution Centers,Regional storage facilities,MEDIUM,CRITICAL
+SEC007,Logistics & Transportation,CAT030,Warehousing,SUB123,Cold Storage,Temperature-controlled storage,HIGH,CRITICAL
+SEC007,Logistics & Transportation,CAT030,Warehousing,SUB124,3PL Services,Third-party logistics,MEDIUM,HIGH
+SEC007,Logistics & Transportation,CAT031,Fleet Services,SUB125,Fleet Vehicles,Company transport vehicles,MEDIUM,HIGH
+SEC007,Logistics & Transportation,CAT031,Fleet Services,SUB126,Fleet Maintenance,Vehicle servicing,LOW,HIGH
+SEC007,Logistics & Transportation,CAT031,Fleet Services,SUB127,Fleet Telematics,Vehicle tracking systems,LOW,MEDIUM
+SEC008,Professional Services,CAT032,Consulting,SUB128,Management Consulting,Strategy and operations,MEDIUM,HIGH
+SEC008,Professional Services,CAT032,Consulting,SUB129,IT Consulting,Technology advisory,MEDIUM,HIGH
+SEC008,Professional Services,CAT032,Consulting,SUB130,HR Consulting,People and organization,LOW,MEDIUM
+SEC008,Professional Services,CAT033,Legal Services,SUB131,Corporate Law,Business and M&A legal,MEDIUM,HIGH
+SEC008,Professional Services,CAT033,Legal Services,SUB132,Intellectual Property,Patent and trademark,MEDIUM,HIGH
+SEC008,Professional Services,CAT033,Legal Services,SUB133,Employment Law,Labor and workforce legal,LOW,MEDIUM
+SEC008,Professional Services,CAT034,Financial Services,SUB134,Accounting,Audit and tax services,MEDIUM,CRITICAL
+SEC008,Professional Services,CAT034,Financial Services,SUB135,Banking,Corporate banking services,MEDIUM,HIGH
+SEC008,Professional Services,CAT034,Financial Services,SUB136,Insurance,Risk management coverage,MEDIUM,HIGH
+SEC008,Professional Services,CAT035,Marketing Services,SUB137,Advertising,Brand and media campaigns,MEDIUM,HIGH
+SEC008,Professional Services,CAT035,Marketing Services,SUB138,Digital Marketing,Online and social media,MEDIUM,HIGH
+SEC008,Professional Services,CAT035,Marketing Services,SUB139,Market Research,Consumer insights and data,LOW,MEDIUM
+SEC008,Professional Services,CAT035,Marketing Services,SUB140,PR & Communications,Public relations services,LOW,MEDIUM
+SEC009,Facilities & Corporate Services,CAT036,Facilities Management,SUB141,Building Maintenance,Property upkeep services,LOW,HIGH
+SEC009,Facilities & Corporate Services,CAT036,Facilities Management,SUB142,Cleaning Services,Janitorial and sanitation,LOW,MEDIUM
+SEC009,Facilities & Corporate Services,CAT036,Facilities Management,SUB143,Security Services,Physical security guards,MEDIUM,HIGH
+SEC009,Facilities & Corporate Services,CAT037,Office Services,SUB144,Office Supplies,Stationery and consumables,LOW,LOW
+SEC009,Facilities & Corporate Services,CAT037,Office Services,SUB145,Office Furniture,Desks chairs storage,LOW,MEDIUM
+SEC009,Facilities & Corporate Services,CAT037,Office Services,SUB146,Printing Services,Document reproduction,LOW,LOW
+SEC009,Facilities & Corporate Services,CAT038,Travel & Events,SUB147,Business Travel,Corporate travel management,MEDIUM,MEDIUM
+SEC009,Facilities & Corporate Services,CAT038,Travel & Events,SUB148,Event Management,Corporate events and meetings,LOW,LOW
+SEC010,Human Resources,CAT039,Staffing Services,SUB149,Permanent Recruitment,Full-time hiring services,MEDIUM,HIGH
+SEC010,Human Resources,CAT039,Staffing Services,SUB150,Temporary Staffing,Contract and temp workers,MEDIUM,HIGH
+SEC010,Human Resources,CAT039,Staffing Services,SUB151,Executive Search,Senior leadership hiring,MEDIUM,MEDIUM
+SEC010,Human Resources,CAT040,HR Technology,SUB152,HRIS Systems,HR information systems,MEDIUM,HIGH
+SEC010,Human Resources,CAT040,HR Technology,SUB153,Payroll Services,Salary processing,MEDIUM,CRITICAL
+SEC010,Human Resources,CAT040,HR Technology,SUB154,Benefits Administration,Employee benefits management,MEDIUM,HIGH
+SEC010,Human Resources,CAT041,Learning & Development,SUB155,Training Programs,Employee skill development,LOW,MEDIUM
+SEC010,Human Resources,CAT041,Learning & Development,SUB156,E-Learning Platforms,Online training systems,LOW,MEDIUM
+SEC010,Human Resources,CAT041,Learning & Development,SUB157,Leadership Development,Executive coaching,LOW,MEDIUM

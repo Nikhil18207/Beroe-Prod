@@ -1,0 +1,141 @@
+sector,category,subcategory,moq_months_of_demand,foreign_currency_spend_pct,inventory_turnover,safety_stock_days,avg_inventory_value_usd
+Food & Beverages,Beverages,Coffee,1.6,64.9,6.6,34,499598
+Food & Beverages,Beverages,Tea,4.9,50.5,7.9,60,125681
+Food & Beverages,Dairy Products,Cheese,4.0,32.6,10.1,44,80211
+Food & Beverages,Dairy Products,Milk & Cream,7.3,38.2,5.4,50,266361
+Food & Beverages,Edible Oils,Canola Oil,1.9,43.7,8.7,41,342178
+Food & Beverages,Edible Oils,Coconut Oil,4.6,23.7,2.9,48,120303
+Food & Beverages,Edible Oils,Olive Oil,4.7,32.1,7.2,39,177327
+Food & Beverages,Edible Oils,Palm Oil,3.2,27.7,5.1,31,156607
+Food & Beverages,Edible Oils,Peanut Oil,5.7,34.3,6.7,36,389060
+Food & Beverages,Edible Oils,Rice Bran Oil,2.8,42.2,3.6,20,285817
+Food & Beverages,Edible Oils,Soybean Oil,5.4,75.8,7.6,38,98477
+Food & Beverages,Edible Oils,Sunflower Oil,3.6,42.4,8.4,49,429891
+Food & Beverages,Grains & Cereals,Corn/Maize,9.9,27.0,6.4,27,77020
+Food & Beverages,Grains & Cereals,Rice,4.1,21.8,11.4,32,247744
+Food & Beverages,Grains & Cereals,Wheat,5.3,47.1,8.8,58,367178
+Food & Beverages,Packaging Materials,Aluminum Cans,7.2,10.6,11.6,53,70734
+Food & Beverages,Packaging Materials,Food-Grade Plastics,1.2,42.3,4.1,19,148651
+Food & Beverages,Packaging Materials,Glass Containers,4.8,79.6,9.2,52,429744
+Food & Beverages,Proteins,Beef,4.8,19.0,4.9,57,342998
+Food & Beverages,Proteins,Poultry,11.2,25.7,9.9,28,301340
+Food & Beverages,Proteins,Seafood,7.4,38.3,9.7,28,224569
+Food & Beverages,Spices & Seasonings,Pepper,2.5,45.9,4.3,34,58039
+Food & Beverages,Spices & Seasonings,Vanilla,8.8,36.3,5.7,28,149627
+Food & Beverages,Sweeteners,Sugar,6.0,36.8,5.8,22,441579
+Information Technology,Cloud Services,Cloud Storage,6.7,43.6,8.0,45,177188
+Information Technology,Cloud Services,IaaS,3.1,45.6,10.6,59,366880
+Information Technology,Cloud Services,PaaS,1.9,10.1,9.7,60,157223
+Information Technology,Cloud Services,SaaS,5.0,32.7,5.5,40,175478
+Information Technology,Cybersecurity,Endpoint Security,1.8,10.2,5.6,50,218618
+Information Technology,Cybersecurity,Identity Management,5.4,70.0,6.2,33,249576
+Information Technology,Cybersecurity,Network Security,3.5,48.1,7.7,44,329786
+Information Technology,Cybersecurity,Security Operations,2.1,28.1,11.8,56,238355
+Information Technology,Hardware,Desktops,1.7,39.6,9.2,34,187133
+Information Technology,Hardware,Laptops,2.0,73.2,5.2,38,318863
+Information Technology,Hardware,Network Equipment,4.3,32.2,2.9,46,294320
+Information Technology,Hardware,Peripherals,5.8,24.1,11.0,21,470907
+Information Technology,Hardware,Servers,3.4,35.3,5.8,45,449312
+Information Technology,Hardware,Storage Systems,3.5,25.9,7.8,35,156497
+Information Technology,Software,Database Software,1.7,35.8,2.2,38,214061
+Information Technology,Software,Development Tools,6.4,41.3,10.9,41,73968
+Information Technology,Software,Enterprise Software,7.2,76.2,8.2,51,166011
+Information Technology,Software,Productivity Software,7.8,10.1,10.4,24,58503
+Information Technology,Telecommunications,Internet Services,2.2,12.3,6.7,31,340094
+Information Technology,Telecommunications,Mobile Services,4.5,37.0,4.0,52,353637
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,5.8,37.9,5.2,41,204765
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,4.6,63.4,9.3,24,152860
+Manufacturing & Industrial,Chemicals,Petrochemicals,4.2,73.2,7.5,36,170596
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,3.9,33.5,3.6,39,348733
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,8.7,76.6,6.2,30,311777
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,4.1,31.4,10.7,50,393203
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,4.7,57.1,9.8,58,226980
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,3.5,19.9,5.7,31,450220
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,3.2,43.5,9.9,46,429352
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,2.0,54.5,6.8,56,437760
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,5.5,11.3,6.1,46,291607
+Manufacturing & Industrial,MRO Supplies,Spare Parts,4.5,55.3,10.7,25,434183
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,5.6,29.0,6.4,37,138743
+Manufacturing & Industrial,Raw Materials - Metals,Copper,4.2,46.4,3.0,23,427651
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,1.8,25.3,5.7,49,306018
+Manufacturing & Industrial,Raw Materials - Metals,Steel,9.6,37.6,7.1,26,334235
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,5.0,24.9,5.3,56,80792
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,4.5,31.5,2.1,48,67733
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,5.4,58.3,5.8,19,478865
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,3.1,38.5,8.6,57,75435
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,5.4,13.3,11.5,15,266212
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,11.9,41.6,7.5,23,491736
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,1.6,18.4,10.1,55,171337
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,10.6,18.3,11.3,19,420760
+Healthcare & Life Sciences,Medical Devices,Implants,7.3,46.7,6.2,24,54792
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2.6,29.1,7.2,28,315149
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,4.2,40.9,3.5,44,245664
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,4.8,29.1,9.1,18,373923
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,5.8,40.7,8.7,55,399571
+Healthcare & Life Sciences,Medical Supplies,Wound Care,5.9,25.4,10.4,54,303338
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,8.6,43.8,10.9,57,305776
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,11.3,36.6,11.0,16,53466
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,5.3,13.9,10.3,49,339220
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,4.4,13.6,10.2,41,56213
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,4.7,11.3,6.5,16,327567
+Energy & Utilities,Electricity,Backup Power,5.8,22.5,10.8,32,330881
+Energy & Utilities,Electricity,Grid Electricity,10.0,30.7,5.5,33,58987
+Energy & Utilities,Electricity,Renewable Electricity,2.2,79.1,2.6,47,476328
+Energy & Utilities,Fuels,Aviation Fuel,4.2,40.5,5.9,59,403387
+Energy & Utilities,Fuels,Biofuels,5.2,35.7,8.3,42,472664
+Energy & Utilities,Fuels,Diesel,4.5,32.8,9.5,26,106107
+Energy & Utilities,Fuels,Natural Gas,5.6,37.2,5.6,21,324928
+Energy & Utilities,Renewable Equipment,Battery Storage,4.0,37.1,10.5,24,176337
+Energy & Utilities,Renewable Equipment,Solar Panels,3.0,74.9,8.1,27,374943
+Energy & Utilities,Renewable Equipment,Wind Turbines,4.1,30.1,7.0,48,182339
+Construction & Real Estate,Building Materials,Cement,3.3,61.3,2.6,37,190155
+Construction & Real Estate,Building Materials,Concrete,6.0,64.0,6.2,40,91428
+Construction & Real Estate,Building Materials,Glass,4.8,10.3,8.0,38,262875
+Construction & Real Estate,Building Materials,Lumber,5.2,36.3,11.7,44,346223
+Construction & Real Estate,Building Materials,Structural Steel,9.9,37.0,6.1,30,415552
+Construction & Real Estate,Construction Equipment,Heavy Equipment,3.6,48.5,10.6,29,207273
+Construction & Real Estate,Construction Equipment,Power Tools,3.9,40.2,4.4,58,484143
+Construction & Real Estate,Construction Equipment,Scaffolding,3.3,46.5,11.4,20,392745
+Construction & Real Estate,MEP Systems,Electrical Systems,1.2,43.4,9.4,56,448241
+Construction & Real Estate,MEP Systems,HVAC Equipment,11.2,16.8,11.5,17,99021
+Construction & Real Estate,MEP Systems,Plumbing Systems,10.4,33.5,6.8,40,248843
+Logistics & Transportation,Fleet Services,Fleet Maintenance,4.1,71.7,6.5,39,339774
+Logistics & Transportation,Fleet Services,Fleet Telematics,3.3,70.8,9.0,45,79420
+Logistics & Transportation,Fleet Services,Fleet Vehicles,1.9,46.9,10.3,55,54954
+Logistics & Transportation,Freight Services,Air Freight,3.5,11.8,6.5,59,139854
+Logistics & Transportation,Freight Services,Ocean Freight,4.5,65.6,10.2,20,312069
+Logistics & Transportation,Freight Services,Rail Freight,5.5,54.5,11.7,42,388117
+Logistics & Transportation,Freight Services,Road Freight,6.8,14.5,5.3,36,346671
+Logistics & Transportation,Warehousing,3PL Services,4.2,27.8,4.1,21,326907
+Logistics & Transportation,Warehousing,Cold Storage,3.4,15.4,5.9,17,170463
+Logistics & Transportation,Warehousing,Distribution Centers,5.5,22.2,7.5,28,412958
+Professional Services,Consulting,HR Consulting,1.1,61.2,5.7,51,299299
+Professional Services,Consulting,IT Consulting,5.2,25.7,10.6,32,74411
+Professional Services,Consulting,Management Consulting,7.1,70.4,5.5,19,408837
+Professional Services,Financial Services,Accounting,1.1,73.7,9.1,32,334704
+Professional Services,Financial Services,Banking,3.0,74.5,5.6,51,395038
+Professional Services,Financial Services,Insurance,1.9,73.8,6.0,17,144033
+Professional Services,Legal Services,Corporate Law,1.4,29.1,8.8,35,58209
+Professional Services,Legal Services,Employment Law,1.9,39.1,9.3,28,357775
+Professional Services,Legal Services,Intellectual Property,5.8,41.2,5.4,24,444397
+Professional Services,Marketing Services,Advertising,8.0,41.0,5.4,60,480389
+Professional Services,Marketing Services,Digital Marketing,3.1,41.5,5.4,40,90337
+Professional Services,Marketing Services,Market Research,2.7,39.7,2.5,34,135170
+Professional Services,Marketing Services,PR & Communications,9.0,32.2,6.7,51,176076
+Facilities & Corporate Services,Facilities Management,Building Maintenance,10.7,23.8,6.0,51,487597
+Facilities & Corporate Services,Facilities Management,Cleaning Services,1.2,20.7,6.0,39,404961
+Facilities & Corporate Services,Facilities Management,Security Services,2.4,26.4,5.6,49,223921
+Facilities & Corporate Services,Office Services,Office Furniture,1.1,23.2,9.2,39,446156
+Facilities & Corporate Services,Office Services,Office Supplies,11.8,18.6,11.1,23,464448
+Facilities & Corporate Services,Office Services,Printing Services,2.3,22.6,11.9,59,429670
+Facilities & Corporate Services,Travel & Events,Business Travel,5.5,60.3,11.7,20,312559
+Facilities & Corporate Services,Travel & Events,Event Management,3.7,70.8,8.8,37,78152
+Human Resources,HR Technology,Benefits Administration,4.7,34.5,9.8,21,279160
+Human Resources,HR Technology,HRIS Systems,5.3,67.5,11.8,29,489707
+Human Resources,HR Technology,Payroll Services,1.1,17.6,7.2,19,228568
+Human Resources,Learning & Development,E-Learning Platforms,5.7,47.6,6.1,53,453180
+Human Resources,Learning & Development,Leadership Development,4.8,11.1,11.1,54,362270
+Human Resources,Learning & Development,Training Programs,5.9,43.4,6.7,40,455565
+Human Resources,Staffing Services,Executive Search,5.3,31.0,9.4,35,65532
+Human Resources,Staffing Services,Permanent Recruitment,2.0,14.8,11.5,55,193302
+Human Resources,Staffing Services,Temporary Staffing,2.0,46.6,8.9,43,307217

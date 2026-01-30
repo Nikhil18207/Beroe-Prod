@@ -1,0 +1,894 @@
+Supplier_ID,Supplier_Name,Region,Country,Sector,Category,SubCategory,Total_Spend_USD,Transaction_Count,Avg_Quality_Rating,Avg_Delivery_Rating,Performance_Score,Performance_Tier,Sustainability_Score,Last_Review_Date
+S001,Malaya Agri Oils,APAC,Malaysia,Food & Beverages,Edible Oils,Rice Bran Oil,2140200,3,4.53,4.3,87.9,Gold,8.0,2026-01-03
+S002,Borneo Nutrients,APAC,Malaysia,Food & Beverages,Edible Oils,Rice Bran Oil,1479600,2,4.25,4.05,84.1,Silver,8.0,2026-01-03
+S003,Thai Rice Oil Co,APAC,Thailand,Food & Beverages,Edible Oils,Rice Bran Oil,524400,1,4.4,4.5,86.8,Gold,8.0,2026-01-03
+S004,Ricela Health Foods,APAC,India,Food & Beverages,Edible Oils,Rice Bran Oil,1186300,3,4.23,4.3,83.8,Silver,8.0,2026-01-03
+S005,Golden Sun Oils,Europe,Ukraine,Food & Beverages,Edible Oils,Sunflower Oil,1047600,2,4.55,3.75,81.3,Silver,8.0,2026-01-03
+S006,Kernel Trade,Europe,Ukraine,Food & Beverages,Edible Oils,Sunflower Oil,1292100,3,4.6,3.63,80.3,Silver,8.0,2026-01-03
+S007,Cargill Sunflower,Americas,Argentina,Food & Beverages,Edible Oils,Sunflower Oil,701600,2,4.45,4.65,88.1,Gold,8.0,2026-01-03
+S008,ADM Argentina,Americas,Argentina,Food & Beverages,Edible Oils,Sunflower Oil,805800,2,4.35,4.5,85.0,Silver,8.0,2026-01-03
+S009,Indo Palm Corp,APAC,Indonesia,Food & Beverages,Edible Oils,Palm Oil,864000,2,4.35,4.25,84.7,Silver,8.0,2026-01-03
+S010,Wilmar International,APAC,Singapore,Food & Beverages,Edible Oils,Palm Oil,1861100,4,4.45,4.3,87.0,Gold,8.0,2026-01-03
+S011,Sime Darby Oils,APAC,Malaysia,Food & Beverages,Edible Oils,Palm Oil,486000,1,4.5,4.4,87.7,Gold,8.0,2026-01-03
+S012,Mediterranean Oils,Europe,Spain,Food & Beverages,Edible Oils,Olive Oil,658800,2,4.9,4.65,90.5,Gold,8.0,2026-01-03
+S013,Deoleo Premium,Europe,Italy,Food & Beverages,Edible Oils,Olive Oil,291600,1,4.8,4.5,89.0,Gold,8.0,2026-01-03
+S014,Greek Gold Olive,Europe,Greece,Food & Beverages,Edible Oils,Olive Oil,259200,1,4.7,4.4,89.2,Gold,8.0,2026-01-03
+S015,American Soy Co,Americas,USA,Food & Beverages,Edible Oils,Soybean Oil,788400,2,4.6,4.55,90.3,Gold,8.0,2026-01-03
+S016,Bunge Ltd,Americas,Brazil,Food & Beverages,Edible Oils,Soybean Oil,345600,1,4.5,4.3,84.9,Silver,8.0,2026-01-03
+S017,Louis Dreyfus Soy,Americas,Brazil,Food & Beverages,Edible Oils,Soybean Oil,324000,1,4.4,4.2,85.4,Gold,8.0,2026-01-03
+S018,Richardson Oilseed,Americas,Canada,Food & Beverages,Edible Oils,Canola Oil,2155900,4,4.5,4.6,87.1,Gold,8.0,2026-01-03
+S019,Viterra Canada,Americas,Canada,Food & Beverages,Edible Oils,Canola Oil,280800,1,4.6,4.5,88.8,Gold,8.0,2026-01-03
+S020,Philippine Coconut,APAC,Philippines,Food & Beverages,Edible Oils,Coconut Oil,1115500,3,4.33,4.33,85.9,Gold,8.0,2026-01-03
+S021,Sri Lanka Coco,APAC,Sri Lanka,Food & Beverages,Edible Oils,Coconut Oil,216000,1,4.2,3.8,80.9,Silver,8.0,2026-01-03
+S022,Shandong Luhua,APAC,China,Food & Beverages,Edible Oils,Peanut Oil,194400,1,4.4,4.2,82.8,Silver,8.0,2026-01-03
+S023,Archer Daniels Midland,Americas,USA,Food & Beverages,Grains & Cereals,Wheat,3081300,4,4.58,4.45,88.5,Gold,8.0,2026-01-03
+S024,Glencore Agriculture,APAC,Australia,Food & Beverages,Grains & Cereals,Wheat,1134000,1,4.6,4.4,88.7,Gold,8.0,2026-01-03
+S025,Nidera Holdings,Europe,Netherlands,Food & Beverages,Grains & Cereals,Wheat,1271200,3,4.2,4.7,86.6,Gold,8.0,2026-01-03
+S026,Olam International,APAC,Singapore,Food & Beverages,Grains & Cereals,Rice,2241300,3,4.63,4.6,90.0,Gold,8.0,2026-01-03
+S027,KRBL Ltd,APAC,India,Food & Beverages,Grains & Cereals,Rice,756000,1,4.5,4.2,85.6,Gold,8.0,2026-01-03
+S028,Vietnam Food Corp,APAC,Vietnam,Food & Beverages,Grains & Cereals,Rice,702000,1,4.4,4.3,87.1,Gold,8.0,2026-01-03
+S029,Cargill Corn,Americas,USA,Food & Beverages,Grains & Cereals,Corn/Maize,2192400,2,4.8,4.75,91.9,Gold,8.0,2026-01-03
+S030,Bunge Corn Brazil,Americas,Brazil,Food & Beverages,Grains & Cereals,Corn/Maize,896400,1,4.6,4.4,89.0,Gold,8.0,2026-01-03
+S031,Tyson Foods,Americas,USA,Food & Beverages,Proteins,Poultry,5080200,4,4.5,4.42,85.7,Gold,8.0,2026-01-03
+S032,BRF S.A.,Americas,Brazil,Food & Beverages,Proteins,Poultry,1566000,1,4.5,4.3,87.0,Gold,8.0,2026-01-03
+S033,Pilgrim's Pride,Americas,USA,Food & Beverages,Proteins,Poultry,1404000,1,4.6,4.5,89.1,Gold,8.0,2026-01-03
+S034,JBS S.A.,Americas,Brazil,Food & Beverages,Proteins,Beef,5861000,4,4.53,4.3,85.1,Gold,8.0,2026-01-03
+S035,Cargill Beef,Americas,USA,Food & Beverages,Proteins,Beef,2106000,1,4.8,4.7,91.4,Gold,8.0,2026-01-03
+S036,Australian Meat Group,APAC,Australia,Food & Beverages,Proteins,Beef,1814400,1,4.7,4.4,90.1,Gold,8.0,2026-01-03
+S037,Thai Union Group,APAC,Thailand,Food & Beverages,Proteins,Seafood,2592000,2,4.55,4.35,89.1,Gold,8.0,2026-01-03
+S038,Nippon Suisan,APAC,Japan,Food & Beverages,Proteins,Seafood,1134000,1,4.7,4.6,89.1,Gold,8.0,2026-01-03
+S039,Fonterra,APAC,New Zealand,Food & Beverages,Dairy Products,Milk & Cream,3348000,2,4.8,4.65,92.5,Gold,8.0,2026-01-03
+S040,FrieslandCampina,Europe,Netherlands,Food & Beverages,Dairy Products,Milk & Cream,1404000,1,4.7,4.5,87.7,Gold,8.0,2026-01-03
+S041,Kraft Heinz Dairy,Americas,USA,Food & Beverages,Dairy Products,Cheese,972000,1,4.6,4.5,90.0,Gold,8.0,2026-01-03
+S042,Lactalis Group,Europe,France,Food & Beverages,Dairy Products,Cheese,864000,1,4.7,4.4,88.1,Gold,8.0,2026-01-03
+S043,Sudzucker AG,Europe,Germany,Food & Beverages,Sweeteners,Sugar,3008200,4,4.5,4.35,86.4,Gold,8.0,2026-01-03
+S044,Raizen Energia,Americas,Brazil,Food & Beverages,Sweeteners,Sugar,756000,1,4.5,4.3,86.3,Gold,8.0,2026-01-03
+S045,Thai Sugar Trading,APAC,Thailand,Food & Beverages,Sweeteners,Sugar,648000,1,4.4,4.2,85.4,Gold,8.0,2026-01-03
+S046,Nestle Coffee,Europe,Switzerland,Food & Beverages,Beverages,Coffee,3407400,3,4.6,4.83,92.9,Gold,8.0,2026-01-03
+S047,JDE Peets,Europe,Netherlands,Food & Beverages,Beverages,Coffee,1645500,2,4.6,4.45,89.0,Gold,8.0,2026-01-03
+S048,Colombian Coffee Fed,Americas,Colombia,Food & Beverages,Beverages,Coffee,918000,1,4.8,4.4,90.8,Gold,8.0,2026-01-03
+S049,Unilever Tea,Europe,UK,Food & Beverages,Beverages,Tea,594000,1,4.7,4.5,89.2,Gold,8.0,2026-01-03
+S050,Tata Global Beverages,APAC,India,Food & Beverages,Beverages,Tea,518400,1,4.5,4.2,87.4,Gold,8.0,2026-01-03
+S051,Olam Spices,APAC,Vietnam,Food & Beverages,Spices & Seasonings,Pepper,324000,1,4.5,4.3,85.1,Gold,8.0,2026-01-03
+S052,Madagascar Vanilla,Africa,Madagascar,Food & Beverages,Spices & Seasonings,Vanilla,1026000,2,4.35,3.75,80.3,Silver,8.0,2026-01-03
+S053,Berry Global,Americas,USA,Food & Beverages,Packaging Materials,Food-Grade Plastics,1350000,2,4.6,4.55,88.3,Gold,8.0,2026-01-03
+S054,Owens-Illinois,Americas,USA,Food & Beverages,Packaging Materials,Glass Containers,540000,1,4.7,4.5,89.3,Gold,8.0,2026-01-03
+S055,Ball Corporation,Americas,USA,Food & Beverages,Packaging Materials,Aluminum Cans,756000,1,4.8,4.7,94.0,Gold,8.0,2026-01-03
+S101,Dell Technologies,Americas,USA,Information Technology,Hardware,Laptops,2754000,3,4.73,4.63,90.1,Gold,8.0,2026-01-03
+S102,HP Inc,Americas,USA,Information Technology,Hardware,Laptops,2465800,3,4.4,4.53,86.8,Gold,8.0,2026-01-03
+S103,Lenovo,APAC,China,Information Technology,Hardware,Laptops,2246900,4,4.55,4.18,85.6,Gold,8.0,2026-01-03
+S104,Apple Inc,Americas,USA,Information Technology,Hardware,Laptops,2754000,2,4.9,4.85,92.7,Gold,8.0,2026-01-03
+S105,Dell Desktops,Americas,USA,Information Technology,Hardware,Desktops,1747600,3,4.87,4.8,93.1,Gold,8.0,2026-01-03
+S106,HP Desktops,Americas,USA,Information Technology,Hardware,Desktops,863300,2,4.7,4.7,92.8,Gold,8.0,2026-01-03
+S107,Cisco Systems,Americas,USA,Information Technology,Hardware,Servers,2246400,2,4.8,4.75,92.1,Gold,8.0,2026-01-03
+S108,HPE Servers,Americas,USA,Information Technology,Hardware,Servers,950400,1,4.7,4.6,91.6,Gold,8.0,2026-01-03
+S109,Dell EMC,Americas,USA,Information Technology,Hardware,Servers,1600200,3,4.37,4.63,88.7,Gold,8.0,2026-01-03
+S110,IBM Servers,Americas,USA,Information Technology,Hardware,Servers,810000,1,4.6,4.5,88.9,Gold,8.0,2026-01-03
+S111,Juniper Networks,Americas,USA,Information Technology,Hardware,Network Equipment,1026000,2,4.7,4.65,89.4,Gold,8.0,2026-01-03
+S112,Huawei,APAC,China,Information Technology,Hardware,Network Equipment,1075400,2,4.3,4.55,88.2,Gold,8.0,2026-01-03
+S113,Arista Networks,Americas,USA,Information Technology,Hardware,Network Equipment,378000,1,4.8,4.7,91.8,Gold,8.0,2026-01-03
+S114,NetApp,Americas,USA,Information Technology,Hardware,Storage Systems,648000,1,4.7,4.6,89.3,Gold,8.0,2026-01-03
+S115,Pure Storage,Americas,USA,Information Technology,Hardware,Storage Systems,594000,1,4.8,4.7,91.4,Gold,8.0,2026-01-03
+S116,Logitech,Europe,Switzerland,Information Technology,Hardware,Peripherals,194400,1,4.6,4.5,86.9,Gold,8.0,2026-01-03
+S117,LG Electronics,APAC,South Korea,Information Technology,Hardware,Peripherals,237600,1,4.5,4.4,87.0,Gold,8.0,2026-01-03
+S201,AWS,Americas,USA,Information Technology,Cloud Services,IaaS,3466800,6,4.9,4.85,93.8,Gold,8.0,2026-01-03
+S202,Microsoft Azure,Americas,USA,Information Technology,Cloud Services,IaaS,1583600,4,4.57,4.7,88.8,Gold,8.0,2026-01-03
+S203,Google Cloud,Americas,USA,Information Technology,Cloud Services,IaaS,723600,2,4.8,4.75,91.7,Gold,8.0,2026-01-03
+S204,Heroku,Americas,USA,Information Technology,Cloud Services,PaaS,1494000,3,4.47,4.33,88.2,Gold,8.0,2026-01-03
+S205,Red Hat OpenShift,Americas,USA,Information Technology,Cloud Services,PaaS,1270000,3,4.5,4.3,85.1,Gold,8.0,2026-01-03
+S206,Salesforce,Americas,USA,Information Technology,Cloud Services,SaaS,1540500,4,4.72,4.62,92.5,Gold,8.0,2026-01-03
+S207,Adobe Creative Cloud,Americas,USA,Information Technology,Cloud Services,SaaS,1242300,3,4.63,4.03,86.4,Gold,8.0,2026-01-03
+S208,Microsoft 365,Americas,USA,Information Technology,Cloud Services,SaaS,738500,4,4.42,4.58,86.9,Gold,8.0,2026-01-03
+S209,Workday,Americas,USA,Information Technology,Cloud Services,SaaS,194400,1,4.7,4.6,91.2,Gold,8.0,2026-01-03
+S210,Dropbox Business,Americas,USA,Information Technology,Cloud Services,Cloud Storage,108000,1,4.5,4.5,86.8,Gold,8.0,2026-01-03
+S211,Box Enterprise,Americas,USA,Information Technology,Cloud Services,Cloud Storage,1625600,3,4.3,4.6,85.5,Gold,8.0,2026-01-03
+S301,Oracle,Americas,USA,Information Technology,Software,Enterprise Software,2127600,2,4.7,4.65,91.7,Gold,8.0,2026-01-03
+S302,SAP,Europe,Germany,Information Technology,Software,Enterprise Software,3127100,3,4.83,4.3,90.3,Gold,8.0,2026-01-03
+S303,IBM,Americas,USA,Information Technology,Software,Enterprise Software,734400,1,4.6,4.5,90.7,Gold,8.0,2026-01-03
+S304,Microsoft Office,Americas,USA,Information Technology,Software,Productivity Software,486000,1,4.9,4.8,94.4,Gold,8.0,2026-01-03
+S305,Google Workspace,Americas,USA,Information Technology,Software,Productivity Software,378000,1,4.8,4.7,91.2,Gold,8.0,2026-01-03
+S306,Oracle Database,Americas,USA,Information Technology,Software,Database Software,756000,1,4.8,4.7,90.6,Gold,8.0,2026-01-03
+S307,Microsoft SQL Server,Americas,USA,Information Technology,Software,Database Software,648000,1,4.8,4.8,93.6,Gold,8.0,2026-01-03
+S308,JetBrains,Europe,Czech Republic,Information Technology,Software,Development Tools,499900,2,4.4,4.25,84.6,Silver,8.0,2026-01-03
+S309,GitHub Enterprise,Americas,USA,Information Technology,Software,Development Tools,216000,1,4.8,4.7,93.9,Gold,8.0,2026-01-03
+S310,Palo Alto Networks,Americas,USA,Information Technology,Cybersecurity,Endpoint Security,2284600,4,4.6,4.75,89.7,Gold,8.0,2026-01-03
+S311,CrowdStrike,Americas,USA,Information Technology,Cybersecurity,Endpoint Security,1448200,3,4.33,4.27,84.2,Silver,8.0,2026-01-03
+S312,Fortinet,Americas,USA,Information Technology,Cybersecurity,Network Security,345600,1,4.7,4.6,90.3,Gold,8.0,2026-01-03
+S313,Check Point,Middle East,Israel,Information Technology,Cybersecurity,Network Security,324000,1,4.7,4.6,88.9,Gold,8.0,2026-01-03
+S314,Okta,Americas,USA,Information Technology,Cybersecurity,Identity Management,259200,1,4.8,4.7,90.3,Gold,8.0,2026-01-03
+S315,Ping Identity,Americas,USA,Information Technology,Cybersecurity,Identity Management,216000,1,4.6,4.5,89.7,Gold,8.0,2026-01-03
+S316,Splunk,Americas,USA,Information Technology,Cybersecurity,Security Operations,378000,1,4.7,4.6,90.0,Gold,8.0,2026-01-03
+S317,Verizon,Americas,USA,Information Technology,Telecommunications,Mobile Services,1296000,2,4.6,4.55,89.5,Gold,8.0,2026-01-03
+S318,AT&T,Americas,USA,Information Technology,Telecommunications,Mobile Services,561600,1,4.5,4.4,86.5,Gold,8.0,2026-01-03
+S319,Vodafone,Europe,UK,Information Technology,Telecommunications,Mobile Services,518400,1,4.6,4.5,88.7,Gold,8.0,2026-01-03
+S320,Comcast Business,Americas,USA,Information Technology,Telecommunications,Internet Services,939600,2,4.5,4.45,86.1,Gold,8.0,2026-01-03
+S401,ArcelorMittal,Europe,Luxembourg,Manufacturing & Industrial,Raw Materials - Metals,Steel,5907600,3,4.7,4.53,90.1,Gold,8.0,2026-01-03
+S402,Tata Steel,APAC,India,Manufacturing & Industrial,Raw Materials - Metals,Steel,7171100,4,4.35,4.12,84.9,Silver,8.0,2026-01-03
+S403,Baosteel,APAC,China,Manufacturing & Industrial,Raw Materials - Metals,Steel,3456000,2,4.4,4.25,85.2,Gold,8.0,2026-01-03
+S404,Nippon Steel,APAC,Japan,Manufacturing & Industrial,Raw Materials - Metals,Steel,1566000,1,4.8,4.6,92.5,Gold,8.0,2026-01-03
+S405,POSCO,APAC,South Korea,Manufacturing & Industrial,Raw Materials - Metals,Steel,1490400,1,4.7,4.5,88.8,Gold,8.0,2026-01-03
+S406,Alcoa,Americas,USA,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,5370300,4,4.3,4.57,88.7,Gold,8.0,2026-01-03
+S407,Rio Tinto Alcan,Americas,Canada,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,4081000,3,4.63,4.23,88.7,Gold,8.0,2026-01-03
+S408,Norsk Hydro,Europe,Norway,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,918000,1,4.7,4.5,88.7,Gold,8.0,2026-01-03
+S409,Freeport-McMoRan,Americas,USA,Manufacturing & Industrial,Raw Materials - Metals,Copper,3774200,3,4.67,4.27,86.3,Gold,8.0,2026-01-03
+S410,Codelco,Americas,Chile,Manufacturing & Industrial,Raw Materials - Metals,Copper,896400,1,4.5,4.3,85.5,Gold,8.0,2026-01-03
+S411,BHP Copper,APAC,Australia,Manufacturing & Industrial,Raw Materials - Metals,Copper,810000,1,4.7,4.5,90.1,Gold,8.0,2026-01-03
+S412,Glencore Zinc,Europe,Switzerland,Manufacturing & Industrial,Raw Materials - Metals,Zinc,4274100,3,4.47,4.5,88.3,Gold,8.0,2026-01-03
+S413,Vale Nickel,Americas,Brazil,Manufacturing & Industrial,Raw Materials - Metals,Nickel,702000,1,4.5,4.3,86.7,Gold,8.0,2026-01-03
+S414,Norilsk Nickel,Europe,Russia,Manufacturing & Industrial,Raw Materials - Metals,Nickel,1391400,2,4.1,4.15,82.5,Silver,8.0,2026-01-03
+S415,BASF,Europe,Germany,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,702000,1,4.8,4.6,90.6,Gold,8.0,2026-01-03
+S416,Dow Chemical,Americas,USA,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,957400,3,4.83,4.43,88.3,Gold,8.0,2026-01-03
+S417,SABIC,Middle East,Saudi Arabia,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,1085900,3,4.67,3.97,83.4,Silver,8.0,2026-01-03
+S418,LyondellBasell,Europe,Netherlands,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,594000,1,4.7,4.5,90.7,Gold,8.0,2026-01-03
+S419,ExxonMobil Chemical,Americas,USA,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,626400,1,4.8,4.7,90.8,Gold,8.0,2026-01-03
+S420,Formosa Plastics,APAC,Taiwan,Manufacturing & Industrial,Raw Materials - Plastics,PVC,540000,1,4.5,4.3,86.9,Gold,8.0,2026-01-03
+S421,DuPont,Americas,USA,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,486000,1,4.8,4.7,93.6,Gold,8.0,2026-01-03
+S422,BASF Chemicals,Europe,Germany,Manufacturing & Industrial,Chemicals,Industrial Chemicals,2720500,4,4.6,4.32,88.0,Gold,8.0,2026-01-03
+S423,Dow Industrial,Americas,USA,Manufacturing & Industrial,Chemicals,Industrial Chemicals,1099500,2,4.75,4.55,89.4,Gold,8.0,2026-01-03
+S424,Evonik,Europe,Germany,Manufacturing & Industrial,Chemicals,Specialty Chemicals,702000,1,4.7,4.5,89.2,Gold,8.0,2026-01-03
+S425,Huntsman,Americas,USA,Manufacturing & Industrial,Chemicals,Specialty Chemicals,648000,1,4.6,4.5,89.6,Gold,8.0,2026-01-03
+S426,Shell Chemicals,Europe,Netherlands,Manufacturing & Industrial,Chemicals,Petrochemicals,864000,1,4.8,4.6,90.9,Gold,8.0,2026-01-03
+S427,Chevron Phillips,Americas,USA,Manufacturing & Industrial,Chemicals,Petrochemicals,810000,1,4.7,4.6,89.8,Gold,8.0,2026-01-03
+S428,Henkel,Europe,Germany,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,432000,1,4.8,4.7,93.4,Gold,8.0,2026-01-03
+S429,3M Adhesives,Americas,USA,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,486000,1,4.9,4.8,95.6,Gold,8.0,2026-01-03
+S501,Siemens,Europe,Germany,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,4914000,2,4.8,4.65,91.2,Gold,8.0,2026-01-03
+S502,ABB,Europe,Switzerland,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,2106000,1,4.8,4.6,91.3,Gold,8.0,2026-01-03
+S503,Schneider Electric,Europe,France,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,1814400,1,4.7,4.5,88.6,Gold,8.0,2026-01-03
+S504,Rockwell Automation,Americas,USA,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,1620000,1,4.7,4.6,90.2,Gold,8.0,2026-01-03
+S505,Caterpillar,Americas,USA,Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,4071600,2,4.8,4.75,90.6,Gold,8.0,2026-01-03
+S506,Komatsu,APAC,Japan,Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,2253000,2,4.7,4.05,87.5,Gold,8.0,2026-01-03
+S507,John Deere,Americas,USA,Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,1566000,1,4.7,4.6,92.3,Gold,8.0,2026-01-03
+S508,Fanuc,APAC,Japan,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2808000,2,4.9,4.75,94.5,Gold,8.0,2026-01-03
+S509,KUKA,Europe,Germany,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,1274400,1,4.7,4.5,90.5,Gold,8.0,2026-01-03
+S510,ABB Robotics,Europe,Switzerland,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,1188000,1,4.8,4.6,89.8,Gold,8.0,2026-01-03
+S511,Toyota Material Handling,APAC,Japan,Manufacturing & Industrial,Equipment & Machinery,Material Handling,864000,1,4.8,4.7,91.9,Gold,8.0,2026-01-03
+S512,Crown Equipment,Americas,USA,Manufacturing & Industrial,Equipment & Machinery,Material Handling,2103600,2,4.55,4.45,88.0,Gold,8.0,2026-01-03
+S513,Stanley Black & Decker,Americas,USA,Manufacturing & Industrial,MRO Supplies,Industrial Tools,324000,1,4.7,4.6,90.0,Gold,8.0,2026-01-03
+S514,Honeywell Safety,Americas,USA,Manufacturing & Industrial,MRO Supplies,Safety Equipment,606400,2,4.45,4.2,84.2,Silver,8.0,2026-01-03
+S515,3M Safety,Americas,USA,Manufacturing & Industrial,MRO Supplies,Safety Equipment,1013700,2,4.75,4.3,86.6,Gold,8.0,2026-01-03
+S516,Shell Lubricants,Europe,Netherlands,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,893800,2,4.35,4.5,87.2,Gold,8.0,2026-01-03
+S517,Grainger,Americas,USA,Manufacturing & Industrial,MRO Supplies,Spare Parts,1021300,2,4.3,4.7,88.7,Gold,8.0,2026-01-03
+S601,Pfizer,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,10724400,3,4.9,4.73,91.1,Gold,8.0,2026-01-03
+S602,Johnson & Johnson,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,6534000,2,4.8,4.75,90.9,Gold,8.0,2026-01-03
+S603,Novartis,Europe,Switzerland,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2894400,1,4.8,4.6,90.7,Gold,8.0,2026-01-03
+S604,Roche,Europe,Switzerland,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2721600,1,4.8,4.7,90.2,Gold,8.0,2026-01-03
+S605,Merck & Co,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2592000,1,4.8,4.6,91.4,Gold,8.0,2026-01-03
+S606,Teva Pharmaceutical,Middle East,Israel,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,1296000,1,4.5,4.3,85.6,Gold,8.0,2026-01-03
+S607,Mylan,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,1134000,1,4.5,4.4,87.0,Gold,8.0,2026-01-03
+S608,Sun Pharma,APAC,India,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,1026000,1,4.4,4.2,86.1,Gold,8.0,2026-01-03
+S609,Sandoz,Europe,Switzerland,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,1752000,2,4.45,4.4,87.2,Gold,8.0,2026-01-03
+S610,Moderna,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,1944000,1,4.8,4.6,89.6,Gold,8.0,2026-01-03
+S611,AstraZeneca,Europe,UK,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,1782000,1,4.7,4.5,91.5,Gold,8.0,2026-01-03
+S612,GSK Vaccines,Europe,UK,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,1620000,1,4.7,4.6,89.9,Gold,8.0,2026-01-03
+S613,AbbVie,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Biologics,2160000,1,4.8,4.6,91.6,Gold,8.0,2026-01-03
+S614,Amgen,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,Biologics,1998000,1,4.8,4.7,90.2,Gold,8.0,2026-01-03
+S615,Bayer Consumer,Europe,Germany,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,648000,1,4.6,4.5,89.7,Gold,8.0,2026-01-03
+S616,Procter & Gamble Health,Americas,USA,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,2180100,2,4.25,4.45,85.7,Gold,8.0,2026-01-03
+S617,Siemens Healthineers,Europe,Germany,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,8099400,4,4.42,4.5,89.0,Gold,8.0,2026-01-03
+S618,GE Healthcare,Americas,USA,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,1782000,1,4.7,4.5,91.3,Gold,8.0,2026-01-03
+S619,Philips Healthcare,Europe,Netherlands,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,1620000,1,4.7,4.6,90.0,Gold,8.0,2026-01-03
+S620,Medtronic,Americas,USA,Healthcare & Life Sciences,Medical Devices,Surgical Instruments,2226900,2,4.75,4.45,91.0,Gold,8.0,2026-01-03
+S621,Stryker,Americas,USA,Healthcare & Life Sciences,Medical Devices,Surgical Instruments,1458000,1,4.8,4.6,91.2,Gold,8.0,2026-01-03
+S622,Boston Scientific,Americas,USA,Healthcare & Life Sciences,Medical Devices,Implants,1350000,1,4.8,4.6,91.2,Gold,8.0,2026-01-03
+S623,Zimmer Biomet,Americas,USA,Healthcare & Life Sciences,Medical Devices,Implants,1242000,1,4.7,4.5,89.5,Gold,8.0,2026-01-03
+S624,Masimo,Americas,USA,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,5169800,3,4.47,4.43,86.5,Gold,8.0,2026-01-03
+S625,Cardinal Health,Americas,USA,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2753900,4,4.75,4.55,90.1,Gold,8.0,2026-01-03
+S626,McKesson,Americas,USA,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,993600,1,4.6,4.5,90.4,Gold,8.0,2026-01-03
+S627,Becton Dickinson,Americas,USA,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,1179900,2,4.7,4.65,91.3,Gold,8.0,2026-01-03
+S628,Thermo Fisher Scientific,Americas,USA,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,864000,1,4.8,4.7,91.1,Gold,8.0,2026-01-03
+S629,Merck Millipore,Europe,Germany,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,756000,1,4.7,4.5,91.5,Gold,8.0,2026-01-03
+S630,Smith & Nephew,Europe,UK,Healthcare & Life Sciences,Medical Supplies,Wound Care,540000,1,4.7,4.6,89.3,Gold,8.0,2026-01-03
+S631,Agilent Technologies,Americas,USA,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,1296000,1,4.8,4.7,91.9,Gold,8.0,2026-01-03
+S632,Waters Corporation,Americas,USA,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,1959100,3,4.7,3.97,86.2,Gold,8.0,2026-01-03
+S633,PerkinElmer,Americas,USA,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,864000,1,4.7,4.5,89.1,Gold,8.0,2026-01-03
+S701,NextEra Energy,Americas,USA,Energy & Utilities,Electricity,Grid Electricity,7160900,5,4.66,4.66,89.5,Gold,8.0,2026-01-03
+S702,Duke Energy,Americas,USA,Energy & Utilities,Electricity,Grid Electricity,4014800,3,4.2,4.67,87.7,Gold,8.0,2026-01-03
+S703,Enel,Europe,Italy,Energy & Utilities,Electricity,Grid Electricity,1134000,1,4.6,4.4,87.8,Gold,8.0,2026-01-03
+S704,Orsted,Europe,Denmark,Energy & Utilities,Electricity,Renewable Electricity,2466900,3,4.67,4.43,88.5,Gold,8.0,2026-01-03
+S705,Iberdrola Renewables,Europe,Spain,Energy & Utilities,Electricity,Renewable Electricity,864000,1,4.7,4.5,89.6,Gold,8.0,2026-01-03
+S706,Cummins Power,Americas,USA,Energy & Utilities,Electricity,Backup Power,540000,1,4.7,4.6,90.3,Gold,8.0,2026-01-03
+S707,Caterpillar Power,Americas,USA,Energy & Utilities,Electricity,Backup Power,594000,1,4.8,4.7,92.9,Gold,8.0,2026-01-03
+S708,Cheniere Energy,Americas,USA,Energy & Utilities,Fuels,Natural Gas,2192400,2,4.7,4.65,90.9,Gold,8.0,2026-01-03
+S709,Shell Gas,Europe,Netherlands,Energy & Utilities,Fuels,Natural Gas,993600,1,4.8,4.6,93.2,Gold,8.0,2026-01-03
+S710,BP Fuels,Europe,UK,Energy & Utilities,Fuels,Diesel,702000,1,4.6,4.5,88.3,Gold,8.0,2026-01-03
+S711,ExxonMobil Fuels,Americas,USA,Energy & Utilities,Fuels,Diesel,756000,1,4.7,4.6,90.2,Gold,8.0,2026-01-03
+S712,Shell Aviation,Europe,Netherlands,Energy & Utilities,Fuels,Aviation Fuel,864000,1,4.8,4.7,92.2,Gold,8.0,2026-01-03
+S713,Neste,Europe,Finland,Energy & Utilities,Fuels,Biofuels,594000,1,4.7,4.5,91.1,Gold,8.0,2026-01-03
+S714,First Solar,Americas,USA,Energy & Utilities,Renewable Equipment,Solar Panels,2073600,2,4.7,4.65,92.0,Gold,8.0,2026-01-03
+S715,Canadian Solar,Americas,Canada,Energy & Utilities,Renewable Equipment,Solar Panels,1724300,3,4.57,4.2,86.1,Gold,8.0,2026-01-03
+S716,JinkoSolar,APAC,China,Energy & Utilities,Renewable Equipment,Solar Panels,992500,2,4.4,4.0,82.3,Silver,8.0,2026-01-03
+S717,Vestas,Europe,Denmark,Energy & Utilities,Renewable Equipment,Wind Turbines,2332000,2,4.5,4.65,91.0,Gold,8.0,2026-01-03
+S718,Siemens Gamesa,Europe,Spain,Energy & Utilities,Renewable Equipment,Wind Turbines,1857600,1,4.8,4.7,93.1,Gold,8.0,2026-01-03
+S719,GE Renewable Energy,Americas,USA,Energy & Utilities,Renewable Equipment,Wind Turbines,1706400,1,4.7,4.5,90.4,Gold,8.0,2026-01-03
+S720,Tesla Energy,Americas,USA,Energy & Utilities,Renewable Equipment,Battery Storage,1350000,1,4.8,4.6,91.1,Gold,8.0,2026-01-03
+S721,LG Energy Solution,APAC,South Korea,Energy & Utilities,Renewable Equipment,Battery Storage,1242000,1,4.7,4.5,91.3,Gold,8.0,2026-01-03
+S722,CATL,APAC,China,Energy & Utilities,Renewable Equipment,Battery Storage,1862700,2,4.4,4.45,86.0,Gold,8.0,2026-01-03
+S801,Cemex,Americas,Mexico,Construction & Real Estate,Building Materials,Cement,5079700,4,4.65,4.55,89.8,Gold,8.0,2026-01-03
+S802,LafargeHolcim,Europe,Switzerland,Construction & Real Estate,Building Materials,Cement,2991600,2,4.7,4.55,89.6,Gold,8.0,2026-01-03
+S803,HeidelbergCement,Europe,Germany,Construction & Real Estate,Building Materials,Cement,1350000,1,4.7,4.5,90.7,Gold,8.0,2026-01-03
+S804,Ready Mix USA,Americas,USA,Construction & Real Estate,Building Materials,Concrete,756000,1,4.5,4.4,85.4,Gold,8.0,2026-01-03
+S805,Martin Marietta,Americas,USA,Construction & Real Estate,Building Materials,Concrete,2505100,2,4.6,4.45,86.7,Gold,8.0,2026-01-03
+S806,Weyerhaeuser,Americas,USA,Construction & Real Estate,Building Materials,Lumber,2726500,3,4.73,4.63,91.6,Gold,8.0,2026-01-03
+S807,West Fraser Timber,Americas,Canada,Construction & Real Estate,Building Materials,Lumber,864000,1,4.6,4.5,87.7,Gold,8.0,2026-01-03
+S808,Nucor,Americas,USA,Construction & Real Estate,Building Materials,Structural Steel,2808200,3,4.7,4.4,87.9,Gold,8.0,2026-01-03
+S809,Steel Dynamics,Americas,USA,Construction & Real Estate,Building Materials,Structural Steel,1134000,1,4.6,4.5,87.9,Gold,8.0,2026-01-03
+S810,Guardian Glass,Americas,USA,Construction & Real Estate,Building Materials,Glass,3308300,3,4.57,4.37,88.4,Gold,8.0,2026-01-03
+S811,Saint-Gobain Glass,Europe,France,Construction & Real Estate,Building Materials,Glass,702000,1,4.7,4.6,88.6,Gold,8.0,2026-01-03
+S812,Carrier Global,Americas,USA,Construction & Real Estate,MEP Systems,HVAC Equipment,864000,1,4.7,4.6,89.3,Gold,8.0,2026-01-03
+S813,Trane Technologies,Europe,Ireland,Construction & Real Estate,MEP Systems,HVAC Equipment,918000,1,4.7,4.5,88.0,Gold,8.0,2026-01-03
+S814,Eaton,Europe,Ireland,Construction & Real Estate,MEP Systems,Electrical Systems,702000,1,4.8,4.6,91.1,Gold,8.0,2026-01-03
+S815,Schneider Electric,Europe,France,Construction & Real Estate,MEP Systems,Electrical Systems,756000,1,4.8,4.7,90.5,Gold,8.0,2026-01-03
+S816,Masco,Americas,USA,Construction & Real Estate,MEP Systems,Plumbing Systems,788600,3,4.2,4.5,87.5,Gold,8.0,2026-01-03
+S817,Kohler,Americas,USA,Construction & Real Estate,MEP Systems,Plumbing Systems,540000,1,4.7,4.6,91.0,Gold,8.0,2026-01-03
+S818,Caterpillar Construction,Americas,USA,Construction & Real Estate,Construction Equipment,Heavy Equipment,3240000,2,4.8,4.75,92.3,Gold,8.0,2026-01-03
+S819,Komatsu Construction,APAC,Japan,Construction & Real Estate,Construction Equipment,Heavy Equipment,1404000,1,4.7,4.5,90.6,Gold,8.0,2026-01-03
+S820,Hilti,Europe,Liechtenstein,Construction & Real Estate,Construction Equipment,Power Tools,734400,1,4.8,4.7,91.1,Gold,8.0,2026-01-03
+S821,Bosch Power Tools,Europe,Germany,Construction & Real Estate,Construction Equipment,Power Tools,1482300,2,4.55,4.75,91.5,Gold,8.0,2026-01-03
+S822,Layher,Europe,Germany,Construction & Real Estate,Construction Equipment,Scaffolding,797700,2,4.25,4.3,83.3,Silver,8.0,2026-01-03
+S901,Maersk,Europe,Denmark,Logistics & Transportation,Freight Services,Ocean Freight,2775600,2,4.8,4.65,93.0,Gold,8.0,2026-01-03
+S902,MSC,Europe,Switzerland,Logistics & Transportation,Freight Services,Ocean Freight,1242000,1,4.7,4.5,91.3,Gold,8.0,2026-01-03
+S903,CMA CGM,Europe,France,Logistics & Transportation,Freight Services,Ocean Freight,1771000,2,4.5,4.35,88.2,Gold,8.0,2026-01-03
+S904,DHL Express,Europe,Germany,Logistics & Transportation,Freight Services,Air Freight,1911600,2,4.8,4.75,90.5,Gold,8.0,2026-01-03
+S905,FedEx Express,Americas,USA,Logistics & Transportation,Freight Services,Air Freight,864000,1,4.8,4.7,93.2,Gold,8.0,2026-01-03
+S906,UPS Air,Americas,USA,Logistics & Transportation,Freight Services,Air Freight,1941100,3,4.8,4.23,89.3,Gold,8.0,2026-01-03
+S907,XPO Logistics,Americas,USA,Logistics & Transportation,Freight Services,Road Freight,1458000,2,4.6,4.55,88.4,Gold,8.0,2026-01-03
+S908,J.B. Hunt,Americas,USA,Logistics & Transportation,Freight Services,Road Freight,669600,1,4.6,4.5,88.0,Gold,8.0,2026-01-03
+S909,Kuehne + Nagel Road,Europe,Switzerland,Logistics & Transportation,Freight Services,Road Freight,626400,1,4.7,4.5,91.3,Gold,8.0,2026-01-03
+S910,Union Pacific,Americas,USA,Logistics & Transportation,Freight Services,Rail Freight,540000,1,4.6,4.5,88.6,Gold,8.0,2026-01-03
+S911,BNSF Railway,Americas,USA,Logistics & Transportation,Freight Services,Rail Freight,594000,1,4.6,4.5,88.9,Gold,8.0,2026-01-03
+S912,Prologis,Americas,USA,Logistics & Transportation,Warehousing,Distribution Centers,1911600,2,4.8,4.75,90.9,Gold,8.0,2026-01-03
+S913,Duke Realty,Americas,USA,Logistics & Transportation,Warehousing,Distribution Centers,810000,1,4.7,4.6,89.5,Gold,8.0,2026-01-03
+S914,Americold,Americas,USA,Logistics & Transportation,Warehousing,Cold Storage,2077100,3,4.8,4.53,90.0,Gold,8.0,2026-01-03
+S915,Lineage Logistics,Americas,USA,Logistics & Transportation,Warehousing,Cold Storage,1410800,2,4.35,4.45,87.0,Gold,8.0,2026-01-03
+S916,DHL Supply Chain,Europe,Germany,Logistics & Transportation,Warehousing,3PL Services,864000,1,4.8,4.6,89.3,Gold,8.0,2026-01-03
+S917,C.H. Robinson,Americas,USA,Logistics & Transportation,Warehousing,3PL Services,1361100,2,4.35,4.1,82.8,Silver,8.0,2026-01-03
+S918,Enterprise Fleet,Americas,USA,Logistics & Transportation,Fleet Services,Fleet Vehicles,594000,1,4.7,4.6,89.2,Gold,8.0,2026-01-03
+S919,Ryder Fleet,Americas,USA,Logistics & Transportation,Fleet Services,Fleet Vehicles,1252700,2,4.8,4.1,87.8,Gold,8.0,2026-01-03
+S920,Penske Truck Leasing,Americas,USA,Logistics & Transportation,Fleet Services,Fleet Maintenance,1537000,3,4.67,4.17,86.4,Gold,8.0,2026-01-03
+S921,Samsara,Americas,USA,Logistics & Transportation,Fleet Services,Fleet Telematics,270000,1,4.7,4.6,90.0,Gold,8.0,2026-01-03
+S1001,McKinsey,Americas,USA,Professional Services,Consulting,Management Consulting,4158000,2,4.9,4.75,95.1,Gold,8.0,2026-01-03
+S1002,BCG,Americas,USA,Professional Services,Consulting,Management Consulting,3759200,2,4.7,4.5,91.3,Gold,8.0,2026-01-03
+S1003,Bain & Company,Americas,USA,Professional Services,Consulting,Management Consulting,1620000,1,4.8,4.7,91.5,Gold,8.0,2026-01-03
+S1004,Accenture,Europe,Ireland,Professional Services,Consulting,IT Consulting,3240000,2,4.7,4.55,89.1,Gold,8.0,2026-01-03
+S1005,Deloitte Digital,Americas,USA,Professional Services,Consulting,IT Consulting,2647400,2,4.5,4.7,89.9,Gold,8.0,2026-01-03
+S1006,IBM Consulting,Americas,USA,Professional Services,Consulting,IT Consulting,1296000,1,4.6,4.5,87.8,Gold,8.0,2026-01-03
+S1007,Mercer,Americas,USA,Professional Services,Consulting,HR Consulting,4677500,3,4.67,4.57,88.8,Gold,8.0,2026-01-03
+S1008,Korn Ferry,Americas,USA,Professional Services,Consulting,HR Consulting,648000,1,4.6,4.5,88.7,Gold,8.0,2026-01-03
+S1009,Baker McKenzie,Americas,USA,Professional Services,Legal Services,Corporate Law,918000,1,4.8,4.6,91.9,Gold,8.0,2026-01-03
+S1010,DLA Piper,Americas,USA,Professional Services,Legal Services,Corporate Law,842400,1,4.7,4.5,91.2,Gold,8.0,2026-01-03
+S1011,Clifford Chance,Europe,UK,Professional Services,Legal Services,Corporate Law,777600,1,4.8,4.6,92.0,Gold,8.0,2026-01-03
+S1012,Fish & Richardson,Americas,USA,Professional Services,Legal Services,Intellectual Property,2038500,3,4.27,4.0,83.9,Silver,8.0,2026-01-03
+S1013,Finnegan,Americas,USA,Professional Services,Legal Services,Intellectual Property,486000,1,4.7,4.5,88.5,Gold,8.0,2026-01-03
+S1014,Littler Mendelson,Americas,USA,Professional Services,Legal Services,Employment Law,1523600,3,4.43,4.17,84.7,Silver,8.0,2026-01-03
+S1015,PwC,Americas,USA,Professional Services,Financial Services,Accounting,3299500,4,4.6,4.32,89.4,Gold,8.0,2026-01-03
+S1016,EY,Americas,USA,Professional Services,Financial Services,Accounting,993600,1,4.8,4.6,92.0,Gold,8.0,2026-01-03
+S1017,KPMG,Americas,USA,Professional Services,Financial Services,Accounting,950400,1,4.7,4.5,90.6,Gold,8.0,2026-01-03
+S1018,JPMorgan Chase,Americas,USA,Professional Services,Financial Services,Banking,756000,1,4.8,4.7,93.3,Gold,8.0,2026-01-03
+S1019,Bank of America,Americas,USA,Professional Services,Financial Services,Banking,702000,1,4.7,4.6,91.1,Gold,8.0,2026-01-03
+S1020,Marsh McLennan,Americas,USA,Professional Services,Financial Services,Insurance,594000,1,4.7,4.5,90.7,Gold,8.0,2026-01-03
+S1021,Aon,Europe,UK,Professional Services,Financial Services,Insurance,648000,1,4.7,4.6,90.5,Gold,8.0,2026-01-03
+S1022,WPP,Europe,UK,Professional Services,Marketing Services,Advertising,2127600,2,4.7,4.55,91.7,Gold,8.0,2026-01-03
+S1023,Omnicom,Americas,USA,Professional Services,Marketing Services,Advertising,950400,1,4.6,4.5,90.1,Gold,8.0,2026-01-03
+S1024,Publicis Groupe,Europe,France,Professional Services,Marketing Services,Advertising,885600,1,4.6,4.4,86.8,Gold,8.0,2026-01-03
+S1025,Google Ads,Americas,USA,Professional Services,Marketing Services,Digital Marketing,2532500,5,4.52,4.48,86.7,Gold,8.0,2026-01-03
+S1026,Meta Ads,Americas,USA,Professional Services,Marketing Services,Digital Marketing,1296000,2,4.7,4.75,91.4,Gold,8.0,2026-01-03
+S1027,Nielsen,Americas,USA,Professional Services,Marketing Services,Market Research,486000,1,4.7,4.5,90.5,Gold,8.0,2026-01-03
+S1028,Ipsos,Europe,France,Professional Services,Marketing Services,Market Research,432000,1,4.6,4.4,89.6,Gold,8.0,2026-01-03
+S1029,Edelman,Americas,USA,Professional Services,Marketing Services,PR & Communications,518400,1,4.7,4.5,87.8,Gold,8.0,2026-01-03
+S1030,Weber Shandwick,Americas,USA,Professional Services,Marketing Services,PR & Communications,561600,1,4.6,4.5,88.5,Gold,8.0,2026-01-03
+S1101,CBRE,Americas,USA,Facilities & Corporate Services,Facilities Management,Building Maintenance,1648600,4,4.55,4.28,86.8,Gold,8.0,2026-01-03
+S1102,JLL,Americas,USA,Facilities & Corporate Services,Facilities Management,Building Maintenance,518400,1,4.6,4.5,88.0,Gold,8.0,2026-01-03
+S1103,ISS,Europe,Denmark,Facilities & Corporate Services,Facilities Management,Cleaning Services,324000,1,4.5,4.4,86.2,Gold,8.0,2026-01-03
+S1104,ABM Industries,Americas,USA,Facilities & Corporate Services,Facilities Management,Cleaning Services,345600,1,4.5,4.4,86.1,Gold,8.0,2026-01-03
+S1105,Securitas,Europe,Sweden,Facilities & Corporate Services,Facilities Management,Security Services,432000,1,4.6,4.5,88.5,Gold,8.0,2026-01-03
+S1106,Allied Universal,Americas,USA,Facilities & Corporate Services,Facilities Management,Security Services,486000,1,4.6,4.5,89.0,Gold,8.0,2026-01-03
+S1107,Staples,Americas,USA,Facilities & Corporate Services,Office Services,Office Supplies,286200,3,4.5,4.53,89.8,Gold,8.0,2026-01-03
+S1108,Office Depot,Americas,USA,Facilities & Corporate Services,Office Services,Office Supplies,172800,2,4.4,4.45,86.7,Gold,8.0,2026-01-03
+S1109,Steelcase,Americas,USA,Facilities & Corporate Services,Office Services,Office Furniture,1004400,2,4.7,4.65,89.5,Gold,8.0,2026-01-03
+S1110,Herman Miller,Americas,USA,Facilities & Corporate Services,Office Services,Office Furniture,453600,1,4.8,4.7,92.6,Gold,8.0,2026-01-03
+S1111,Haworth,Americas,USA,Facilities & Corporate Services,Office Services,Office Furniture,1239400,2,4.2,4.6,88.3,Gold,8.0,2026-01-03
+S1112,FedEx Office,Americas,USA,Facilities & Corporate Services,Office Services,Printing Services,147960,2,4.5,4.55,90.0,Gold,8.0,2026-01-03
+S1113,American Express GBT,Americas,USA,Facilities & Corporate Services,Travel & Events,Business Travel,866400,3,4.73,4.27,89.7,Gold,8.0,2026-01-03
+S1114,BCD Travel,Europe,Netherlands,Facilities & Corporate Services,Travel & Events,Business Travel,291600,1,4.6,4.4,86.3,Gold,8.0,2026-01-03
+S1115,Maritz Global Events,Americas,USA,Facilities & Corporate Services,Travel & Events,Event Management,567800,3,4.3,3.97,83.6,Silver,8.0,2026-01-03
+S1201,Robert Half,Americas,USA,Human Resources,Staffing Services,Permanent Recruitment,1088300,3,4.73,4.63,92.4,Gold,8.0,2026-01-03
+S1202,Hays,Europe,UK,Human Resources,Staffing Services,Permanent Recruitment,345600,1,4.5,4.4,89.2,Gold,8.0,2026-01-03
+S1203,Randstad,Europe,Netherlands,Human Resources,Staffing Services,Temporary Staffing,918000,2,4.5,4.45,86.1,Gold,8.0,2026-01-03
+S1204,Adecco,Europe,Switzerland,Human Resources,Staffing Services,Temporary Staffing,410400,1,4.5,4.4,88.5,Gold,8.0,2026-01-03
+S1205,ManpowerGroup,Americas,USA,Human Resources,Staffing Services,Temporary Staffing,485800,2,4.45,4.4,88.7,Gold,8.0,2026-01-03
+S1206,Spencer Stuart,Americas,USA,Human Resources,Staffing Services,Executive Search,270000,1,4.8,4.6,92.1,Gold,8.0,2026-01-03
+S1207,Heidrick & Struggles,Americas,USA,Human Resources,Staffing Services,Executive Search,291600,1,4.7,4.5,89.1,Gold,8.0,2026-01-03
+S1208,Workday HR,Americas,USA,Human Resources,HR Technology,HRIS Systems,378000,1,4.8,4.7,91.8,Gold,8.0,2026-01-03
+S1209,SAP SuccessFactors,Europe,Germany,Human Resources,HR Technology,HRIS Systems,345600,1,4.7,4.5,88.4,Gold,8.0,2026-01-03
+S1210,ADP,Americas,USA,Human Resources,HR Technology,Payroll Services,1004800,3,4.5,4.47,88.8,Gold,8.0,2026-01-03
+S1211,Paychex,Americas,USA,Human Resources,HR Technology,Payroll Services,378000,1,4.6,4.5,89.4,Gold,8.0,2026-01-03
+S1212,Benefitfocus,Americas,USA,Human Resources,HR Technology,Benefits Administration,270000,1,4.5,4.4,88.9,Gold,8.0,2026-01-03
+S1213,Businessolver,Americas,USA,Human Resources,HR Technology,Benefits Administration,795700,2,4.3,4.7,87.0,Gold,8.0,2026-01-03
+S1214,Dale Carnegie,Americas,USA,Human Resources,Learning & Development,Training Programs,162000,1,4.6,4.5,89.2,Gold,8.0,2026-01-03
+S1215,Franklin Covey,Americas,USA,Human Resources,Learning & Development,Training Programs,194400,1,4.7,4.5,90.3,Gold,8.0,2026-01-03
+S1216,Skillsoft,Americas,USA,Human Resources,Learning & Development,E-Learning Platforms,194400,1,4.5,4.5,87.0,Gold,8.0,2026-01-03
+S1217,LinkedIn Learning,Americas,USA,Human Resources,Learning & Development,E-Learning Platforms,237600,1,4.7,4.7,91.0,Gold,8.0,2026-01-03
+S1218,Udemy Business,Americas,USA,Human Resources,Learning & Development,E-Learning Platforms,387300,2,4.55,4.25,87.4,Gold,8.0,2026-01-03
+S1219,Center for Creative Leadership,Americas,USA,Human Resources,Learning & Development,Leadership Development,324000,1,4.8,4.6,89.8,Gold,8.0,2026-01-03
+S1220,DDI,Americas,USA,Human Resources,Learning & Development,Leadership Development,291600,1,4.7,4.5,88.5,Gold,8.0,2026-01-03
+S1221,Argentina Drink Masters Corp,Americas,Argentina,Food & Beverages,Beverages,Coffee,2590900,4,4.07,4.2,82.5,Silver,9.3,2026-01-03
+S1222,Beverage Co Enterprises,Europe,UK,Food & Beverages,Beverages,Coffee,3050400,4,4.27,4.23,85.1,Gold,6.5,2026-01-03
+S1223,Beverage Co International,Middle East,UAE,Food & Beverages,Beverages,Tea,644500,2,4.45,4.4,85.7,Gold,8.9,2026-01-03
+S1224,Premium Drinks Solutions,Europe,Netherlands,Food & Beverages,Beverages,Tea,443400,2,4.9,4.45,92.7,Gold,8.8,2026-01-03
+S1225,Beverage Co Group,Middle East,Kuwait,Food & Beverages,Beverages,Tea,326900,3,4.17,4.6,85.8,Gold,6.8,2026-01-03
+S1226,Canada Fresh Brew Solutions,Americas,Canada,Food & Beverages,Beverages,Tea,978500,4,4.65,4.05,85.8,Gold,6.8,2026-01-03
+S1227,Fresh Brew Solutions,Americas,USA,Food & Beverages,Beverages,Tea,1349200,2,4.5,4.75,90.9,Gold,7.4,2026-01-03
+S1228,Japan Milk Masters Co,APAC,Japan,Food & Beverages,Dairy Products,Cheese,1069700,2,4.25,4.2,84.3,Silver,6.4,2026-01-03
+S1229,Poland Fresh Dairy Trading,Europe,Poland,Food & Beverages,Dairy Products,Cheese,1123500,2,4.25,4.25,82.2,Silver,7.9,2026-01-03
+S1230,Cream Co Inc,APAC,China,Food & Beverages,Dairy Products,Cheese,1916600,3,4.53,4.3,87.2,Gold,8.1,2026-01-03
+S1231,Cream Co Trading,APAC,Australia,Food & Beverages,Dairy Products,Cheese,1651000,4,4.4,4.03,83.5,Silver,8.8,2026-01-03
+S1232,Milk Masters Group,Americas,Canada,Food & Beverages,Dairy Products,Cheese,939500,2,4.45,3.9,82.4,Silver,7.6,2026-01-03
+S1233,Farm Dairy Enterprises,APAC,Vietnam,Food & Beverages,Dairy Products,Cheese,505900,2,4.5,4.55,87.1,Gold,9.2,2026-01-03
+S1234,Australia Fresh Dairy Trading,APAC,Australia,Food & Beverages,Dairy Products,Milk & Cream,1130500,4,4.5,4.7,88.6,Gold,7.2,2026-01-03
+S1235,Cream Co Enterprises,Europe,UK,Food & Beverages,Dairy Products,Milk & Cream,1848100,4,4.47,4.15,86.4,Gold,7.1,2026-01-03
+S1236,Ghana Quality Milk Group,Africa,Ghana,Food & Beverages,Dairy Products,Milk & Cream,2239100,4,4.47,4.15,84.9,Silver,9.3,2026-01-03
+S1237,Indonesia Dairy Fresh Co,APAC,Indonesia,Food & Beverages,Dairy Products,Milk & Cream,606600,2,4.3,4.4,85.3,Gold,6.8,2026-01-03
+S1238,Pure Oils Co,APAC,China,Food & Beverages,Edible Oils,Canola Oil,2628200,4,4.57,4.45,88.3,Gold,8.4,2026-01-03
+S1239,Quality Oils Co,Americas,Peru,Food & Beverages,Edible Oils,Canola Oil,1729600,3,4.47,4.17,84.1,Silver,8.4,2026-01-03
+S1240,Select Oils Co,Middle East,Oman,Food & Beverages,Edible Oils,Canola Oil,365500,3,4.63,4.03,83.6,Silver,6.6,2026-01-03
+S1241,Switzerland Pure Oils Group,Europe,Switzerland,Food & Beverages,Edible Oils,Canola Oil,323300,3,4.27,3.87,80.6,Silver,8.8,2026-01-03
+S1242,USA Pure Oils Trading,Americas,USA,Food & Beverages,Edible Oils,Coconut Oil,393400,2,4.4,3.9,83.7,Silver,8.3,2026-01-03
+S1243,Switzerland Premium Oils Trading,Europe,Switzerland,Food & Beverages,Edible Oils,Coconut Oil,2326800,4,4.28,4.28,83.9,Silver,7.8,2026-01-03
+S1244,Quality Oils Enterprises,Europe,Belgium,Food & Beverages,Edible Oils,Coconut Oil,365400,2,4.25,4.55,84.6,Silver,9.5,2026-01-03
+S1245,Pure Oils Enterprises,Europe,Sweden,Food & Beverages,Edible Oils,Coconut Oil,2306000,4,4.43,4.35,87.4,Gold,7.8,2026-01-03
+S1246,Global Oils Group,Middle East,Jordan,Food & Beverages,Edible Oils,Coconut Oil,1469400,3,4.2,4.33,85.0,Silver,7.7,2026-01-03
+S1247,Poland Pure Oils Group,Europe,Poland,Food & Beverages,Edible Oils,Olive Oil,1626200,2,4.0,3.95,78.4,Silver,7.1,2026-01-03
+S1248,Argentina Select Oils Ltd,Americas,Argentina,Food & Beverages,Edible Oils,Olive Oil,2071900,3,4.5,4.2,84.8,Silver,8.9,2026-01-03
+S1249,UK Global Oils Trading,Europe,UK,Food & Beverages,Edible Oils,Olive Oil,1449900,4,4.65,4.53,88.2,Gold,8.6,2026-01-03
+S1250,Global Oils Solutions,APAC,Malaysia,Food & Beverages,Edible Oils,Olive Oil,1280300,3,4.23,4.2,84.4,Silver,9.3,2026-01-03
+S1251,Pure Oils Ltd,Americas,Mexico,Food & Beverages,Edible Oils,Olive Oil,1314400,2,4.05,4.6,86.2,Gold,6.8,2026-01-03
+S1252,Fresh Oils Enterprises,Middle East,Kuwait,Food & Beverages,Edible Oils,Palm Oil,822100,2,4.5,4.4,88.0,Gold,8.2,2026-01-03
+S1253,Organic Oils Trading,Africa,Kenya,Food & Beverages,Edible Oils,Palm Oil,2558300,4,4.3,4.28,84.2,Silver,8.7,2026-01-03
+S1254,Turkey Fresh Oils Solutions,Middle East,Turkey,Food & Beverages,Edible Oils,Palm Oil,1493500,2,4.6,3.8,82.5,Silver,6.2,2026-01-03
+S1255,Fresh Oils International,Europe,Germany,Food & Beverages,Edible Oils,Peanut Oil,1263200,2,4.85,3.75,84.7,Silver,8.6,2026-01-03
+S1256,Germany Select Oils International,Europe,Germany,Food & Beverages,Edible Oils,Peanut Oil,2262500,3,4.33,4.13,83.0,Silver,7.4,2026-01-03
+S1257,Singapore Fresh Oils Co,APAC,Singapore,Food & Beverages,Edible Oils,Peanut Oil,1456400,4,4.62,3.95,86.1,Gold,8.8,2026-01-03
+S1258,Select Oils Ltd,APAC,Australia,Food & Beverages,Edible Oils,Peanut Oil,1057200,2,4.4,3.8,82.8,Silver,7.3,2026-01-03
+S1259,Belgium Fresh Oils Co,Europe,Belgium,Food & Beverages,Edible Oils,Rice Bran Oil,2366300,4,4.32,4.0,83.6,Silver,8.3,2026-01-03
+S1260,Fresh Oils Inc,Middle East,Saudi Arabia,Food & Beverages,Edible Oils,Rice Bran Oil,463500,2,4.4,4.15,83.2,Silver,7.2,2026-01-03
+S1261,Natural Oils Inc,Middle East,Qatar,Food & Beverages,Edible Oils,Soybean Oil,457400,2,3.9,4.2,79.0,Silver,8.3,2026-01-03
+S1262,Canada Select Oils International,Americas,Canada,Food & Beverages,Edible Oils,Soybean Oil,1116900,2,4.15,4.8,88.6,Gold,8.6,2026-01-03
+S1263,Peru Premium Oils International,Americas,Peru,Food & Beverages,Edible Oils,Soybean Oil,471900,2,4.5,4.1,85.0,Gold,7.9,2026-01-03
+S1264,Fresh Oils Solutions,Europe,Netherlands,Food & Beverages,Edible Oils,Sunflower Oil,855800,4,4.42,4.18,85.7,Gold,9.3,2026-01-03
+S1265,South Korea Select Oils Co,APAC,South Korea,Food & Beverages,Edible Oils,Sunflower Oil,1930400,3,4.43,4.37,85.2,Gold,8.7,2026-01-03
+S1266,Prime Harvest Enterprises,Americas,USA,Food & Beverages,Grains & Cereals,Corn/Maize,1565600,3,4.4,3.83,82.1,Silver,6.4,2026-01-03
+S1267,Italy Harvest Co Enterprises,Europe,Italy,Food & Beverages,Grains & Cereals,Corn/Maize,703900,2,3.85,4.2,80.6,Silver,9.0,2026-01-03
+S1268,Agro Trade International,APAC,Vietnam,Food & Beverages,Grains & Cereals,Corn/Maize,571100,4,4.45,4.32,85.6,Gold,6.7,2026-01-03
+S1269,Golden Grain Enterprises,Middle East,Saudi Arabia,Food & Beverages,Grains & Cereals,Corn/Maize,1417800,3,4.63,4.2,86.6,Gold,9.2,2026-01-03
+S1270,Poland Harvest Co Solutions,Europe,Poland,Food & Beverages,Grains & Cereals,Corn/Maize,2175100,3,4.57,4.2,87.1,Gold,9.4,2026-01-03
+S1271,Agri Corp Inc,Americas,Peru,Food & Beverages,Grains & Cereals,Corn/Maize,516800,3,4.2,4.17,83.9,Silver,8.9,2026-01-03
+S1272,Belgium Farm Fresh Ltd,Europe,Belgium,Food & Beverages,Grains & Cereals,Rice,997900,2,4.65,4.4,87.0,Gold,7.5,2026-01-03
+S1273,Farm Fresh Inc,APAC,Malaysia,Food & Beverages,Grains & Cereals,Rice,708300,2,4.4,4.2,83.5,Silver,8.3,2026-01-03
+S1274,Colombia Agri Corp Corp,Americas,Colombia,Food & Beverages,Grains & Cereals,Rice,1055300,4,4.32,4.38,87.6,Gold,9.0,2026-01-03
+S1275,Australia Grain Masters Enterprises,APAC,Australia,Food & Beverages,Grains & Cereals,Rice,558400,3,4.47,3.8,82.2,Silver,6.8,2026-01-03
+S1276,Argentina Prime Harvest Corp,Americas,Argentina,Food & Beverages,Grains & Cereals,Rice,1636300,3,4.1,3.8,77.5,Silver,8.8,2026-01-03
+S1277,Prime Harvest Corp,APAC,Indonesia,Food & Beverages,Grains & Cereals,Wheat,1425200,2,4.5,4.4,85.4,Gold,7.9,2026-01-03
+S1278,Prime Harvest Inc,APAC,Australia,Food & Beverages,Grains & Cereals,Wheat,938900,2,4.4,4.6,86.5,Gold,8.8,2026-01-03
+S1279,Pack Tech Solutions,APAC,India,Food & Beverages,Packaging Materials,Aluminum Cans,287400,2,4.4,3.95,81.1,Silver,7.4,2026-01-03
+S1280,UK Box Masters Trading,Europe,UK,Food & Beverages,Packaging Materials,Aluminum Cans,1257800,3,4.37,4.6,86.6,Gold,9.4,2026-01-03
+S1281,Poland Pack Tech International,Europe,Poland,Food & Beverages,Packaging Materials,Aluminum Cans,1118200,3,4.47,4.13,83.0,Silver,9.4,2026-01-03
+S1282,Packaging Solutions International,APAC,Philippines,Food & Beverages,Packaging Materials,Aluminum Cans,1411600,2,4.3,4.4,87.3,Gold,7.3,2026-01-03
+S1283,Container Co Ltd,Europe,Belgium,Food & Beverages,Packaging Materials,Aluminum Cans,2239500,4,4.6,4.52,89.6,Gold,6.9,2026-01-03
+S1284,Colombia Wrap Inc Trading,Americas,Colombia,Food & Beverages,Packaging Materials,Aluminum Cans,752600,4,4.18,4.4,84.7,Silver,7.5,2026-01-03
+S1285,Sweden Wrap Inc Corp,Europe,Sweden,Food & Beverages,Packaging Materials,Aluminum Cans,1063700,4,4.5,4.45,85.7,Gold,6.8,2026-01-03
+S1286,Packaging Solutions Corp,Europe,Poland,Food & Beverages,Packaging Materials,Food-Grade Plastics,1658600,4,4.28,4.12,83.3,Silver,7.4,2026-01-03
+S1287,Colombia Container Co Co,Americas,Colombia,Food & Beverages,Packaging Materials,Food-Grade Plastics,301500,2,4.9,4.55,91.6,Gold,7.8,2026-01-03
+S1288,Belgium Container Co International,Europe,Belgium,Food & Beverages,Packaging Materials,Food-Grade Plastics,1096200,2,4.4,4.7,88.5,Gold,6.8,2026-01-03
+S1289,Pack Pro Inc,Americas,Colombia,Food & Beverages,Packaging Materials,Food-Grade Plastics,1752000,3,4.5,4.43,86.2,Gold,7.5,2026-01-03
+S1290,Colombia Pack Tech Inc,Americas,Colombia,Food & Beverages,Packaging Materials,Food-Grade Plastics,2429500,3,4.27,4.43,85.7,Gold,6.2,2026-01-03
+S1291,Container Co Enterprises,Middle East,UAE,Food & Beverages,Packaging Materials,Food-Grade Plastics,2349400,3,4.37,4.2,85.0,Gold,6.4,2026-01-03
+S1292,Box Masters International,APAC,Taiwan,Food & Beverages,Packaging Materials,Food-Grade Plastics,1391200,4,4.7,3.88,84.0,Silver,9.5,2026-01-03
+S1293,Colombia Container Co Inc,Americas,Colombia,Food & Beverages,Packaging Materials,Glass Containers,1175700,2,4.9,3.9,84.7,Silver,6.6,2026-01-03
+S1294,China Box Masters Corp,APAC,China,Food & Beverages,Packaging Materials,Glass Containers,981800,2,4.3,4.9,89.4,Gold,6.7,2026-01-03
+S1295,Box Masters Group,Europe,France,Food & Beverages,Packaging Materials,Glass Containers,965900,2,4.3,4.5,87.2,Gold,6.6,2026-01-03
+S1296,Pack Tech Ltd,APAC,Japan,Food & Beverages,Packaging Materials,Glass Containers,1325900,2,4.15,4.0,82.5,Silver,8.2,2026-01-03
+S1297,Thailand Container Co Trading,APAC,Thailand,Food & Beverages,Packaging Materials,Glass Containers,1622500,4,4.75,4.12,89.0,Gold,6.5,2026-01-03
+S1298,Premium Meats Enterprises,APAC,India,Food & Beverages,Proteins,Beef,1299800,4,4.35,4.4,84.1,Silver,7.1,2026-01-03
+S1299,Select Proteins Trading,Europe,France,Food & Beverages,Proteins,Beef,1786700,3,4.53,4.1,84.6,Silver,9.3,2026-01-03
+S1300,Protein Source Ltd,Europe,France,Food & Beverages,Proteins,Beef,2215100,4,4.58,4.28,87.3,Gold,8.6,2026-01-03
+S1301,Quality Foods Group,Middle East,Turkey,Food & Beverages,Proteins,Poultry,3210000,4,4.32,4.1,81.7,Silver,8.3,2026-01-03
+S1302,Thailand Meat Pro Enterprises,APAC,Thailand,Food & Beverages,Proteins,Poultry,304200,2,4.45,4.2,85.8,Gold,6.1,2026-01-03
+S1303,Egypt Select Proteins Solutions,Africa,Egypt,Food & Beverages,Proteins,Poultry,3039500,4,4.28,4.1,84.9,Silver,8.7,2026-01-03
+S1304,Quality Foods Co,Americas,Chile,Food & Beverages,Proteins,Poultry,1742100,4,4.62,4.0,86.6,Gold,6.4,2026-01-03
+S1305,Belgium Prime Cuts Solutions,Europe,Belgium,Food & Beverages,Proteins,Seafood,229400,2,4.2,4.5,84.5,Silver,9.3,2026-01-03
+S1306,Fresh Farms Enterprises,APAC,South Korea,Food & Beverages,Proteins,Seafood,1108400,3,4.47,4.27,86.6,Gold,9.3,2026-01-03
+S1307,Switzerland Fresh Farms Ltd,Europe,Switzerland,Food & Beverages,Proteins,Seafood,791000,2,4.55,3.95,83.1,Silver,9.4,2026-01-03
+S1308,Nigeria Select Proteins Trading,Africa,Nigeria,Food & Beverages,Proteins,Seafood,807600,3,4.73,3.9,85.8,Gold,8.5,2026-01-03
+S1309,Ghana Prime Cuts Group,Africa,Ghana,Food & Beverages,Proteins,Seafood,1672600,3,4.43,3.9,82.8,Silver,6.4,2026-01-03
+S1310,Italy Quality Foods Enterprises,Europe,Italy,Food & Beverages,Proteins,Seafood,556000,3,4.5,4.23,84.6,Silver,7.2,2026-01-03
+S1311,Argentina Seasoning Masters Solutions,Americas,Argentina,Food & Beverages,Spices & Seasonings,Pepper,1179200,3,4.47,4.43,85.3,Gold,6.3,2026-01-03
+S1312,Herb Gardens International,APAC,Taiwan,Food & Beverages,Spices & Seasonings,Pepper,1431400,3,4.47,4.53,86.6,Gold,6.7,2026-01-03
+S1313,Premium Flavors Solutions,Middle East,Saudi Arabia,Food & Beverages,Spices & Seasonings,Pepper,1098200,3,4.63,4.67,91.7,Gold,7.4,2026-01-03
+S1314,Australia Premium Flavors Inc,APAC,Australia,Food & Beverages,Spices & Seasonings,Pepper,3186200,4,4.53,4.3,85.8,Gold,9.4,2026-01-03
+S1315,Seasoning Masters Solutions,Europe,Netherlands,Food & Beverages,Spices & Seasonings,Vanilla,2236300,4,4.12,4.6,86.1,Gold,9.1,2026-01-03
+S1316,Germany Flavor Co Group,Europe,Germany,Food & Beverages,Spices & Seasonings,Vanilla,1597600,2,4.4,4.25,85.9,Gold,6.2,2026-01-03
+S1317,Australia Herb Gardens Corp,APAC,Australia,Food & Beverages,Spices & Seasonings,Vanilla,1690400,4,4.35,4.25,84.3,Silver,7.7,2026-01-03
+S1318,Tanzania Flavor Co Trading,Africa,Tanzania,Food & Beverages,Spices & Seasonings,Vanilla,2930400,4,4.58,4.48,89.6,Gold,8.7,2026-01-03
+S1319,Spice World Co,Europe,Netherlands,Food & Beverages,Spices & Seasonings,Vanilla,1151800,2,4.8,4.3,87.1,Gold,9.0,2026-01-03
+S1320,Qatar Exotic Spices International,Middle East,Qatar,Food & Beverages,Spices & Seasonings,Vanilla,2566600,4,4.45,3.9,82.2,Silver,8.4,2026-01-03
+S1321,Natural Sweet Solutions,Europe,Italy,Food & Beverages,Sweeteners,Sugar,431700,2,4.5,4.4,86.1,Gold,7.2,2026-01-03
+S1322,Quality Sweet Inc,Americas,Peru,Food & Beverages,Sweeteners,Sugar,2257600,4,4.55,4.15,86.0,Gold,8.8,2026-01-03
+S1323,France Sky Services Enterprises,Europe,France,Information Technology,Cloud Services,Cloud Storage,205100,2,4.3,4.25,84.8,Silver,7.4,2026-01-03
+S1324,France Cloud Pro Enterprises,Europe,France,Information Technology,Cloud Services,Cloud Storage,3074900,4,4.45,4.45,86.5,Gold,6.7,2026-01-03
+S1325,Cloud Masters Trading,Middle East,Qatar,Information Technology,Cloud Services,Cloud Storage,634200,2,4.45,4.45,88.3,Gold,7.3,2026-01-03
+S1326,Virtual Solutions Ltd,Africa,Egypt,Information Technology,Cloud Services,Cloud Storage,303400,2,4.45,4.1,83.3,Silver,9.3,2026-01-03
+S1327,Virtual Solutions International,APAC,South Korea,Information Technology,Cloud Services,IaaS,3123500,4,4.28,4.4,84.9,Silver,7.8,2026-01-03
+S1328,Kuwait Cloud Pro International,Middle East,Kuwait,Information Technology,Cloud Services,IaaS,1944100,3,4.53,4.27,86.7,Gold,7.0,2026-01-03
+S1329,Switzerland Sky Services Inc,Europe,Switzerland,Information Technology,Cloud Services,PaaS,2794200,4,4.32,4.08,84.3,Silver,7.1,2026-01-03
+S1330,Belgium Sky Services Enterprises,Europe,Belgium,Information Technology,Cloud Services,PaaS,587100,2,4.05,4.45,83.0,Silver,8.0,2026-01-03
+S1331,Ethiopia Cloud Pro Corp,Africa,Ethiopia,Information Technology,Cloud Services,PaaS,315500,2,4.5,4.35,85.9,Gold,8.8,2026-01-03
+S1332,Tech Cloud International,Americas,Argentina,Information Technology,Cloud Services,SaaS,1086400,3,4.37,4.2,85.7,Gold,7.4,2026-01-03
+S1333,Digital Cloud Corp,APAC,China,Information Technology,Cloud Services,SaaS,959200,2,4.55,3.75,82.0,Silver,9.2,2026-01-03
+S1334,Cyber Shield Trading,Americas,Mexico,Information Technology,Cybersecurity,Endpoint Security,3212900,4,4.07,4.62,84.0,Silver,7.8,2026-01-03
+S1335,France Safe Tech Co,Europe,France,Information Technology,Cybersecurity,Endpoint Security,1756500,3,4.2,3.97,81.1,Silver,6.7,2026-01-03
+S1336,Mexico Security Masters Inc,Americas,Mexico,Information Technology,Cybersecurity,Endpoint Security,2080200,3,4.9,4.47,89.3,Gold,6.1,2026-01-03
+S1337,South Africa Safe Tech Corp,Africa,South Africa,Information Technology,Cybersecurity,Identity Management,1179800,2,4.3,4.0,82.1,Silver,9.2,2026-01-03
+S1338,Chile Secure Pro Corp,Americas,Chile,Information Technology,Cybersecurity,Identity Management,449700,2,4.6,4.55,89.2,Gold,8.6,2026-01-03
+S1339,Ghana Guard Systems Enterprises,Africa,Ghana,Information Technology,Cybersecurity,Identity Management,1922800,4,4.82,4.47,88.8,Gold,8.2,2026-01-03
+S1340,Digital Defense Inc,Middle East,Saudi Arabia,Information Technology,Cybersecurity,Identity Management,325000,2,4.1,3.9,80.4,Silver,7.3,2026-01-03
+S1341,Cyber Shield Solutions,APAC,Philippines,Information Technology,Cybersecurity,Identity Management,796500,2,4.9,3.6,85.5,Gold,8.2,2026-01-03
+S1342,Digital Defense Corp,Europe,France,Information Technology,Cybersecurity,Network Security,875000,3,4.33,4.57,86.9,Gold,6.9,2026-01-03
+S1343,Brazil Secure Pro Solutions,Americas,Brazil,Information Technology,Cybersecurity,Network Security,1430500,3,4.53,4.0,85.2,Gold,6.2,2026-01-03
+S1344,Belgium Safe Tech Inc,Europe,Belgium,Information Technology,Cybersecurity,Network Security,2126500,4,4.7,4.48,91.4,Gold,6.5,2026-01-03
+S1345,Digital Defense Enterprises,Europe,UK,Information Technology,Cybersecurity,Security Operations,1192600,3,4.5,4.63,89.2,Gold,8.5,2026-01-03
+S1346,Secure Pro Corp,Europe,Poland,Information Technology,Cybersecurity,Security Operations,1676600,2,4.6,3.8,81.9,Silver,7.8,2026-01-03
+S1347,Cyber Shield Corp,Europe,Poland,Information Technology,Cybersecurity,Security Operations,2243000,4,4.55,4.68,88.9,Gold,9.2,2026-01-03
+S1348,Kenya Security Masters Solutions,Africa,Kenya,Information Technology,Cybersecurity,Security Operations,868500,4,4.08,4.43,82.7,Silver,8.9,2026-01-03
+S1349,Secure Pro Co,Africa,Nigeria,Information Technology,Cybersecurity,Security Operations,2333800,3,4.3,4.3,84.0,Silver,7.3,2026-01-03
+S1350,Guard Systems Group,APAC,Singapore,Information Technology,Cybersecurity,Security Operations,1504000,4,4.8,4.47,89.6,Gold,8.0,2026-01-03
+S1351,Poland Digital Depot Group,Europe,Poland,Information Technology,Hardware,Desktops,2424900,4,4.47,4.25,86.7,Gold,9.4,2026-01-03
+S1352,Belgium Digital Systems International,Europe,Belgium,Information Technology,Hardware,Desktops,752800,2,4.5,4.3,86.9,Gold,7.0,2026-01-03
+S1353,Philippines Hardware Solutions Trading,APAC,Philippines,Information Technology,Hardware,Desktops,613700,3,4.57,4.27,85.2,Gold,7.8,2026-01-03
+S1354,Hardware Solutions Corp,Africa,Tanzania,Information Technology,Hardware,Desktops,2529200,3,4.37,4.2,84.1,Silver,9.1,2026-01-03
+S1355,Hardware Solutions Trading,Americas,Canada,Information Technology,Hardware,Laptops,3126200,3,4.33,3.93,81.7,Silver,6.5,2026-01-03
+S1356,Switzerland Digital Systems Inc,Europe,Switzerland,Information Technology,Hardware,Network Equipment,2118200,2,3.85,3.95,78.2,Silver,9.0,2026-01-03
+S1357,Compute Pro Solutions,APAC,Thailand,Information Technology,Hardware,Network Equipment,568100,2,4.3,4.05,84.1,Silver,8.5,2026-01-03
+S1358,Compute Pro Corp,Middle East,Saudi Arabia,Information Technology,Hardware,Network Equipment,3858600,3,4.37,4.3,85.7,Gold,6.5,2026-01-03
+S1359,Israel Hardware Solutions Ltd,Middle East,Israel,Information Technology,Hardware,Peripherals,847400,3,4.4,4.47,87.3,Gold,7.1,2026-01-03
+S1360,Turkey Tech Hardware Corp,Middle East,Turkey,Information Technology,Hardware,Peripherals,3329400,3,4.37,4.2,84.4,Silver,7.1,2026-01-03
+S1361,Germany Tech Mart Inc,Europe,Germany,Information Technology,Hardware,Peripherals,6181500,4,4.62,3.82,83.2,Silver,6.3,2026-01-03
+S1362,Compute Pro Co,Europe,Switzerland,Information Technology,Hardware,Servers,1934900,3,4.47,4.17,86.0,Gold,8.4,2026-01-03
+S1363,Nigeria Tech Mart Corp,Africa,Nigeria,Information Technology,Hardware,Servers,904400,2,4.3,4.45,87.9,Gold,6.7,2026-01-03
+S1364,Sweden Digital Depot Enterprises,Europe,Sweden,Information Technology,Hardware,Storage Systems,5705800,4,4.25,4.22,83.1,Silver,7.6,2026-01-03
+S1365,Digital Depot Group,Europe,France,Information Technology,Hardware,Storage Systems,1741000,2,3.95,4.7,86.3,Gold,9.0,2026-01-03
+S1366,Malaysia Hardware Solutions International,APAC,Malaysia,Information Technology,Hardware,Storage Systems,446400,2,4.5,4.6,90.5,Gold,8.3,2026-01-03
+S1367,Digital Systems Ltd,Africa,Morocco,Information Technology,Hardware,Storage Systems,2405900,2,4.5,4.0,86.0,Gold,6.6,2026-01-03
+S1368,Tech Apps Enterprises,Middle East,Kuwait,Information Technology,Software,Database Software,1592500,4,4.25,4.3,85.5,Gold,7.2,2026-01-03
+S1369,Soft Solutions Trading,APAC,Australia,Information Technology,Software,Database Software,1677700,4,4.5,4.15,86.1,Gold,6.7,2026-01-03
+S1370,Saudi Arabia Soft Solutions Solutions,Middle East,Saudi Arabia,Information Technology,Software,Database Software,340800,2,4.7,4.2,86.0,Gold,7.6,2026-01-03
+S1371,Indonesia Software Hub Inc,APAC,Indonesia,Information Technology,Software,Development Tools,936500,2,4.25,3.85,82.1,Silver,9.2,2026-01-03
+S1372,France Software Hub International,Europe,France,Information Technology,Software,Development Tools,1184300,2,4.3,4.5,87.8,Gold,9.2,2026-01-03
+S1373,App Pro Co,Americas,Mexico,Information Technology,Software,Development Tools,2958700,4,4.4,4.18,85.3,Gold,9.2,2026-01-03
+S1374,Soft Solutions International,Middle East,Oman,Information Technology,Software,Enterprise Software,1431300,2,4.2,4.4,84.0,Silver,8.7,2026-01-03
+S1375,Israel Code Masters Group,Middle East,Israel,Information Technology,Software,Enterprise Software,748200,4,4.18,4.03,80.2,Silver,8.3,2026-01-03
+S1376,Digital Software Corp,APAC,Vietnam,Information Technology,Software,Enterprise Software,3340300,4,4.38,4.18,83.9,Silver,7.7,2026-01-03
+S1377,Switzerland Tech Apps Ltd,Europe,Switzerland,Information Technology,Software,Enterprise Software,997800,3,4.43,4.13,84.9,Silver,7.7,2026-01-03
+S1378,Digital Software Solutions,APAC,Thailand,Information Technology,Software,Productivity Software,1298700,2,3.95,4.65,84.9,Silver,7.3,2026-01-03
+S1379,Soft Solutions Co,Africa,South Africa,Information Technology,Software,Productivity Software,1684500,3,4.2,3.97,82.8,Silver,6.1,2026-01-03
+S1380,Soft Solutions Corp,Europe,France,Information Technology,Software,Productivity Software,3256600,4,4.65,4.5,87.3,Gold,6.8,2026-01-03
+S1381,Peru Soft Solutions Group,Americas,Peru,Information Technology,Software,Productivity Software,2157900,4,4.28,4.5,87.0,Gold,7.9,2026-01-03
+S1382,Peru App Pro International,Americas,Peru,Information Technology,Software,Productivity Software,732800,3,4.03,4.2,82.2,Silver,7.9,2026-01-03
+S1383,Mexico Telecom Pro Inc,Americas,Mexico,Information Technology,Telecommunications,Internet Services,2303900,3,4.37,4.47,85.1,Gold,9.1,2026-01-03
+S1384,USA Telecom Pro Group,Americas,USA,Information Technology,Telecommunications,Internet Services,1702500,3,4.4,4.37,86.8,Gold,7.7,2026-01-03
+S1385,Signal Masters Group,APAC,Vietnam,Information Technology,Telecommunications,Internet Services,1441300,2,4.75,4.65,91.7,Gold,6.5,2026-01-03
+S1386,Network Solutions Ltd,Middle East,Jordan,Information Technology,Telecommunications,Internet Services,614800,2,4.4,4.5,87.8,Gold,8.4,2026-01-03
+S1387,Connect Co Co,Europe,Belgium,Information Technology,Telecommunications,Mobile Services,782800,2,3.95,3.7,79.1,Silver,7.9,2026-01-03
+S1388,Network Solutions International,Americas,USA,Information Technology,Telecommunications,Mobile Services,1474100,4,4.35,4.32,86.6,Gold,8.6,2026-01-03
+S1389,Argentina Network Solutions Solutions,Americas,Argentina,Information Technology,Telecommunications,Mobile Services,1447800,3,4.2,4.6,84.8,Silver,9.3,2026-01-03
+S1390,Israel Comm Tech Corp,Middle East,Israel,Information Technology,Telecommunications,Mobile Services,2363100,4,4.42,4.25,86.4,Gold,6.3,2026-01-03
+S1391,Lab Chemicals Enterprises,Africa,Morocco,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2231800,4,4.43,4.25,86.2,Gold,8.3,2026-01-03
+S1392,USA Pure Chemicals Co,Americas,USA,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,715100,4,4.4,4.1,83.5,Silver,8.3,2026-01-03
+S1393,Specialty Chem Solutions,Middle East,Jordan,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2679400,4,4.1,4.38,84.5,Silver,6.3,2026-01-03
+S1394,Colombia Specialty Chem Co,Americas,Colombia,Manufacturing & Industrial,Chemicals,Adhesives & Sealants,1786800,4,4.32,4.12,82.2,Silver,9.5,2026-01-03
+S1395,Specialty Chem Inc,Europe,France,Manufacturing & Industrial,Chemicals,Industrial Chemicals,707300,2,4.25,4.1,82.7,Silver,8.6,2026-01-03
+S1396,Chemical Solutions Inc,Middle East,Bahrain,Manufacturing & Industrial,Chemicals,Industrial Chemicals,521400,3,4.2,4.5,87.3,Gold,8.8,2026-01-03
+S1397,Ghana Pure Chemicals Inc,Africa,Ghana,Manufacturing & Industrial,Chemicals,Industrial Chemicals,2498600,4,4.2,4.12,83.9,Silver,9.1,2026-01-03
+S1398,Chile Chemical Solutions Enterprises,Americas,Chile,Manufacturing & Industrial,Chemicals,Industrial Chemicals,1061200,2,4.4,4.55,87.0,Gold,8.5,2026-01-03
+S1399,Vietnam Industrial Chem Co,APAC,Vietnam,Manufacturing & Industrial,Chemicals,Petrochemicals,1874900,4,4.25,4.8,89.5,Gold,7.3,2026-01-03
+S1400,Specialty Chem Group,APAC,Vietnam,Manufacturing & Industrial,Chemicals,Petrochemicals,1530500,4,4.53,3.88,82.6,Silver,7.9,2026-01-03
+S1401,UAE Specialty Chem Trading,Middle East,UAE,Manufacturing & Industrial,Chemicals,Petrochemicals,629900,4,4.25,4.2,84.5,Silver,6.2,2026-01-03
+S1402,Spain Specialty Chem Solutions,Europe,Spain,Manufacturing & Industrial,Chemicals,Petrochemicals,2126700,3,4.23,4.53,84.4,Silver,7.0,2026-01-03
+S1403,Lab Chemicals Co,APAC,Singapore,Manufacturing & Industrial,Chemicals,Petrochemicals,349500,3,4.43,4.13,85.4,Gold,6.5,2026-01-03
+S1404,Chile Chemical Solutions Solutions,Americas,Chile,Manufacturing & Industrial,Chemicals,Petrochemicals,2770100,4,4.58,4.22,85.8,Gold,7.8,2026-01-03
+S1405,Specialty Chem Enterprises,APAC,Malaysia,Manufacturing & Industrial,Chemicals,Specialty Chemicals,1038900,3,4.3,4.43,87.1,Gold,6.2,2026-01-03
+S1406,Lab Chemicals Ltd,Americas,Argentina,Manufacturing & Industrial,Chemicals,Specialty Chemicals,1665000,3,4.4,4.4,87.4,Gold,8.6,2026-01-03
+S1407,Nigeria Chem Pro International,Africa,Nigeria,Manufacturing & Industrial,Chemicals,Specialty Chemicals,843200,2,4.35,4.8,89.4,Gold,6.7,2026-01-03
+S1408,Equipment Masters Group,Europe,Germany,Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,1359100,4,4.3,4.18,83.5,Silver,7.8,2026-01-03
+S1409,Chile Industrial Machines International,Americas,Chile,Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,4840800,2,4.4,4.45,88.0,Gold,7.3,2026-01-03
+S1410,Belgium Tech Machinery Group,Europe,Belgium,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,6759200,3,4.57,4.53,87.5,Gold,6.6,2026-01-03
+S1411,France Industrial Machines Trading,Europe,France,Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,6827700,3,4.4,4.43,86.2,Gold,8.7,2026-01-03
+S1412,Tech Machinery Corp,Americas,Colombia,Manufacturing & Industrial,Equipment & Machinery,Material Handling,860200,2,4.35,4.05,84.7,Silver,7.6,2026-01-03
+S1413,Oman Machine Pro Trading,Middle East,Oman,Manufacturing & Industrial,Equipment & Machinery,Material Handling,1282100,3,4.63,4.6,89.6,Gold,6.9,2026-01-03
+S1414,Germany Equipment Masters Solutions,Europe,Germany,Manufacturing & Industrial,Equipment & Machinery,Material Handling,1817000,3,4.37,4.67,87.1,Gold,8.4,2026-01-03
+S1415,Peru Industrial Machines Ltd,Americas,Peru,Manufacturing & Industrial,Equipment & Machinery,Material Handling,7946700,3,4.33,4.0,83.5,Silver,6.2,2026-01-03
+S1416,Machine Pro Solutions,Africa,South Africa,Manufacturing & Industrial,Equipment & Machinery,Material Handling,994200,3,3.93,4.4,83.0,Silver,6.9,2026-01-03
+S1417,UK Machine Pro Trading,Europe,UK,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2998200,2,4.2,4.55,86.1,Gold,7.4,2026-01-03
+S1418,Industrial Machines Solutions,Middle East,Turkey,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,6036300,4,4.28,4.42,84.4,Silver,8.8,2026-01-03
+S1419,Machine Pro Inc,APAC,South Korea,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2432900,2,4.2,4.35,85.1,Gold,7.7,2026-01-03
+S1420,Industrial Machines International,Europe,Germany,Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,1566400,4,4.3,4.35,87.1,Gold,7.3,2026-01-03
+S1421,Germany Industrial Supply Enterprises,Europe,Germany,Manufacturing & Industrial,MRO Supplies,Industrial Tools,2583500,4,4.02,4.62,84.8,Silver,7.8,2026-01-03
+S1422,Kuwait Maintenance Co Ltd,Middle East,Kuwait,Manufacturing & Industrial,MRO Supplies,Industrial Tools,992100,4,4.42,3.92,81.3,Silver,8.3,2026-01-03
+S1423,Argentina MRO Pro Enterprises,Americas,Argentina,Manufacturing & Industrial,MRO Supplies,Industrial Tools,1236300,2,4.3,4.45,85.8,Gold,8.7,2026-01-03
+S1424,Industrial Supply Inc,Europe,Germany,Manufacturing & Industrial,MRO Supplies,Industrial Tools,812400,3,4.43,4.77,90.3,Gold,6.4,2026-01-03
+S1425,Taiwan Industrial Supply Co,APAC,Taiwan,Manufacturing & Industrial,MRO Supplies,Industrial Tools,1476900,2,4.35,4.25,86.5,Gold,8.6,2026-01-03
+S1426,India MRO Pro Trading,APAC,India,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,864500,2,4.4,4.25,85.9,Gold,7.2,2026-01-03
+S1427,Malaysia Supply Masters Enterprises,APAC,Malaysia,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,1399900,2,4.4,4.3,84.6,Silver,8.0,2026-01-03
+S1428,Industrial Supply International,APAC,Philippines,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,673300,4,4.28,4.4,84.9,Silver,8.3,2026-01-03
+S1429,USA Service Supply Enterprises,Americas,USA,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,658500,3,4.43,4.4,86.2,Gold,9.1,2026-01-03
+S1430,USA Service Supply Solutions,Americas,USA,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,364100,2,4.35,4.25,85.1,Gold,7.7,2026-01-03
+S1431,USA Industrial Supply Co,Americas,USA,Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,1515100,3,4.43,3.63,80.5,Silver,9.0,2026-01-03
+S1432,MRO Pro Solutions,APAC,Australia,Manufacturing & Industrial,MRO Supplies,Safety Equipment,2173900,3,4.77,4.3,90.2,Gold,9.5,2026-01-03
+S1433,MRO Pro Group,Europe,France,Manufacturing & Industrial,MRO Supplies,Safety Equipment,1760600,4,4.38,3.9,80.9,Silver,7.1,2026-01-03
+S1434,South Korea MRO Pro Group,APAC,South Korea,Manufacturing & Industrial,MRO Supplies,Safety Equipment,319300,2,4.35,4.05,82.4,Silver,6.8,2026-01-03
+S1435,Poland Service Supply International,Europe,Poland,Manufacturing & Industrial,MRO Supplies,Safety Equipment,559700,4,4.08,4.25,84.0,Silver,6.8,2026-01-03
+S1436,Service Supply Group,APAC,Australia,Manufacturing & Industrial,MRO Supplies,Safety Equipment,239700,2,4.4,4.65,89.9,Gold,8.8,2026-01-03
+S1437,Singapore Industrial Supply Ltd,APAC,Singapore,Manufacturing & Industrial,MRO Supplies,Spare Parts,1611500,3,4.63,3.8,83.4,Silver,8.3,2026-01-03
+S1438,Colombia Parts Pro Ltd,Americas,Colombia,Manufacturing & Industrial,MRO Supplies,Spare Parts,1485700,4,4.22,4.3,83.7,Silver,8.4,2026-01-03
+S1439,Poland Parts Pro Enterprises,Europe,Poland,Manufacturing & Industrial,MRO Supplies,Spare Parts,1322100,3,4.3,4.5,87.0,Gold,7.4,2026-01-03
+S1440,Thailand Service Supply Solutions,APAC,Thailand,Manufacturing & Industrial,MRO Supplies,Spare Parts,248700,2,5.0,4.3,90.4,Gold,8.9,2026-01-03
+S1441,USA Metal Pro Co,Americas,USA,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,6140400,4,4.5,3.8,82.2,Silver,7.3,2026-01-03
+S1442,Metal Pro Co,APAC,Indonesia,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,6496100,4,4.3,4.5,86.7,Gold,7.7,2026-01-03
+S1443,Morocco Prime Metals Solutions,Africa,Morocco,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,1197300,2,4.4,3.75,80.1,Silver,8.2,2026-01-03
+S1444,Sweden Steel Masters Ltd,Europe,Sweden,Manufacturing & Industrial,Raw Materials - Metals,Aluminum,3232000,2,4.9,4.4,89.3,Gold,6.4,2026-01-03
+S1445,Prime Metals International,Americas,USA,Manufacturing & Industrial,Raw Materials - Metals,Copper,2437700,3,4.3,4.1,84.3,Silver,8.6,2026-01-03
+S1446,Bahrain Metal Pro Co,Middle East,Bahrain,Manufacturing & Industrial,Raw Materials - Metals,Copper,1849500,2,4.35,3.9,83.1,Silver,6.7,2026-01-03
+S1447,Prime Metals Inc,Americas,Brazil,Manufacturing & Industrial,Raw Materials - Metals,Copper,2717900,2,4.6,4.05,85.2,Gold,6.8,2026-01-03
+S1448,Metal Works Group,Middle East,Qatar,Manufacturing & Industrial,Raw Materials - Metals,Nickel,5307900,3,4.2,4.5,84.7,Silver,7.2,2026-01-03
+S1449,Steel Masters Corp,Americas,USA,Manufacturing & Industrial,Raw Materials - Metals,Nickel,2679900,2,4.45,4.2,87.2,Gold,8.3,2026-01-03
+S1450,Bahrain Prime Metals Inc,Middle East,Bahrain,Manufacturing & Industrial,Raw Materials - Metals,Nickel,2270800,2,4.25,3.85,81.8,Silver,9.4,2026-01-03
+S1451,Metal Pro Trading,Africa,Ghana,Manufacturing & Industrial,Raw Materials - Metals,Nickel,1486600,4,4.27,4.2,83.6,Silver,8.8,2026-01-03
+S1452,Forge Inc Group,Europe,Sweden,Manufacturing & Industrial,Raw Materials - Metals,Nickel,6354200,3,4.4,4.87,89.8,Gold,7.5,2026-01-03
+S1453,Metal Works International,Europe,Sweden,Manufacturing & Industrial,Raw Materials - Metals,Nickel,6251200,4,4.2,4.35,85.0,Gold,6.2,2026-01-03
+S1454,Steel Masters Enterprises,Europe,France,Manufacturing & Industrial,Raw Materials - Metals,Steel,3816800,2,4.5,3.75,83.5,Silver,9.4,2026-01-03
+S1455,Peru Metal Pro Trading,Americas,Peru,Manufacturing & Industrial,Raw Materials - Metals,Steel,2584600,2,4.85,4.65,91.1,Gold,6.5,2026-01-03
+S1456,UK Metal Pro Corp,Europe,UK,Manufacturing & Industrial,Raw Materials - Metals,Zinc,1739600,2,4.6,4.45,86.7,Gold,7.0,2026-01-03
+S1457,Peru Prime Metals Ltd,Americas,Peru,Manufacturing & Industrial,Raw Materials - Metals,Zinc,2268100,3,4.53,4.2,84.3,Silver,7.6,2026-01-03
+S1458,Tanzania Steel Masters Trading,Africa,Tanzania,Manufacturing & Industrial,Raw Materials - Metals,Zinc,1917200,3,4.4,4.23,83.9,Silver,7.9,2026-01-03
+S1459,Alloy Co Group,Europe,Poland,Manufacturing & Industrial,Raw Materials - Metals,Zinc,5099400,4,4.28,4.28,85.2,Gold,6.9,2026-01-03
+S1460,Indonesia Alloy Co Corp,APAC,Indonesia,Manufacturing & Industrial,Raw Materials - Metals,Zinc,1912500,2,4.05,4.1,81.6,Silver,7.4,2026-01-03
+S1461,Canada Forge Inc International,Americas,Canada,Manufacturing & Industrial,Raw Materials - Metals,Zinc,1042000,2,4.4,3.95,83.3,Silver,6.4,2026-01-03
+S1462,Turkey Metal Works Solutions,Middle East,Turkey,Manufacturing & Industrial,Raw Materials - Metals,Zinc,1070300,2,4.2,4.3,85.3,Gold,9.3,2026-01-03
+S1463,Singapore Polymer Co Corp,APAC,Singapore,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,639900,3,4.5,4.63,89.3,Gold,7.6,2026-01-03
+S1464,China Polymer Co Group,APAC,China,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,1612900,3,4.33,4.27,85.2,Gold,6.7,2026-01-03
+S1465,India Plastic Pro Corp,APAC,India,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,1556500,3,4.43,4.47,89.1,Gold,7.5,2026-01-03
+S1466,Singapore Polymer Co Ltd,APAC,Singapore,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,1196200,3,4.53,4.2,86.2,Gold,9.0,2026-01-03
+S1467,Colombia Resin Masters Group,Americas,Colombia,Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,2078900,4,4.35,4.22,84.7,Silver,7.4,2026-01-03
+S1468,Qatar Plastic Solutions Solutions,Middle East,Qatar,Manufacturing & Industrial,Raw Materials - Plastics,PVC,1899200,4,4.4,4.02,84.7,Silver,6.2,2026-01-03
+S1469,Plastic Pro Trading,APAC,India,Manufacturing & Industrial,Raw Materials - Plastics,PVC,2101600,4,4.6,4.38,88.8,Gold,7.7,2026-01-03
+S1470,Resin Masters Inc,Europe,Germany,Manufacturing & Industrial,Raw Materials - Plastics,PVC,2168800,3,4.43,4.4,84.9,Silver,9.5,2026-01-03
+S1471,Polymer Co Group,Americas,Canada,Manufacturing & Industrial,Raw Materials - Plastics,PVC,2186300,3,4.2,4.77,88.4,Gold,9.3,2026-01-03
+S1472,Poly Tech Enterprises,Americas,Colombia,Manufacturing & Industrial,Raw Materials - Plastics,PVC,1104200,4,4.42,4.08,82.5,Silver,8.1,2026-01-03
+S1473,Poly Tech Co,Middle East,Israel,Manufacturing & Industrial,Raw Materials - Plastics,PVC,507600,2,4.4,3.95,82.1,Silver,8.8,2026-01-03
+S1474,Plastic Solutions Inc,APAC,Philippines,Manufacturing & Industrial,Raw Materials - Plastics,PVC,778300,2,4.2,4.6,87.8,Gold,7.2,2026-01-03
+S1475,UK Poly Tech Ltd,Europe,UK,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,1326100,3,4.8,4.17,86.3,Gold,8.0,2026-01-03
+S1476,Argentina Resin Masters Solutions,Americas,Argentina,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,378100,3,4.37,4.33,86.1,Gold,6.4,2026-01-03
+S1477,Netherlands Polymer Co Corp,Europe,Netherlands,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,1738500,4,3.92,4.15,78.9,Silver,7.7,2026-01-03
+S1478,Colombia Resin Masters International,Americas,Colombia,Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,563800,2,4.6,4.45,89.5,Gold,6.4,2026-01-03
+S1479,Plastic Solutions International,Middle East,Qatar,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,1778300,3,4.43,3.97,84.2,Silver,9.0,2026-01-03
+S1480,Plastic Solutions Ltd,APAC,Thailand,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,601400,2,4.2,3.75,81.1,Silver,7.3,2026-01-03
+S1481,Kenya Polymer Co International,Africa,Kenya,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,2241600,4,4.38,4.0,83.0,Silver,6.2,2026-01-03
+S1482,Poly Tech Corp,Africa,Tunisia,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,2603500,4,4.28,4.4,86.9,Gold,8.8,2026-01-03
+S1483,Polymer Co Corp,Middle East,Jordan,Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,254100,2,4.65,4.2,85.2,Gold,8.1,2026-01-03
+S1484,Argentina Science Equipment Enterprises,Americas,Argentina,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2755700,4,4.6,4.12,86.3,Gold,8.0,2026-01-03
+S1485,Analytical Pro Solutions,APAC,Australia,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2583800,4,4.18,4.22,84.6,Silver,9.3,2026-01-03
+S1486,Analytical Pro Co,Europe,UK,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,1896400,3,4.37,4.4,85.7,Gold,9.1,2026-01-03
+S1487,UK Research Tools Corp,Europe,UK,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,1736700,4,4.27,3.85,82.3,Silver,7.8,2026-01-03
+S1488,Analytical Pro Group,APAC,Philippines,Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,524900,2,4.45,3.85,81.7,Silver,6.0,2026-01-03
+S1489,Lab Masters Group,Europe,Belgium,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,195100,2,3.95,4.9,87.0,Gold,9.3,2026-01-03
+S1490,Lab Masters Trading,Americas,Peru,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,521100,2,4.6,3.55,82.6,Silver,8.3,2026-01-03
+S1491,Lab Pro Solutions,Middle East,Turkey,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,3045500,4,4.6,4.15,87.6,Gold,7.3,2026-01-03
+S1492,Belgium Lab Masters Corp,Europe,Belgium,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,1967000,4,4.48,4.7,87.6,Gold,8.2,2026-01-03
+S1493,Lab Pro International,Middle East,Turkey,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,1485100,4,4.58,4.42,89.3,Gold,8.9,2026-01-03
+S1494,Canada Research Tools Corp,Americas,Canada,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,2181600,4,4.42,4.2,86.7,Gold,8.4,2026-01-03
+S1495,Switzerland Analytical Pro International,Europe,Switzerland,Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,784100,3,4.63,4.3,87.3,Gold,8.0,2026-01-03
+S1496,Australia Med Tech Group,APAC,Australia,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,2668400,4,4.4,4.6,87.7,Gold,7.8,2026-01-03
+S1497,Argentina Health Devices Trading,Americas,Argentina,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,4190700,2,3.95,4.15,82.4,Silver,6.8,2026-01-03
+S1498,Care Tech Co,APAC,Philippines,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,5005400,3,4.57,4.07,84.3,Silver,8.0,2026-01-03
+S1499,Malaysia Care Tech Enterprises,APAC,Malaysia,Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,5095000,3,4.57,4.07,86.6,Gold,9.1,2026-01-03
+S1500,Malaysia Med Tech International,APAC,Malaysia,Healthcare & Life Sciences,Medical Devices,Implants,2933700,2,4.25,4.5,85.4,Gold,9.5,2026-01-03
+S1501,Med Tech Enterprises,Americas,Peru,Healthcare & Life Sciences,Medical Devices,Implants,2401300,2,4.25,4.7,88.3,Gold,6.5,2026-01-03
+S1502,Care Tech Trading,Middle East,Bahrain,Healthcare & Life Sciences,Medical Devices,Implants,2735500,3,4.7,4.4,87.0,Gold,7.5,2026-01-03
+S1503,Turkey Med Tech Group,Middle East,Turkey,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,3597300,2,4.4,3.95,83.7,Silver,9.2,2026-01-03
+S1504,Device Pro Group,Americas,Canada,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,1872400,3,4.47,3.67,80.8,Silver,6.6,2026-01-03
+S1505,Health Devices Inc,Americas,Colombia,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,5311000,4,4.47,4.2,83.8,Silver,9.0,2026-01-03
+S1506,Health Devices Corp,Americas,Peru,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2590600,3,4.2,4.53,84.2,Silver,9.0,2026-01-03
+S1507,Australia Diagnostic Pro Group,APAC,Australia,Healthcare & Life Sciences,Medical Devices,Patient Monitoring,5462900,4,4.53,4.25,86.3,Gold,7.3,2026-01-03
+S1508,Switzerland Medical Systems Corp,Europe,Switzerland,Healthcare & Life Sciences,Medical Devices,Surgical Instruments,1639700,4,4.58,3.98,82.4,Silver,7.7,2026-01-03
+S1509,Diagnostic Pro Corp,Europe,Sweden,Healthcare & Life Sciences,Medical Devices,Surgical Instruments,3261400,2,4.95,4.65,91.3,Gold,7.7,2026-01-03
+S1510,Colombia Health Devices Trading,Americas,Colombia,Healthcare & Life Sciences,Medical Devices,Surgical Instruments,3277300,3,4.6,3.93,85.0,Gold,7.3,2026-01-03
+S1511,Supply Care Ltd,Americas,Argentina,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,404000,3,4.53,4.43,86.6,Gold,8.9,2026-01-03
+S1512,Med Supply Solutions,Europe,UK,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2981000,4,4.5,4.47,89.0,Gold,8.8,2026-01-03
+S1513,Japan Health Supplies Corp,APAC,Japan,Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,1430800,3,4.27,4.23,83.5,Silver,9.2,2026-01-03
+S1514,USA Care Supplies Co,Americas,USA,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,1286600,4,4.55,3.97,83.7,Silver,9.2,2026-01-03
+S1515,Med Supply International,Europe,Switzerland,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,345000,3,4.07,3.8,80.4,Silver,7.9,2026-01-03
+S1516,Health Supplies Group,Middle East,Israel,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,1307400,3,4.6,4.47,89.2,Gold,8.7,2026-01-03
+S1517,Health Supplies International,APAC,Vietnam,Healthcare & Life Sciences,Medical Supplies,Lab Supplies,1647000,4,4.38,4.5,87.3,Gold,9.4,2026-01-03
+S1518,Medical Mart Co,Middle East,Jordan,Healthcare & Life Sciences,Medical Supplies,Wound Care,2215300,3,4.2,4.2,81.9,Silver,7.9,2026-01-03
+S1519,Mexico Med Supply Group,Americas,Mexico,Healthcare & Life Sciences,Medical Supplies,Wound Care,2599200,4,4.05,4.15,80.5,Silver,7.8,2026-01-03
+S1520,UAE Supply Care Enterprises,Middle East,UAE,Healthcare & Life Sciences,Medical Supplies,Wound Care,944300,2,4.3,4.5,88.1,Gold,9.0,2026-01-03
+S1521,Sweden Care Supplies Corp,Europe,Sweden,Healthcare & Life Sciences,Medical Supplies,Wound Care,885000,2,4.6,3.95,84.2,Silver,7.3,2026-01-03
+S1522,Nigeria Health Pro Trading,Africa,Nigeria,Healthcare & Life Sciences,Medical Supplies,Wound Care,943300,2,3.95,4.0,81.2,Silver,7.1,2026-01-03
+S1523,Health Pharma Co,Americas,Canada,Healthcare & Life Sciences,Pharmaceuticals,Biologics,12151800,4,4.22,4.15,81.5,Silver,6.6,2026-01-03
+S1524,Brazil Pharma Pro Trading,Americas,Brazil,Healthcare & Life Sciences,Pharmaceuticals,Biologics,6267500,2,4.6,4.4,87.4,Gold,6.1,2026-01-03
+S1525,India Med Source Corp,APAC,India,Healthcare & Life Sciences,Pharmaceuticals,Biologics,9305400,4,4.42,4.3,87.0,Gold,6.6,2026-01-03
+S1526,Life Sciences Inc,Europe,Switzerland,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2063600,2,4.6,4.5,89.4,Gold,8.5,2026-01-03
+S1527,Bio Pharma Trading,Americas,Argentina,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2229100,4,4.25,3.88,81.4,Silver,7.3,2026-01-03
+S1528,Saudi Arabia Pharma Pro Corp,Middle East,Saudi Arabia,Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,4528800,2,4.05,4.05,79.9,Silver,8.6,2026-01-03
+S1529,Med Source Solutions,APAC,China,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,6869200,4,4.53,4.45,85.9,Gold,7.3,2026-01-03
+S1530,Belgium Life Sciences Trading,Europe,Belgium,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,5699900,4,4.55,4.35,88.7,Gold,7.8,2026-01-03
+S1531,Medical Solutions International,Middle East,UAE,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,5997100,2,4.3,4.15,84.0,Silver,8.4,2026-01-03
+S1532,Med Source Corp,Africa,South Africa,Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,10201800,4,4.32,4.08,82.8,Silver,6.9,2026-01-03
+S1533,Bio Pharma Enterprises,Europe,UK,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,4609500,4,4.62,4.03,86.3,Gold,8.5,2026-01-03
+S1534,Nigeria Life Sciences Group,Africa,Nigeria,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,7985600,4,4.27,4.18,82.6,Silver,7.2,2026-01-03
+S1535,Malaysia Medical Solutions Ltd,APAC,Malaysia,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,5060600,2,4.4,4.45,85.8,Gold,6.1,2026-01-03
+S1536,Australia Health Pharma Co,APAC,Australia,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,5608700,3,4.8,3.83,83.4,Silver,6.1,2026-01-03
+S1537,Health Pharma Trading,Americas,Brazil,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,3641800,4,4.65,4.05,83.6,Silver,7.3,2026-01-03
+S1538,Spain Health Pharma Co,Europe,Spain,Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,9227100,4,4.58,4.53,88.1,Gold,9.3,2026-01-03
+S1539,Bio Pharma Ltd,Middle East,Bahrain,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2661600,3,4.43,3.83,83.5,Silver,6.1,2026-01-03
+S1540,Canada Health Pharma Trading,Americas,Canada,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2887200,2,4.75,4.25,88.2,Gold,7.3,2026-01-03
+S1541,Malaysia Medical Solutions Trading,APAC,Malaysia,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,9243500,4,4.1,3.87,79.7,Silver,9.4,2026-01-03
+S1542,Life Sciences Solutions,Europe,Italy,Healthcare & Life Sciences,Pharmaceuticals,Vaccines,3480800,3,4.63,4.33,86.0,Gold,9.2,2026-01-03
+S1543,Grid Masters Trading,APAC,China,Energy & Utilities,Electricity,Backup Power,2000900,4,4.25,4.47,83.9,Silver,9.2,2026-01-03
+S1544,Mexico Electric Solutions Ltd,Americas,Mexico,Energy & Utilities,Electricity,Backup Power,1898900,2,4.2,3.8,81.7,Silver,9.4,2026-01-03
+S1545,Power Pro Co,APAC,South Korea,Energy & Utilities,Electricity,Backup Power,4364700,3,4.5,4.33,86.3,Gold,7.2,2026-01-03
+S1546,Energy Co Trading,Europe,UK,Energy & Utilities,Electricity,Backup Power,4793100,4,4.05,4.22,83.1,Silver,7.2,2026-01-03
+S1547,Energy Co Corp,Americas,Brazil,Energy & Utilities,Electricity,Grid Electricity,839200,3,4.27,4.47,85.6,Gold,6.8,2026-01-03
+S1548,Energy Plus Inc,APAC,South Korea,Energy & Utilities,Electricity,Grid Electricity,991100,2,4.3,3.65,80.2,Silver,6.9,2026-01-03
+S1549,Ethiopia Power Pro Group,Africa,Ethiopia,Energy & Utilities,Electricity,Grid Electricity,1940500,4,4.52,4.15,84.0,Silver,9.3,2026-01-03
+S1550,Power Pro Ltd,Americas,Mexico,Energy & Utilities,Electricity,Grid Electricity,2112100,2,4.25,4.55,84.7,Silver,6.6,2026-01-03
+S1551,Colombia Electric Solutions Enterprises,Americas,Colombia,Energy & Utilities,Electricity,Renewable Electricity,3539400,3,4.07,4.47,86.2,Gold,7.4,2026-01-03
+S1552,Power Source Co,APAC,Singapore,Energy & Utilities,Electricity,Renewable Electricity,1798400,2,4.35,4.2,83.7,Silver,6.5,2026-01-03
+S1553,Taiwan Grid Masters Solutions,APAC,Taiwan,Energy & Utilities,Electricity,Renewable Electricity,4710400,4,4.4,3.95,83.9,Silver,6.0,2026-01-03
+S1554,Canada Power Fuels Co,Americas,Canada,Energy & Utilities,Fuels,Aviation Fuel,874900,2,4.55,3.9,84.2,Silver,7.0,2026-01-03
+S1555,Fuel Pro Solutions,Middle East,UAE,Energy & Utilities,Fuels,Aviation Fuel,612000,3,4.4,4.0,82.9,Silver,7.4,2026-01-03
+S1556,Turkey Fuel Pro Solutions,Middle East,Turkey,Energy & Utilities,Fuels,Aviation Fuel,737600,3,4.23,4.2,82.4,Silver,6.5,2026-01-03
+S1557,Philippines Energy Fuels International,APAC,Philippines,Energy & Utilities,Fuels,Aviation Fuel,1836900,3,4.37,4.47,88.4,Gold,9.5,2026-01-03
+S1558,Brazil Petro Co Ltd,Americas,Brazil,Energy & Utilities,Fuels,Aviation Fuel,1424800,4,4.53,4.55,89.0,Gold,7.2,2026-01-03
+S1559,Poland Fuel Solutions Trading,Europe,Poland,Energy & Utilities,Fuels,Aviation Fuel,585400,3,4.53,4.27,87.1,Gold,6.9,2026-01-03
+S1560,Energy Fuels International,APAC,Philippines,Energy & Utilities,Fuels,Aviation Fuel,2204300,3,4.17,4.13,81.1,Silver,7.2,2026-01-03
+S1561,Fuel Pro Corp,Africa,Kenya,Energy & Utilities,Fuels,Biofuels,1584200,4,4.58,4.43,86.5,Gold,8.6,2026-01-03
+S1562,Fuel Solutions Group,Europe,Switzerland,Energy & Utilities,Fuels,Biofuels,528900,2,4.35,4.8,89.2,Gold,6.5,2026-01-03
+S1563,Fuel Solutions Co,Americas,Mexico,Energy & Utilities,Fuels,Biofuels,1077900,4,4.15,4.2,82.9,Silver,8.6,2026-01-03
+S1564,Germany Power Fuels Ltd,Europe,Germany,Energy & Utilities,Fuels,Biofuels,1890200,4,4.55,4.15,84.6,Silver,9.5,2026-01-03
+S1565,Italy Energy Fuels Trading,Europe,Italy,Energy & Utilities,Fuels,Biofuels,291000,2,4.4,4.2,85.8,Gold,8.2,2026-01-03
+S1566,USA Energy Fuels Co,Americas,USA,Energy & Utilities,Fuels,Biofuels,777100,3,4.23,3.6,79.6,Silver,8.2,2026-01-03
+S1567,Gas Masters Corp,Americas,USA,Energy & Utilities,Fuels,Biofuels,246300,2,4.5,4.15,86.8,Gold,7.6,2026-01-03
+S1568,Japan Fuel Pro Inc,APAC,Japan,Energy & Utilities,Fuels,Diesel,1029300,2,3.95,4.5,83.3,Silver,9.0,2026-01-03
+S1569,Power Fuels Corp,Middle East,UAE,Energy & Utilities,Fuels,Diesel,1996700,3,4.13,4.23,82.0,Silver,7.2,2026-01-03
+S1570,Poland Fuel Solutions Enterprises,Europe,Poland,Energy & Utilities,Fuels,Diesel,590900,3,4.03,4.57,85.3,Gold,7.6,2026-01-03
+S1571,Energy Fuels Co,Americas,Colombia,Energy & Utilities,Fuels,Natural Gas,428900,2,4.4,3.85,82.0,Silver,9.5,2026-01-03
+S1572,Energy Fuels Ltd,Americas,Brazil,Energy & Utilities,Fuels,Natural Gas,772800,3,4.2,3.83,81.7,Silver,6.3,2026-01-03
+S1573,Fuel Solutions Enterprises,Africa,Tanzania,Energy & Utilities,Fuels,Natural Gas,942200,2,4.1,4.4,82.6,Silver,9.4,2026-01-03
+S1574,Jordan Petro Co Trading,Middle East,Jordan,Energy & Utilities,Fuels,Natural Gas,307500,2,4.0,3.7,79.2,Silver,7.3,2026-01-03
+S1575,Energy Fuels Group,Americas,Mexico,Energy & Utilities,Fuels,Natural Gas,3072600,4,4.57,3.98,82.9,Silver,7.4,2026-01-03
+S1576,France Fuel Pro Ltd,Europe,France,Energy & Utilities,Fuels,Natural Gas,692100,2,4.8,3.85,83.2,Silver,7.5,2026-01-03
+S1577,Clean Energy Trading,APAC,Malaysia,Energy & Utilities,Renewable Equipment,Battery Storage,2902500,4,4.6,4.3,85.2,Gold,8.7,2026-01-03
+S1578,Renewable Tech Solutions,APAC,India,Energy & Utilities,Renewable Equipment,Battery Storage,1456600,3,4.63,4.13,85.6,Gold,6.3,2026-01-03
+S1579,Eco Power Ltd,Europe,France,Energy & Utilities,Renewable Equipment,Battery Storage,612000,3,4.67,4.47,87.8,Gold,8.2,2026-01-03
+S1580,Sweden Eco Power Corp,Europe,Sweden,Energy & Utilities,Renewable Equipment,Battery Storage,2009000,3,4.5,4.13,83.2,Silver,8.7,2026-01-03
+S1581,Singapore Green Energy Ltd,APAC,Singapore,Energy & Utilities,Renewable Equipment,Solar Panels,1328600,3,4.43,3.97,84.1,Silver,7.6,2026-01-03
+S1582,Eco Power International,Americas,Peru,Energy & Utilities,Renewable Equipment,Solar Panels,2243600,4,4.12,3.98,79.7,Silver,7.4,2026-01-03
+S1583,Clean Energy Solutions,Middle East,Saudi Arabia,Energy & Utilities,Renewable Equipment,Solar Panels,1371400,3,4.8,4.4,91.3,Gold,6.2,2026-01-03
+S1584,Indonesia Green Energy Solutions,APAC,Indonesia,Energy & Utilities,Renewable Equipment,Wind Turbines,2773500,4,4.45,4.38,87.9,Gold,6.1,2026-01-03
+S1585,Green Energy Inc,Americas,Colombia,Energy & Utilities,Renewable Equipment,Wind Turbines,1887100,3,4.33,4.03,81.4,Silver,7.3,2026-01-03
+S1586,Brazil Build Pro Trading,Americas,Brazil,Construction & Real Estate,Building Materials,Cement,2895400,4,4.2,3.97,79.6,Silver,9.3,2026-01-03
+S1587,Singapore Construction Materials Inc,APAC,Singapore,Construction & Real Estate,Building Materials,Cement,1656800,4,4.62,3.97,84.9,Silver,6.7,2026-01-03
+S1588,Indonesia Build Pro International,APAC,Indonesia,Construction & Real Estate,Building Materials,Cement,4232100,3,4.13,4.27,82.8,Silver,6.8,2026-01-03
+S1589,Structure Co Group,Europe,UK,Construction & Real Estate,Building Materials,Concrete,3545800,3,4.77,4.2,89.2,Gold,9.1,2026-01-03
+S1590,Material Masters Ltd,Europe,Belgium,Construction & Real Estate,Building Materials,Concrete,2349800,2,4.1,4.35,82.8,Silver,9.0,2026-01-03
+S1591,Construction Materials International,Americas,Chile,Construction & Real Estate,Building Materials,Concrete,658700,3,4.5,4.07,84.4,Silver,6.2,2026-01-03
+S1592,Build Pro Group,Americas,Peru,Construction & Real Estate,Building Materials,Concrete,2570100,2,4.7,3.9,84.0,Silver,9.0,2026-01-03
+S1593,Material Masters Inc,Middle East,Turkey,Construction & Real Estate,Building Materials,Concrete,1850500,2,4.45,4.55,89.0,Gold,8.2,2026-01-03
+S1594,USA Construction Materials Ltd,Americas,USA,Construction & Real Estate,Building Materials,Glass,4378300,4,4.15,4.78,86.9,Gold,7.2,2026-01-03
+S1595,UK Structure Co Co,Europe,UK,Construction & Real Estate,Building Materials,Glass,4537000,4,4.52,4.05,86.6,Gold,7.1,2026-01-03
+S1596,Construction Materials Enterprises,Middle East,Kuwait,Construction & Real Estate,Building Materials,Glass,1229000,2,4.15,4.2,83.7,Silver,7.2,2026-01-03
+S1597,Build Pro Solutions,Middle East,Saudi Arabia,Construction & Real Estate,Building Materials,Lumber,2244800,2,4.3,4.0,83.6,Silver,9.5,2026-01-03
+S1598,Construction Materials Group,Americas,Colombia,Construction & Real Estate,Building Materials,Lumber,2686200,2,4.65,4.3,89.3,Gold,8.3,2026-01-03
+S1599,Build Solutions Trading,Europe,Belgium,Construction & Real Estate,Building Materials,Lumber,1311600,2,4.55,4.3,87.0,Gold,7.8,2026-01-03
+S1600,Build Pro Corp,Americas,Chile,Construction & Real Estate,Building Materials,Lumber,1571700,3,4.0,3.67,78.1,Silver,7.9,2026-01-03
+S1601,Build Pro Ltd,APAC,India,Construction & Real Estate,Building Materials,Lumber,3532100,4,4.25,4.22,83.1,Silver,7.5,2026-01-03
+S1602,Canada Build Solutions Ltd,Americas,Canada,Construction & Real Estate,Building Materials,Lumber,5848700,4,4.68,4.1,85.7,Gold,9.2,2026-01-03
+S1603,Material Masters Solutions,APAC,Philippines,Construction & Real Estate,Building Materials,Structural Steel,684300,3,4.47,4.3,85.4,Gold,9.1,2026-01-03
+S1604,Construction Materials Inc,Americas,Canada,Construction & Real Estate,Building Materials,Structural Steel,2227100,3,4.3,4.53,88.6,Gold,6.4,2026-01-03
+S1605,Poland Structure Co Solutions,Europe,Poland,Construction & Real Estate,Building Materials,Structural Steel,3510700,4,4.32,4.68,89.8,Gold,8.1,2026-01-03
+S1606,Canada Structure Co Ltd,Americas,Canada,Construction & Real Estate,Building Materials,Structural Steel,4431700,4,4.47,4.2,84.0,Silver,7.6,2026-01-03
+S1607,Sweden Build Solutions Inc,Europe,Sweden,Construction & Real Estate,Building Materials,Structural Steel,3389600,3,4.57,4.47,86.4,Gold,9.3,2026-01-03
+S1608,Heavy Machines Group,APAC,Indonesia,Construction & Real Estate,Construction Equipment,Heavy Equipment,919600,4,4.22,4.15,84.4,Silver,8.1,2026-01-03
+S1609,Builder Tools International,Americas,Brazil,Construction & Real Estate,Construction Equipment,Heavy Equipment,777800,2,4.4,4.9,92.0,Gold,8.4,2026-01-03
+S1610,Chile Builder Tools International,Americas,Chile,Construction & Real Estate,Construction Equipment,Heavy Equipment,483900,3,4.37,4.5,87.9,Gold,6.5,2026-01-03
+S1611,Germany Site Equipment International,Europe,Germany,Construction & Real Estate,Construction Equipment,Heavy Equipment,492800,2,4.3,3.8,80.8,Silver,7.4,2026-01-03
+S1612,Qatar Builder Tools Inc,Middle East,Qatar,Construction & Real Estate,Construction Equipment,Heavy Equipment,804200,4,4.35,4.25,84.4,Silver,9.0,2026-01-03
+S1613,Build Equipment Solutions,Middle East,Kuwait,Construction & Real Estate,Construction Equipment,Power Tools,2656300,4,4.75,4.38,87.2,Gold,8.4,2026-01-03
+S1614,USA Construction Pro Enterprises,Americas,USA,Construction & Real Estate,Construction Equipment,Power Tools,2372600,3,4.1,4.3,81.7,Silver,8.4,2026-01-03
+S1615,Netherlands Build Equipment Inc,Europe,Netherlands,Construction & Real Estate,Construction Equipment,Power Tools,1467000,2,4.45,4.35,87.8,Gold,7.1,2026-01-03
+S1616,Construction Pro International,Middle East,Bahrain,Construction & Real Estate,Construction Equipment,Power Tools,711100,2,3.8,4.35,80.8,Silver,7.6,2026-01-03
+S1617,Italy Heavy Machines International,Europe,Italy,Construction & Real Estate,Construction Equipment,Scaffolding,829700,2,4.55,3.85,82.5,Silver,7.0,2026-01-03
+S1618,Australia Heavy Machines Co,APAC,Australia,Construction & Real Estate,Construction Equipment,Scaffolding,1186700,3,4.33,4.5,85.6,Gold,7.2,2026-01-03
+S1619,Poland Build Equipment Solutions,Europe,Poland,Construction & Real Estate,Construction Equipment,Scaffolding,1070100,3,4.33,3.93,80.7,Silver,9.2,2026-01-03
+S1620,Ghana Builder Tools Co,Africa,Ghana,Construction & Real Estate,Construction Equipment,Scaffolding,2523100,3,4.7,4.37,87.0,Gold,6.6,2026-01-03
+S1621,South Korea Build Equipment Group,APAC,South Korea,Construction & Real Estate,Construction Equipment,Scaffolding,614000,3,4.57,4.63,89.4,Gold,7.1,2026-01-03
+S1622,Technical Systems Co,Europe,Spain,Construction & Real Estate,MEP Systems,Electrical Systems,736600,4,4.45,4.18,83.5,Silver,7.0,2026-01-03
+S1623,MEP Pro Co,Americas,Chile,Construction & Real Estate,MEP Systems,Electrical Systems,1146800,2,4.0,3.65,78.3,Silver,6.7,2026-01-03
+S1624,Building Systems Inc,Africa,Ghana,Construction & Real Estate,MEP Systems,Electrical Systems,922600,2,4.25,4.65,87.1,Gold,8.7,2026-01-03
+S1625,UK Systems Masters Enterprises,Europe,UK,Construction & Real Estate,MEP Systems,HVAC Equipment,2632400,4,4.45,4.2,83.6,Silver,9.0,2026-01-03
+S1626,Install Pro Co,Americas,Chile,Construction & Real Estate,MEP Systems,HVAC Equipment,1079300,3,4.83,4.67,91.2,Gold,8.6,2026-01-03
+S1627,MEP Pro Trading,Middle East,UAE,Construction & Real Estate,MEP Systems,HVAC Equipment,2335500,4,4.47,4.15,85.4,Gold,9.3,2026-01-03
+S1628,Tanzania Building Systems Solutions,Africa,Tanzania,Construction & Real Estate,MEP Systems,HVAC Equipment,1247500,4,4.47,3.8,83.6,Silver,9.2,2026-01-03
+S1629,Qatar Technical Systems Group,Middle East,Qatar,Construction & Real Estate,MEP Systems,Plumbing Systems,1785100,4,4.12,4.45,85.4,Gold,7.8,2026-01-03
+S1630,Colombia Technical Systems Corp,Americas,Colombia,Construction & Real Estate,MEP Systems,Plumbing Systems,686000,3,4.07,4.23,82.0,Silver,8.1,2026-01-03
+S1631,Bahrain Install Pro Ltd,Middle East,Bahrain,Construction & Real Estate,MEP Systems,Plumbing Systems,1774200,4,4.5,4.2,84.8,Silver,6.7,2026-01-03
+S1632,Indonesia Drive Solutions Co,APAC,Indonesia,Logistics & Transportation,Fleet Services,Fleet Maintenance,2182800,3,4.43,4.5,86.2,Gold,6.9,2026-01-03
+S1633,Australia Vehicle Masters Solutions,APAC,Australia,Logistics & Transportation,Fleet Services,Fleet Maintenance,2254900,3,3.93,4.03,81.2,Silver,6.8,2026-01-03
+S1634,Netherlands Drive Solutions Co,Europe,Netherlands,Logistics & Transportation,Fleet Services,Fleet Maintenance,1386000,2,4.35,4.05,83.4,Silver,8.3,2026-01-03
+S1635,Mexico Drive Solutions Trading,Americas,Mexico,Logistics & Transportation,Fleet Services,Fleet Maintenance,916200,2,4.3,4.05,81.2,Silver,7.0,2026-01-03
+S1636,Vehicle Masters Inc,Europe,Germany,Logistics & Transportation,Fleet Services,Fleet Maintenance,1016800,2,4.75,4.45,88.1,Gold,6.8,2026-01-03
+S1637,Drive Solutions Trading,Africa,Egypt,Logistics & Transportation,Fleet Services,Fleet Maintenance,1784000,4,4.65,4.25,88.3,Gold,9.3,2026-01-03
+S1638,Netherlands Auto Fleet Solutions,Europe,Netherlands,Logistics & Transportation,Fleet Services,Fleet Maintenance,1677200,4,4.3,4.2,82.8,Silver,7.5,2026-01-03
+S1639,Australia Auto Fleet Solutions,APAC,Australia,Logistics & Transportation,Fleet Services,Fleet Telematics,2685900,4,4.25,4.25,84.7,Silver,6.1,2026-01-03
+S1640,Vehicle Masters Corp,Europe,Spain,Logistics & Transportation,Fleet Services,Fleet Telematics,1196400,4,4.45,4.2,83.5,Silver,8.9,2026-01-03
+S1641,Fleet Pro Co,APAC,South Korea,Logistics & Transportation,Fleet Services,Fleet Telematics,2026500,3,4.7,4.27,89.4,Gold,9.3,2026-01-03
+S1642,Transport Fleet Co,Europe,Belgium,Logistics & Transportation,Fleet Services,Fleet Telematics,761800,2,4.2,4.0,83.6,Silver,6.2,2026-01-03
+S1643,Transport Fleet Solutions,Europe,UK,Logistics & Transportation,Fleet Services,Fleet Telematics,1692100,4,4.38,4.45,87.2,Gold,6.7,2026-01-03
+S1644,USA Transport Fleet International,Americas,USA,Logistics & Transportation,Fleet Services,Fleet Telematics,1246900,2,4.5,4.55,86.8,Gold,8.4,2026-01-03
+S1645,Indonesia Transport Fleet Enterprises,APAC,Indonesia,Logistics & Transportation,Fleet Services,Fleet Telematics,1062100,2,4.3,4.4,86.8,Gold,8.5,2026-01-03
+S1646,Kenya Auto Fleet International,Africa,Kenya,Logistics & Transportation,Fleet Services,Fleet Vehicles,1528400,2,4.65,4.35,89.8,Gold,8.4,2026-01-03
+S1647,Drive Solutions International,Europe,Netherlands,Logistics & Transportation,Fleet Services,Fleet Vehicles,1849800,3,4.43,4.37,88.1,Gold,6.5,2026-01-03
+S1648,Israel Fleet Pro Trading,Middle East,Israel,Logistics & Transportation,Fleet Services,Fleet Vehicles,757400,2,4.3,4.2,84.9,Silver,6.6,2026-01-03
+S1649,Turkey Vehicle Masters Inc,Middle East,Turkey,Logistics & Transportation,Fleet Services,Fleet Vehicles,2010200,4,4.28,4.27,83.9,Silver,6.7,2026-01-03
+S1650,Fleet Pro Corp,APAC,Philippines,Logistics & Transportation,Fleet Services,Fleet Vehicles,1376200,3,4.23,4.13,82.3,Silver,9.2,2026-01-03
+S1651,Turkey Transport Solutions Trading,Middle East,Turkey,Logistics & Transportation,Freight Services,Air Freight,2254300,4,4.18,4.12,81.5,Silver,7.4,2026-01-03
+S1652,Transport Solutions Corp,Americas,Chile,Logistics & Transportation,Freight Services,Air Freight,2340900,3,4.27,4.17,82.1,Silver,6.4,2026-01-03
+S1653,Logistics Plus Inc,Americas,Peru,Logistics & Transportation,Freight Services,Air Freight,1375800,4,4.3,3.98,82.7,Silver,6.9,2026-01-03
+S1654,Freight Pro Corp,Europe,UK,Logistics & Transportation,Freight Services,Ocean Freight,2841900,4,4.38,4.38,86.0,Gold,7.6,2026-01-03
+S1655,Transport Solutions Inc,APAC,South Korea,Logistics & Transportation,Freight Services,Ocean Freight,527800,2,4.35,4.35,85.5,Gold,7.1,2026-01-03
+S1656,Logistics Plus Ltd,Europe,Italy,Logistics & Transportation,Freight Services,Rail Freight,1299300,2,4.1,4.0,80.3,Silver,8.5,2026-01-03
+S1657,Ship Co Inc,Europe,UK,Logistics & Transportation,Freight Services,Rail Freight,3274200,4,4.65,4.18,87.2,Gold,6.5,2026-01-03
+S1658,India Logistics Plus Inc,APAC,India,Logistics & Transportation,Freight Services,Rail Freight,1631000,2,4.5,4.0,83.0,Silver,8.4,2026-01-03
+S1659,Argentina Logistics Plus Trading,Americas,Argentina,Logistics & Transportation,Freight Services,Road Freight,2113800,3,4.57,4.43,88.2,Gold,7.2,2026-01-03
+S1660,Ship Co International,Americas,Chile,Logistics & Transportation,Freight Services,Road Freight,540500,3,4.37,4.37,85.4,Gold,7.7,2026-01-03
+S1661,Ship Co Co,Middle East,Oman,Logistics & Transportation,Freight Services,Road Freight,1840300,4,4.4,4.15,84.3,Silver,9.1,2026-01-03
+S1662,USA Cargo Masters Corp,Americas,USA,Logistics & Transportation,Freight Services,Road Freight,1016700,4,4.47,3.82,81.8,Silver,9.0,2026-01-03
+S1663,Belgium Storage Masters Corp,Europe,Belgium,Logistics & Transportation,Warehousing,3PL Services,3185500,4,4.45,4.7,88.5,Gold,6.2,2026-01-03
+S1664,Store Solutions Solutions,Middle East,Bahrain,Logistics & Transportation,Warehousing,3PL Services,459300,2,4.35,4.15,82.1,Silver,7.3,2026-01-03
+S1665,UK Distribution Pro Co,Europe,UK,Logistics & Transportation,Warehousing,3PL Services,1130600,3,4.5,4.23,84.0,Silver,6.0,2026-01-03
+S1666,France Store Solutions Group,Europe,France,Logistics & Transportation,Warehousing,3PL Services,2127900,3,4.63,4.03,84.5,Silver,6.9,2026-01-03
+S1667,Distribution Pro Trading,Americas,Peru,Logistics & Transportation,Warehousing,3PL Services,856600,2,4.25,4.4,85.1,Gold,8.2,2026-01-03
+S1668,Australia Distribution Pro Ltd,APAC,Australia,Logistics & Transportation,Warehousing,3PL Services,717800,4,4.35,4.8,89.5,Gold,9.2,2026-01-03
+S1669,Peru Warehouse Pro Enterprises,Americas,Peru,Logistics & Transportation,Warehousing,Cold Storage,745000,2,4.4,4.3,84.2,Silver,7.2,2026-01-03
+S1670,Qatar Warehouse Pro Group,Middle East,Qatar,Logistics & Transportation,Warehousing,Cold Storage,1555300,4,4.28,4.28,83.4,Silver,9.4,2026-01-03
+S1671,Warehouse Pro Co,APAC,India,Logistics & Transportation,Warehousing,Cold Storage,1564400,4,4.35,4.75,90.0,Gold,6.5,2026-01-03
+S1672,Distribution Pro Group,Europe,Spain,Logistics & Transportation,Warehousing,Cold Storage,1527000,3,4.53,4.27,87.5,Gold,9.5,2026-01-03
+S1673,Storage Masters Corp,Middle East,Saudi Arabia,Logistics & Transportation,Warehousing,Distribution Centers,2398600,3,4.77,4.0,86.4,Gold,7.9,2026-01-03
+S1674,Ethiopia Storage Masters Group,Africa,Ethiopia,Logistics & Transportation,Warehousing,Distribution Centers,745400,4,4.47,4.03,83.6,Silver,8.4,2026-01-03
+S1675,Colombia Distribution Pro Solutions,Americas,Colombia,Logistics & Transportation,Warehousing,Distribution Centers,664700,4,4.55,4.53,90.6,Gold,7.4,2026-01-03
+S1676,France Warehouse Pro Corp,Europe,France,Logistics & Transportation,Warehousing,Distribution Centers,1761200,3,4.67,4.37,87.2,Gold,6.9,2026-01-03
+S1677,Storage Masters Co,Africa,Nigeria,Logistics & Transportation,Warehousing,Distribution Centers,282000,2,4.7,4.25,88.6,Gold,8.3,2026-01-03
+S1678,Kenya Warehouse Pro Corp,Africa,Kenya,Logistics & Transportation,Warehousing,Distribution Centers,672500,3,4.5,4.2,86.0,Gold,7.7,2026-01-03
+S1679,Australia Advisory Masters Co,APAC,Australia,Professional Services,Consulting,HR Consulting,3662800,4,4.32,4.47,85.8,Gold,7.3,2026-01-03
+S1680,Business Consulting Inc,APAC,India,Professional Services,Consulting,HR Consulting,3527700,2,4.65,4.25,85.8,Gold,7.3,2026-01-03
+S1681,Mexico Business Consulting International,Americas,Mexico,Professional Services,Consulting,HR Consulting,4491700,3,4.13,4.37,85.3,Gold,7.2,2026-01-03
+S1682,Advisory Masters Inc,Africa,Tunisia,Professional Services,Consulting,HR Consulting,2284200,3,4.63,4.43,90.4,Gold,6.4,2026-01-03
+S1683,Argentina Strategy Co International,Americas,Argentina,Professional Services,Consulting,HR Consulting,4925900,3,4.5,4.3,85.1,Gold,6.5,2026-01-03
+S1684,Business Consulting International,Europe,Belgium,Professional Services,Consulting,IT Consulting,4716500,4,4.53,4.1,83.2,Silver,9.1,2026-01-03
+S1685,Strategy Co Group,Americas,Argentina,Professional Services,Consulting,IT Consulting,1442400,4,4.55,4.47,86.3,Gold,8.2,2026-01-03
+S1686,Colombia Strategy Co Inc,Americas,Colombia,Professional Services,Consulting,IT Consulting,2288100,3,4.47,4.27,85.2,Gold,8.2,2026-01-03
+S1687,Expert Advisors Co,Middle East,Oman,Professional Services,Consulting,IT Consulting,1070700,3,4.27,4.37,86.3,Gold,6.1,2026-01-03
+S1688,Turkey Advisory Masters Ltd,Middle East,Turkey,Professional Services,Consulting,IT Consulting,3559500,4,4.53,4.53,87.1,Gold,9.0,2026-01-03
+S1689,Tunisia Business Consulting Group,Africa,Tunisia,Professional Services,Consulting,Management Consulting,437600,2,4.55,4.5,89.9,Gold,8.1,2026-01-03
+S1690,Philippines Consult Pro Ltd,APAC,Philippines,Professional Services,Consulting,Management Consulting,1474900,4,4.28,4.38,83.8,Silver,6.9,2026-01-03
+S1691,Strategy Co International,Middle East,Jordan,Professional Services,Consulting,Management Consulting,1733300,2,4.35,4.25,83.4,Silver,6.7,2026-01-03
+S1692,Saudi Arabia Strategy Co Enterprises,Middle East,Saudi Arabia,Professional Services,Consulting,Management Consulting,1678600,2,4.35,4.65,88.1,Gold,6.2,2026-01-03
+S1693,Finance Pro Ltd,Middle East,Israel,Professional Services,Financial Services,Accounting,1906500,3,4.17,4.27,81.8,Silver,7.9,2026-01-03
+S1694,Capital Co Co,Middle East,Kuwait,Professional Services,Financial Services,Accounting,657800,2,4.9,3.6,84.6,Silver,6.3,2026-01-03
+S1695,Poland Investment Pro Enterprises,Europe,Poland,Professional Services,Financial Services,Accounting,1182800,2,4.75,4.55,89.7,Gold,6.2,2026-01-03
+S1696,Investment Pro International,Africa,Kenya,Professional Services,Financial Services,Accounting,1072300,4,4.6,4.02,86.9,Gold,6.1,2026-01-03
+S1697,Finance Pro International,APAC,Vietnam,Professional Services,Financial Services,Banking,1045600,4,4.53,4.47,87.7,Gold,7.1,2026-01-03
+S1698,Australia Finance Pro Ltd,APAC,Australia,Professional Services,Financial Services,Banking,2226400,4,4.25,4.2,83.5,Silver,8.6,2026-01-03
+S1699,Colombia Money Masters International,Americas,Colombia,Professional Services,Financial Services,Banking,753700,4,4.0,4.15,82.0,Silver,9.3,2026-01-03
+S1700,Indonesia Financial Solutions Corp,APAC,Indonesia,Professional Services,Financial Services,Insurance,345000,3,4.3,4.4,87.2,Gold,7.5,2026-01-03
+S1701,Money Masters Solutions,Middle East,Saudi Arabia,Professional Services,Financial Services,Insurance,396800,3,4.73,4.33,88.0,Gold,9.2,2026-01-03
+S1702,Financial Solutions Trading,Africa,Ethiopia,Professional Services,Financial Services,Insurance,1076800,2,4.6,3.95,85.7,Gold,6.6,2026-01-03
+S1703,Tunisia Capital Co Inc,Africa,Tunisia,Professional Services,Financial Services,Insurance,787300,2,4.5,3.85,83.7,Silver,7.9,2026-01-03
+S1704,Legal Pro Co,Africa,Kenya,Professional Services,Legal Services,Corporate Law,3232600,4,4.6,3.98,83.3,Silver,7.5,2026-01-03
+S1705,Morocco Legal Pro Trading,Africa,Morocco,Professional Services,Legal Services,Corporate Law,1329200,3,4.27,4.23,84.8,Silver,7.1,2026-01-03
+S1706,Justice Co Enterprises,APAC,Taiwan,Professional Services,Legal Services,Corporate Law,1521700,4,4.35,4.3,86.6,Gold,8.8,2026-01-03
+S1707,Bahrain Counsel Pro Inc,Middle East,Bahrain,Professional Services,Legal Services,Corporate Law,941300,3,4.03,4.2,82.1,Silver,7.7,2026-01-03
+S1708,South Africa Legal Pro Trading,Africa,South Africa,Professional Services,Legal Services,Corporate Law,1415600,2,4.05,3.85,78.5,Silver,6.9,2026-01-03
+S1709,Legal Solutions Trading,APAC,Japan,Professional Services,Legal Services,Employment Law,2155000,4,4.53,4.08,85.2,Gold,7.6,2026-01-03
+S1710,Switzerland Legal Solutions Solutions,Europe,Switzerland,Professional Services,Legal Services,Employment Law,1547100,3,4.47,4.37,85.1,Gold,7.4,2026-01-03
+S1711,Canada Legal Solutions Group,Americas,Canada,Professional Services,Legal Services,Employment Law,2133400,4,4.03,4.32,82.1,Silver,8.7,2026-01-03
+S1712,Legal Pro Ltd,APAC,Indonesia,Professional Services,Legal Services,Employment Law,353700,2,4.2,4.9,88.2,Gold,9.1,2026-01-03
+S1713,Legal Pro Enterprises,APAC,Singapore,Professional Services,Legal Services,Intellectual Property,521600,2,4.9,4.55,92.1,Gold,6.6,2026-01-03
+S1714,Legal Solutions Solutions,Americas,USA,Professional Services,Legal Services,Intellectual Property,273700,2,4.85,4.65,93.3,Gold,8.1,2026-01-03
+S1715,Brazil Justice Co Trading,Americas,Brazil,Professional Services,Legal Services,Intellectual Property,606400,2,4.6,4.95,93.3,Gold,6.7,2026-01-03
+S1716,Vietnam Legal Solutions International,APAC,Vietnam,Professional Services,Legal Services,Intellectual Property,1611500,2,4.0,4.65,83.2,Silver,7.4,2026-01-03
+S1717,China Legal Solutions Co,APAC,China,Professional Services,Legal Services,Intellectual Property,1556100,3,4.33,4.33,86.1,Gold,8.3,2026-01-03
+S1718,Brand Masters Ltd,Americas,Brazil,Professional Services,Marketing Services,Advertising,593200,2,4.6,4.25,87.9,Gold,8.6,2026-01-03
+S1719,Marketing Pro Corp,Middle East,Saudi Arabia,Professional Services,Marketing Services,Advertising,734700,4,4.28,4.2,82.0,Silver,7.9,2026-01-03
+S1720,Taiwan Brand Masters Corp,APAC,Taiwan,Professional Services,Marketing Services,Digital Marketing,528300,2,4.35,4.15,83.7,Silver,6.2,2026-01-03
+S1721,Marketing Pro Solutions,Middle East,Saudi Arabia,Professional Services,Marketing Services,Digital Marketing,634600,4,4.48,4.43,86.9,Gold,8.9,2026-01-03
+S1722,Ad Solutions Solutions,Americas,Chile,Professional Services,Marketing Services,Digital Marketing,1637600,3,4.57,4.03,84.2,Silver,9.2,2026-01-03
+S1723,Ad Solutions Trading,Europe,Netherlands,Professional Services,Marketing Services,Digital Marketing,1411700,4,4.53,4.0,85.5,Gold,9.2,2026-01-03
+S1724,Australia Brand Masters International,APAC,Australia,Professional Services,Marketing Services,Market Research,502400,3,4.43,4.17,85.1,Gold,8.0,2026-01-03
+S1725,South Korea Ad Solutions Solutions,APAC,South Korea,Professional Services,Marketing Services,Market Research,1761000,3,4.13,3.77,78.1,Silver,6.6,2026-01-03
+S1726,Singapore Ad Solutions International,APAC,Singapore,Professional Services,Marketing Services,Market Research,1162300,4,4.6,3.88,85.0,Silver,9.5,2026-01-03
+S1727,Creative Co Solutions,APAC,Australia,Professional Services,Marketing Services,Market Research,2865200,4,4.38,4.08,81.7,Silver,7.4,2026-01-03
+S1728,Marketing Pro Enterprises,Africa,Nigeria,Professional Services,Marketing Services,PR & Communications,1409400,4,4.58,3.92,82.4,Silver,7.8,2026-01-03
+S1729,Mexico Brand Masters Corp,Americas,Mexico,Professional Services,Marketing Services,PR & Communications,1375400,3,4.4,4.23,86.6,Gold,7.2,2026-01-03
+S1730,USA Creative Co Group,Americas,USA,Professional Services,Marketing Services,PR & Communications,2111400,4,4.25,4.32,82.9,Silver,9.2,2026-01-03
+S1731,Building Services Enterprises,Europe,Netherlands,Facilities & Corporate Services,Facilities Management,Building Maintenance,714300,2,4.0,4.55,86.3,Gold,6.8,2026-01-03
+S1732,Qatar Site Pro Ltd,Middle East,Qatar,Facilities & Corporate Services,Facilities Management,Building Maintenance,1744000,2,4.4,4.5,89.1,Gold,6.4,2026-01-03
+S1733,Property Services Inc,Middle East,Saudi Arabia,Facilities & Corporate Services,Facilities Management,Building Maintenance,441500,2,4.45,4.2,86.0,Gold,6.1,2026-01-03
+S1734,Property Services Enterprises,Americas,Canada,Facilities & Corporate Services,Facilities Management,Building Maintenance,1259900,2,4.7,3.95,85.8,Gold,8.7,2026-01-03
+S1735,Singapore Property Services Co,APAC,Singapore,Facilities & Corporate Services,Facilities Management,Building Maintenance,799100,2,4.35,3.65,79.7,Silver,9.5,2026-01-03
+S1736,Chile Maintenance Masters Enterprises,Americas,Chile,Facilities & Corporate Services,Facilities Management,Cleaning Services,2283900,3,4.3,4.43,85.2,Gold,8.4,2026-01-03
+S1737,Israel Maintenance Masters Enterprises,Middle East,Israel,Facilities & Corporate Services,Facilities Management,Cleaning Services,1045700,4,4.53,4.35,86.6,Gold,7.0,2026-01-03
+S1738,Tunisia Building Services International,Africa,Tunisia,Facilities & Corporate Services,Facilities Management,Cleaning Services,828700,4,4.45,4.5,89.3,Gold,6.5,2026-01-03
+S1739,Maintenance Masters Trading,Europe,UK,Facilities & Corporate Services,Facilities Management,Cleaning Services,1703900,4,4.6,4.53,89.6,Gold,9.2,2026-01-03
+S1740,Peru Property Services Group,Americas,Peru,Facilities & Corporate Services,Facilities Management,Cleaning Services,747800,2,4.5,4.7,88.0,Gold,9.2,2026-01-03
+S1741,Site Pro Solutions,APAC,Indonesia,Facilities & Corporate Services,Facilities Management,Security Services,1128000,2,4.35,4.35,85.8,Gold,6.4,2026-01-03
+S1742,Spain Facility Pro Corp,Europe,Spain,Facilities & Corporate Services,Facilities Management,Security Services,591500,2,3.95,4.75,83.8,Silver,8.0,2026-01-03
+S1743,Facility Pro Corp,APAC,Taiwan,Facilities & Corporate Services,Facilities Management,Security Services,2834000,4,4.28,4.62,85.6,Gold,7.4,2026-01-03
+S1744,Thailand Work Pro International,APAC,Thailand,Facilities & Corporate Services,Office Services,Office Furniture,516900,3,4.37,3.97,83.2,Silver,7.1,2026-01-03
+S1745,Workspace Solutions Solutions,Africa,Tanzania,Facilities & Corporate Services,Office Services,Office Furniture,427700,2,4.3,4.45,84.4,Silver,9.3,2026-01-03
+S1746,Workspace Solutions Group,Americas,Colombia,Facilities & Corporate Services,Office Services,Office Furniture,492400,3,4.17,4.43,85.4,Gold,7.1,2026-01-03
+S1747,Malaysia Work Pro Ltd,APAC,Malaysia,Facilities & Corporate Services,Office Services,Office Supplies,1537300,2,4.6,4.5,88.7,Gold,8.0,2026-01-03
+S1748,Office Masters International,Middle East,Turkey,Facilities & Corporate Services,Office Services,Office Supplies,1469500,3,4.27,4.27,85.4,Gold,7.3,2026-01-03
+S1749,Philippines Workspace Solutions Corp,APAC,Philippines,Facilities & Corporate Services,Office Services,Office Supplies,1704200,4,4.45,4.45,88.8,Gold,7.9,2026-01-03
+S1750,Work Pro Trading,Americas,Canada,Facilities & Corporate Services,Office Services,Office Supplies,693300,2,5.0,4.4,91.8,Gold,6.1,2026-01-03
+S1751,Workspace Solutions Corp,Europe,Spain,Facilities & Corporate Services,Office Services,Office Supplies,295700,2,4.5,3.7,81.1,Silver,6.0,2026-01-03
+S1752,Switzerland Workspace Solutions Co,Europe,Switzerland,Facilities & Corporate Services,Office Services,Office Supplies,1457800,4,4.2,4.0,80.3,Silver,9.3,2026-01-03
+S1753,Netherlands Office Pro Trading,Europe,Netherlands,Facilities & Corporate Services,Office Services,Printing Services,837600,3,4.7,3.87,84.3,Silver,6.2,2026-01-03
+S1754,Workspace Solutions Co,APAC,India,Facilities & Corporate Services,Office Services,Printing Services,1134300,3,4.43,4.17,86.1,Gold,7.6,2026-01-03
+S1755,Spain Business Services International,Europe,Spain,Facilities & Corporate Services,Office Services,Printing Services,1705700,3,4.53,4.13,83.9,Silver,8.6,2026-01-03
+S1756,Workspace Solutions Enterprises,Americas,Colombia,Facilities & Corporate Services,Office Services,Printing Services,1515100,2,4.5,4.3,84.8,Silver,8.0,2026-01-03
+S1757,Japan Business Services Corp,APAC,Japan,Facilities & Corporate Services,Office Services,Printing Services,2083600,3,4.27,4.4,86.6,Gold,9.3,2026-01-03
+S1758,Office Pro Co,APAC,Singapore,Facilities & Corporate Services,Office Services,Printing Services,633200,4,4.38,4.1,84.8,Silver,8.6,2026-01-03
+S1759,Office Masters Group,Americas,Colombia,Facilities & Corporate Services,Office Services,Printing Services,1927100,3,4.23,4.27,82.2,Silver,6.7,2026-01-03
+S1760,Travel Pro Group,Africa,Kenya,Facilities & Corporate Services,Travel & Events,Business Travel,1845300,3,4.6,4.47,88.6,Gold,7.6,2026-01-03
+S1761,Journey Co Inc,Americas,Mexico,Facilities & Corporate Services,Travel & Events,Business Travel,2261200,3,4.5,4.03,85.0,Gold,6.1,2026-01-03
+S1762,Journey Co Corp,APAC,Taiwan,Facilities & Corporate Services,Travel & Events,Business Travel,391700,2,4.3,4.15,83.9,Silver,8.1,2026-01-03
+S1763,Netherlands Travel Pro Corp,Europe,Netherlands,Facilities & Corporate Services,Travel & Events,Business Travel,1754600,3,4.9,4.27,88.5,Gold,7.4,2026-01-03
+S1764,Event Masters Inc,Americas,Argentina,Facilities & Corporate Services,Travel & Events,Business Travel,1302700,3,4.53,4.37,88.6,Gold,9.1,2026-01-03
+S1765,Singapore Event Masters Corp,APAC,Singapore,Facilities & Corporate Services,Travel & Events,Business Travel,683000,4,4.22,4.2,83.7,Silver,9.0,2026-01-03
+S1766,Colombia Travel Pro Corp,Americas,Colombia,Facilities & Corporate Services,Travel & Events,Event Management,979100,2,4.05,4.4,83.9,Silver,9.4,2026-01-03
+S1767,South Africa Event Masters Trading,Africa,South Africa,Facilities & Corporate Services,Travel & Events,Event Management,652100,3,4.63,3.83,82.3,Silver,6.7,2026-01-03
+S1768,Destination Pro Group,Europe,Poland,Facilities & Corporate Services,Travel & Events,Event Management,2258400,4,4.35,4.35,85.4,Gold,8.4,2026-01-03
+S1769,Meeting Solutions Inc,APAC,Taiwan,Facilities & Corporate Services,Travel & Events,Event Management,859800,3,4.1,4.77,85.6,Gold,9.2,2026-01-03
+S1770,Talent Tech International,Africa,Ethiopia,Human Resources,HR Technology,Benefits Administration,736500,2,4.8,4.8,91.6,Gold,9.3,2026-01-03
+S1771,People Systems Corp,Europe,Sweden,Human Resources,HR Technology,Benefits Administration,2720600,4,4.55,4.22,84.5,Silver,7.8,2026-01-03
+S1772,People Systems Solutions,APAC,Australia,Human Resources,HR Technology,Benefits Administration,589800,4,4.58,4.02,83.6,Silver,8.9,2026-01-03
+S1773,Oman People Systems Enterprises,Middle East,Oman,Human Resources,HR Technology,Benefits Administration,1017300,2,4.1,3.95,79.0,Silver,8.5,2026-01-03
+S1774,Kuwait HR Solutions Enterprises,Middle East,Kuwait,Human Resources,HR Technology,HRIS Systems,591300,2,4.0,4.1,80.1,Silver,6.4,2026-01-03
+S1775,Thailand HR Solutions Group,APAC,Thailand,Human Resources,HR Technology,HRIS Systems,641400,3,4.5,4.1,86.0,Gold,6.0,2026-01-03
+S1776,Colombia People Systems Co,Americas,Colombia,Human Resources,HR Technology,HRIS Systems,2008700,3,4.47,4.03,84.2,Silver,9.0,2026-01-03
+S1777,Tanzania People Systems Ltd,Africa,Tanzania,Human Resources,HR Technology,Payroll Services,871000,4,4.5,4.58,90.0,Gold,7.6,2026-01-03
+S1778,Workforce Pro Trading,Europe,Poland,Human Resources,HR Technology,Payroll Services,1311400,3,4.27,4.17,85.1,Gold,8.1,2026-01-03
+S1779,HR Solutions Enterprises,Africa,Egypt,Human Resources,HR Technology,Payroll Services,3132900,4,4.35,4.5,87.6,Gold,7.4,2026-01-03
+S1780,Training Masters Corp,APAC,China,Human Resources,Learning & Development,E-Learning Platforms,2593500,4,4.25,4.22,84.9,Silver,6.2,2026-01-03
+S1781,Ethiopia Skill Co Corp,Africa,Ethiopia,Human Resources,Learning & Development,E-Learning Platforms,3059500,4,4.35,4.38,84.4,Silver,8.1,2026-01-03
+S1782,Sweden Skill Co Solutions,Europe,Sweden,Human Resources,Learning & Development,Leadership Development,1049100,4,4.25,3.92,81.7,Silver,9.3,2026-01-03
+S1783,Training Masters Solutions,APAC,Australia,Human Resources,Learning & Development,Leadership Development,1770100,3,4.6,4.33,85.9,Gold,7.1,2026-01-03
+S1784,Education Solutions Ltd,APAC,China,Human Resources,Learning & Development,Leadership Development,1107000,3,4.47,3.93,84.3,Silver,7.6,2026-01-03
+S1785,Development Pro International,APAC,Singapore,Human Resources,Learning & Development,Leadership Development,2299500,3,4.43,4.3,87.3,Gold,6.8,2026-01-03
+S1786,Vietnam Training Masters Co,APAC,Vietnam,Human Resources,Learning & Development,Leadership Development,963400,2,4.35,4.0,84.3,Silver,9.3,2026-01-03
+S1787,Argentina Learn Pro Solutions,Americas,Argentina,Human Resources,Learning & Development,Leadership Development,1121200,4,4.45,4.35,87.0,Gold,9.1,2026-01-03
+S1788,Learn Pro Solutions,APAC,South Korea,Human Resources,Learning & Development,Training Programs,259600,2,4.3,4.45,85.9,Gold,8.7,2026-01-03
+S1789,Development Pro Ltd,Europe,Sweden,Human Resources,Learning & Development,Training Programs,627100,2,4.4,4.05,83.2,Silver,6.4,2026-01-03
+S1790,Tanzania Education Solutions Enterprises,Africa,Tanzania,Human Resources,Learning & Development,Training Programs,997500,2,4.5,4.45,88.3,Gold,9.4,2026-01-03
+S1791,Israel Talent Masters Enterprises,Middle East,Israel,Human Resources,Staffing Services,Executive Search,1356300,2,4.35,4.15,83.6,Silver,8.7,2026-01-03
+S1792,People Pro Enterprises,APAC,Japan,Human Resources,Staffing Services,Executive Search,2429600,4,4.65,4.12,87.0,Gold,6.6,2026-01-03
+S1793,Staff Pro Ltd,Middle East,UAE,Human Resources,Staffing Services,Executive Search,2739100,4,4.5,4.53,88.1,Gold,8.1,2026-01-03
+S1794,Japan Talent Masters Group,APAC,Japan,Human Resources,Staffing Services,Permanent Recruitment,812400,2,4.25,4.1,82.3,Silver,7.7,2026-01-03
+S1795,Vietnam Recruit Co Trading,APAC,Vietnam,Human Resources,Staffing Services,Permanent Recruitment,1198100,2,4.55,4.55,90.0,Gold,8.7,2026-01-03
+S1796,Switzerland Talent Masters Trading,Europe,Switzerland,Human Resources,Staffing Services,Permanent Recruitment,2564600,4,4.42,4.05,85.2,Gold,7.6,2026-01-03
+S1797,Recruit Co Group,APAC,South Korea,Human Resources,Staffing Services,Permanent Recruitment,687900,4,4.3,4.05,83.5,Silver,7.9,2026-01-03
+S1798,Staff Pro Corp,Europe,Spain,Human Resources,Staffing Services,Permanent Recruitment,976500,2,4.1,4.25,81.7,Silver,6.2,2026-01-03
+S1799,Talent Masters Ltd,Africa,Tunisia,Human Resources,Staffing Services,Permanent Recruitment,2259000,4,4.65,4.08,86.8,Gold,8.0,2026-01-03
+S1800,Peru Recruit Co Ltd,Americas,Peru,Human Resources,Staffing Services,Temporary Staffing,1382600,4,4.38,4.35,85.1,Gold,8.4,2026-01-03
+S1801,Kenya Recruit Co Ltd,Africa,Kenya,Human Resources,Staffing Services,Temporary Staffing,2567300,4,4.45,4.65,89.2,Gold,9.3,2026-01-03

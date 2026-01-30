@@ -1,0 +1,701 @@
+Sector,Category,SubCategory,Scenario_Name,Description,Current_Spend_USD,Projected_Savings_Pct,Projected_Savings_USD,Risk_Reduction_Pct,Implementation_Complexity,Timeline_Months
+Construction & Real Estate,Building Materials,Cement,Aggressive Diversification,Reduce top supplier share to <30%,18205600,15,2730840.0,25,High,6
+Construction & Real Estate,Building Materials,Cement,Moderate Diversification,Reduce top supplier share to <40%,18205600,10,1820560.0,15,Low,8
+Construction & Real Estate,Building Materials,Cement,Regional Expansion,Add Africa/Middle East suppliers,18205600,12,2184672.0,20,Medium,4
+Construction & Real Estate,Building Materials,Cement,Cost Optimization,Shift 20% spend to low-cost regions,18205600,8,1456448.0,12,Medium,7
+Construction & Real Estate,Building Materials,Cement,Risk Mitigation,Dual-source all critical categories,18205600,5,910280.0,18,High,7
+Construction & Real Estate,Building Materials,Concrete,Aggressive Diversification,Reduce top supplier share to <30%,14236000,15,2135400.0,25,Low,11
+Construction & Real Estate,Building Materials,Concrete,Moderate Diversification,Reduce top supplier share to <40%,14236000,10,1423600.0,15,Medium,11
+Construction & Real Estate,Building Materials,Concrete,Regional Expansion,Add Africa/Middle East suppliers,14236000,12,1708320.0,20,High,10
+Construction & Real Estate,Building Materials,Concrete,Cost Optimization,Shift 20% spend to low-cost regions,14236000,8,1138880.0,12,Medium,3
+Construction & Real Estate,Building Materials,Concrete,Risk Mitigation,Dual-source all critical categories,14236000,5,711800.0,18,Medium,6
+Construction & Real Estate,Building Materials,Glass,Aggressive Diversification,Reduce top supplier share to <30%,14154600,15,2123190.0,25,Medium,11
+Construction & Real Estate,Building Materials,Glass,Moderate Diversification,Reduce top supplier share to <40%,14154600,10,1415460.0,15,Low,4
+Construction & Real Estate,Building Materials,Glass,Regional Expansion,Add Africa/Middle East suppliers,14154600,12,1698552.0,20,Low,11
+Construction & Real Estate,Building Materials,Glass,Cost Optimization,Shift 20% spend to low-cost regions,14154600,8,1132368.0,12,High,3
+Construction & Real Estate,Building Materials,Glass,Risk Mitigation,Dual-source all critical categories,14154600,5,707730.0,18,High,4
+Construction & Real Estate,Building Materials,Lumber,Aggressive Diversification,Reduce top supplier share to <30%,20785600,15,3117840.0,25,Low,6
+Construction & Real Estate,Building Materials,Lumber,Moderate Diversification,Reduce top supplier share to <40%,20785600,10,2078560.0,15,High,9
+Construction & Real Estate,Building Materials,Lumber,Regional Expansion,Add Africa/Middle East suppliers,20785600,12,2494272.0,20,Low,6
+Construction & Real Estate,Building Materials,Lumber,Cost Optimization,Shift 20% spend to low-cost regions,20785600,8,1662848.0,12,High,9
+Construction & Real Estate,Building Materials,Lumber,Risk Mitigation,Dual-source all critical categories,20785600,5,1039280.0,18,High,4
+Construction & Real Estate,Building Materials,Structural Steel,Aggressive Diversification,Reduce top supplier share to <30%,18185600,15,2727840.0,25,High,5
+Construction & Real Estate,Building Materials,Structural Steel,Moderate Diversification,Reduce top supplier share to <40%,18185600,10,1818560.0,15,Low,10
+Construction & Real Estate,Building Materials,Structural Steel,Regional Expansion,Add Africa/Middle East suppliers,18185600,12,2182272.0,20,High,8
+Construction & Real Estate,Building Materials,Structural Steel,Cost Optimization,Shift 20% spend to low-cost regions,18185600,8,1454848.0,12,Low,4
+Construction & Real Estate,Building Materials,Structural Steel,Risk Mitigation,Dual-source all critical categories,18185600,5,909280.0,18,Low,3
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Aggressive Diversification,Reduce top supplier share to <30%,8122300,15,1218345.0,25,Low,7
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Moderate Diversification,Reduce top supplier share to <40%,8122300,10,812230.0,15,High,4
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Regional Expansion,Add Africa/Middle East suppliers,8122300,12,974676.0,20,High,6
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Cost Optimization,Shift 20% spend to low-cost regions,8122300,8,649784.0,12,Medium,9
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Risk Mitigation,Dual-source all critical categories,8122300,5,406115.0,18,Medium,10
+Construction & Real Estate,Construction Equipment,Power Tools,Aggressive Diversification,Reduce top supplier share to <30%,9423700,15,1413555.0,25,High,9
+Construction & Real Estate,Construction Equipment,Power Tools,Moderate Diversification,Reduce top supplier share to <40%,9423700,10,942370.0,15,Medium,8
+Construction & Real Estate,Construction Equipment,Power Tools,Regional Expansion,Add Africa/Middle East suppliers,9423700,12,1130844.0,20,Low,9
+Construction & Real Estate,Construction Equipment,Power Tools,Cost Optimization,Shift 20% spend to low-cost regions,9423700,8,753896.0,12,High,4
+Construction & Real Estate,Construction Equipment,Power Tools,Risk Mitigation,Dual-source all critical categories,9423700,5,471185.0,18,High,3
+Construction & Real Estate,Construction Equipment,Scaffolding,Aggressive Diversification,Reduce top supplier share to <30%,7021300,15,1053195.0,25,High,12
+Construction & Real Estate,Construction Equipment,Scaffolding,Moderate Diversification,Reduce top supplier share to <40%,7021300,10,702130.0,15,Low,12
+Construction & Real Estate,Construction Equipment,Scaffolding,Regional Expansion,Add Africa/Middle East suppliers,7021300,12,842556.0,20,Low,4
+Construction & Real Estate,Construction Equipment,Scaffolding,Cost Optimization,Shift 20% spend to low-cost regions,7021300,8,561704.0,12,Medium,11
+Construction & Real Estate,Construction Equipment,Scaffolding,Risk Mitigation,Dual-source all critical categories,7021300,5,351065.0,18,Low,7
+Construction & Real Estate,MEP Systems,Electrical Systems,Aggressive Diversification,Reduce top supplier share to <30%,4264000,15,639600.0,25,High,7
+Construction & Real Estate,MEP Systems,Electrical Systems,Moderate Diversification,Reduce top supplier share to <40%,4264000,10,426400.0,15,High,4
+Construction & Real Estate,MEP Systems,Electrical Systems,Regional Expansion,Add Africa/Middle East suppliers,4264000,12,511680.0,20,Medium,10
+Construction & Real Estate,MEP Systems,Electrical Systems,Cost Optimization,Shift 20% spend to low-cost regions,4264000,8,341120.0,12,Medium,9
+Construction & Real Estate,MEP Systems,Electrical Systems,Risk Mitigation,Dual-source all critical categories,4264000,5,213200.0,18,High,3
+Construction & Real Estate,MEP Systems,HVAC Equipment,Aggressive Diversification,Reduce top supplier share to <30%,9076700,15,1361505.0,25,Medium,5
+Construction & Real Estate,MEP Systems,HVAC Equipment,Moderate Diversification,Reduce top supplier share to <40%,9076700,10,907670.0,15,High,6
+Construction & Real Estate,MEP Systems,HVAC Equipment,Regional Expansion,Add Africa/Middle East suppliers,9076700,12,1089204.0,20,Low,9
+Construction & Real Estate,MEP Systems,HVAC Equipment,Cost Optimization,Shift 20% spend to low-cost regions,9076700,8,726136.0,12,High,7
+Construction & Real Estate,MEP Systems,HVAC Equipment,Risk Mitigation,Dual-source all critical categories,9076700,5,453835.0,18,High,5
+Construction & Real Estate,MEP Systems,Plumbing Systems,Aggressive Diversification,Reduce top supplier share to <30%,5573900,15,836085.0,25,Medium,8
+Construction & Real Estate,MEP Systems,Plumbing Systems,Moderate Diversification,Reduce top supplier share to <40%,5573900,10,557390.0,15,Low,11
+Construction & Real Estate,MEP Systems,Plumbing Systems,Regional Expansion,Add Africa/Middle East suppliers,5573900,12,668868.0,20,High,5
+Construction & Real Estate,MEP Systems,Plumbing Systems,Cost Optimization,Shift 20% spend to low-cost regions,5573900,8,445912.0,12,Low,3
+Construction & Real Estate,MEP Systems,Plumbing Systems,Risk Mitigation,Dual-source all critical categories,5573900,5,278695.0,18,Low,12
+Energy & Utilities,Electricity,Backup Power,Aggressive Diversification,Reduce top supplier share to <30%,14191600,15,2128740.0,25,High,9
+Energy & Utilities,Electricity,Backup Power,Moderate Diversification,Reduce top supplier share to <40%,14191600,10,1419160.0,15,High,11
+Energy & Utilities,Electricity,Backup Power,Regional Expansion,Add Africa/Middle East suppliers,14191600,12,1702992.0,20,Low,7
+Energy & Utilities,Electricity,Backup Power,Cost Optimization,Shift 20% spend to low-cost regions,14191600,8,1135328.0,12,Low,8
+Energy & Utilities,Electricity,Backup Power,Risk Mitigation,Dual-source all critical categories,14191600,5,709580.0,18,Low,9
+Energy & Utilities,Electricity,Grid Electricity,Aggressive Diversification,Reduce top supplier share to <30%,18192600,15,2728890.0,25,High,11
+Energy & Utilities,Electricity,Grid Electricity,Moderate Diversification,Reduce top supplier share to <40%,18192600,10,1819260.0,15,Low,5
+Energy & Utilities,Electricity,Grid Electricity,Regional Expansion,Add Africa/Middle East suppliers,18192600,12,2183112.0,20,Low,6
+Energy & Utilities,Electricity,Grid Electricity,Cost Optimization,Shift 20% spend to low-cost regions,18192600,8,1455408.0,12,High,7
+Energy & Utilities,Electricity,Grid Electricity,Risk Mitigation,Dual-source all critical categories,18192600,5,909630.0,18,Low,4
+Energy & Utilities,Electricity,Renewable Electricity,Aggressive Diversification,Reduce top supplier share to <30%,13379100,15,2006865.0,25,Low,12
+Energy & Utilities,Electricity,Renewable Electricity,Moderate Diversification,Reduce top supplier share to <40%,13379100,10,1337910.0,15,Low,11
+Energy & Utilities,Electricity,Renewable Electricity,Regional Expansion,Add Africa/Middle East suppliers,13379100,12,1605492.0,20,Medium,11
+Energy & Utilities,Electricity,Renewable Electricity,Cost Optimization,Shift 20% spend to low-cost regions,13379100,8,1070328.0,12,Low,7
+Energy & Utilities,Electricity,Renewable Electricity,Risk Mitigation,Dual-source all critical categories,13379100,5,668955.0,18,High,4
+Energy & Utilities,Fuels,Aviation Fuel,Aggressive Diversification,Reduce top supplier share to <30%,9139900,15,1370985.0,25,Medium,4
+Energy & Utilities,Fuels,Aviation Fuel,Moderate Diversification,Reduce top supplier share to <40%,9139900,10,913990.0,15,Low,12
+Energy & Utilities,Fuels,Aviation Fuel,Regional Expansion,Add Africa/Middle East suppliers,9139900,12,1096788.0,20,Medium,8
+Energy & Utilities,Fuels,Aviation Fuel,Cost Optimization,Shift 20% spend to low-cost regions,9139900,8,731192.0,12,Medium,5
+Energy & Utilities,Fuels,Aviation Fuel,Risk Mitigation,Dual-source all critical categories,9139900,5,456995.0,18,High,6
+Energy & Utilities,Fuels,Biofuels,Aggressive Diversification,Reduce top supplier share to <30%,6989600,15,1048440.0,25,Low,7
+Energy & Utilities,Fuels,Biofuels,Moderate Diversification,Reduce top supplier share to <40%,6989600,10,698960.0,15,High,4
+Energy & Utilities,Fuels,Biofuels,Regional Expansion,Add Africa/Middle East suppliers,6989600,12,838752.0,20,Low,8
+Energy & Utilities,Fuels,Biofuels,Cost Optimization,Shift 20% spend to low-cost regions,6989600,8,559168.0,12,Medium,10
+Energy & Utilities,Fuels,Biofuels,Risk Mitigation,Dual-source all critical categories,6989600,5,349480.0,18,Medium,12
+Energy & Utilities,Fuels,Diesel,Aggressive Diversification,Reduce top supplier share to <30%,5074900,15,761235.0,25,High,7
+Energy & Utilities,Fuels,Diesel,Moderate Diversification,Reduce top supplier share to <40%,5074900,10,507490.0,15,High,12
+Energy & Utilities,Fuels,Diesel,Regional Expansion,Add Africa/Middle East suppliers,5074900,12,608988.0,20,Low,12
+Energy & Utilities,Fuels,Diesel,Cost Optimization,Shift 20% spend to low-cost regions,5074900,8,405992.0,12,High,8
+Energy & Utilities,Fuels,Diesel,Risk Mitigation,Dual-source all critical categories,5074900,5,253745.0,18,Medium,9
+Energy & Utilities,Fuels,Natural Gas,Aggressive Diversification,Reduce top supplier share to <30%,9402100,15,1410315.0,25,Low,3
+Energy & Utilities,Fuels,Natural Gas,Moderate Diversification,Reduce top supplier share to <40%,9402100,10,940210.0,15,Medium,6
+Energy & Utilities,Fuels,Natural Gas,Regional Expansion,Add Africa/Middle East suppliers,9402100,12,1128252.0,20,Low,9
+Energy & Utilities,Fuels,Natural Gas,Cost Optimization,Shift 20% spend to low-cost regions,9402100,8,752168.0,12,Medium,8
+Energy & Utilities,Fuels,Natural Gas,Risk Mitigation,Dual-source all critical categories,9402100,5,470105.0,18,Low,8
+Energy & Utilities,Renewable Equipment,Battery Storage,Aggressive Diversification,Reduce top supplier share to <30%,11434800,15,1715220.0,25,Medium,10
+Energy & Utilities,Renewable Equipment,Battery Storage,Moderate Diversification,Reduce top supplier share to <40%,11434800,10,1143480.0,15,Medium,8
+Energy & Utilities,Renewable Equipment,Battery Storage,Regional Expansion,Add Africa/Middle East suppliers,11434800,12,1372176.0,20,Medium,10
+Energy & Utilities,Renewable Equipment,Battery Storage,Cost Optimization,Shift 20% spend to low-cost regions,11434800,8,914784.0,12,High,4
+Energy & Utilities,Renewable Equipment,Battery Storage,Risk Mitigation,Dual-source all critical categories,11434800,5,571740.0,18,Low,12
+Energy & Utilities,Renewable Equipment,Solar Panels,Aggressive Diversification,Reduce top supplier share to <30%,9734000,15,1460100.0,25,Low,7
+Energy & Utilities,Renewable Equipment,Solar Panels,Moderate Diversification,Reduce top supplier share to <40%,9734000,10,973400.0,15,Low,11
+Energy & Utilities,Renewable Equipment,Solar Panels,Regional Expansion,Add Africa/Middle East suppliers,9734000,12,1168080.0,20,Low,7
+Energy & Utilities,Renewable Equipment,Solar Panels,Cost Optimization,Shift 20% spend to low-cost regions,9734000,8,778720.0,12,High,4
+Energy & Utilities,Renewable Equipment,Solar Panels,Risk Mitigation,Dual-source all critical categories,9734000,5,486700.0,18,High,4
+Energy & Utilities,Renewable Equipment,Wind Turbines,Aggressive Diversification,Reduce top supplier share to <30%,10556600,15,1583490.0,25,Low,11
+Energy & Utilities,Renewable Equipment,Wind Turbines,Moderate Diversification,Reduce top supplier share to <40%,10556600,10,1055660.0,15,High,3
+Energy & Utilities,Renewable Equipment,Wind Turbines,Regional Expansion,Add Africa/Middle East suppliers,10556600,12,1266792.0,20,High,12
+Energy & Utilities,Renewable Equipment,Wind Turbines,Cost Optimization,Shift 20% spend to low-cost regions,10556600,8,844528.0,12,Medium,12
+Energy & Utilities,Renewable Equipment,Wind Turbines,Risk Mitigation,Dual-source all critical categories,10556600,5,527830.0,18,Low,3
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Aggressive Diversification,Reduce top supplier share to <30%,7125800,15,1068870.0,25,High,7
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Moderate Diversification,Reduce top supplier share to <40%,7125800,10,712580.0,15,High,11
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Regional Expansion,Add Africa/Middle East suppliers,7125800,12,855096.0,20,Medium,5
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Cost Optimization,Shift 20% spend to low-cost regions,7125800,8,570064.0,12,Medium,9
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Risk Mitigation,Dual-source all critical categories,7125800,5,356290.0,18,Low,12
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Aggressive Diversification,Reduce top supplier share to <30%,7279600,15,1091940.0,25,High,7
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Moderate Diversification,Reduce top supplier share to <40%,7279600,10,727960.0,15,Low,10
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Regional Expansion,Add Africa/Middle East suppliers,7279600,12,873552.0,20,High,11
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Cost Optimization,Shift 20% spend to low-cost regions,7279600,8,582368.0,12,Low,9
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Risk Mitigation,Dual-source all critical categories,7279600,5,363980.0,18,Medium,11
+Facilities & Corporate Services,Facilities Management,Security Services,Aggressive Diversification,Reduce top supplier share to <30%,5471500,15,820725.0,25,Low,6
+Facilities & Corporate Services,Facilities Management,Security Services,Moderate Diversification,Reduce top supplier share to <40%,5471500,10,547150.0,15,High,5
+Facilities & Corporate Services,Facilities Management,Security Services,Regional Expansion,Add Africa/Middle East suppliers,5471500,12,656580.0,20,High,5
+Facilities & Corporate Services,Facilities Management,Security Services,Cost Optimization,Shift 20% spend to low-cost regions,5471500,8,437720.0,12,Medium,5
+Facilities & Corporate Services,Facilities Management,Security Services,Risk Mitigation,Dual-source all critical categories,5471500,5,273575.0,18,Low,12
+Facilities & Corporate Services,Office Services,Office Furniture,Aggressive Diversification,Reduce top supplier share to <30%,4134400,15,620160.0,25,High,5
+Facilities & Corporate Services,Office Services,Office Furniture,Moderate Diversification,Reduce top supplier share to <40%,4134400,10,413440.0,15,High,10
+Facilities & Corporate Services,Office Services,Office Furniture,Regional Expansion,Add Africa/Middle East suppliers,4134400,12,496128.0,20,Medium,3
+Facilities & Corporate Services,Office Services,Office Furniture,Cost Optimization,Shift 20% spend to low-cost regions,4134400,8,330752.0,12,Low,10
+Facilities & Corporate Services,Office Services,Office Furniture,Risk Mitigation,Dual-source all critical categories,4134400,5,206720.0,18,Low,4
+Facilities & Corporate Services,Office Services,Office Supplies,Aggressive Diversification,Reduce top supplier share to <30%,7616800,15,1142520.0,25,Medium,8
+Facilities & Corporate Services,Office Services,Office Supplies,Moderate Diversification,Reduce top supplier share to <40%,7616800,10,761680.0,15,Low,3
+Facilities & Corporate Services,Office Services,Office Supplies,Regional Expansion,Add Africa/Middle East suppliers,7616800,12,914016.0,20,High,6
+Facilities & Corporate Services,Office Services,Office Supplies,Cost Optimization,Shift 20% spend to low-cost regions,7616800,8,609344.0,12,High,8
+Facilities & Corporate Services,Office Services,Office Supplies,Risk Mitigation,Dual-source all critical categories,7616800,5,380840.0,18,Medium,10
+Facilities & Corporate Services,Office Services,Printing Services,Aggressive Diversification,Reduce top supplier share to <30%,9984560,15,1497684.0,25,Medium,3
+Facilities & Corporate Services,Office Services,Printing Services,Moderate Diversification,Reduce top supplier share to <40%,9984560,10,998456.0,15,Low,8
+Facilities & Corporate Services,Office Services,Printing Services,Regional Expansion,Add Africa/Middle East suppliers,9984560,12,1198147.2,20,Low,11
+Facilities & Corporate Services,Office Services,Printing Services,Cost Optimization,Shift 20% spend to low-cost regions,9984560,8,798764.8,12,High,7
+Facilities & Corporate Services,Office Services,Printing Services,Risk Mitigation,Dual-source all critical categories,9984560,5,499228.0,18,High,7
+Facilities & Corporate Services,Travel & Events,Business Travel,Aggressive Diversification,Reduce top supplier share to <30%,9396500,15,1409475.0,25,High,11
+Facilities & Corporate Services,Travel & Events,Business Travel,Moderate Diversification,Reduce top supplier share to <40%,9396500,10,939650.0,15,High,5
+Facilities & Corporate Services,Travel & Events,Business Travel,Regional Expansion,Add Africa/Middle East suppliers,9396500,12,1127580.0,20,Medium,9
+Facilities & Corporate Services,Travel & Events,Business Travel,Cost Optimization,Shift 20% spend to low-cost regions,9396500,8,751720.0,12,Medium,12
+Facilities & Corporate Services,Travel & Events,Business Travel,Risk Mitigation,Dual-source all critical categories,9396500,5,469825.0,18,High,4
+Facilities & Corporate Services,Travel & Events,Event Management,Aggressive Diversification,Reduce top supplier share to <30%,5317200,15,797580.0,25,High,7
+Facilities & Corporate Services,Travel & Events,Event Management,Moderate Diversification,Reduce top supplier share to <40%,5317200,10,531720.0,15,Medium,6
+Facilities & Corporate Services,Travel & Events,Event Management,Regional Expansion,Add Africa/Middle East suppliers,5317200,12,638064.0,20,High,9
+Facilities & Corporate Services,Travel & Events,Event Management,Cost Optimization,Shift 20% spend to low-cost regions,5317200,8,425376.0,12,Medium,8
+Facilities & Corporate Services,Travel & Events,Event Management,Risk Mitigation,Dual-source all critical categories,5317200,5,265860.0,18,Medium,10
+Food & Beverages,Beverages,Coffee,Aggressive Diversification,Reduce top supplier share to <30%,11612200,15,1741830.0,25,High,3
+Food & Beverages,Beverages,Coffee,Moderate Diversification,Reduce top supplier share to <40%,11612200,10,1161220.0,15,High,5
+Food & Beverages,Beverages,Coffee,Regional Expansion,Add Africa/Middle East suppliers,11612200,12,1393464.0,20,Medium,5
+Food & Beverages,Beverages,Coffee,Cost Optimization,Shift 20% spend to low-cost regions,11612200,8,928976.0,12,Low,4
+Food & Beverages,Beverages,Coffee,Risk Mitigation,Dual-source all critical categories,11612200,5,580610.0,18,High,7
+Food & Beverages,Beverages,Tea,Aggressive Diversification,Reduce top supplier share to <30%,4854900,15,728235.0,25,Low,5
+Food & Beverages,Beverages,Tea,Moderate Diversification,Reduce top supplier share to <40%,4854900,10,485490.0,15,Low,5
+Food & Beverages,Beverages,Tea,Regional Expansion,Add Africa/Middle East suppliers,4854900,12,582588.0,20,Medium,12
+Food & Beverages,Beverages,Tea,Cost Optimization,Shift 20% spend to low-cost regions,4854900,8,388392.0,12,High,4
+Food & Beverages,Beverages,Tea,Risk Mitigation,Dual-source all critical categories,4854900,5,242745.0,18,High,6
+Food & Beverages,Dairy Products,Cheese,Aggressive Diversification,Reduce top supplier share to <30%,9042200,15,1356330.0,25,Medium,8
+Food & Beverages,Dairy Products,Cheese,Moderate Diversification,Reduce top supplier share to <40%,9042200,10,904220.0,15,High,4
+Food & Beverages,Dairy Products,Cheese,Regional Expansion,Add Africa/Middle East suppliers,9042200,12,1085064.0,20,Medium,10
+Food & Beverages,Dairy Products,Cheese,Cost Optimization,Shift 20% spend to low-cost regions,9042200,8,723376.0,12,Medium,6
+Food & Beverages,Dairy Products,Cheese,Risk Mitigation,Dual-source all critical categories,9042200,5,452110.0,18,High,5
+Food & Beverages,Dairy Products,Milk & Cream,Aggressive Diversification,Reduce top supplier share to <30%,10576300,15,1586445.0,25,High,9
+Food & Beverages,Dairy Products,Milk & Cream,Moderate Diversification,Reduce top supplier share to <40%,10576300,10,1057630.0,15,Low,6
+Food & Beverages,Dairy Products,Milk & Cream,Regional Expansion,Add Africa/Middle East suppliers,10576300,12,1269156.0,20,Low,5
+Food & Beverages,Dairy Products,Milk & Cream,Cost Optimization,Shift 20% spend to low-cost regions,10576300,8,846104.0,12,High,12
+Food & Beverages,Dairy Products,Milk & Cream,Risk Mitigation,Dual-source all critical categories,10576300,5,528815.0,18,Low,5
+Food & Beverages,Edible Oils,Canola Oil,Aggressive Diversification,Reduce top supplier share to <30%,7483300,15,1122495.0,25,High,11
+Food & Beverages,Edible Oils,Canola Oil,Moderate Diversification,Reduce top supplier share to <40%,7483300,10,748330.0,15,Low,12
+Food & Beverages,Edible Oils,Canola Oil,Regional Expansion,Add Africa/Middle East suppliers,7483300,12,897996.0,20,Low,3
+Food & Beverages,Edible Oils,Canola Oil,Cost Optimization,Shift 20% spend to low-cost regions,7483300,8,598664.0,12,Low,7
+Food & Beverages,Edible Oils,Canola Oil,Risk Mitigation,Dual-source all critical categories,7483300,5,374165.0,18,Low,11
+Food & Beverages,Edible Oils,Coconut Oil,Aggressive Diversification,Reduce top supplier share to <30%,8192500,15,1228875.0,25,Medium,12
+Food & Beverages,Edible Oils,Coconut Oil,Moderate Diversification,Reduce top supplier share to <40%,8192500,10,819250.0,15,High,3
+Food & Beverages,Edible Oils,Coconut Oil,Regional Expansion,Add Africa/Middle East suppliers,8192500,12,983100.0,20,High,7
+Food & Beverages,Edible Oils,Coconut Oil,Cost Optimization,Shift 20% spend to low-cost regions,8192500,8,655400.0,12,Low,6
+Food & Beverages,Edible Oils,Coconut Oil,Risk Mitigation,Dual-source all critical categories,8192500,5,409625.0,18,Medium,12
+Food & Beverages,Edible Oils,Olive Oil,Aggressive Diversification,Reduce top supplier share to <30%,8952300,15,1342845.0,25,Medium,10
+Food & Beverages,Edible Oils,Olive Oil,Moderate Diversification,Reduce top supplier share to <40%,8952300,10,895230.0,15,Low,6
+Food & Beverages,Edible Oils,Olive Oil,Regional Expansion,Add Africa/Middle East suppliers,8952300,12,1074276.0,20,Medium,12
+Food & Beverages,Edible Oils,Olive Oil,Cost Optimization,Shift 20% spend to low-cost regions,8952300,8,716184.0,12,Low,12
+Food & Beverages,Edible Oils,Olive Oil,Risk Mitigation,Dual-source all critical categories,8952300,5,447615.0,18,Low,12
+Food & Beverages,Edible Oils,Palm Oil,Aggressive Diversification,Reduce top supplier share to <30%,8085000,15,1212750.0,25,High,11
+Food & Beverages,Edible Oils,Palm Oil,Moderate Diversification,Reduce top supplier share to <40%,8085000,10,808500.0,15,Medium,5
+Food & Beverages,Edible Oils,Palm Oil,Regional Expansion,Add Africa/Middle East suppliers,8085000,12,970200.0,20,High,8
+Food & Beverages,Edible Oils,Palm Oil,Cost Optimization,Shift 20% spend to low-cost regions,8085000,8,646800.0,12,Medium,12
+Food & Beverages,Edible Oils,Palm Oil,Risk Mitigation,Dual-source all critical categories,8085000,5,404250.0,18,High,4
+Food & Beverages,Edible Oils,Peanut Oil,Aggressive Diversification,Reduce top supplier share to <30%,6233700,15,935055.0,25,Low,9
+Food & Beverages,Edible Oils,Peanut Oil,Moderate Diversification,Reduce top supplier share to <40%,6233700,10,623370.0,15,Medium,5
+Food & Beverages,Edible Oils,Peanut Oil,Regional Expansion,Add Africa/Middle East suppliers,6233700,12,748044.0,20,Low,3
+Food & Beverages,Edible Oils,Peanut Oil,Cost Optimization,Shift 20% spend to low-cost regions,6233700,8,498696.0,12,Low,11
+Food & Beverages,Edible Oils,Peanut Oil,Risk Mitigation,Dual-source all critical categories,6233700,5,311685.0,18,High,9
+Food & Beverages,Edible Oils,Rice Bran Oil,Aggressive Diversification,Reduce top supplier share to <30%,8160300,15,1224045.0,25,Low,12
+Food & Beverages,Edible Oils,Rice Bran Oil,Moderate Diversification,Reduce top supplier share to <40%,8160300,10,816030.0,15,Low,5
+Food & Beverages,Edible Oils,Rice Bran Oil,Regional Expansion,Add Africa/Middle East suppliers,8160300,12,979236.0,20,Medium,12
+Food & Beverages,Edible Oils,Rice Bran Oil,Cost Optimization,Shift 20% spend to low-cost regions,8160300,8,652824.0,12,High,3
+Food & Beverages,Edible Oils,Rice Bran Oil,Risk Mitigation,Dual-source all critical categories,8160300,5,408015.0,18,High,11
+Food & Beverages,Edible Oils,Soybean Oil,Aggressive Diversification,Reduce top supplier share to <30%,3504200,15,525630.0,25,Low,4
+Food & Beverages,Edible Oils,Soybean Oil,Moderate Diversification,Reduce top supplier share to <40%,3504200,10,350420.0,15,Medium,5
+Food & Beverages,Edible Oils,Soybean Oil,Regional Expansion,Add Africa/Middle East suppliers,3504200,12,420504.0,20,High,11
+Food & Beverages,Edible Oils,Soybean Oil,Cost Optimization,Shift 20% spend to low-cost regions,3504200,8,280336.0,12,Low,9
+Food & Beverages,Edible Oils,Soybean Oil,Risk Mitigation,Dual-source all critical categories,3504200,5,175210.0,18,High,9
+Food & Beverages,Edible Oils,Sunflower Oil,Aggressive Diversification,Reduce top supplier share to <30%,6633300,15,994995.0,25,Medium,3
+Food & Beverages,Edible Oils,Sunflower Oil,Moderate Diversification,Reduce top supplier share to <40%,6633300,10,663330.0,15,High,11
+Food & Beverages,Edible Oils,Sunflower Oil,Regional Expansion,Add Africa/Middle East suppliers,6633300,12,795996.0,20,Medium,6
+Food & Beverages,Edible Oils,Sunflower Oil,Cost Optimization,Shift 20% spend to low-cost regions,6633300,8,530664.0,12,Medium,9
+Food & Beverages,Edible Oils,Sunflower Oil,Risk Mitigation,Dual-source all critical categories,6633300,5,331665.0,18,Medium,12
+Food & Beverages,Grains & Cereals,Corn/Maize,Aggressive Diversification,Reduce top supplier share to <30%,10039100,15,1505865.0,25,High,12
+Food & Beverages,Grains & Cereals,Corn/Maize,Moderate Diversification,Reduce top supplier share to <40%,10039100,10,1003910.0,15,Low,9
+Food & Beverages,Grains & Cereals,Corn/Maize,Regional Expansion,Add Africa/Middle East suppliers,10039100,12,1204692.0,20,Low,7
+Food & Beverages,Grains & Cereals,Corn/Maize,Cost Optimization,Shift 20% spend to low-cost regions,10039100,8,803128.0,12,Medium,6
+Food & Beverages,Grains & Cereals,Corn/Maize,Risk Mitigation,Dual-source all critical categories,10039100,5,501955.0,18,Low,7
+Food & Beverages,Grains & Cereals,Rice,Aggressive Diversification,Reduce top supplier share to <30%,8655500,15,1298325.0,25,High,11
+Food & Beverages,Grains & Cereals,Rice,Moderate Diversification,Reduce top supplier share to <40%,8655500,10,865550.0,15,Medium,7
+Food & Beverages,Grains & Cereals,Rice,Regional Expansion,Add Africa/Middle East suppliers,8655500,12,1038660.0,20,Low,3
+Food & Beverages,Grains & Cereals,Rice,Cost Optimization,Shift 20% spend to low-cost regions,8655500,8,692440.0,12,High,3
+Food & Beverages,Grains & Cereals,Rice,Risk Mitigation,Dual-source all critical categories,8655500,5,432775.0,18,High,11
+Food & Beverages,Grains & Cereals,Wheat,Aggressive Diversification,Reduce top supplier share to <30%,7850600,15,1177590.0,25,Low,11
+Food & Beverages,Grains & Cereals,Wheat,Moderate Diversification,Reduce top supplier share to <40%,7850600,10,785060.0,15,Low,9
+Food & Beverages,Grains & Cereals,Wheat,Regional Expansion,Add Africa/Middle East suppliers,7850600,12,942072.0,20,High,6
+Food & Beverages,Grains & Cereals,Wheat,Cost Optimization,Shift 20% spend to low-cost regions,7850600,8,628048.0,12,High,8
+Food & Beverages,Grains & Cereals,Wheat,Risk Mitigation,Dual-source all critical categories,7850600,5,392530.0,18,Medium,8
+Food & Beverages,Packaging Materials,Aluminum Cans,Aggressive Diversification,Reduce top supplier share to <30%,8886800,15,1333020.0,25,Low,5
+Food & Beverages,Packaging Materials,Aluminum Cans,Moderate Diversification,Reduce top supplier share to <40%,8886800,10,888680.0,15,Medium,12
+Food & Beverages,Packaging Materials,Aluminum Cans,Regional Expansion,Add Africa/Middle East suppliers,8886800,12,1066416.0,20,Medium,7
+Food & Beverages,Packaging Materials,Aluminum Cans,Cost Optimization,Shift 20% spend to low-cost regions,8886800,8,710944.0,12,High,9
+Food & Beverages,Packaging Materials,Aluminum Cans,Risk Mitigation,Dual-source all critical categories,8886800,5,444340.0,18,High,8
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Aggressive Diversification,Reduce top supplier share to <30%,12328400,15,1849260.0,25,High,7
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Moderate Diversification,Reduce top supplier share to <40%,12328400,10,1232840.0,15,High,9
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Regional Expansion,Add Africa/Middle East suppliers,12328400,12,1479408.0,20,Low,9
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Cost Optimization,Shift 20% spend to low-cost regions,12328400,8,986272.0,12,High,11
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Risk Mitigation,Dual-source all critical categories,12328400,5,616420.0,18,Medium,5
+Food & Beverages,Packaging Materials,Glass Containers,Aggressive Diversification,Reduce top supplier share to <30%,6611800,15,991770.0,25,Medium,11
+Food & Beverages,Packaging Materials,Glass Containers,Moderate Diversification,Reduce top supplier share to <40%,6611800,10,661180.0,15,High,10
+Food & Beverages,Packaging Materials,Glass Containers,Regional Expansion,Add Africa/Middle East suppliers,6611800,12,793416.0,20,Medium,7
+Food & Beverages,Packaging Materials,Glass Containers,Cost Optimization,Shift 20% spend to low-cost regions,6611800,8,528944.0,12,High,8
+Food & Beverages,Packaging Materials,Glass Containers,Risk Mitigation,Dual-source all critical categories,6611800,5,330590.0,18,High,9
+Food & Beverages,Proteins,Beef,Aggressive Diversification,Reduce top supplier share to <30%,15083000,15,2262450.0,25,High,5
+Food & Beverages,Proteins,Beef,Moderate Diversification,Reduce top supplier share to <40%,15083000,10,1508300.0,15,High,4
+Food & Beverages,Proteins,Beef,Regional Expansion,Add Africa/Middle East suppliers,15083000,12,1809960.0,20,High,6
+Food & Beverages,Proteins,Beef,Cost Optimization,Shift 20% spend to low-cost regions,15083000,8,1206640.0,12,Medium,5
+Food & Beverages,Proteins,Beef,Risk Mitigation,Dual-source all critical categories,15083000,5,754150.0,18,Low,6
+Food & Beverages,Proteins,Poultry,Aggressive Diversification,Reduce top supplier share to <30%,16346000,15,2451900.0,25,High,9
+Food & Beverages,Proteins,Poultry,Moderate Diversification,Reduce top supplier share to <40%,16346000,10,1634600.0,15,Medium,11
+Food & Beverages,Proteins,Poultry,Regional Expansion,Add Africa/Middle East suppliers,16346000,12,1961520.0,20,High,3
+Food & Beverages,Proteins,Poultry,Cost Optimization,Shift 20% spend to low-cost regions,16346000,8,1307680.0,12,Low,9
+Food & Beverages,Proteins,Poultry,Risk Mitigation,Dual-source all critical categories,16346000,5,817300.0,18,High,3
+Food & Beverages,Proteins,Seafood,Aggressive Diversification,Reduce top supplier share to <30%,8891000,15,1333650.0,25,Low,5
+Food & Beverages,Proteins,Seafood,Moderate Diversification,Reduce top supplier share to <40%,8891000,10,889100.0,15,Medium,12
+Food & Beverages,Proteins,Seafood,Regional Expansion,Add Africa/Middle East suppliers,8891000,12,1066920.0,20,Medium,4
+Food & Beverages,Proteins,Seafood,Cost Optimization,Shift 20% spend to low-cost regions,8891000,8,711280.0,12,Low,7
+Food & Beverages,Proteins,Seafood,Risk Mitigation,Dual-source all critical categories,8891000,5,444550.0,18,Low,8
+Food & Beverages,Spices & Seasonings,Pepper,Aggressive Diversification,Reduce top supplier share to <30%,7219000,15,1082850.0,25,Low,12
+Food & Beverages,Spices & Seasonings,Pepper,Moderate Diversification,Reduce top supplier share to <40%,7219000,10,721900.0,15,Low,9
+Food & Beverages,Spices & Seasonings,Pepper,Regional Expansion,Add Africa/Middle East suppliers,7219000,12,866280.0,20,Medium,12
+Food & Beverages,Spices & Seasonings,Pepper,Cost Optimization,Shift 20% spend to low-cost regions,7219000,8,577520.0,12,High,11
+Food & Beverages,Spices & Seasonings,Pepper,Risk Mitigation,Dual-source all critical categories,7219000,5,360950.0,18,Medium,12
+Food & Beverages,Spices & Seasonings,Vanilla,Aggressive Diversification,Reduce top supplier share to <30%,13199100,15,1979865.0,25,Low,5
+Food & Beverages,Spices & Seasonings,Vanilla,Moderate Diversification,Reduce top supplier share to <40%,13199100,10,1319910.0,15,High,10
+Food & Beverages,Spices & Seasonings,Vanilla,Regional Expansion,Add Africa/Middle East suppliers,13199100,12,1583892.0,20,Medium,3
+Food & Beverages,Spices & Seasonings,Vanilla,Cost Optimization,Shift 20% spend to low-cost regions,13199100,8,1055928.0,12,Low,11
+Food & Beverages,Spices & Seasonings,Vanilla,Risk Mitigation,Dual-source all critical categories,13199100,5,659955.0,18,Medium,6
+Food & Beverages,Sweeteners,Sugar,Aggressive Diversification,Reduce top supplier share to <30%,7101500,15,1065225.0,25,Low,12
+Food & Beverages,Sweeteners,Sugar,Moderate Diversification,Reduce top supplier share to <40%,7101500,10,710150.0,15,High,11
+Food & Beverages,Sweeteners,Sugar,Regional Expansion,Add Africa/Middle East suppliers,7101500,12,852180.0,20,High,6
+Food & Beverages,Sweeteners,Sugar,Cost Optimization,Shift 20% spend to low-cost regions,7101500,8,568120.0,12,High,5
+Food & Beverages,Sweeteners,Sugar,Risk Mitigation,Dual-source all critical categories,7101500,5,355075.0,18,High,3
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Aggressive Diversification,Reduce top supplier share to <30%,12752600,15,1912890.0,25,Medium,6
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Moderate Diversification,Reduce top supplier share to <40%,12752600,10,1275260.0,15,High,3
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Regional Expansion,Add Africa/Middle East suppliers,12752600,12,1530312.0,20,Low,4
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Cost Optimization,Shift 20% spend to low-cost regions,12752600,8,1020208.0,12,Medium,9
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Risk Mitigation,Dual-source all critical categories,12752600,5,637630.0,18,Medium,9
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Aggressive Diversification,Reduce top supplier share to <30%,11043500,15,1656525.0,25,Medium,12
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Moderate Diversification,Reduce top supplier share to <40%,11043500,10,1104350.0,15,Low,11
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Regional Expansion,Add Africa/Middle East suppliers,11043500,12,1325220.0,20,Low,4
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Cost Optimization,Shift 20% spend to low-cost regions,11043500,8,883480.0,12,Low,11
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Risk Mitigation,Dual-source all critical categories,11043500,5,552175.0,18,Medium,11
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Aggressive Diversification,Reduce top supplier share to <30%,28460900,15,4269135.0,25,High,8
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Moderate Diversification,Reduce top supplier share to <40%,28460900,10,2846090.0,15,Medium,7
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Regional Expansion,Add Africa/Middle East suppliers,28460900,12,3415308.0,20,Low,12
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Cost Optimization,Shift 20% spend to low-cost regions,28460900,8,2276872.0,12,Low,10
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Risk Mitigation,Dual-source all critical categories,28460900,5,1423045.0,18,Medium,12
+Healthcare & Life Sciences,Medical Devices,Implants,Aggressive Diversification,Reduce top supplier share to <30%,10662500,15,1599375.0,25,Low,7
+Healthcare & Life Sciences,Medical Devices,Implants,Moderate Diversification,Reduce top supplier share to <40%,10662500,10,1066250.0,15,Low,9
+Healthcare & Life Sciences,Medical Devices,Implants,Regional Expansion,Add Africa/Middle East suppliers,10662500,12,1279500.0,20,High,4
+Healthcare & Life Sciences,Medical Devices,Implants,Cost Optimization,Shift 20% spend to low-cost regions,10662500,8,853000.0,12,High,4
+Healthcare & Life Sciences,Medical Devices,Implants,Risk Mitigation,Dual-source all critical categories,10662500,5,533125.0,18,High,7
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Aggressive Diversification,Reduce top supplier share to <30%,24004000,15,3600600.0,25,Medium,4
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Moderate Diversification,Reduce top supplier share to <40%,24004000,10,2400400.0,15,High,7
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Regional Expansion,Add Africa/Middle East suppliers,24004000,12,2880480.0,20,High,12
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Cost Optimization,Shift 20% spend to low-cost regions,24004000,8,1920320.0,12,Medium,10
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Risk Mitigation,Dual-source all critical categories,24004000,5,1200200.0,18,Medium,12
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Aggressive Diversification,Reduce top supplier share to <30%,11863300,15,1779495.0,25,Medium,6
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Moderate Diversification,Reduce top supplier share to <40%,11863300,10,1186330.0,15,Medium,10
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Regional Expansion,Add Africa/Middle East suppliers,11863300,12,1423596.0,20,High,10
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Cost Optimization,Shift 20% spend to low-cost regions,11863300,8,949064.0,12,High,3
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Risk Mitigation,Dual-source all critical categories,11863300,5,593165.0,18,Medium,4
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Aggressive Diversification,Reduce top supplier share to <30%,9743200,15,1461480.0,25,Medium,4
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Moderate Diversification,Reduce top supplier share to <40%,9743200,10,974320.0,15,Medium,6
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Regional Expansion,Add Africa/Middle East suppliers,9743200,12,1169184.0,20,High,6
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Cost Optimization,Shift 20% spend to low-cost regions,9743200,8,779456.0,12,Medium,9
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Risk Mitigation,Dual-source all critical categories,9743200,5,487160.0,18,Medium,11
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Aggressive Diversification,Reduce top supplier share to <30%,6206000,15,930900.0,25,High,3
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Moderate Diversification,Reduce top supplier share to <40%,6206000,10,620600.0,15,High,7
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Regional Expansion,Add Africa/Middle East suppliers,6206000,12,744720.0,20,Low,7
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Cost Optimization,Shift 20% spend to low-cost regions,6206000,8,496480.0,12,Low,9
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Risk Mitigation,Dual-source all critical categories,6206000,5,310300.0,18,High,8
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Aggressive Diversification,Reduce top supplier share to <30%,8127100,15,1219065.0,25,Low,11
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Moderate Diversification,Reduce top supplier share to <40%,8127100,10,812710.0,15,Low,10
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Regional Expansion,Add Africa/Middle East suppliers,8127100,12,975252.0,20,Medium,8
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Cost Optimization,Shift 20% spend to low-cost regions,8127100,8,650168.0,12,Low,12
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Risk Mitigation,Dual-source all critical categories,8127100,5,406355.0,18,Medium,5
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Aggressive Diversification,Reduce top supplier share to <30%,31882700,15,4782405.0,25,High,6
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Moderate Diversification,Reduce top supplier share to <40%,31882700,10,3188270.0,15,Medium,6
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Regional Expansion,Add Africa/Middle East suppliers,31882700,12,3825924.0,20,Low,6
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Cost Optimization,Shift 20% spend to low-cost regions,31882700,8,2550616.0,12,Medium,6
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Risk Mitigation,Dual-source all critical categories,31882700,5,1594135.0,18,Low,6
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Aggressive Diversification,Reduce top supplier share to <30%,34287900,15,5143185.0,25,Low,12
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Moderate Diversification,Reduce top supplier share to <40%,34287900,10,3428790.0,15,Medium,5
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Regional Expansion,Add Africa/Middle East suppliers,34287900,12,4114548.0,20,Low,4
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Cost Optimization,Shift 20% spend to low-cost regions,34287900,8,2743032.0,12,Low,10
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Risk Mitigation,Dual-source all critical categories,34287900,5,1714395.0,18,High,3
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Aggressive Diversification,Reduce top supplier share to <30%,33976000,15,5096400.0,25,High,3
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Moderate Diversification,Reduce top supplier share to <40%,33976000,10,3397600.0,15,Medium,8
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Regional Expansion,Add Africa/Middle East suppliers,33976000,12,4077120.0,20,High,8
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Cost Optimization,Shift 20% spend to low-cost regions,33976000,8,2718080.0,12,Medium,12
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Risk Mitigation,Dual-source all critical categories,33976000,5,1698800.0,18,Medium,10
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Aggressive Diversification,Reduce top supplier share to <30%,38961400,15,5844210.0,25,Low,11
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Moderate Diversification,Reduce top supplier share to <40%,38961400,10,3896140.0,15,Medium,9
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Regional Expansion,Add Africa/Middle East suppliers,38961400,12,4675368.0,20,Low,12
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Cost Optimization,Shift 20% spend to low-cost regions,38961400,8,3116912.0,12,Low,3
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Risk Mitigation,Dual-source all critical categories,38961400,5,1948070.0,18,High,9
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Aggressive Diversification,Reduce top supplier share to <30%,23619100,15,3542865.0,25,Medium,11
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Moderate Diversification,Reduce top supplier share to <40%,23619100,10,2361910.0,15,Low,11
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Regional Expansion,Add Africa/Middle East suppliers,23619100,12,2834292.0,20,Medium,9
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Cost Optimization,Shift 20% spend to low-cost regions,23619100,8,1889528.0,12,High,5
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Risk Mitigation,Dual-source all critical categories,23619100,5,1180955.0,18,Medium,4
+Human Resources,HR Technology,Benefits Administration,Aggressive Diversification,Reduce top supplier share to <30%,6129900,15,919485.0,25,High,11
+Human Resources,HR Technology,Benefits Administration,Moderate Diversification,Reduce top supplier share to <40%,6129900,10,612990.0,15,Medium,8
+Human Resources,HR Technology,Benefits Administration,Regional Expansion,Add Africa/Middle East suppliers,6129900,12,735588.0,20,High,3
+Human Resources,HR Technology,Benefits Administration,Cost Optimization,Shift 20% spend to low-cost regions,6129900,8,490392.0,12,Low,6
+Human Resources,HR Technology,Benefits Administration,Risk Mitigation,Dual-source all critical categories,6129900,5,306495.0,18,Medium,12
+Human Resources,HR Technology,HRIS Systems,Aggressive Diversification,Reduce top supplier share to <30%,3965000,15,594750.0,25,Low,8
+Human Resources,HR Technology,HRIS Systems,Moderate Diversification,Reduce top supplier share to <40%,3965000,10,396500.0,15,Medium,12
+Human Resources,HR Technology,HRIS Systems,Regional Expansion,Add Africa/Middle East suppliers,3965000,12,475800.0,20,Medium,5
+Human Resources,HR Technology,HRIS Systems,Cost Optimization,Shift 20% spend to low-cost regions,3965000,8,317200.0,12,High,7
+Human Resources,HR Technology,HRIS Systems,Risk Mitigation,Dual-source all critical categories,3965000,5,198250.0,18,Low,7
+Human Resources,HR Technology,Payroll Services,Aggressive Diversification,Reduce top supplier share to <30%,6698100,15,1004715.0,25,Medium,12
+Human Resources,HR Technology,Payroll Services,Moderate Diversification,Reduce top supplier share to <40%,6698100,10,669810.0,15,Medium,8
+Human Resources,HR Technology,Payroll Services,Regional Expansion,Add Africa/Middle East suppliers,6698100,12,803772.0,20,Low,10
+Human Resources,HR Technology,Payroll Services,Cost Optimization,Shift 20% spend to low-cost regions,6698100,8,535848.0,12,Medium,6
+Human Resources,HR Technology,Payroll Services,Risk Mitigation,Dual-source all critical categories,6698100,5,334905.0,18,Medium,8
+Human Resources,Learning & Development,E-Learning Platforms,Aggressive Diversification,Reduce top supplier share to <30%,6472300,15,970845.0,25,Medium,9
+Human Resources,Learning & Development,E-Learning Platforms,Moderate Diversification,Reduce top supplier share to <40%,6472300,10,647230.0,15,Medium,10
+Human Resources,Learning & Development,E-Learning Platforms,Regional Expansion,Add Africa/Middle East suppliers,6472300,12,776676.0,20,Low,12
+Human Resources,Learning & Development,E-Learning Platforms,Cost Optimization,Shift 20% spend to low-cost regions,6472300,8,517784.0,12,Low,12
+Human Resources,Learning & Development,E-Learning Platforms,Risk Mitigation,Dual-source all critical categories,6472300,5,323615.0,18,High,6
+Human Resources,Learning & Development,Leadership Development,Aggressive Diversification,Reduce top supplier share to <30%,8925900,15,1338885.0,25,Low,7
+Human Resources,Learning & Development,Leadership Development,Moderate Diversification,Reduce top supplier share to <40%,8925900,10,892590.0,15,Low,11
+Human Resources,Learning & Development,Leadership Development,Regional Expansion,Add Africa/Middle East suppliers,8925900,12,1071108.0,20,Medium,9
+Human Resources,Learning & Development,Leadership Development,Cost Optimization,Shift 20% spend to low-cost regions,8925900,8,714072.0,12,Low,5
+Human Resources,Learning & Development,Leadership Development,Risk Mitigation,Dual-source all critical categories,8925900,5,446295.0,18,High,5
+Human Resources,Learning & Development,Training Programs,Aggressive Diversification,Reduce top supplier share to <30%,2240600,15,336090.0,25,Medium,3
+Human Resources,Learning & Development,Training Programs,Moderate Diversification,Reduce top supplier share to <40%,2240600,10,224060.0,15,Low,9
+Human Resources,Learning & Development,Training Programs,Regional Expansion,Add Africa/Middle East suppliers,2240600,12,268872.0,20,Medium,5
+Human Resources,Learning & Development,Training Programs,Cost Optimization,Shift 20% spend to low-cost regions,2240600,8,179248.0,12,High,11
+Human Resources,Learning & Development,Training Programs,Risk Mitigation,Dual-source all critical categories,2240600,5,112030.0,18,High,8
+Human Resources,Staffing Services,Executive Search,Aggressive Diversification,Reduce top supplier share to <30%,7086600,15,1062990.0,25,Medium,7
+Human Resources,Staffing Services,Executive Search,Moderate Diversification,Reduce top supplier share to <40%,7086600,10,708660.0,15,Medium,11
+Human Resources,Staffing Services,Executive Search,Regional Expansion,Add Africa/Middle East suppliers,7086600,12,850392.0,20,High,3
+Human Resources,Staffing Services,Executive Search,Cost Optimization,Shift 20% spend to low-cost regions,7086600,8,566928.0,12,Medium,4
+Human Resources,Staffing Services,Executive Search,Risk Mitigation,Dual-source all critical categories,7086600,5,354330.0,18,High,5
+Human Resources,Staffing Services,Permanent Recruitment,Aggressive Diversification,Reduce top supplier share to <30%,9932400,15,1489860.0,25,Low,6
+Human Resources,Staffing Services,Permanent Recruitment,Moderate Diversification,Reduce top supplier share to <40%,9932400,10,993240.0,15,Medium,10
+Human Resources,Staffing Services,Permanent Recruitment,Regional Expansion,Add Africa/Middle East suppliers,9932400,12,1191888.0,20,High,4
+Human Resources,Staffing Services,Permanent Recruitment,Cost Optimization,Shift 20% spend to low-cost regions,9932400,8,794592.0,12,Medium,8
+Human Resources,Staffing Services,Permanent Recruitment,Risk Mitigation,Dual-source all critical categories,9932400,5,496620.0,18,Medium,8
+Human Resources,Staffing Services,Temporary Staffing,Aggressive Diversification,Reduce top supplier share to <30%,5764100,15,864615.0,25,Medium,11
+Human Resources,Staffing Services,Temporary Staffing,Moderate Diversification,Reduce top supplier share to <40%,5764100,10,576410.0,15,High,7
+Human Resources,Staffing Services,Temporary Staffing,Regional Expansion,Add Africa/Middle East suppliers,5764100,12,691692.0,20,Medium,3
+Human Resources,Staffing Services,Temporary Staffing,Cost Optimization,Shift 20% spend to low-cost regions,5764100,8,461128.0,12,Medium,4
+Human Resources,Staffing Services,Temporary Staffing,Risk Mitigation,Dual-source all critical categories,5764100,5,288205.0,18,Medium,12
+Information Technology,Cloud Services,Cloud Storage,Aggressive Diversification,Reduce top supplier share to <30%,5951200,15,892680.0,25,Low,12
+Information Technology,Cloud Services,Cloud Storage,Moderate Diversification,Reduce top supplier share to <40%,5951200,10,595120.0,15,High,11
+Information Technology,Cloud Services,Cloud Storage,Regional Expansion,Add Africa/Middle East suppliers,5951200,12,714144.0,20,Low,7
+Information Technology,Cloud Services,Cloud Storage,Cost Optimization,Shift 20% spend to low-cost regions,5951200,8,476096.0,12,Medium,8
+Information Technology,Cloud Services,Cloud Storage,Risk Mitigation,Dual-source all critical categories,5951200,5,297560.0,18,High,11
+Information Technology,Cloud Services,IaaS,Aggressive Diversification,Reduce top supplier share to <30%,10841600,15,1626240.0,25,Medium,10
+Information Technology,Cloud Services,IaaS,Moderate Diversification,Reduce top supplier share to <40%,10841600,10,1084160.0,15,Low,9
+Information Technology,Cloud Services,IaaS,Regional Expansion,Add Africa/Middle East suppliers,10841600,12,1300992.0,20,High,7
+Information Technology,Cloud Services,IaaS,Cost Optimization,Shift 20% spend to low-cost regions,10841600,8,867328.0,12,Medium,5
+Information Technology,Cloud Services,IaaS,Risk Mitigation,Dual-source all critical categories,10841600,5,542080.0,18,Low,8
+Information Technology,Cloud Services,PaaS,Aggressive Diversification,Reduce top supplier share to <30%,6460800,15,969120.0,25,Medium,12
+Information Technology,Cloud Services,PaaS,Moderate Diversification,Reduce top supplier share to <40%,6460800,10,646080.0,15,High,9
+Information Technology,Cloud Services,PaaS,Regional Expansion,Add Africa/Middle East suppliers,6460800,12,775296.0,20,Low,4
+Information Technology,Cloud Services,PaaS,Cost Optimization,Shift 20% spend to low-cost regions,6460800,8,516864.0,12,Low,8
+Information Technology,Cloud Services,PaaS,Risk Mitigation,Dual-source all critical categories,6460800,5,323040.0,18,Low,8
+Information Technology,Cloud Services,SaaS,Aggressive Diversification,Reduce top supplier share to <30%,5761300,15,864195.0,25,Medium,7
+Information Technology,Cloud Services,SaaS,Moderate Diversification,Reduce top supplier share to <40%,5761300,10,576130.0,15,High,7
+Information Technology,Cloud Services,SaaS,Regional Expansion,Add Africa/Middle East suppliers,5761300,12,691356.0,20,High,9
+Information Technology,Cloud Services,SaaS,Cost Optimization,Shift 20% spend to low-cost regions,5761300,8,460904.0,12,Medium,10
+Information Technology,Cloud Services,SaaS,Risk Mitigation,Dual-source all critical categories,5761300,5,288065.0,18,Medium,12
+Information Technology,Cybersecurity,Endpoint Security,Aggressive Diversification,Reduce top supplier share to <30%,10782400,15,1617360.0,25,High,10
+Information Technology,Cybersecurity,Endpoint Security,Moderate Diversification,Reduce top supplier share to <40%,10782400,10,1078240.0,15,Medium,5
+Information Technology,Cybersecurity,Endpoint Security,Regional Expansion,Add Africa/Middle East suppliers,10782400,12,1293888.0,20,Low,3
+Information Technology,Cybersecurity,Endpoint Security,Cost Optimization,Shift 20% spend to low-cost regions,10782400,8,862592.0,12,Low,6
+Information Technology,Cybersecurity,Endpoint Security,Risk Mitigation,Dual-source all critical categories,10782400,5,539120.0,18,High,7
+Information Technology,Cybersecurity,Identity Management,Aggressive Diversification,Reduce top supplier share to <30%,5149000,15,772350.0,25,High,4
+Information Technology,Cybersecurity,Identity Management,Moderate Diversification,Reduce top supplier share to <40%,5149000,10,514900.0,15,Low,5
+Information Technology,Cybersecurity,Identity Management,Regional Expansion,Add Africa/Middle East suppliers,5149000,12,617880.0,20,Medium,4
+Information Technology,Cybersecurity,Identity Management,Cost Optimization,Shift 20% spend to low-cost regions,5149000,8,411920.0,12,Low,4
+Information Technology,Cybersecurity,Identity Management,Risk Mitigation,Dual-source all critical categories,5149000,5,257450.0,18,Medium,11
+Information Technology,Cybersecurity,Network Security,Aggressive Diversification,Reduce top supplier share to <30%,5101600,15,765240.0,25,Low,3
+Information Technology,Cybersecurity,Network Security,Moderate Diversification,Reduce top supplier share to <40%,5101600,10,510160.0,15,Medium,11
+Information Technology,Cybersecurity,Network Security,Regional Expansion,Add Africa/Middle East suppliers,5101600,12,612192.0,20,Low,4
+Information Technology,Cybersecurity,Network Security,Cost Optimization,Shift 20% spend to low-cost regions,5101600,8,408128.0,12,Medium,12
+Information Technology,Cybersecurity,Network Security,Risk Mitigation,Dual-source all critical categories,5101600,5,255080.0,18,Low,4
+Information Technology,Cybersecurity,Security Operations,Aggressive Diversification,Reduce top supplier share to <30%,10196500,15,1529475.0,25,High,9
+Information Technology,Cybersecurity,Security Operations,Moderate Diversification,Reduce top supplier share to <40%,10196500,10,1019650.0,15,Medium,6
+Information Technology,Cybersecurity,Security Operations,Regional Expansion,Add Africa/Middle East suppliers,10196500,12,1223580.0,20,Low,7
+Information Technology,Cybersecurity,Security Operations,Cost Optimization,Shift 20% spend to low-cost regions,10196500,8,815720.0,12,Medium,5
+Information Technology,Cybersecurity,Security Operations,Risk Mitigation,Dual-source all critical categories,10196500,5,509825.0,18,Low,11
+Information Technology,Hardware,Desktops,Aggressive Diversification,Reduce top supplier share to <30%,8931500,15,1339725.0,25,Low,3
+Information Technology,Hardware,Desktops,Moderate Diversification,Reduce top supplier share to <40%,8931500,10,893150.0,15,Low,8
+Information Technology,Hardware,Desktops,Regional Expansion,Add Africa/Middle East suppliers,8931500,12,1071780.0,20,Medium,10
+Information Technology,Hardware,Desktops,Cost Optimization,Shift 20% spend to low-cost regions,8931500,8,714520.0,12,Medium,11
+Information Technology,Hardware,Desktops,Risk Mitigation,Dual-source all critical categories,8931500,5,446575.0,18,Medium,11
+Information Technology,Hardware,Laptops,Aggressive Diversification,Reduce top supplier share to <30%,13346900,15,2002035.0,25,Medium,5
+Information Technology,Hardware,Laptops,Moderate Diversification,Reduce top supplier share to <40%,13346900,10,1334690.0,15,High,11
+Information Technology,Hardware,Laptops,Regional Expansion,Add Africa/Middle East suppliers,13346900,12,1601628.0,20,Low,12
+Information Technology,Hardware,Laptops,Cost Optimization,Shift 20% spend to low-cost regions,13346900,8,1067752.0,12,High,10
+Information Technology,Hardware,Laptops,Risk Mitigation,Dual-source all critical categories,13346900,5,667345.0,18,High,12
+Information Technology,Hardware,Network Equipment,Aggressive Diversification,Reduce top supplier share to <30%,9024300,15,1353645.0,25,Medium,11
+Information Technology,Hardware,Network Equipment,Moderate Diversification,Reduce top supplier share to <40%,9024300,10,902430.0,15,High,11
+Information Technology,Hardware,Network Equipment,Regional Expansion,Add Africa/Middle East suppliers,9024300,12,1082916.0,20,Medium,8
+Information Technology,Hardware,Network Equipment,Cost Optimization,Shift 20% spend to low-cost regions,9024300,8,721944.0,12,Medium,11
+Information Technology,Hardware,Network Equipment,Risk Mitigation,Dual-source all critical categories,9024300,5,451215.0,18,Low,4
+Information Technology,Hardware,Peripherals,Aggressive Diversification,Reduce top supplier share to <30%,10790300,15,1618545.0,25,Medium,7
+Information Technology,Hardware,Peripherals,Moderate Diversification,Reduce top supplier share to <40%,10790300,10,1079030.0,15,Medium,9
+Information Technology,Hardware,Peripherals,Regional Expansion,Add Africa/Middle East suppliers,10790300,12,1294836.0,20,Medium,5
+Information Technology,Hardware,Peripherals,Cost Optimization,Shift 20% spend to low-cost regions,10790300,8,863224.0,12,Medium,3
+Information Technology,Hardware,Peripherals,Risk Mitigation,Dual-source all critical categories,10790300,5,539515.0,18,Low,11
+Information Technology,Hardware,Servers,Aggressive Diversification,Reduce top supplier share to <30%,8446300,15,1266945.0,25,Low,8
+Information Technology,Hardware,Servers,Moderate Diversification,Reduce top supplier share to <40%,8446300,10,844630.0,15,Medium,10
+Information Technology,Hardware,Servers,Regional Expansion,Add Africa/Middle East suppliers,8446300,12,1013556.0,20,High,3
+Information Technology,Hardware,Servers,Cost Optimization,Shift 20% spend to low-cost regions,8446300,8,675704.0,12,High,10
+Information Technology,Hardware,Servers,Risk Mitigation,Dual-source all critical categories,8446300,5,422315.0,18,Medium,7
+Information Technology,Hardware,Storage Systems,Aggressive Diversification,Reduce top supplier share to <30%,11541100,15,1731165.0,25,Low,9
+Information Technology,Hardware,Storage Systems,Moderate Diversification,Reduce top supplier share to <40%,11541100,10,1154110.0,15,Medium,12
+Information Technology,Hardware,Storage Systems,Regional Expansion,Add Africa/Middle East suppliers,11541100,12,1384932.0,20,Low,3
+Information Technology,Hardware,Storage Systems,Cost Optimization,Shift 20% spend to low-cost regions,11541100,8,923288.0,12,High,8
+Information Technology,Hardware,Storage Systems,Risk Mitigation,Dual-source all critical categories,11541100,5,577055.0,18,Low,9
+Information Technology,Software,Database Software,Aggressive Diversification,Reduce top supplier share to <30%,5015000,15,752250.0,25,High,9
+Information Technology,Software,Database Software,Moderate Diversification,Reduce top supplier share to <40%,5015000,10,501500.0,15,Medium,6
+Information Technology,Software,Database Software,Regional Expansion,Add Africa/Middle East suppliers,5015000,12,601800.0,20,Low,9
+Information Technology,Software,Database Software,Cost Optimization,Shift 20% spend to low-cost regions,5015000,8,401200.0,12,Medium,6
+Information Technology,Software,Database Software,Risk Mitigation,Dual-source all critical categories,5015000,5,250750.0,18,Medium,4
+Information Technology,Software,Development Tools,Aggressive Diversification,Reduce top supplier share to <30%,5795400,15,869310.0,25,Medium,6
+Information Technology,Software,Development Tools,Moderate Diversification,Reduce top supplier share to <40%,5795400,10,579540.0,15,High,12
+Information Technology,Software,Development Tools,Regional Expansion,Add Africa/Middle East suppliers,5795400,12,695448.0,20,High,7
+Information Technology,Software,Development Tools,Cost Optimization,Shift 20% spend to low-cost regions,5795400,8,463632.0,12,Medium,11
+Information Technology,Software,Development Tools,Risk Mitigation,Dual-source all critical categories,5795400,5,289770.0,18,Medium,9
+Information Technology,Software,Enterprise Software,Aggressive Diversification,Reduce top supplier share to <30%,12506700,15,1876005.0,25,Low,4
+Information Technology,Software,Enterprise Software,Moderate Diversification,Reduce top supplier share to <40%,12506700,10,1250670.0,15,Low,5
+Information Technology,Software,Enterprise Software,Regional Expansion,Add Africa/Middle East suppliers,12506700,12,1500804.0,20,Medium,4
+Information Technology,Software,Enterprise Software,Cost Optimization,Shift 20% spend to low-cost regions,12506700,8,1000536.0,12,High,10
+Information Technology,Software,Enterprise Software,Risk Mitigation,Dual-source all critical categories,12506700,5,625335.0,18,High,10
+Information Technology,Software,Productivity Software,Aggressive Diversification,Reduce top supplier share to <30%,9994500,15,1499175.0,25,Medium,12
+Information Technology,Software,Productivity Software,Moderate Diversification,Reduce top supplier share to <40%,9994500,10,999450.0,15,Medium,6
+Information Technology,Software,Productivity Software,Regional Expansion,Add Africa/Middle East suppliers,9994500,12,1199340.0,20,Medium,3
+Information Technology,Software,Productivity Software,Cost Optimization,Shift 20% spend to low-cost regions,9994500,8,799560.0,12,Low,3
+Information Technology,Software,Productivity Software,Risk Mitigation,Dual-source all critical categories,9994500,5,499725.0,18,High,3
+Information Technology,Telecommunications,Internet Services,Aggressive Diversification,Reduce top supplier share to <30%,7002100,15,1050315.0,25,Low,4
+Information Technology,Telecommunications,Internet Services,Moderate Diversification,Reduce top supplier share to <40%,7002100,10,700210.0,15,Medium,7
+Information Technology,Telecommunications,Internet Services,Regional Expansion,Add Africa/Middle East suppliers,7002100,12,840252.0,20,Low,10
+Information Technology,Telecommunications,Internet Services,Cost Optimization,Shift 20% spend to low-cost regions,7002100,8,560168.0,12,High,3
+Information Technology,Telecommunications,Internet Services,Risk Mitigation,Dual-source all critical categories,7002100,5,350105.0,18,Low,4
+Information Technology,Telecommunications,Mobile Services,Aggressive Diversification,Reduce top supplier share to <30%,8443800,15,1266570.0,25,Low,3
+Information Technology,Telecommunications,Mobile Services,Moderate Diversification,Reduce top supplier share to <40%,8443800,10,844380.0,15,Medium,6
+Information Technology,Telecommunications,Mobile Services,Regional Expansion,Add Africa/Middle East suppliers,8443800,12,1013256.0,20,Medium,9
+Information Technology,Telecommunications,Mobile Services,Cost Optimization,Shift 20% spend to low-cost regions,8443800,8,675504.0,12,Medium,10
+Information Technology,Telecommunications,Mobile Services,Risk Mitigation,Dual-source all critical categories,8443800,5,422190.0,18,Medium,10
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Aggressive Diversification,Reduce top supplier share to <30%,12754900,15,1913235.0,25,High,3
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Moderate Diversification,Reduce top supplier share to <40%,12754900,10,1275490.0,15,Medium,4
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Regional Expansion,Add Africa/Middle East suppliers,12754900,12,1530588.0,20,Low,3
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Cost Optimization,Shift 20% spend to low-cost regions,12754900,8,1020392.0,12,Medium,9
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Risk Mitigation,Dual-source all critical categories,12754900,5,637745.0,18,Low,11
+Logistics & Transportation,Fleet Services,Fleet Telematics,Aggressive Diversification,Reduce top supplier share to <30%,10941700,15,1641255.0,25,Medium,5
+Logistics & Transportation,Fleet Services,Fleet Telematics,Moderate Diversification,Reduce top supplier share to <40%,10941700,10,1094170.0,15,Low,7
+Logistics & Transportation,Fleet Services,Fleet Telematics,Regional Expansion,Add Africa/Middle East suppliers,10941700,12,1313004.0,20,Medium,3
+Logistics & Transportation,Fleet Services,Fleet Telematics,Cost Optimization,Shift 20% spend to low-cost regions,10941700,8,875336.0,12,Low,6
+Logistics & Transportation,Fleet Services,Fleet Telematics,Risk Mitigation,Dual-source all critical categories,10941700,5,547085.0,18,Medium,10
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Aggressive Diversification,Reduce top supplier share to <30%,9368700,15,1405305.0,25,Low,3
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Moderate Diversification,Reduce top supplier share to <40%,9368700,10,936870.0,15,Low,10
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Regional Expansion,Add Africa/Middle East suppliers,9368700,12,1124244.0,20,High,4
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Cost Optimization,Shift 20% spend to low-cost regions,9368700,8,749496.0,12,High,6
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Risk Mitigation,Dual-source all critical categories,9368700,5,468435.0,18,Medium,9
+Logistics & Transportation,Freight Services,Air Freight,Aggressive Diversification,Reduce top supplier share to <30%,10687700,15,1603155.0,25,High,7
+Logistics & Transportation,Freight Services,Air Freight,Moderate Diversification,Reduce top supplier share to <40%,10687700,10,1068770.0,15,Medium,5
+Logistics & Transportation,Freight Services,Air Freight,Regional Expansion,Add Africa/Middle East suppliers,10687700,12,1282524.0,20,High,3
+Logistics & Transportation,Freight Services,Air Freight,Cost Optimization,Shift 20% spend to low-cost regions,10687700,8,855016.0,12,High,11
+Logistics & Transportation,Freight Services,Air Freight,Risk Mitigation,Dual-source all critical categories,10687700,5,534385.0,18,High,4
+Logistics & Transportation,Freight Services,Ocean Freight,Aggressive Diversification,Reduce top supplier share to <30%,9158300,15,1373745.0,25,Medium,10
+Logistics & Transportation,Freight Services,Ocean Freight,Moderate Diversification,Reduce top supplier share to <40%,9158300,10,915830.0,15,High,7
+Logistics & Transportation,Freight Services,Ocean Freight,Regional Expansion,Add Africa/Middle East suppliers,9158300,12,1098996.0,20,Low,8
+Logistics & Transportation,Freight Services,Ocean Freight,Cost Optimization,Shift 20% spend to low-cost regions,9158300,8,732664.0,12,Low,6
+Logistics & Transportation,Freight Services,Ocean Freight,Risk Mitigation,Dual-source all critical categories,9158300,5,457915.0,18,Low,6
+Logistics & Transportation,Freight Services,Rail Freight,Aggressive Diversification,Reduce top supplier share to <30%,7338500,15,1100775.0,25,High,9
+Logistics & Transportation,Freight Services,Rail Freight,Moderate Diversification,Reduce top supplier share to <40%,7338500,10,733850.0,15,Medium,3
+Logistics & Transportation,Freight Services,Rail Freight,Regional Expansion,Add Africa/Middle East suppliers,7338500,12,880620.0,20,Low,7
+Logistics & Transportation,Freight Services,Rail Freight,Cost Optimization,Shift 20% spend to low-cost regions,7338500,8,587080.0,12,High,4
+Logistics & Transportation,Freight Services,Rail Freight,Risk Mitigation,Dual-source all critical categories,7338500,5,366925.0,18,Medium,6
+Logistics & Transportation,Freight Services,Road Freight,Aggressive Diversification,Reduce top supplier share to <30%,8265300,15,1239795.0,25,Low,3
+Logistics & Transportation,Freight Services,Road Freight,Moderate Diversification,Reduce top supplier share to <40%,8265300,10,826530.0,15,High,10
+Logistics & Transportation,Freight Services,Road Freight,Regional Expansion,Add Africa/Middle East suppliers,8265300,12,991836.0,20,High,12
+Logistics & Transportation,Freight Services,Road Freight,Cost Optimization,Shift 20% spend to low-cost regions,8265300,8,661224.0,12,Low,8
+Logistics & Transportation,Freight Services,Road Freight,Risk Mitigation,Dual-source all critical categories,8265300,5,413265.0,18,Low,6
+Logistics & Transportation,Warehousing,3PL Services,Aggressive Diversification,Reduce top supplier share to <30%,10702800,15,1605420.0,25,Low,10
+Logistics & Transportation,Warehousing,3PL Services,Moderate Diversification,Reduce top supplier share to <40%,10702800,10,1070280.0,15,Low,12
+Logistics & Transportation,Warehousing,3PL Services,Regional Expansion,Add Africa/Middle East suppliers,10702800,12,1284336.0,20,Medium,3
+Logistics & Transportation,Warehousing,3PL Services,Cost Optimization,Shift 20% spend to low-cost regions,10702800,8,856224.0,12,Low,8
+Logistics & Transportation,Warehousing,3PL Services,Risk Mitigation,Dual-source all critical categories,10702800,5,535140.0,18,High,5
+Logistics & Transportation,Warehousing,Cold Storage,Aggressive Diversification,Reduce top supplier share to <30%,8879600,15,1331940.0,25,High,11
+Logistics & Transportation,Warehousing,Cold Storage,Moderate Diversification,Reduce top supplier share to <40%,8879600,10,887960.0,15,Low,5
+Logistics & Transportation,Warehousing,Cold Storage,Regional Expansion,Add Africa/Middle East suppliers,8879600,12,1065552.0,20,Medium,6
+Logistics & Transportation,Warehousing,Cold Storage,Cost Optimization,Shift 20% spend to low-cost regions,8879600,8,710368.0,12,Medium,11
+Logistics & Transportation,Warehousing,Cold Storage,Risk Mitigation,Dual-source all critical categories,8879600,5,443980.0,18,High,8
+Logistics & Transportation,Warehousing,Distribution Centers,Aggressive Diversification,Reduce top supplier share to <30%,9246000,15,1386900.0,25,Medium,6
+Logistics & Transportation,Warehousing,Distribution Centers,Moderate Diversification,Reduce top supplier share to <40%,9246000,10,924600.0,15,Low,9
+Logistics & Transportation,Warehousing,Distribution Centers,Regional Expansion,Add Africa/Middle East suppliers,9246000,12,1109520.0,20,Medium,5
+Logistics & Transportation,Warehousing,Distribution Centers,Cost Optimization,Shift 20% spend to low-cost regions,9246000,8,739680.0,12,Medium,3
+Logistics & Transportation,Warehousing,Distribution Centers,Risk Mitigation,Dual-source all critical categories,9246000,5,462300.0,18,Medium,10
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Aggressive Diversification,Reduce top supplier share to <30%,8331100,15,1249665.0,25,High,7
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Moderate Diversification,Reduce top supplier share to <40%,8331100,10,833110.0,15,High,10
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Regional Expansion,Add Africa/Middle East suppliers,8331100,12,999732.0,20,Low,12
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Cost Optimization,Shift 20% spend to low-cost regions,8331100,8,666488.0,12,Low,11
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Risk Mitigation,Dual-source all critical categories,8331100,5,416555.0,18,Medium,8
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Aggressive Diversification,Reduce top supplier share to <30%,8608500,15,1291275.0,25,High,10
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Moderate Diversification,Reduce top supplier share to <40%,8608500,10,860850.0,15,Medium,12
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Regional Expansion,Add Africa/Middle East suppliers,8608500,12,1033020.0,20,High,5
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Cost Optimization,Shift 20% spend to low-cost regions,8608500,8,688680.0,12,Low,11
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Risk Mitigation,Dual-source all critical categories,8608500,5,430425.0,18,Low,10
+Manufacturing & Industrial,Chemicals,Petrochemicals,Aggressive Diversification,Reduce top supplier share to <30%,10955600,15,1643340.0,25,Medium,7
+Manufacturing & Industrial,Chemicals,Petrochemicals,Moderate Diversification,Reduce top supplier share to <40%,10955600,10,1095560.0,15,High,8
+Manufacturing & Industrial,Chemicals,Petrochemicals,Regional Expansion,Add Africa/Middle East suppliers,10955600,12,1314672.0,20,Medium,3
+Manufacturing & Industrial,Chemicals,Petrochemicals,Cost Optimization,Shift 20% spend to low-cost regions,10955600,8,876448.0,12,High,11
+Manufacturing & Industrial,Chemicals,Petrochemicals,Risk Mitigation,Dual-source all critical categories,10955600,5,547780.0,18,Medium,5
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Aggressive Diversification,Reduce top supplier share to <30%,4897100,15,734565.0,25,Low,12
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Moderate Diversification,Reduce top supplier share to <40%,4897100,10,489710.0,15,Medium,12
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Regional Expansion,Add Africa/Middle East suppliers,4897100,12,587652.0,20,Low,8
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Cost Optimization,Shift 20% spend to low-cost regions,4897100,8,391768.0,12,High,4
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Risk Mitigation,Dual-source all critical categories,4897100,5,244855.0,18,High,11
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Aggressive Diversification,Reduce top supplier share to <30%,14090500,15,2113575.0,25,Medium,6
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Moderate Diversification,Reduce top supplier share to <40%,14090500,10,1409050.0,15,High,10
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Regional Expansion,Add Africa/Middle East suppliers,14090500,12,1690860.0,20,High,5
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Cost Optimization,Shift 20% spend to low-cost regions,14090500,8,1127240.0,12,High,7
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Risk Mitigation,Dual-source all critical categories,14090500,5,704525.0,18,Medium,9
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Aggressive Diversification,Reduce top supplier share to <30%,24041300,15,3606195.0,25,High,8
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Moderate Diversification,Reduce top supplier share to <40%,24041300,10,2404130.0,15,Low,4
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Regional Expansion,Add Africa/Middle East suppliers,24041300,12,2884956.0,20,High,4
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Cost Optimization,Shift 20% spend to low-cost regions,24041300,8,1923304.0,12,Low,5
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Risk Mitigation,Dual-source all critical categories,24041300,5,1202065.0,18,Low,3
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Aggressive Diversification,Reduce top supplier share to <30%,15867800,15,2380170.0,25,Low,4
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Moderate Diversification,Reduce top supplier share to <40%,15867800,10,1586780.0,15,Medium,6
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Regional Expansion,Add Africa/Middle East suppliers,15867800,12,1904136.0,20,Low,3
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Cost Optimization,Shift 20% spend to low-cost regions,15867800,8,1269424.0,12,High,9
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Risk Mitigation,Dual-source all critical categories,15867800,5,793390.0,18,High,10
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Aggressive Diversification,Reduce top supplier share to <30%,18304200,15,2745630.0,25,High,12
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Moderate Diversification,Reduce top supplier share to <40%,18304200,10,1830420.0,15,High,12
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Regional Expansion,Add Africa/Middle East suppliers,18304200,12,2196504.0,20,Medium,3
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Cost Optimization,Shift 20% spend to low-cost regions,18304200,8,1464336.0,12,Medium,6
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Risk Mitigation,Dual-source all critical categories,18304200,5,915210.0,18,High,4
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Aggressive Diversification,Reduce top supplier share to <30%,7425200,15,1113780.0,25,Low,6
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Moderate Diversification,Reduce top supplier share to <40%,7425200,10,742520.0,15,High,10
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Regional Expansion,Add Africa/Middle East suppliers,7425200,12,891024.0,20,Low,10
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Cost Optimization,Shift 20% spend to low-cost regions,7425200,8,594016.0,12,High,3
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Risk Mitigation,Dual-source all critical categories,7425200,5,371260.0,18,Medium,11
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Aggressive Diversification,Reduce top supplier share to <30%,6369200,15,955380.0,25,High,9
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Moderate Diversification,Reduce top supplier share to <40%,6369200,10,636920.0,15,Medium,3
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Regional Expansion,Add Africa/Middle East suppliers,6369200,12,764304.0,20,High,7
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Cost Optimization,Shift 20% spend to low-cost regions,6369200,8,509536.0,12,High,3
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Risk Mitigation,Dual-source all critical categories,6369200,5,318460.0,18,High,4
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Aggressive Diversification,Reduce top supplier share to <30%,6673300,15,1000995.0,25,Medium,4
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Moderate Diversification,Reduce top supplier share to <40%,6673300,10,667330.0,15,Low,11
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Regional Expansion,Add Africa/Middle East suppliers,6673300,12,800796.0,20,Low,4
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Cost Optimization,Shift 20% spend to low-cost regions,6673300,8,533864.0,12,High,6
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Risk Mitigation,Dual-source all critical categories,6673300,5,333665.0,18,High,9
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Aggressive Diversification,Reduce top supplier share to <30%,5689300,15,853395.0,25,Low,6
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Moderate Diversification,Reduce top supplier share to <40%,5689300,10,568930.0,15,High,6
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Regional Expansion,Add Africa/Middle East suppliers,5689300,12,682716.0,20,High,5
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Cost Optimization,Shift 20% spend to low-cost regions,5689300,8,455144.0,12,High,11
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Risk Mitigation,Dual-source all critical categories,5689300,5,284465.0,18,Medium,4
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Aggressive Diversification,Reduce top supplier share to <30%,27435100,15,4115265.0,25,High,12
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Moderate Diversification,Reduce top supplier share to <40%,27435100,10,2743510.0,15,Medium,10
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Regional Expansion,Add Africa/Middle East suppliers,27435100,12,3292212.0,20,High,9
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Cost Optimization,Shift 20% spend to low-cost regions,27435100,8,2194808.0,12,Low,5
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Risk Mitigation,Dual-source all critical categories,27435100,5,1371755.0,18,Low,11
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Aggressive Diversification,Reduce top supplier share to <30%,12485700,15,1872855.0,25,Medium,11
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Moderate Diversification,Reduce top supplier share to <40%,12485700,10,1248570.0,15,Medium,5
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Regional Expansion,Add Africa/Middle East suppliers,12485700,12,1498284.0,20,High,12
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Cost Optimization,Shift 20% spend to low-cost regions,12485700,8,998856.0,12,Medium,8
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Risk Mitigation,Dual-source all critical categories,12485700,5,624285.0,18,Medium,11
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Aggressive Diversification,Reduce top supplier share to <30%,26444000,15,3966600.0,25,Medium,8
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Moderate Diversification,Reduce top supplier share to <40%,26444000,10,2644400.0,15,Medium,9
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Regional Expansion,Add Africa/Middle East suppliers,26444000,12,3173280.0,20,High,8
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Cost Optimization,Shift 20% spend to low-cost regions,26444000,8,2115520.0,12,High,6
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Risk Mitigation,Dual-source all critical categories,26444000,5,1322200.0,18,High,11
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Aggressive Diversification,Reduce top supplier share to <30%,25992500,15,3898875.0,25,Low,9
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Moderate Diversification,Reduce top supplier share to <40%,25992500,10,2599250.0,15,High,7
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Regional Expansion,Add Africa/Middle East suppliers,25992500,12,3119100.0,20,Medium,10
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Cost Optimization,Shift 20% spend to low-cost regions,25992500,8,2079400.0,12,Medium,9
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Risk Mitigation,Dual-source all critical categories,25992500,5,1299625.0,18,Low,3
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Aggressive Diversification,Reduce top supplier share to <30%,19323200,15,2898480.0,25,Medium,12
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Moderate Diversification,Reduce top supplier share to <40%,19323200,10,1932320.0,15,Low,11
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Regional Expansion,Add Africa/Middle East suppliers,19323200,12,2318784.0,20,Low,7
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Cost Optimization,Shift 20% spend to low-cost regions,19323200,8,1545856.0,12,Low,7
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Risk Mitigation,Dual-source all critical categories,19323200,5,966160.0,18,Low,6
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Aggressive Diversification,Reduce top supplier share to <30%,7570400,15,1135560.0,25,Medium,3
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Moderate Diversification,Reduce top supplier share to <40%,7570400,10,757040.0,15,High,7
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Regional Expansion,Add Africa/Middle East suppliers,7570400,12,908448.0,20,High,11
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Cost Optimization,Shift 20% spend to low-cost regions,7570400,8,605632.0,12,High,12
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Risk Mitigation,Dual-source all critical categories,7570400,5,378520.0,18,High,5
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Aggressive Diversification,Reduce top supplier share to <30%,11286000,15,1692900.0,25,Low,3
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Moderate Diversification,Reduce top supplier share to <40%,11286000,10,1128600.0,15,Medium,8
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Regional Expansion,Add Africa/Middle East suppliers,11286000,12,1354320.0,20,Low,5
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Cost Optimization,Shift 20% spend to low-cost regions,11286000,8,902880.0,12,Medium,8
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Risk Mitigation,Dual-source all critical categories,11286000,5,564300.0,18,High,6
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Aggressive Diversification,Reduce top supplier share to <30%,6751800,15,1012770.0,25,Low,7
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Moderate Diversification,Reduce top supplier share to <40%,6751800,10,675180.0,15,Medium,4
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Regional Expansion,Add Africa/Middle East suppliers,6751800,12,810216.0,20,High,9
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Cost Optimization,Shift 20% spend to low-cost regions,6751800,8,540144.0,12,High,6
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Risk Mitigation,Dual-source all critical categories,6751800,5,337590.0,18,High,4
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Aggressive Diversification,Reduce top supplier share to <30%,8699300,15,1304895.0,25,High,8
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Moderate Diversification,Reduce top supplier share to <40%,8699300,10,869930.0,15,Medium,5
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Regional Expansion,Add Africa/Middle East suppliers,8699300,12,1043916.0,20,Medium,12
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Cost Optimization,Shift 20% spend to low-cost regions,8699300,8,695944.0,12,Low,12
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Risk Mitigation,Dual-source all critical categories,8699300,5,434965.0,18,High,7
+Professional Services,Consulting,HR Consulting,Aggressive Diversification,Reduce top supplier share to <30%,24217800,15,3632670.0,25,Low,12
+Professional Services,Consulting,HR Consulting,Moderate Diversification,Reduce top supplier share to <40%,24217800,10,2421780.0,15,Medium,4
+Professional Services,Consulting,HR Consulting,Regional Expansion,Add Africa/Middle East suppliers,24217800,12,2906136.0,20,Low,8
+Professional Services,Consulting,HR Consulting,Cost Optimization,Shift 20% spend to low-cost regions,24217800,8,1937424.0,12,Medium,9
+Professional Services,Consulting,HR Consulting,Risk Mitigation,Dual-source all critical categories,24217800,5,1210890.0,18,Medium,4
+Professional Services,Consulting,IT Consulting,Aggressive Diversification,Reduce top supplier share to <30%,20260600,15,3039090.0,25,Low,12
+Professional Services,Consulting,IT Consulting,Moderate Diversification,Reduce top supplier share to <40%,20260600,10,2026060.0,15,Low,9
+Professional Services,Consulting,IT Consulting,Regional Expansion,Add Africa/Middle East suppliers,20260600,12,2431272.0,20,Low,7
+Professional Services,Consulting,IT Consulting,Cost Optimization,Shift 20% spend to low-cost regions,20260600,8,1620848.0,12,High,3
+Professional Services,Consulting,IT Consulting,Risk Mitigation,Dual-source all critical categories,20260600,5,1013030.0,18,Medium,11
+Professional Services,Consulting,Management Consulting,Aggressive Diversification,Reduce top supplier share to <30%,14861600,15,2229240.0,25,High,5
+Professional Services,Consulting,Management Consulting,Moderate Diversification,Reduce top supplier share to <40%,14861600,10,1486160.0,15,Medium,11
+Professional Services,Consulting,Management Consulting,Regional Expansion,Add Africa/Middle East suppliers,14861600,12,1783392.0,20,High,6
+Professional Services,Consulting,Management Consulting,Cost Optimization,Shift 20% spend to low-cost regions,14861600,8,1188928.0,12,Low,3
+Professional Services,Consulting,Management Consulting,Risk Mitigation,Dual-source all critical categories,14861600,5,743080.0,18,High,9
+Professional Services,Financial Services,Accounting,Aggressive Diversification,Reduce top supplier share to <30%,10062900,15,1509435.0,25,Medium,12
+Professional Services,Financial Services,Accounting,Moderate Diversification,Reduce top supplier share to <40%,10062900,10,1006290.0,15,High,11
+Professional Services,Financial Services,Accounting,Regional Expansion,Add Africa/Middle East suppliers,10062900,12,1207548.0,20,Low,6
+Professional Services,Financial Services,Accounting,Cost Optimization,Shift 20% spend to low-cost regions,10062900,8,805032.0,12,Medium,7
+Professional Services,Financial Services,Accounting,Risk Mitigation,Dual-source all critical categories,10062900,5,503145.0,18,Medium,5
+Professional Services,Financial Services,Banking,Aggressive Diversification,Reduce top supplier share to <30%,5483700,15,822555.0,25,Low,8
+Professional Services,Financial Services,Banking,Moderate Diversification,Reduce top supplier share to <40%,5483700,10,548370.0,15,Low,10
+Professional Services,Financial Services,Banking,Regional Expansion,Add Africa/Middle East suppliers,5483700,12,658044.0,20,High,3
+Professional Services,Financial Services,Banking,Cost Optimization,Shift 20% spend to low-cost regions,5483700,8,438696.0,12,High,9
+Professional Services,Financial Services,Banking,Risk Mitigation,Dual-source all critical categories,5483700,5,274185.0,18,Medium,4
+Professional Services,Financial Services,Insurance,Aggressive Diversification,Reduce top supplier share to <30%,3847900,15,577185.0,25,Medium,11
+Professional Services,Financial Services,Insurance,Moderate Diversification,Reduce top supplier share to <40%,3847900,10,384790.0,15,Medium,5
+Professional Services,Financial Services,Insurance,Regional Expansion,Add Africa/Middle East suppliers,3847900,12,461748.0,20,Low,10
+Professional Services,Financial Services,Insurance,Cost Optimization,Shift 20% spend to low-cost regions,3847900,8,307832.0,12,High,6
+Professional Services,Financial Services,Insurance,Risk Mitigation,Dual-source all critical categories,3847900,5,192395.0,18,Medium,9
+Professional Services,Legal Services,Corporate Law,Aggressive Diversification,Reduce top supplier share to <30%,10978400,15,1646760.0,25,High,12
+Professional Services,Legal Services,Corporate Law,Moderate Diversification,Reduce top supplier share to <40%,10978400,10,1097840.0,15,Low,11
+Professional Services,Legal Services,Corporate Law,Regional Expansion,Add Africa/Middle East suppliers,10978400,12,1317408.0,20,High,11
+Professional Services,Legal Services,Corporate Law,Cost Optimization,Shift 20% spend to low-cost regions,10978400,8,878272.0,12,Low,6
+Professional Services,Legal Services,Corporate Law,Risk Mitigation,Dual-source all critical categories,10978400,5,548920.0,18,Low,7
+Professional Services,Legal Services,Employment Law,Aggressive Diversification,Reduce top supplier share to <30%,7712800,15,1156920.0,25,Medium,8
+Professional Services,Legal Services,Employment Law,Moderate Diversification,Reduce top supplier share to <40%,7712800,10,771280.0,15,High,12
+Professional Services,Legal Services,Employment Law,Regional Expansion,Add Africa/Middle East suppliers,7712800,12,925536.0,20,Low,4
+Professional Services,Legal Services,Employment Law,Cost Optimization,Shift 20% spend to low-cost regions,7712800,8,617024.0,12,High,9
+Professional Services,Legal Services,Employment Law,Risk Mitigation,Dual-source all critical categories,7712800,5,385640.0,18,Medium,8
+Professional Services,Legal Services,Intellectual Property,Aggressive Diversification,Reduce top supplier share to <30%,7093800,15,1064070.0,25,Medium,6
+Professional Services,Legal Services,Intellectual Property,Moderate Diversification,Reduce top supplier share to <40%,7093800,10,709380.0,15,Medium,8
+Professional Services,Legal Services,Intellectual Property,Regional Expansion,Add Africa/Middle East suppliers,7093800,12,851256.0,20,High,3
+Professional Services,Legal Services,Intellectual Property,Cost Optimization,Shift 20% spend to low-cost regions,7093800,8,567504.0,12,Medium,5
+Professional Services,Legal Services,Intellectual Property,Risk Mitigation,Dual-source all critical categories,7093800,5,354690.0,18,Medium,12
+Professional Services,Marketing Services,Advertising,Aggressive Diversification,Reduce top supplier share to <30%,5291500,15,793725.0,25,Medium,12
+Professional Services,Marketing Services,Advertising,Moderate Diversification,Reduce top supplier share to <40%,5291500,10,529150.0,15,Low,10
+Professional Services,Marketing Services,Advertising,Regional Expansion,Add Africa/Middle East suppliers,5291500,12,634980.0,20,Low,6
+Professional Services,Marketing Services,Advertising,Cost Optimization,Shift 20% spend to low-cost regions,5291500,8,423320.0,12,Low,8
+Professional Services,Marketing Services,Advertising,Risk Mitigation,Dual-source all critical categories,5291500,5,264575.0,18,Low,4
+Professional Services,Marketing Services,Digital Marketing,Aggressive Diversification,Reduce top supplier share to <30%,8040700,15,1206105.0,25,Low,3
+Professional Services,Marketing Services,Digital Marketing,Moderate Diversification,Reduce top supplier share to <40%,8040700,10,804070.0,15,Low,12
+Professional Services,Marketing Services,Digital Marketing,Regional Expansion,Add Africa/Middle East suppliers,8040700,12,964884.0,20,Low,7
+Professional Services,Marketing Services,Digital Marketing,Cost Optimization,Shift 20% spend to low-cost regions,8040700,8,643256.0,12,Low,8
+Professional Services,Marketing Services,Digital Marketing,Risk Mitigation,Dual-source all critical categories,8040700,5,402035.0,18,High,4
+Professional Services,Marketing Services,Market Research,Aggressive Diversification,Reduce top supplier share to <30%,7208900,15,1081335.0,25,Medium,10
+Professional Services,Marketing Services,Market Research,Moderate Diversification,Reduce top supplier share to <40%,7208900,10,720890.0,15,Medium,3
+Professional Services,Marketing Services,Market Research,Regional Expansion,Add Africa/Middle East suppliers,7208900,12,865068.0,20,Medium,6
+Professional Services,Marketing Services,Market Research,Cost Optimization,Shift 20% spend to low-cost regions,7208900,8,576712.0,12,High,11
+Professional Services,Marketing Services,Market Research,Risk Mitigation,Dual-source all critical categories,7208900,5,360445.0,18,Low,6
+Professional Services,Marketing Services,PR & Communications,Aggressive Diversification,Reduce top supplier share to <30%,5976200,15,896430.0,25,High,11
+Professional Services,Marketing Services,PR & Communications,Moderate Diversification,Reduce top supplier share to <40%,5976200,10,597620.0,15,Medium,11
+Professional Services,Marketing Services,PR & Communications,Regional Expansion,Add Africa/Middle East suppliers,5976200,12,717144.0,20,Medium,12
+Professional Services,Marketing Services,PR & Communications,Cost Optimization,Shift 20% spend to low-cost regions,5976200,8,478096.0,12,High,5
+Professional Services,Marketing Services,PR & Communications,Risk Mitigation,Dual-source all critical categories,5976200,5,298810.0,18,High,3

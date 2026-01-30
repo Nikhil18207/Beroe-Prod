@@ -1,0 +1,8 @@
+# Placeholder for calculated/derived data
+# This directory will contain computed metrics generated from structured data
+
+# Examples:
+# - savings_analysis.csv
+# - risk_scores.csv
+# - compliance_flags.csv
+# - kpi_metrics.csv

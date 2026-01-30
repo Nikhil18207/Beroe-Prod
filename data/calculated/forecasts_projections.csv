@@ -1,0 +1,561 @@
+Sector,Category,SubCategory,Forecast_Period,Projected_Spend_USD,Growth_Rate_Pct,Confidence_Interval_Lower,Confidence_Interval_Upper,Forecast_Model,Generated_Date
+Construction & Real Estate,Building Materials,Cement,Q1 2026,19052214.94,4.65,17146993.45,20957436.44,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Cement,Q2 2026,21031252.39,7.48,18928127.15,23134377.63,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Cement,Q3 2026,20741649.29,4.44,18667484.36,22815814.22,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Cement,Q4 2026,22050524.6,4.91,19845472.14,24255577.06,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Concrete,Q1 2026,14961894.85,5.1,13465705.37,16458084.34,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Concrete,Q2 2026,15469833.0,4.24,13922849.7,17016816.3,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Concrete,Q3 2026,15257698.01,2.34,13731928.21,16783467.81,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Concrete,Q4 2026,18485972.5,6.75,16637375.25,20334569.75,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Glass,Q1 2026,14493418.92,2.39,13044077.02,15942760.81,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Glass,Q2 2026,15981447.22,6.26,14383302.5,17579591.95,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Glass,Q3 2026,16115825.12,4.42,14504242.61,17727407.64,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Glass,Q4 2026,18334965.01,6.68,16501468.51,20168461.52,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Lumber,Q1 2026,21855168.22,5.15,19669651.39,24040685.04,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Lumber,Q2 2026,23096328.64,5.41,20786695.78,25405961.51,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Lumber,Q3 2026,22741063.3,3.04,20466956.97,25015169.62,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Lumber,Q4 2026,27502319.06,7.25,24752087.15,30252550.96,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Structural Steel,Q1 2026,18768332.21,3.2,16891498.99,20645165.43,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Structural Steel,Q2 2026,19048789.75,2.35,17143910.77,20953668.72,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Structural Steel,Q3 2026,19411551.97,2.2,17470396.78,21352707.17,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Building Materials,Structural Steel,Q4 2026,19919899.91,2.3,17927909.92,21911889.9,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Q1 2026,8460370.47,4.16,7614333.42,9306407.52,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Q2 2026,8649549.01,3.19,7784594.11,9514503.91,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Q3 2026,9191970.22,4.21,8272773.2,10111167.25,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Q4 2026,9792208.44,4.79,8812987.6,10771429.29,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Power Tools,Q1 2026,9836613.9,4.38,8852952.51,10820275.29,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Power Tools,Q2 2026,10898053.3,7.54,9808247.97,11987858.63,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Power Tools,Q3 2026,11251450.76,6.09,10126305.68,12376595.84,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Power Tools,Q4 2026,10793710.84,3.45,9714339.76,11873081.93,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Scaffolding,Q1 2026,7367641.1,4.93,6630876.99,8104405.21,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Scaffolding,Q2 2026,7693375.25,4.68,6924037.73,8462712.78,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Scaffolding,Q3 2026,8786745.09,7.76,7908070.58,9665419.6,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,Construction Equipment,Scaffolding,Q4 2026,8484958.92,4.85,7636463.03,9333454.81,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Electrical Systems,Q1 2026,4490333.22,5.31,4041299.9,4939366.54,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Electrical Systems,Q2 2026,4617752.97,4.07,4155977.68,5079528.27,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Electrical Systems,Q3 2026,5227380.79,7.03,4704642.71,5750118.86,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Electrical Systems,Q4 2026,4902871.18,3.55,4412584.06,5393158.3,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,Q1 2026,9710727.57,6.99,8739654.82,10681800.33,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,Q2 2026,9544090.01,2.54,8589681.01,10498499.02,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,Q3 2026,9679002.7,2.16,8711102.43,10646902.97,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,Q4 2026,9940196.32,2.3,8946176.69,10934215.95,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,Q1 2026,5970924.88,7.12,5373832.39,6568017.37,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,Q2 2026,6343323.91,6.68,5708991.52,6977656.3,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,Q3 2026,6141612.8,3.29,5527451.52,6755774.08,Time_Series_Extrapolation,2026-01-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,Q4 2026,6353792.92,3.33,5718413.62,6989172.21,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Backup Power,Q1 2026,14667114.0,3.35,13200402.6,16133825.4,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Backup Power,Q2 2026,15126226.54,3.24,13613603.88,16638849.19,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Backup Power,Q3 2026,16859178.55,5.91,15173260.7,18545096.41,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Backup Power,Q4 2026,17302404.08,5.08,15572163.67,19032644.49,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Grid Electricity,Q1 2026,19500243.99,7.19,17550219.59,21450268.39,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Grid Electricity,Q2 2026,21142439.46,7.8,19028195.52,23256683.41,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Grid Electricity,Q3 2026,21724880.57,6.09,19552392.51,23897368.63,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Grid Electricity,Q4 2026,21982585.02,4.84,19784326.52,24180843.53,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Renewable Electricity,Q1 2026,13752896.61,2.79,12377606.95,15128186.27,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Renewable Electricity,Q2 2026,14204694.22,3.04,12784224.8,15625163.65,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Renewable Electricity,Q3 2026,16300613.74,6.81,14670552.37,17930675.12,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Electricity,Renewable Electricity,Q4 2026,15259657.09,3.34,13733691.38,16785622.8,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Aviation Fuel,Q1 2026,9656310.14,5.65,8690679.12,10621941.15,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Aviation Fuel,Q2 2026,10593373.86,7.66,9534036.47,11652711.25,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Aviation Fuel,Q3 2026,10971158.13,6.28,9874042.31,12068273.94,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Aviation Fuel,Q4 2026,11650879.63,6.26,10485791.67,12815967.6,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Biofuels,Q1 2026,7244879.16,3.65,6520391.24,7969367.07,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Biofuels,Q2 2026,8058267.34,7.37,7252440.6,8864094.07,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Biofuels,Q3 2026,8588879.42,7.11,7729991.48,9447767.37,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Biofuels,Q4 2026,8416559.29,4.75,7574903.36,9258215.22,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Diesel,Q1 2026,5242841.35,3.31,4718557.21,5767125.48,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Diesel,Q2 2026,5469276.62,3.81,4922348.95,6016204.28,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Diesel,Q3 2026,5895640.35,5.12,5306076.31,6485204.38,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Diesel,Q4 2026,6344707.42,5.74,5710236.68,6979178.16,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Natural Gas,Q1 2026,9919866.4,5.51,8927879.76,10911853.04,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Natural Gas,Q2 2026,9790402.38,2.04,8811362.14,10769442.62,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Natural Gas,Q3 2026,11842811.83,8.0,10658530.65,13027093.02,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Fuels,Natural Gas,Q4 2026,12696452.38,7.8,11426807.14,13966097.62,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Battery Storage,Q1 2026,12239383.46,7.04,11015445.11,13463321.81,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Battery Storage,Q2 2026,12695568.96,5.37,11426012.06,13965125.86,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Battery Storage,Q3 2026,13451144.65,5.56,12106030.19,14796259.12,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Battery Storage,Q4 2026,13221405.21,3.7,11899264.69,14543545.73,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Solar Panels,Q1 2026,10328404.65,6.11,9295564.18,11361245.11,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Solar Panels,Q2 2026,10709349.15,4.89,9638414.23,11780284.06,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Solar Panels,Q3 2026,10955018.26,4.02,9859516.43,12050520.09,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Solar Panels,Q4 2026,11238742.4,3.66,10114868.16,12362616.65,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,Q1 2026,10973672.52,3.95,9876305.27,12071039.77,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,Q2 2026,11343770.94,3.66,10209393.84,12478148.03,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,Q3 2026,12550574.43,5.94,11295516.99,13805631.87,Time_Series_Extrapolation,2026-01-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,Q4 2026,14210147.92,7.71,12789133.12,15631162.71,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Q1 2026,7546849.19,5.91,6792164.27,8301534.1,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Q2 2026,7578879.74,3.13,6820991.77,8336767.72,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Q3 2026,8273483.52,5.1,7446135.17,9100831.87,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Q4 2026,8158646.47,3.44,7342781.82,8974511.12,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Q1 2026,7449989.82,2.34,6704990.83,8194988.8,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Q2 2026,8356845.13,7.14,7521160.62,9192529.64,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Q3 2026,8882907.62,6.86,7994616.86,9771198.38,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Q4 2026,8656027.76,4.42,7790424.99,9521630.54,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Security Services,Q1 2026,5685846.8,3.92,5117262.12,6254431.48,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Security Services,Q2 2026,5786646.7,2.84,5207982.03,6365311.36,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Security Services,Q3 2026,5832521.61,2.15,5249269.45,6415773.77,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Facilities Management,Security Services,Q4 2026,6646649.66,4.98,5981984.69,7311314.63,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Furniture,Q1 2026,4290416.87,3.77,3861375.18,4719458.55,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Furniture,Q2 2026,4772614.65,7.44,4295353.19,5249876.12,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Furniture,Q3 2026,4708236.83,4.43,4237413.15,5179060.51,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Furniture,Q4 2026,5302881.45,6.42,4772593.31,5833169.6,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Supplies,Q1 2026,8035582.5,5.5,7232024.25,8839140.75,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Supplies,Q2 2026,8879057.49,7.97,7991151.74,9766963.23,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Supplies,Q3 2026,9303749.11,6.9,8373374.2,10234124.02,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Office Supplies,Q4 2026,8930816.84,4.06,8037735.16,9823898.53,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Printing Services,Q1 2026,10611611.91,6.28,9550450.72,11672773.1,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Printing Services,Q2 2026,11243623.54,6.12,10119261.19,12367985.89,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Printing Services,Q3 2026,11834607.56,5.83,10651146.8,13018068.32,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Office Services,Printing Services,Q4 2026,12069124.15,4.85,10862211.73,13276036.56,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Business Travel,Q1 2026,10114769.19,7.64,9103292.27,11126246.1,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Business Travel,Q2 2026,10192784.98,4.15,9173506.49,11212063.48,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Business Travel,Q3 2026,10509277.29,3.8,9458349.56,11560205.02,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Business Travel,Q4 2026,10584027.29,3.02,9525624.56,11642430.02,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Event Management,Q1 2026,5633344.13,5.95,5070009.72,6196678.54,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Event Management,Q2 2026,5901302.22,5.35,5311172.0,6491432.45,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Event Management,Q3 2026,5940278.99,3.76,5346251.09,6534306.88,Time_Series_Extrapolation,2026-01-03
+Facilities & Corporate Services,Travel & Events,Event Management,Q4 2026,6420033.05,4.82,5778029.75,7062036.36,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Coffee,Q1 2026,12360665.9,6.45,11124599.31,13596732.49,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Coffee,Q2 2026,13134049.28,6.35,11820644.35,14447454.21,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Coffee,Q3 2026,13579067.39,5.35,12221160.65,14936974.13,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Coffee,Q4 2026,15493745.64,7.48,13944371.08,17043120.21,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Tea,Q1 2026,5227831.1,7.68,4705047.99,5750614.21,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Tea,Q2 2026,5599754.82,7.4,5039779.34,6159730.31,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Tea,Q3 2026,5770261.35,5.93,5193235.21,6347287.48,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Beverages,Tea,Q4 2026,5535351.46,3.33,4981816.32,6088886.61,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Cheese,Q1 2026,9344206.55,3.34,8409785.89,10278627.2,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Cheese,Q2 2026,10396695.56,7.23,9357026.0,11436365.11,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Cheese,Q3 2026,10325418.33,4.52,9292876.5,11357960.16,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Cheese,Q4 2026,11995378.16,7.32,10795840.34,13194915.97,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Milk & Cream,Q1 2026,11023687.49,4.23,9921318.74,12126056.24,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Milk & Cream,Q2 2026,11774682.24,5.51,10597214.01,12952150.46,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Milk & Cream,Q3 2026,12167485.08,4.78,10950736.57,13384233.58,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Dairy Products,Milk & Cream,Q4 2026,11768704.92,2.71,10591834.43,12945575.42,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Canola Oil,Q1 2026,7657066.85,2.32,6891360.16,8422773.53,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Canola Oil,Q2 2026,8377546.98,5.81,7539792.28,9215301.67,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Canola Oil,Q3 2026,8782673.22,5.48,7904405.9,9660940.55,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Canola Oil,Q4 2026,9349455.52,5.72,8414509.97,10284401.08,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Coconut Oil,Q1 2026,8588469.58,4.83,7729622.63,9447316.54,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Coconut Oil,Q2 2026,8719674.37,3.17,7847706.93,9591641.8,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Coconut Oil,Q3 2026,8879069.89,2.72,7991162.9,9766976.88,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Coconut Oil,Q4 2026,10375739.34,6.08,9338165.41,11413313.28,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Olive Oil,Q1 2026,9415942.39,5.18,8474348.16,10357536.63,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Olive Oil,Q2 2026,9772139.95,4.48,8794925.96,10749353.95,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Olive Oil,Q3 2026,11036311.37,7.23,9932680.24,12139942.51,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Olive Oil,Q4 2026,10038642.23,2.9,9034778.0,11042506.45,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Palm Oil,Q1 2026,8728087.94,7.95,7855279.15,9600896.74,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Palm Oil,Q2 2026,8754159.19,4.06,7878743.27,9629575.11,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Palm Oil,Q3 2026,10163045.21,7.92,9146740.69,11179349.74,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Palm Oil,Q4 2026,10739959.33,7.36,9665963.4,11813955.27,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Peanut Oil,Q1 2026,6727402.53,7.92,6054662.28,7400142.78,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Peanut Oil,Q2 2026,6595282.55,2.86,5935754.29,7254810.8,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Peanut Oil,Q3 2026,7673944.23,7.17,6906549.81,8441338.65,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Peanut Oil,Q4 2026,7038491.85,3.08,6334642.67,7742341.04,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Rice Bran Oil,Q1 2026,8363072.75,2.48,7526765.47,9199380.02,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Rice Bran Oil,Q2 2026,8825463.65,4.0,7942917.29,9708010.02,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Rice Bran Oil,Q3 2026,10256756.15,7.92,9231080.54,11282431.77,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Rice Bran Oil,Q4 2026,9502589.97,3.88,8552330.97,10452848.96,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Soybean Oil,Q1 2026,3586481.47,2.35,3227833.33,3945129.62,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Soybean Oil,Q2 2026,3842239.6,4.71,3458015.64,4226463.56,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Soybean Oil,Q3 2026,3857789.16,3.26,3472010.25,4243568.08,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Soybean Oil,Q4 2026,4531999.49,6.64,4078799.54,4985199.44,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Sunflower Oil,Q1 2026,6995323.86,5.46,6295791.47,7694856.24,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Sunflower Oil,Q2 2026,7030520.74,2.95,6327468.67,7733572.81,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Sunflower Oil,Q3 2026,8060471.55,6.71,7254424.39,8866518.7,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Edible Oils,Sunflower Oil,Q4 2026,8590876.61,6.68,7731788.95,9449964.27,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Corn/Maize,Q1 2026,10317829.16,2.78,9286046.24,11349612.08,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Corn/Maize,Q2 2026,10984416.36,4.6,9885974.73,12082858.0,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Corn/Maize,Q3 2026,11481445.51,4.58,10333300.96,12629590.06,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Corn/Maize,Q4 2026,12005830.23,4.57,10805247.21,13206413.25,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Rice,Q1 2026,9076538.29,4.86,8168884.46,9984192.11,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Rice,Q2 2026,9010129.52,2.03,8109116.57,9911142.47,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Rice,Q3 2026,10077963.11,5.2,9070166.8,11085759.43,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Rice,Q4 2026,11086556.61,6.38,9977900.95,12195212.27,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Wheat,Q1 2026,8455128.52,7.7,7609615.67,9300641.37,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Wheat,Q2 2026,9047392.68,7.35,8142653.41,9952131.94,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Wheat,Q3 2026,9494108.99,6.54,8544698.1,10443519.89,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Grains & Cereals,Wheat,Q4 2026,9610322.42,5.19,8649290.18,10571354.67,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Aluminum Cans,Q1 2026,9074089.02,2.11,8166680.12,9981497.92,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Aluminum Cans,Q2 2026,9250312.94,2.02,8325281.65,10175344.24,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Aluminum Cans,Q3 2026,10705085.01,6.4,9634576.51,11775593.51,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Aluminum Cans,Q4 2026,10141798.44,3.36,9127618.6,11155978.29,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Q1 2026,13223677.41,7.26,11901309.67,14546045.15,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Q2 2026,13301736.28,3.87,11971562.65,14631909.91,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Q3 2026,13321561.31,2.62,11989405.18,14653717.44,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Q4 2026,14996678.63,5.02,13497010.76,16496346.49,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Glass Containers,Q1 2026,6865474.31,3.84,6178926.88,7552021.74,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Glass Containers,Q2 2026,6931853.94,2.39,6238668.55,7625039.33,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Glass Containers,Q3 2026,7073256.12,2.27,6365930.51,7780581.73,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Packaging Materials,Glass Containers,Q4 2026,8892703.3,7.69,8003432.97,9781973.63,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Beef,Q1 2026,15797264.19,4.74,14217537.77,17376990.61,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Beef,Q2 2026,16667587.13,5.12,15000828.41,18334345.84,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Beef,Q3 2026,17532746.85,5.14,15779472.17,19286021.54,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Beef,Q4 2026,18057080.8,4.6,16251372.72,19862788.88,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Poultry,Q1 2026,17346486.5,6.12,15611837.85,19081135.15,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Poultry,Q2 2026,17275110.97,2.8,15547599.87,19002622.07,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Poultry,Q3 2026,20578004.43,7.98,18520203.99,22635804.87,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Poultry,Q4 2026,19824100.08,4.94,17841690.08,21806510.09,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Seafood,Q1 2026,9468976.66,6.5,8522078.99,10415874.32,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Seafood,Q2 2026,9430502.44,2.99,8487452.2,10373552.68,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Seafood,Q3 2026,11027197.86,7.44,9924478.07,12129917.64,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Proteins,Seafood,Q4 2026,11598642.67,6.87,10438778.4,12758506.93,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Pepper,Q1 2026,7371663.69,2.11,6634497.32,8108830.06,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Pepper,Q2 2026,7710166.95,3.35,6939150.26,8481183.65,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Pepper,Q3 2026,9070962.92,7.91,8163866.63,9978059.22,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Pepper,Q4 2026,8209669.28,3.27,7388702.35,9030636.21,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Vanilla,Q1 2026,13480436.13,2.13,12132392.52,14828479.74,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Vanilla,Q2 2026,14559714.77,5.03,13103743.3,16015686.25,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Vanilla,Q3 2026,14313635.89,2.74,12882272.3,15744999.48,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Spices & Seasonings,Vanilla,Q4 2026,16831873.21,6.27,15148685.89,18515060.53,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Sweeteners,Sugar,Q1 2026,7581047.46,6.75,6822942.71,8339152.21,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Sweeteners,Sugar,Q2 2026,7718125.54,4.25,6946312.99,8489938.1,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Sweeteners,Sugar,Q3 2026,8420217.31,5.84,7578195.58,9262239.04,Time_Series_Extrapolation,2026-01-03
+Food & Beverages,Sweeteners,Sugar,Q4 2026,9179667.82,6.63,8261701.03,10097634.6,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Q1 2026,13484447.31,5.74,12136002.58,14832892.05,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Q2 2026,14211066.28,5.56,12789959.66,15632172.91,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Q3 2026,13648023.79,2.29,12283221.41,15012826.17,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Q4 2026,14158336.36,2.65,12742502.72,15574169.99,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Q1 2026,11818391.48,7.02,10636552.33,13000230.63,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Q2 2026,11554950.4,2.29,10399455.36,12710445.44,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Q3 2026,11960554.7,2.69,10764499.23,13156610.16,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Q4 2026,13253401.28,4.67,11928061.15,14578741.41,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Q1 2026,29241175.6,2.74,26317058.04,32165293.16,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Q2 2026,30497707.81,3.52,27447937.03,33547478.59,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Q3 2026,34100417.03,6.21,30690375.33,37510458.73,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Q4 2026,32323792.44,3.23,29091413.19,35556171.68,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Implants,Q1 2026,11314452.18,6.11,10183006.96,12445897.4,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Implants,Q2 2026,11105411.6,2.06,9994870.44,12215952.76,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Implants,Q3 2026,12176498.62,4.53,10958848.76,13394148.49,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Implants,Q4 2026,11818109.96,2.61,10636298.96,12999920.96,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Q1 2026,25233450.17,5.12,22710105.15,27756795.19,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Q2 2026,26837115.44,5.74,24153403.89,29520826.98,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Q3 2026,28754818.65,6.2,25879336.79,31630300.52,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Q4 2026,28639413.41,4.51,25775472.07,31503354.75,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Q1 2026,12740203.29,7.39,11466182.96,14014223.62,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Q2 2026,13096610.64,5.07,11786949.58,14406271.7,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Q3 2026,14012213.44,5.71,12610992.1,15413434.79,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Q4 2026,13716950.15,3.7,12345255.13,15088645.16,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Q1 2026,10396828.46,6.71,9357145.61,11436511.3,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Q2 2026,10739102.56,4.99,9665192.3,11813012.81,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Q3 2026,11491046.52,5.65,10341941.87,12640151.17,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Q4 2026,12613459.35,6.67,11352113.42,13874805.29,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Q1 2026,6639736.9,6.99,5975763.21,7303710.59,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Q2 2026,7217074.8,7.84,6495367.32,7938782.28,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Q3 2026,7010656.81,4.15,6309591.13,7711722.49,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Q4 2026,7389031.77,4.46,6650128.59,8127934.94,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Q1 2026,8367844.34,2.96,7531059.9,9204628.77,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Q2 2026,9009490.35,5.29,8108541.31,9910439.38,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Q3 2026,10085607.33,7.46,9077046.59,11094168.06,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Q4 2026,10310400.85,6.13,9279360.77,11341440.94,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Q1 2026,33439845.86,4.88,30095861.27,36783830.44,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Q2 2026,34092216.33,3.41,30682994.7,37501437.96,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Q3 2026,33910356.73,2.08,30519321.05,37301392.4,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Q4 2026,35239276.39,2.53,31715348.75,38763204.03,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Q1 2026,35200844.66,2.66,31680760.19,38720929.12,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Q2 2026,38123448.85,5.44,34311103.96,41935793.73,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Q3 2026,39652425.01,4.96,35687182.51,43617667.51,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Q4 2026,46126455.74,7.7,41513810.16,50739101.31,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Q1 2026,36244630.98,6.68,32620167.88,39869094.07,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Q2 2026,35661419.48,2.45,32095277.53,39227561.43,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Q3 2026,40858279.32,6.34,36772451.39,44944107.25,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Q4 2026,45253601.29,7.43,40728241.16,49778961.42,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Q1 2026,41246883.81,5.87,37122195.43,45371572.19,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Q2 2026,42742891.76,4.74,38468602.59,47017180.94,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Q3 2026,48894616.83,7.86,44005155.15,53784078.51,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Q4 2026,44855721.35,3.58,40370149.21,49341293.48,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Q1 2026,24162452.95,2.3,21746207.65,26578698.24,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Q2 2026,26980418.46,6.88,24282376.61,29678460.3,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Q3 2026,29133495.45,7.24,26220145.9,32046844.99,Time_Series_Extrapolation,2026-01-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Q4 2026,31091384.28,7.11,27982245.85,34200522.71,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Benefits Administration,Q1 2026,6384982.79,4.16,5746484.51,7023481.07,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Benefits Administration,Q2 2026,6895432.99,6.06,6205889.69,7584976.29,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Benefits Administration,Q3 2026,7006480.4,4.56,6305832.36,7707128.44,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Benefits Administration,Q4 2026,6818007.27,2.7,6136206.54,7499808.0,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,HRIS Systems,Q1 2026,4246811.4,7.11,3822130.26,4671492.54,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,HRIS Systems,Q2 2026,4568572.81,7.34,4111715.53,5025430.1,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,HRIS Systems,Q3 2026,4214875.83,2.06,3793388.25,4636363.42,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,HRIS Systems,Q4 2026,4433316.42,2.83,3989984.77,4876648.06,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Payroll Services,Q1 2026,7092162.07,5.88,6382945.86,7801378.27,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Payroll Services,Q2 2026,7240759.63,3.97,6516683.67,7964835.59,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Payroll Services,Q3 2026,8290220.71,7.37,7461198.64,9119242.79,Time_Series_Extrapolation,2026-01-03
+Human Resources,HR Technology,Payroll Services,Q4 2026,9022084.54,7.73,8119876.09,9924293.0,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,E-Learning Platforms,Q1 2026,6705940.74,3.61,6035346.66,7376534.81,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,E-Learning Platforms,Q2 2026,7327045.63,6.4,6594341.07,8059750.19,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,E-Learning Platforms,Q3 2026,7330076.59,4.24,6597068.93,8063084.25,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,E-Learning Platforms,Q4 2026,7588095.07,4.06,6829285.56,8346904.57,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Leadership Development,Q1 2026,9165381.18,2.68,8248843.06,10081919.3,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Leadership Development,Q2 2026,9728939.56,4.4,8756045.6,10701833.51,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Leadership Development,Q3 2026,10256051.05,4.74,9230445.94,11281656.15,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Leadership Development,Q4 2026,11706268.11,7.01,10535641.3,12876894.92,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Training Programs,Q1 2026,2378159.72,6.14,2140343.75,2615975.7,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Training Programs,Q2 2026,2464123.54,4.87,2217711.19,2710535.9,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Training Programs,Q3 2026,2559131.8,4.53,2303218.62,2815044.98,Time_Series_Extrapolation,2026-01-03
+Human Resources,Learning & Development,Training Programs,Q4 2026,2971900.54,7.32,2674710.49,3269090.6,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Executive Search,Q1 2026,7299245.65,3.0,6569321.08,8029170.21,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Executive Search,Q2 2026,7488287.13,2.8,6739458.42,8237115.84,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Executive Search,Q3 2026,8526172.65,6.36,7673555.39,9378789.92,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Executive Search,Q4 2026,9601813.66,7.89,8641632.29,10561995.02,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Permanent Recruitment,Q1 2026,10634233.23,7.07,9570809.9,11697656.55,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Permanent Recruitment,Q2 2026,10460140.27,2.62,9414126.24,11506154.29,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Permanent Recruitment,Q3 2026,12327753.7,7.47,11094978.33,13560529.07,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Permanent Recruitment,Q4 2026,12025156.15,4.9,10822640.54,13227671.77,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Temporary Staffing,Q1 2026,6076148.81,5.41,5468533.93,6683763.69,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Temporary Staffing,Q2 2026,6310088.69,4.63,5679079.82,6941097.56,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Temporary Staffing,Q3 2026,6800819.0,5.67,6120737.1,7480900.9,Time_Series_Extrapolation,2026-01-03
+Human Resources,Staffing Services,Temporary Staffing,Q4 2026,7464176.17,6.67,6717758.55,8210593.79,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,Cloud Storage,Q1 2026,6288522.97,5.67,5659670.68,6917375.27,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,Cloud Storage,Q2 2026,6835892.35,7.18,6152303.11,7519481.58,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,Cloud Storage,Q3 2026,7347798.11,7.28,6613018.3,8082577.92,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,Cloud Storage,Q4 2026,7616892.58,6.36,6855203.32,8378581.84,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,IaaS,Q1 2026,11638520.14,7.35,10474668.12,12802372.15,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,IaaS,Q2 2026,11929761.28,4.9,10736785.15,13122737.41,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,IaaS,Q3 2026,12524970.51,4.93,11272473.46,13777467.56,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,IaaS,Q4 2026,14384874.94,7.33,12946387.45,15823362.43,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,PaaS,Q1 2026,6760847.78,4.64,6084763.0,7436932.55,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,PaaS,Q2 2026,6771995.89,2.38,6094796.3,7449195.48,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,PaaS,Q3 2026,7679647.1,5.93,6911682.39,8447611.81,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,PaaS,Q4 2026,7013738.63,2.07,6312364.77,7715112.49,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,SaaS,Q1 2026,6176689.36,7.21,5559020.43,6794358.3,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,SaaS,Q2 2026,6369861.94,5.15,5732875.74,7006848.13,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,SaaS,Q3 2026,6951863.01,6.46,6256676.71,7647049.31,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cloud Services,SaaS,Q4 2026,7368010.93,6.34,6631209.84,8104812.02,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Endpoint Security,Q1 2026,11142953.7,3.34,10028658.33,12257249.07,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Endpoint Security,Q2 2026,12514848.39,7.73,11263363.55,13766333.23,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Endpoint Security,Q3 2026,13297561.93,7.24,11967805.74,14627318.12,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Endpoint Security,Q4 2026,13163384.74,5.11,11847046.27,14479723.22,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Identity Management,Q1 2026,5464605.37,6.13,4918144.84,6011065.91,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Identity Management,Q2 2026,5753742.05,5.71,5178367.84,6329116.25,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Identity Management,Q3 2026,5892256.8,4.6,5303031.12,6481482.48,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Identity Management,Q4 2026,6589231.5,6.36,5930308.35,7248154.65,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Network Security,Q1 2026,5351148.75,4.89,4816033.87,5886263.62,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Network Security,Q2 2026,5730239.69,5.98,5157215.72,6303263.66,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Network Security,Q3 2026,6050059.22,5.85,5445053.3,6655065.14,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Network Security,Q4 2026,5717834.79,2.89,5146051.31,6289618.27,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Security Operations,Q1 2026,10906036.39,6.96,9815432.75,11996640.03,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Security Operations,Q2 2026,11750988.67,7.35,10575889.8,12926087.53,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Security Operations,Q3 2026,12033681.68,5.68,10830313.51,13237049.85,Time_Series_Extrapolation,2026-01-03
+Information Technology,Cybersecurity,Security Operations,Q4 2026,11067291.7,2.07,9960562.53,12174020.86,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Desktops,Q1 2026,9610850.3,7.61,8649765.27,10571935.33,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Desktops,Q2 2026,9853245.32,5.03,8867920.79,10838569.85,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Desktops,Q3 2026,10284989.14,4.82,9256490.23,11313488.06,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Desktops,Q4 2026,10845962.4,4.98,9761366.16,11930558.64,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Laptops,Q1 2026,13746295.74,2.99,12371666.16,15120925.31,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Laptops,Q2 2026,15140826.95,6.51,13626744.26,16654909.65,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Laptops,Q3 2026,14980472.03,3.92,13482424.83,16478519.24,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Laptops,Q4 2026,15605200.63,3.99,14044680.57,17165720.69,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Network Equipment,Q1 2026,9355396.4,3.67,8419856.76,10290936.04,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Network Equipment,Q2 2026,9957171.39,5.04,8961454.25,10952888.53,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Network Equipment,Q3 2026,10537447.59,5.3,9483702.83,11591192.35,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Network Equipment,Q4 2026,10667961.33,4.27,9601165.2,11734757.46,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Peripherals,Q1 2026,11535113.39,6.9,10381602.05,12688624.73,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Peripherals,Q2 2026,11330583.66,2.47,10197525.29,12463642.03,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Peripherals,Q3 2026,12371991.46,4.67,11134792.32,13609190.61,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Peripherals,Q4 2026,13336000.72,5.44,12002400.64,14669600.79,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Servers,Q1 2026,8659832.53,2.53,7793849.28,9525815.78,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Servers,Q2 2026,9310402.8,4.99,8379362.52,10241443.08,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Servers,Q3 2026,9472565.45,3.9,8525308.91,10419822.0,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Servers,Q4 2026,11441818.59,7.88,10297636.73,12586000.45,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Storage Systems,Q1 2026,12287974.64,6.47,11059177.18,13516772.11,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Storage Systems,Q2 2026,12032474.77,2.11,10829227.3,13235722.25,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Storage Systems,Q3 2026,13140328.75,4.42,11826295.87,14454361.62,Time_Series_Extrapolation,2026-01-03
+Information Technology,Hardware,Storage Systems,Q4 2026,12598115.72,2.21,11338304.14,13857927.29,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Database Software,Q1 2026,5280523.83,5.29,4752471.44,5808576.21,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Database Software,Q2 2026,5736893.62,6.96,5163204.26,6310582.98,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Database Software,Q3 2026,6100748.59,6.75,5490673.73,6710823.45,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Database Software,Q4 2026,6767183.91,7.78,6090465.52,7443902.31,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Development Tools,Q1 2026,6132995.31,5.83,5519695.78,6746294.84,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Development Tools,Q2 2026,6677470.57,7.34,6009723.51,7345217.63,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Development Tools,Q3 2026,6780844.08,5.37,6102759.68,7458928.49,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Development Tools,Q4 2026,7296583.41,5.93,6566925.07,8026241.75,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Enterprise Software,Q1 2026,13099173.34,4.74,11789256.0,14409090.67,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Enterprise Software,Q2 2026,13538988.11,4.05,12185089.3,14892886.92,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Enterprise Software,Q3 2026,15300577.76,6.95,13770519.98,16830635.53,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Enterprise Software,Q4 2026,16332247.4,6.9,14699022.66,17965472.14,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Productivity Software,Q1 2026,10700701.84,7.07,9630631.66,11770772.02,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Productivity Software,Q2 2026,10808354.04,3.99,9727518.63,11889189.44,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Productivity Software,Q3 2026,12108425.26,6.6,10897582.73,13319267.79,Time_Series_Extrapolation,2026-01-03
+Information Technology,Software,Productivity Software,Q4 2026,12428305.6,5.6,11185475.04,13671136.16,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Internet Services,Q1 2026,7443228.69,6.3,6698905.82,8187551.56,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Internet Services,Q2 2026,7599675.96,4.18,6839708.36,8359643.55,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Internet Services,Q3 2026,8040025.44,4.72,7236022.9,8844027.98,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Internet Services,Q4 2026,7754563.58,2.58,6979107.22,8530019.94,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Mobile Services,Q1 2026,8946498.38,5.95,8051848.55,9841148.22,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Mobile Services,Q2 2026,8787200.26,2.01,7908480.23,9665920.28,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Mobile Services,Q3 2026,9534018.2,4.13,8580616.38,10487420.02,Time_Series_Extrapolation,2026-01-03
+Information Technology,Telecommunications,Mobile Services,Q4 2026,10580663.61,5.8,9522597.25,11638729.97,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Q1 2026,13622166.4,6.8,12259949.76,14984383.04,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Q2 2026,14139026.05,5.29,12725123.44,15552928.65,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Q3 2026,14448475.93,4.24,13003628.34,15893323.52,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Q4 2026,14154960.23,2.64,12739464.21,15570456.26,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,Q1 2026,11749335.62,7.38,10574402.06,12924269.18,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,Q2 2026,12052779.27,4.95,10847501.34,13258057.19,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,Q3 2026,13378150.5,6.93,12040335.45,14715965.55,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,Q4 2026,14052387.8,6.46,12647149.02,15457626.58,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Q1 2026,9786100.37,4.46,8807490.33,10764710.41,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Q2 2026,10040977.29,3.53,9036879.56,11045075.02,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Q3 2026,10289859.45,3.18,9260873.5,11318845.39,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Q4 2026,10432179.5,2.72,9388961.55,11475397.45,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Air Freight,Q1 2026,11447933.87,7.11,10303140.48,12592727.25,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Air Freight,Q2 2026,11403300.07,3.29,10262970.07,12543630.08,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Air Freight,Q3 2026,13073565.05,6.95,11766208.54,14380921.55,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Air Freight,Q4 2026,12096263.83,3.14,10886637.45,13305890.21,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Ocean Freight,Q1 2026,9527159.81,4.03,8574443.83,10479875.79,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Ocean Freight,Q2 2026,10395942.31,6.54,9356348.08,11435536.54,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Ocean Freight,Q3 2026,9798832.03,2.28,8818948.82,10778715.23,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Ocean Freight,Q4 2026,11474886.21,5.8,10327397.59,12622374.83,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Rail Freight,Q1 2026,7781220.74,6.03,7003098.67,8559342.82,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Rail Freight,Q2 2026,7746055.98,2.74,6971450.38,8520661.58,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Rail Freight,Q3 2026,9078619.83,7.35,8170757.85,9986481.82,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Rail Freight,Q4 2026,8833429.47,4.74,7950086.52,9716772.41,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Road Freight,Q1 2026,8722858.49,5.54,7850572.65,9595144.34,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Road Freight,Q2 2026,9116865.25,5.03,8205178.72,10028551.77,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Road Freight,Q3 2026,10349300.03,7.78,9314370.03,11384230.04,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Freight Services,Road Freight,Q4 2026,8955761.12,2.03,8060185.01,9851337.23,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,3PL Services,Q1 2026,11389629.03,6.42,10250666.12,12528591.93,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,3PL Services,Q2 2026,11871724.67,5.32,10684552.2,13058897.14,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,3PL Services,Q3 2026,12247667.28,4.6,11022900.56,13472434.01,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,3PL Services,Q4 2026,13264284.46,5.51,11937856.01,14590712.9,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Cold Storage,Q1 2026,9549674.62,7.55,8594707.15,10504642.08,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Cold Storage,Q2 2026,10106766.87,6.69,9096090.19,11117443.56,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Cold Storage,Q3 2026,11019125.1,7.46,9917212.59,12121037.61,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Cold Storage,Q4 2026,11274264.72,6.15,10146838.25,12401691.2,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Distribution Centers,Q1 2026,9527254.22,3.04,8574528.8,10479979.65,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Distribution Centers,Q2 2026,10564281.06,6.89,9507852.96,11620709.17,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Distribution Centers,Q3 2026,9992329.04,2.62,8993096.14,10991561.95,Time_Series_Extrapolation,2026-01-03
+Logistics & Transportation,Warehousing,Distribution Centers,Q4 2026,11648711.68,5.95,10483840.51,12813582.85,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Q1 2026,8800721.16,5.64,7920649.05,9680793.28,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Q2 2026,8998975.77,3.93,8099078.19,9898873.34,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Q3 2026,10288687.25,7.29,9259818.53,11317555.98,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Q4 2026,9939551.56,4.51,8945596.4,10933506.71,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Q1 2026,9095221.33,5.65,8185699.2,10004743.47,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Q2 2026,9700835.85,6.16,8730752.26,10670919.43,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Q3 2026,9541474.7,3.49,8587327.23,10495622.17,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Q4 2026,10221551.25,4.39,9199396.13,11243706.38,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,Q1 2026,11400085.44,4.06,10260076.89,12540093.98,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,Q2 2026,11796095.87,3.77,10616486.28,12975705.46,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,Q3 2026,13356755.79,6.83,12021080.21,14692431.37,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,Q4 2026,12248981.22,2.83,11024083.1,13473879.34,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Q1 2026,5172079.35,5.62,4654871.41,5689287.28,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Q2 2026,5640130.34,7.32,5076117.31,6204143.38,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Q3 2026,5680962.06,5.07,5112865.85,6249058.27,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Q4 2026,6433135.85,7.06,5789822.26,7076449.43,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Q1 2026,14835441.6,5.29,13351897.44,16318985.76,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Q2 2026,15206149.51,3.88,13685534.56,16726764.46,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Q3 2026,16982723.24,6.42,15284450.92,18680995.56,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Q4 2026,17337815.3,5.32,15604033.77,19071596.83,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Q1 2026,24835637.86,3.3,22352074.07,27319201.64,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Q2 2026,25633487.02,3.26,23070138.32,28196835.72,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Q3 2026,28866219.04,6.29,25979597.13,31752840.94,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Q4 2026,30488880.26,6.12,27439992.24,33537768.29,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Q1 2026,17062193.2,7.53,15355973.88,18768412.52,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Q2 2026,16767542.12,2.8,15090787.91,18444296.33,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Q3 2026,19039490.3,6.26,17135541.27,20943439.33,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Q4 2026,21469140.72,7.85,19322226.65,23616054.79,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Q1 2026,18865567.15,3.07,16979010.44,20752123.87,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Q2 2026,20278498.81,5.25,18250648.93,22306348.69,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Q3 2026,21690501.54,5.82,19521451.39,23859551.69,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Q4 2026,23338051.69,6.26,21004246.52,25671856.86,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Q1 2026,7912638.4,6.56,7121374.56,8703902.24,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Q2 2026,8244654.51,5.37,7420189.05,9069119.96,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Q3 2026,8718193.02,5.5,7846373.72,9590012.33,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Q4 2026,9973826.06,7.66,8976443.45,10971208.66,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Q1 2026,6767959.17,6.26,6091163.25,7444755.08,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Q2 2026,7162572.89,6.05,6446315.6,7878830.18,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Q3 2026,7882267.69,7.36,7094040.92,8670494.46,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Q4 2026,7801969.84,5.2,7021772.86,8582166.82,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Q1 2026,7158106.13,7.26,6442295.52,7873916.74,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Q2 2026,7292197.65,4.53,6562977.88,8021417.41,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Q3 2026,7097730.94,2.08,6387957.84,7807504.03,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Q4 2026,7406061.23,2.64,6665455.11,8146667.35,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Q1 2026,5933099.13,4.29,5339789.22,6526409.04,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Q2 2026,5956158.28,2.32,5360542.46,6551774.11,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Q3 2026,6098041.07,2.34,5488236.97,6707845.18,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Q4 2026,6554343.62,3.6,5898909.26,7209777.99,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Q1 2026,29276871.26,6.71,26349184.13,32204558.38,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Q2 2026,31941775.38,7.9,28747597.85,35135952.92,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Q3 2026,32768525.42,6.1,29491672.87,36045377.96,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Q4 2026,30733090.1,2.88,27659781.09,33806399.11,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Q1 2026,12781885.39,2.37,11503696.85,14060073.93,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Q2 2026,14216469.3,6.71,12794822.37,15638116.23,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Q3 2026,13732671.04,3.22,12359403.94,15105938.15,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Q4 2026,15319773.14,5.25,13787795.82,16851750.45,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Q1 2026,27541979.9,4.15,24787781.91,30296177.89,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Q2 2026,28996771.48,4.72,26097094.33,31896448.63,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Q3 2026,31225604.44,5.7,28103044.0,34348164.89,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Q4 2026,33451957.63,6.05,30106761.87,36797153.4,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Q1 2026,27388637.73,5.37,24649773.95,30127501.5,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Q2 2026,27760934.93,3.35,24984841.43,30537028.42,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Q3 2026,30854838.63,5.88,27769354.77,33940322.5,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Q4 2026,30799251.45,4.33,27719326.31,33879176.6,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Q1 2026,20302023.23,5.07,18271820.91,22332225.55,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Q2 2026,22032665.03,6.78,19829398.52,24235931.53,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Q3 2026,23129571.64,6.18,20816614.47,25442528.8,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Q4 2026,24540515.66,6.16,22086464.09,26994567.22,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Q1 2026,7743147.39,2.28,6968832.65,8517462.13,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Q2 2026,8233793.34,4.29,7410414.01,9057172.67,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Q3 2026,8638934.59,4.5,7775041.13,9502828.05,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Q4 2026,9822978.73,6.73,8840680.86,10805276.6,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Q1 2026,11975675.34,6.11,10778107.8,13173242.87,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Q2 2026,13114063.25,7.79,11802656.92,14425469.57,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Q3 2026,12090867.47,2.32,10881780.73,13299954.22,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Q4 2026,14498359.07,6.46,13048523.16,15948194.97,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Q1 2026,6969108.26,3.22,6272197.43,7666019.08,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Q2 2026,7760956.95,7.21,6984861.26,8537052.65,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Q3 2026,8309026.18,7.16,7478123.56,9139928.8,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Q4 2026,8100571.38,4.66,7290514.24,8910628.52,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Q1 2026,8991012.84,3.35,8091911.56,9890114.13,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Q2 2026,9738185.96,5.8,8764367.36,10712004.56,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Q3 2026,10436630.37,6.26,9392967.33,11480293.4,Time_Series_Extrapolation,2026-01-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Q4 2026,10257999.12,4.21,9232199.21,11283799.03,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,HR Consulting,Q1 2026,25557119.91,5.53,23001407.92,28112831.9,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,HR Consulting,Q2 2026,27432698.28,6.43,24689428.46,30175968.11,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,HR Consulting,Q3 2026,26601509.97,3.18,23941358.98,29261660.97,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,HR Consulting,Q4 2026,30979634.36,6.35,27881670.92,34077597.8,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,IT Consulting,Q1 2026,20901034.78,3.16,18810931.31,22991138.26,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,IT Consulting,Q2 2026,22206835.5,4.69,19986151.95,24427519.05,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,IT Consulting,Q3 2026,25452200.15,7.9,22906980.13,27997420.16,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,IT Consulting,Q4 2026,22317530.09,2.45,20085777.08,24549283.1,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,Management Consulting,Q1 2026,16017067.33,7.77,14415360.6,17618774.06,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,Management Consulting,Q2 2026,16828071.45,6.41,15145264.31,18510878.6,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,Management Consulting,Q3 2026,16105767.39,2.72,14495190.65,17716344.13,Time_Series_Extrapolation,2026-01-03
+Professional Services,Consulting,Management Consulting,Q4 2026,16241030.74,2.24,14616927.67,17865133.81,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Accounting,Q1 2026,10432678.72,3.67,9389410.85,11475946.59,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Accounting,Q2 2026,10797434.22,3.59,9717690.8,11877177.64,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Accounting,Q3 2026,10984980.24,2.97,9886482.22,12083478.27,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Accounting,Q4 2026,13227966.76,7.08,11905170.08,14550763.44,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Banking,Q1 2026,5595231.37,2.03,5035708.24,6154754.51,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Banking,Q2 2026,6022538.39,4.8,5420284.55,6624792.23,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Banking,Q3 2026,6836168.8,7.62,6152551.92,7519785.68,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Banking,Q4 2026,5991712.88,2.24,5392541.59,6590884.17,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Insurance,Q1 2026,4139254.12,7.57,3725328.7,4553179.53,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Insurance,Q2 2026,4289410.78,5.58,3860469.7,4718351.86,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Insurance,Q3 2026,4666681.94,6.64,4200013.74,5133350.13,Time_Series_Extrapolation,2026-01-03
+Professional Services,Financial Services,Insurance,Q4 2026,4812618.32,5.75,4331356.49,5293880.16,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Corporate Law,Q1 2026,11753347.68,7.06,10578012.91,12928682.45,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Corporate Law,Q2 2026,11830190.44,3.81,10647171.4,13013209.49,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Corporate Law,Q3 2026,13351003.85,6.74,12015903.47,14686104.24,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Corporate Law,Q4 2026,13497967.88,5.3,12148171.09,14847764.67,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Employment Law,Q1 2026,7900782.9,2.44,7110704.61,8690861.19,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Employment Law,Q2 2026,8706387.2,6.25,7835748.48,9577025.92,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Employment Law,Q3 2026,8967456.35,5.15,8070710.72,9864201.99,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Employment Law,Q4 2026,10393241.38,7.74,9353917.24,11432565.52,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Intellectual Property,Q1 2026,7457260.61,5.12,6711534.55,8202986.67,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Intellectual Property,Q2 2026,8078870.15,6.72,7270983.13,8886757.16,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Intellectual Property,Q3 2026,7741707.26,2.96,6967536.53,8515877.98,Time_Series_Extrapolation,2026-01-03
+Professional Services,Legal Services,Intellectual Property,Q4 2026,8707777.68,5.26,7836999.91,9578555.44,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Advertising,Q1 2026,5525410.88,4.42,4972869.8,6077951.97,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Advertising,Q2 2026,5733903.36,4.1,5160513.02,6307293.7,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Advertising,Q3 2026,6537061.73,7.3,5883355.55,7190767.9,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Advertising,Q4 2026,6675358.18,5.98,6007822.36,7342894.0,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Digital Marketing,Q1 2026,8361234.4,3.99,7525110.96,9197357.84,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Digital Marketing,Q2 2026,8656969.57,3.76,7791272.61,9522666.52,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Digital Marketing,Q3 2026,10045310.02,7.7,9040779.02,11049841.02,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Digital Marketing,Q4 2026,10040444.75,5.71,9036400.27,11044489.22,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Market Research,Q1 2026,7558469.88,4.85,6802622.89,8314316.87,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Market Research,Q2 2026,8003621.49,5.37,7203259.34,8803983.63,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Market Research,Q3 2026,8711128.83,6.51,7840015.95,9582241.72,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,Market Research,Q4 2026,9065337.03,5.9,8158803.33,9971870.73,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,PR & Communications,Q1 2026,6136860.08,2.69,5523174.07,6750546.09,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,PR & Communications,Q2 2026,6473313.99,4.08,5825982.59,7120645.39,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,PR & Communications,Q3 2026,6614803.52,3.44,5953323.17,7276283.87,Time_Series_Extrapolation,2026-01-03
+Professional Services,Marketing Services,PR & Communications,Q4 2026,7503215.61,5.85,6752894.05,8253537.17,Time_Series_Extrapolation,2026-01-03

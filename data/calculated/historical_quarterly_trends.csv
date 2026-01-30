@@ -1,0 +1,555 @@
+Sector,Category,SubCategory,Quarter,Total_Spend_USD,Active_Suppliers,Avg_Quality_Rating,Avg_Delivery_Rating
+Construction & Real Estate,Building Materials,Cement,2025Q1,7527100,6,4.44,4.39
+Construction & Real Estate,Building Materials,Cement,2025Q2,5555800,4,4.44,4.28
+Construction & Real Estate,Building Materials,Cement,2025Q3,1836200,2,4.8,4.0
+Construction & Real Estate,Building Materials,Cement,2025Q4,3286500,3,4.38,4.07
+Construction & Real Estate,Building Materials,Concrete,2025Q1,5028600,5,4.58,4.24
+Construction & Real Estate,Building Materials,Concrete,2025Q2,3529800,4,4.48,4.2
+Construction & Real Estate,Building Materials,Concrete,2025Q3,3427200,2,4.53,4.2
+Construction & Real Estate,Building Materials,Concrete,2025Q4,2250400,2,4.55,4.45
+Construction & Real Estate,Building Materials,Glass,2025Q1,3423100,3,4.45,4.05
+Construction & Real Estate,Building Materials,Glass,2025Q2,5068700,3,4.42,4.54
+Construction & Real Estate,Building Materials,Glass,2025Q3,1951700,2,4.6,4.6
+Construction & Real Estate,Building Materials,Glass,2025Q4,3711100,2,4.1,4.43
+Construction & Real Estate,Building Materials,Lumber,2025Q1,6181900,6,4.51,4.4
+Construction & Real Estate,Building Materials,Lumber,2025Q2,5203000,4,4.46,4.22
+Construction & Real Estate,Building Materials,Lumber,2025Q3,5296700,3,4.58,4.12
+Construction & Real Estate,Building Materials,Lumber,2025Q4,4104000,4,4.17,3.85
+Construction & Real Estate,Building Materials,Structural Steel,2025Q1,2976100,2,4.67,4.37
+Construction & Real Estate,Building Materials,Structural Steel,2025Q2,2351600,2,4.55,4.75
+Construction & Real Estate,Building Materials,Structural Steel,2025Q3,6369500,3,4.44,4.45
+Construction & Real Estate,Building Materials,Structural Steel,2025Q4,6488400,5,4.41,4.36
+Construction & Real Estate,Construction Equipment,Heavy Equipment,2025Q1,3927700,5,4.46,4.54
+Construction & Real Estate,Construction Equipment,Heavy Equipment,2025Q2,2557800,3,4.38,4.02
+Construction & Real Estate,Construction Equipment,Heavy Equipment,2025Q3,859000,2,4.3,4.2
+Construction & Real Estate,Construction Equipment,Heavy Equipment,2025Q4,777800,1,4.4,4.9
+Construction & Real Estate,Construction Equipment,Power Tools,2025Q1,4230100,4,4.2,4.5
+Construction & Real Estate,Construction Equipment,Power Tools,2025Q2,1609700,3,4.47,4.23
+Construction & Real Estate,Construction Equipment,Power Tools,2025Q3,2828600,2,4.62,4.42
+Construction & Real Estate,Construction Equipment,Power Tools,2025Q4,755300,1,4.6,4.6
+Construction & Real Estate,Construction Equipment,Scaffolding,2025Q1,855900,2,4.55,4.15
+Construction & Real Estate,Construction Equipment,Scaffolding,2025Q2,1544700,4,4.46,4.38
+Construction & Real Estate,Construction Equipment,Scaffolding,2025Q3,2839200,2,4.6,4.33
+Construction & Real Estate,Construction Equipment,Scaffolding,2025Q4,1781500,3,4.32,4.22
+Construction & Real Estate,MEP Systems,Electrical Systems,2025Q1,1337500,3,4.4,4.27
+Construction & Real Estate,MEP Systems,Electrical Systems,2025Q2,1328800,2,4.5,4.4
+Construction & Real Estate,MEP Systems,Electrical Systems,2025Q3,984700,2,4.3,4.35
+Construction & Real Estate,MEP Systems,Electrical Systems,2025Q4,613000,1,4.1,3.5
+Construction & Real Estate,MEP Systems,HVAC Equipment,2025Q1,2547200,4,4.4,4.2
+Construction & Real Estate,MEP Systems,HVAC Equipment,2025Q2,1265500,1,4.8,4.05
+Construction & Real Estate,MEP Systems,HVAC Equipment,2025Q3,2340600,4,4.48,4.42
+Construction & Real Estate,MEP Systems,HVAC Equipment,2025Q4,2923400,4,4.65,4.12
+Construction & Real Estate,MEP Systems,Plumbing Systems,2025Q1,2046100,4,4.44,4.16
+Construction & Real Estate,MEP Systems,Plumbing Systems,2025Q2,2486900,4,4.2,4.48
+Construction & Real Estate,MEP Systems,Plumbing Systems,2025Q3,638500,2,4.35,4.15
+Construction & Real Estate,MEP Systems,Plumbing Systems,2025Q4,402400,2,3.95,4.7
+Energy & Utilities,Electricity,Backup Power,2025Q1,7017800,5,4.44,4.42
+Energy & Utilities,Electricity,Backup Power,2025Q2,1735100,2,4.35,4.15
+Energy & Utilities,Electricity,Backup Power,2025Q3,2309000,2,3.9,3.95
+Energy & Utilities,Electricity,Backup Power,2025Q4,3129700,3,4.2,4.37
+Energy & Utilities,Electricity,Grid Electricity,2025Q1,9379600,5,4.4,4.56
+Energy & Utilities,Electricity,Grid Electricity,2025Q2,5222700,3,4.32,4.28
+Energy & Utilities,Electricity,Grid Electricity,2025Q3,2371700,2,4.77,4.27
+Energy & Utilities,Electricity,Grid Electricity,2025Q4,1218600,2,4.33,4.3
+Energy & Utilities,Electricity,Renewable Electricity,2025Q1,3607900,3,4.53,4.3
+Energy & Utilities,Electricity,Renewable Electricity,2025Q2,2967800,3,4.53,4.33
+Energy & Utilities,Electricity,Renewable Electricity,2025Q3,3587700,3,4.53,4.43
+Energy & Utilities,Electricity,Renewable Electricity,2025Q4,3215700,2,3.97,3.97
+Energy & Utilities,Fuels,Aviation Fuel,2025Q1,4404000,7,4.36,4.18
+Energy & Utilities,Fuels,Aviation Fuel,2025Q2,1816700,5,4.53,4.1
+Energy & Utilities,Fuels,Aviation Fuel,2025Q3,1574500,3,4.67,4.5
+Energy & Utilities,Fuels,Aviation Fuel,2025Q4,1344700,3,4.1,4.67
+Energy & Utilities,Fuels,Biofuels,2025Q1,1130200,4,4.4,4.3
+Energy & Utilities,Fuels,Biofuels,2025Q2,1938800,4,4.13,4.15
+Energy & Utilities,Fuels,Biofuels,2025Q3,1302400,3,4.7,3.97
+Energy & Utilities,Fuels,Biofuels,2025Q4,2618200,5,4.47,4.34
+Energy & Utilities,Fuels,Diesel,2025Q1,1089100,2,4.1,4.5
+Energy & Utilities,Fuels,Diesel,2025Q2,1953000,3,4.2,4.53
+Energy & Utilities,Fuels,Diesel,2025Q3,1153100,2,3.95,4.1
+Energy & Utilities,Fuels,Diesel,2025Q4,879700,2,4.45,4.6
+Energy & Utilities,Fuels,Natural Gas,2025Q1,3665100,6,4.35,4.05
+Energy & Utilities,Fuels,Natural Gas,2025Q2,1639100,2,4.43,4.17
+Energy & Utilities,Fuels,Natural Gas,2025Q3,2529300,2,4.4,4.0
+Energy & Utilities,Fuels,Natural Gas,2025Q4,1568600,3,4.54,4.02
+Energy & Utilities,Renewable Equipment,Battery Storage,2025Q1,5788600,5,4.63,4.39
+Energy & Utilities,Renewable Equipment,Battery Storage,2025Q2,3583900,4,4.63,4.4
+Energy & Utilities,Renewable Equipment,Battery Storage,2025Q3,1028400,1,4.6,3.95
+Energy & Utilities,Renewable Equipment,Battery Storage,2025Q4,1033900,2,4.35,4.2
+Energy & Utilities,Renewable Equipment,Solar Panels,2025Q1,2357100,3,4.57,4.2
+Energy & Utilities,Renewable Equipment,Solar Panels,2025Q2,3465300,5,4.44,4.48
+Energy & Utilities,Renewable Equipment,Solar Panels,2025Q3,1524600,4,4.47,3.92
+Energy & Utilities,Renewable Equipment,Solar Panels,2025Q4,2387000,3,4.46,4.04
+Energy & Utilities,Renewable Equipment,Wind Turbines,2025Q1,2705000,2,4.6,4.65
+Energy & Utilities,Renewable Equipment,Wind Turbines,2025Q2,5656800,4,4.48,4.2
+Energy & Utilities,Renewable Equipment,Wind Turbines,2025Q3,647800,1,4.8,4.6
+Energy & Utilities,Renewable Equipment,Wind Turbines,2025Q4,1547000,2,4.3,4.4
+Facilities & Corporate Services,Facilities Management,Building Maintenance,2025Q1,2880900,4,4.68,4.4
+Facilities & Corporate Services,Facilities Management,Building Maintenance,2025Q2,911900,3,4.2,4.43
+Facilities & Corporate Services,Facilities Management,Building Maintenance,2025Q3,1742600,3,4.42,4.15
+Facilities & Corporate Services,Facilities Management,Building Maintenance,2025Q4,1590400,3,4.3,3.8
+Facilities & Corporate Services,Facilities Management,Cleaning Services,2025Q1,993600,3,4.55,4.2
+Facilities & Corporate Services,Facilities Management,Cleaning Services,2025Q2,3230400,6,4.47,4.43
+Facilities & Corporate Services,Facilities Management,Cleaning Services,2025Q4,3055600,4,4.47,4.72
+Facilities & Corporate Services,Facilities Management,Security Services,2025Q1,716400,2,4.35,4.65
+Facilities & Corporate Services,Facilities Management,Security Services,2025Q2,1117900,2,4.45,4.7
+Facilities & Corporate Services,Facilities Management,Security Services,2025Q3,2546500,2,4.12,4.62
+Facilities & Corporate Services,Facilities Management,Security Services,2025Q4,1090700,2,4.4,4.25
+Facilities & Corporate Services,Office Services,Office Furniture,2025Q1,1554100,4,4.48,4.46
+Facilities & Corporate Services,Office Services,Office Furniture,2025Q2,571700,2,4.2,4.5
+Facilities & Corporate Services,Office Services,Office Furniture,2025Q3,1528800,3,4.33,4.3
+Facilities & Corporate Services,Office Services,Office Furniture,2025Q4,479800,2,4.33,4.37
+Facilities & Corporate Services,Office Services,Office Supplies,2025Q1,1647040,5,4.38,4.0
+Facilities & Corporate Services,Office Services,Office Supplies,2025Q2,1506520,5,4.42,4.34
+Facilities & Corporate Services,Office Services,Office Supplies,2025Q3,2375840,5,4.61,4.41
+Facilities & Corporate Services,Office Services,Office Supplies,2025Q4,2087400,4,4.3,4.42
+Facilities & Corporate Services,Office Services,Printing Services,2025Q1,3527100,6,4.43,4.27
+Facilities & Corporate Services,Office Services,Printing Services,2025Q2,2066300,2,4.3,4.3
+Facilities & Corporate Services,Office Services,Printing Services,2025Q3,2537860,5,4.5,4.14
+Facilities & Corporate Services,Office Services,Printing Services,2025Q4,1853300,4,4.45,4.1
+Facilities & Corporate Services,Travel & Events,Business Travel,2025Q1,1716300,4,4.58,4.26
+Facilities & Corporate Services,Travel & Events,Business Travel,2025Q2,2093500,5,4.33,4.27
+Facilities & Corporate Services,Travel & Events,Business Travel,2025Q3,3287000,4,4.6,4.42
+Facilities & Corporate Services,Travel & Events,Business Travel,2025Q4,2299700,4,4.68,4.06
+Facilities & Corporate Services,Travel & Events,Event Management,2025Q1,1221900,3,4.4,4.1
+Facilities & Corporate Services,Travel & Events,Event Management,2025Q2,2181700,5,4.3,4.25
+Facilities & Corporate Services,Travel & Events,Event Management,2025Q3,1126100,3,4.33,4.37
+Facilities & Corporate Services,Travel & Events,Event Management,2025Q4,787500,2,4.1,4.45
+Food & Beverages,Beverages,Coffee,2025Q1,5134800,4,4.23,4.32
+Food & Beverages,Beverages,Coffee,2025Q2,3887700,3,4.5,4.6
+Food & Beverages,Beverages,Coffee,2025Q3,1433300,1,4.35,4.25
+Food & Beverages,Beverages,Coffee,2025Q4,1156400,2,4.55,4.35
+Food & Beverages,Beverages,Tea,2025Q1,1825100,4,4.6,4.06
+Food & Beverages,Beverages,Tea,2025Q2,669400,3,4.7,4.37
+Food & Beverages,Beverages,Tea,2025Q3,983500,3,4.43,4.73
+Food & Beverages,Beverages,Tea,2025Q4,1376900,4,4.4,4.58
+Food & Beverages,Dairy Products,Cheese,2025Q1,4083300,6,4.42,4.2
+Food & Beverages,Dairy Products,Cheese,2025Q2,988300,2,4.45,4.6
+Food & Beverages,Dairy Products,Cheese,2025Q3,1601500,3,4.7,4.08
+Food & Beverages,Dairy Products,Cheese,2025Q4,2369100,5,4.24,4.2
+Food & Beverages,Dairy Products,Milk & Cream,2025Q1,4961800,6,4.41,4.41
+Food & Beverages,Dairy Products,Milk & Cream,2025Q2,2827600,3,4.58,4.4
+Food & Beverages,Dairy Products,Milk & Cream,2025Q3,2300400,4,4.56,4.32
+Food & Beverages,Dairy Products,Milk & Cream,2025Q4,486500,1,4.7,4.5
+Food & Beverages,Edible Oils,Canola Oil,2025Q1,1153200,3,4.47,4.53
+Food & Beverages,Edible Oils,Canola Oil,2025Q2,1267200,3,4.35,4.1
+Food & Beverages,Edible Oils,Canola Oil,2025Q3,3556500,4,4.5,4.19
+Food & Beverages,Edible Oils,Canola Oil,2025Q4,1506400,4,4.68,4.4
+Food & Beverages,Edible Oils,Coconut Oil,2025Q1,2402700,4,4.2,4.38
+Food & Beverages,Edible Oils,Coconut Oil,2025Q2,3358200,5,4.34,4.26
+Food & Beverages,Edible Oils,Coconut Oil,2025Q3,953300,2,4.7,4.0
+Food & Beverages,Edible Oils,Coconut Oil,2025Q4,1478300,3,4.22,4.28
+Food & Beverages,Edible Oils,Olive Oil,2025Q1,4267700,7,4.36,4.36
+Food & Beverages,Edible Oils,Olive Oil,2025Q2,1843500,4,4.54,4.32
+Food & Beverages,Edible Oils,Olive Oil,2025Q3,2037000,4,4.42,4.5
+Food & Beverages,Edible Oils,Olive Oil,2025Q4,804100,1,4.9,4.1
+Food & Beverages,Edible Oils,Palm Oil,2025Q1,3833300,5,4.54,4.1
+Food & Beverages,Edible Oils,Palm Oil,2025Q2,1828300,3,4.47,4.38
+Food & Beverages,Edible Oils,Palm Oil,2025Q3,1728900,2,4.13,4.13
+Food & Beverages,Edible Oils,Palm Oil,2025Q4,694500,1,4.3,5.0
+Food & Beverages,Edible Oils,Peanut Oil,2025Q1,194400,1,4.4,4.2
+Food & Beverages,Edible Oils,Peanut Oil,2025Q2,1071100,2,4.25,3.85
+Food & Beverages,Edible Oils,Peanut Oil,2025Q3,2626200,3,4.6,4.05
+Food & Beverages,Edible Oils,Peanut Oil,2025Q4,2342000,3,4.62,3.88
+Food & Beverages,Edible Oils,Rice Bran Oil,2025Q1,3186900,4,4.46,4.02
+Food & Beverages,Edible Oils,Rice Bran Oil,2025Q2,2208300,4,4.47,4.2
+Food & Beverages,Edible Oils,Rice Bran Oil,2025Q3,1399100,3,4.13,4.33
+Food & Beverages,Edible Oils,Rice Bran Oil,2025Q4,1366000,2,4.23,4.27
+Food & Beverages,Edible Oils,Soybean Oil,2025Q1,723600,2,4.55,4.4
+Food & Beverages,Edible Oils,Soybean Oil,2025Q2,1451000,4,4.36,4.18
+Food & Beverages,Edible Oils,Soybean Oil,2025Q3,1116900,1,4.15,4.8
+Food & Beverages,Edible Oils,Soybean Oil,2025Q4,212700,1,4.0,4.5
+Food & Beverages,Edible Oils,Sunflower Oil,2025Q1,2519300,4,4.44,4.0
+Food & Beverages,Edible Oils,Sunflower Oil,2025Q2,1787200,4,4.65,4.3
+Food & Beverages,Edible Oils,Sunflower Oil,2025Q3,1202500,3,4.23,4.43
+Food & Beverages,Edible Oils,Sunflower Oil,2025Q4,1124300,2,4.55,4.0
+Food & Beverages,Grains & Cereals,Corn/Maize,2025Q1,3890500,4,4.6,4.1
+Food & Beverages,Grains & Cereals,Corn/Maize,2025Q2,1939300,3,4.27,4.47
+Food & Beverages,Grains & Cereals,Corn/Maize,2025Q3,1949400,5,4.45,4.2
+Food & Beverages,Grains & Cereals,Corn/Maize,2025Q4,2259900,4,4.37,4.24
+Food & Beverages,Grains & Cereals,Rice,2025Q1,2116500,4,4.62,4.25
+Food & Beverages,Grains & Cereals,Rice,2025Q2,2777100,5,4.48,4.18
+Food & Beverages,Grains & Cereals,Rice,2025Q3,1961400,4,4.25,4.2
+Food & Beverages,Grains & Cereals,Rice,2025Q4,1800500,3,4.38,4.17
+Food & Beverages,Grains & Cereals,Wheat,2025Q1,3857900,4,4.58,4.53
+Food & Beverages,Grains & Cereals,Wheat,2025Q2,2957300,3,4.48,4.46
+Food & Beverages,Grains & Cereals,Wheat,2025Q3,889300,2,4.35,4.5
+Food & Beverages,Grains & Cereals,Wheat,2025Q4,146100,1,3.9,4.9
+Food & Beverages,Packaging Materials,Aluminum Cans,2025Q1,3555000,7,4.65,4.46
+Food & Beverages,Packaging Materials,Aluminum Cans,2025Q2,1939200,5,4.37,4.25
+Food & Beverages,Packaging Materials,Aluminum Cans,2025Q3,1888700,4,4.3,4.58
+Food & Beverages,Packaging Materials,Aluminum Cans,2025Q4,1503900,3,4.22,4.25
+Food & Beverages,Packaging Materials,Food-Grade Plastics,2025Q1,3262500,6,4.48,4.48
+Food & Beverages,Packaging Materials,Food-Grade Plastics,2025Q2,2397200,4,4.5,4.32
+Food & Beverages,Packaging Materials,Food-Grade Plastics,2025Q3,5856800,6,4.45,4.16
+Food & Beverages,Packaging Materials,Food-Grade Plastics,2025Q4,811900,1,4.7,4.4
+Food & Beverages,Packaging Materials,Glass Containers,2025Q1,1028000,2,4.65,4.55
+Food & Beverages,Packaging Materials,Glass Containers,2025Q2,2413600,3,4.28,4.15
+Food & Beverages,Packaging Materials,Glass Containers,2025Q3,1235500,2,4.67,4.27
+Food & Beverages,Packaging Materials,Glass Containers,2025Q4,1934700,3,4.65,4.28
+Food & Beverages,Proteins,Beef,2025Q1,6277600,4,4.47,4.5
+Food & Beverages,Proteins,Beef,2025Q2,6560200,5,4.62,4.18
+Food & Beverages,Proteins,Beef,2025Q3,1334200,3,4.2,4.5
+Food & Beverages,Proteins,Beef,2025Q4,911000,2,4.9,3.85
+Food & Beverages,Proteins,Poultry,2025Q1,6613200,5,4.53,4.32
+Food & Beverages,Proteins,Poultry,2025Q2,6096900,5,4.36,4.2
+Food & Beverages,Proteins,Poultry,2025Q3,2053800,3,4.43,3.7
+Food & Beverages,Proteins,Poultry,2025Q4,1582100,2,4.5,4.37
+Food & Beverages,Proteins,Seafood,2025Q1,3115400,4,4.62,4.18
+Food & Beverages,Proteins,Seafood,2025Q2,2921100,4,4.66,4.2
+Food & Beverages,Proteins,Seafood,2025Q3,1088400,3,4.44,4.1
+Food & Beverages,Proteins,Seafood,2025Q4,1766100,3,4.27,4.17
+Food & Beverages,Spices & Seasonings,Pepper,2025Q1,1467800,3,4.53,4.1
+Food & Beverages,Spices & Seasonings,Pepper,2025Q2,3339000,4,4.53,4.51
+Food & Beverages,Spices & Seasonings,Pepper,2025Q3,2072500,2,4.53,4.53
+Food & Beverages,Spices & Seasonings,Pepper,2025Q4,339700,1,4.4,4.9
+Food & Beverages,Spices & Seasonings,Vanilla,2025Q1,5614200,6,4.32,4.16
+Food & Beverages,Spices & Seasonings,Vanilla,2025Q2,1961700,4,4.35,4.35
+Food & Beverages,Spices & Seasonings,Vanilla,2025Q3,1862200,3,4.43,4.2
+Food & Beverages,Spices & Seasonings,Vanilla,2025Q4,3761000,5,4.58,4.35
+Food & Beverages,Sweeteners,Sugar,2025Q1,2060400,3,4.63,4.33
+Food & Beverages,Sweeteners,Sugar,2025Q2,2181500,2,4.4,4.4
+Food & Beverages,Sweeteners,Sugar,2025Q3,431700,1,4.5,4.4
+Food & Beverages,Sweeteners,Sugar,2025Q4,2427900,2,4.5,4.08
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2025Q1,5236800,5,4.33,4.12
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2025Q2,4030000,5,4.46,4.14
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2025Q3,1062700,2,4.45,3.95
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,2025Q4,2423100,3,4.6,4.1
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,2025Q1,3295500,4,4.48,4.15
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,2025Q2,3118300,6,4.39,4.41
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,2025Q3,1348100,3,4.7,4.27
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,2025Q4,3281600,7,4.54,4.45
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,2025Q1,13220500,6,4.35,4.16
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,2025Q2,7934700,3,4.35,4.53
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,2025Q3,2478000,2,4.95,4.6
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,2025Q4,4827700,2,4.47,4.4
+Healthcare & Life Sciences,Medical Devices,Implants,2025Q1,5525700,3,4.5,4.53
+Healthcare & Life Sciences,Medical Devices,Implants,2025Q3,1313000,1,4.5,4.9
+Healthcare & Life Sciences,Medical Devices,Implants,2025Q4,3823800,2,4.53,4.42
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2025Q1,8019200,5,4.31,4.0
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2025Q2,1212300,1,5.0,4.0
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2025Q3,2806400,3,4.57,4.07
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,2025Q4,11966100,5,4.41,4.42
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,2025Q1,5721800,4,4.75,4.33
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,2025Q2,2969100,3,4.53,4.2
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,2025Q4,3172400,3,4.73,3.97
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2025Q1,3467400,4,4.52,4.7
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2025Q2,1396200,3,4.77,4.47
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2025Q3,2949800,3,4.62,4.38
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,2025Q4,1929800,4,4.4,4.3
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,2025Q1,3197000,6,4.69,4.23
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,2025Q2,689900,1,4.45,3.9
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,2025Q3,786200,1,4.25,4.55
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,2025Q4,1532900,3,4.2,4.28
+Healthcare & Life Sciences,Medical Supplies,Wound Care,2025Q1,3043800,5,4.32,4.12
+Healthcare & Life Sciences,Medical Supplies,Wound Care,2025Q2,887100,2,4.3,4.25
+Healthcare & Life Sciences,Medical Supplies,Wound Care,2025Q3,2342900,3,4.22,4.25
+Healthcare & Life Sciences,Medical Supplies,Wound Care,2025Q4,1853300,1,4.03,4.2
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,2025Q1,13241100,3,4.36,4.16
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,2025Q2,7376700,3,4.57,4.23
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,2025Q3,4973300,1,4.55,4.75
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,2025Q4,6291600,2,4.4,4.45
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2025Q1,9536400,3,4.83,4.67
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2025Q2,13533100,5,4.74,4.62
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2025Q3,10215900,4,4.43,4.3
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,2025Q4,1002500,1,4.1,3.65
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,2025Q1,10235200,5,4.6,4.28
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,2025Q2,7867900,3,4.34,4.54
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,2025Q3,12571600,4,4.45,4.03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,2025Q4,3301300,1,4.25,4.45
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,2025Q1,5957300,4,4.55,4.15
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,2025Q2,9044600,4,4.36,4.22
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,2025Q3,12546000,4,4.7,4.27
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,2025Q4,11413500,4,4.49,4.16
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2025Q1,11191200,4,4.5,4.18
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2025Q2,6679400,4,4.4,4.42
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2025Q3,2915800,2,4.33,4.03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,2025Q4,2832700,2,4.85,3.65
+Human Resources,HR Technology,Benefits Administration,2025Q1,1646200,4,4.33,4.55
+Human Resources,HR Technology,Benefits Administration,2025Q2,1895100,3,4.6,4.26
+Human Resources,HR Technology,Benefits Administration,2025Q3,1063700,2,4.8,4.25
+Human Resources,HR Technology,Benefits Administration,2025Q4,1524900,3,4.38,4.08
+Human Resources,HR Technology,HRIS Systems,2025Q1,1939600,4,4.12,4.28
+Human Resources,HR Technology,HRIS Systems,2025Q2,516700,2,4.75,4.4
+Human Resources,HR Technology,HRIS Systems,2025Q3,917700,2,4.65,3.9
+Human Resources,HR Technology,HRIS Systems,2025Q4,591000,1,5.0,3.8
+Human Resources,HR Technology,Payroll Services,2025Q1,2892300,4,4.36,4.5
+Human Resources,HR Technology,Payroll Services,2025Q2,2175400,4,4.33,4.38
+Human Resources,HR Technology,Payroll Services,2025Q3,453600,1,4.7,4.7
+Human Resources,HR Technology,Payroll Services,2025Q4,1176800,2,4.6,4.4
+Human Resources,Learning & Development,E-Learning Platforms,2025Q1,2776500,3,4.5,4.42
+Human Resources,Learning & Development,E-Learning Platforms,2025Q2,2231800,3,4.38,4.4
+Human Resources,Learning & Development,E-Learning Platforms,2025Q3,171300,1,4.5,3.9
+Human Resources,Learning & Development,E-Learning Platforms,2025Q4,1292700,1,4.1,4.25
+Human Resources,Learning & Development,Leadership Development,2025Q1,2002300,5,4.46,4.22
+Human Resources,Learning & Development,Leadership Development,2025Q2,3675900,6,4.36,4.28
+Human Resources,Learning & Development,Leadership Development,2025Q3,1415500,2,4.57,4.13
+Human Resources,Learning & Development,Leadership Development,2025Q4,1832200,3,4.52,4.04
+Human Resources,Learning & Development,Training Programs,2025Q1,1086000,4,4.35,4.25
+Human Resources,Learning & Development,Training Programs,2025Q2,194400,1,4.7,4.5
+Human Resources,Learning & Development,Training Programs,2025Q3,960200,3,4.53,4.47
+Human Resources,Staffing Services,Executive Search,2025Q1,2222200,3,4.7,4.17
+Human Resources,Staffing Services,Executive Search,2025Q2,2288400,4,4.35,4.4
+Human Resources,Staffing Services,Executive Search,2025Q3,1208200,2,4.65,4.45
+Human Resources,Staffing Services,Executive Search,2025Q4,1367800,1,4.65,4.4
+Human Resources,Staffing Services,Permanent Recruitment,2025Q1,2915800,5,4.41,4.36
+Human Resources,Staffing Services,Permanent Recruitment,2025Q2,3339500,5,4.43,4.3
+Human Resources,Staffing Services,Permanent Recruitment,2025Q3,2593100,4,4.64,4.12
+Human Resources,Staffing Services,Permanent Recruitment,2025Q4,1084000,3,4.3,3.83
+Human Resources,Staffing Services,Temporary Staffing,2025Q1,1533100,4,4.42,4.35
+Human Resources,Staffing Services,Temporary Staffing,2025Q2,2963000,4,4.45,4.42
+Human Resources,Staffing Services,Temporary Staffing,2025Q3,352500,1,4.7,4.6
+Human Resources,Staffing Services,Temporary Staffing,2025Q4,915500,2,4.3,4.8
+Information Technology,Cloud Services,Cloud Storage,2025Q1,1876500,4,4.38,4.33
+Information Technology,Cloud Services,Cloud Storage,2025Q2,532300,3,4.7,4.23
+Information Technology,Cloud Services,Cloud Storage,2025Q3,1727700,3,4.23,4.63
+Information Technology,Cloud Services,Cloud Storage,2025Q4,1814700,3,4.32,4.45
+Information Technology,Cloud Services,IaaS,2025Q1,4012500,4,4.83,4.65
+Information Technology,Cloud Services,IaaS,2025Q2,4216300,4,4.76,4.71
+Information Technology,Cloud Services,IaaS,2025Q3,222800,1,3.9,4.5
+Information Technology,Cloud Services,IaaS,2025Q4,2390000,2,4.07,4.37
+Information Technology,Cloud Services,PaaS,2025Q1,1111400,4,4.36,4.38
+Information Technology,Cloud Services,PaaS,2025Q2,169200,1,4.4,4.6
+Information Technology,Cloud Services,PaaS,2025Q3,2644300,2,4.38,4.1
+Information Technology,Cloud Services,PaaS,2025Q4,2535900,3,4.4,4.22
+Information Technology,Cloud Services,SaaS,2025Q1,1811200,5,4.62,4.68
+Information Technology,Cloud Services,SaaS,2025Q2,450200,2,4.3,3.8
+Information Technology,Cloud Services,SaaS,2025Q3,3368500,5,4.6,4.15
+Information Technology,Cloud Services,SaaS,2025Q4,131400,1,4.3,4.7
+Information Technology,Cybersecurity,Endpoint Security,2025Q1,4474100,3,4.3,4.59
+Information Technology,Cybersecurity,Endpoint Security,2025Q2,650700,1,4.8,4.7
+Information Technology,Cybersecurity,Endpoint Security,2025Q3,1828200,2,4.87,4.87
+Information Technology,Cybersecurity,Endpoint Security,2025Q4,3829400,4,4.25,4.03
+Information Technology,Cybersecurity,Identity Management,2025Q1,1257900,3,4.7,4.22
+Information Technology,Cybersecurity,Identity Management,2025Q2,1887200,3,4.62,4.4
+Information Technology,Cybersecurity,Identity Management,2025Q3,1434800,4,4.55,4.17
+Information Technology,Cybersecurity,Identity Management,2025Q4,569100,1,4.4,3.6
+Information Technology,Cybersecurity,Network Security,2025Q1,630400,2,4.45,4.55
+Information Technology,Cybersecurity,Network Security,2025Q2,1372600,3,4.45,4.7
+Information Technology,Cybersecurity,Network Security,2025Q3,1630100,2,4.53,3.93
+Information Technology,Cybersecurity,Network Security,2025Q4,1468500,2,4.83,4.37
+Information Technology,Cybersecurity,Security Operations,2025Q1,2601600,5,4.61,4.46
+Information Technology,Cybersecurity,Security Operations,2025Q2,2121200,3,4.25,4.33
+Information Technology,Cybersecurity,Security Operations,2025Q3,1880500,3,4.83,4.3
+Information Technology,Cybersecurity,Security Operations,2025Q4,3593200,5,4.31,4.56
+Information Technology,Hardware,Desktops,2025Q1,3371500,4,4.56,4.5
+Information Technology,Hardware,Desktops,2025Q2,1787700,3,4.47,4.5
+Information Technology,Hardware,Desktops,2025Q3,935600,2,4.65,4.4
+Information Technology,Hardware,Desktops,2025Q4,2836700,3,4.62,4.12
+Information Technology,Hardware,Laptops,2025Q1,3542400,4,4.67,4.58
+Information Technology,Hardware,Laptops,2025Q2,4370100,4,4.6,4.58
+Information Technology,Hardware,Laptops,2025Q3,2406900,3,4.73,3.97
+Information Technology,Hardware,Laptops,2025Q4,3027500,2,4.17,4.2
+Information Technology,Hardware,Network Equipment,2025Q1,2035500,3,4.2,4.5
+Information Technology,Hardware,Network Equipment,2025Q2,4112900,5,4.4,4.28
+Information Technology,Hardware,Network Equipment,2025Q3,2875900,3,4.4,4.27
+Information Technology,Hardware,Peripherals,2025Q1,3179500,4,4.5,4.25
+Information Technology,Hardware,Peripherals,2025Q2,1502500,2,4.4,4.55
+Information Technology,Hardware,Peripherals,2025Q3,3047100,3,4.5,3.97
+Information Technology,Hardware,Peripherals,2025Q4,3061200,2,4.53,4.07
+Information Technology,Hardware,Servers,2025Q1,2008800,2,4.75,4.65
+Information Technology,Hardware,Servers,2025Q2,2120900,2,4.47,4.7
+Information Technology,Hardware,Servers,2025Q3,3180400,4,4.46,4.28
+Information Technology,Hardware,Servers,2025Q4,1136200,2,4.4,4.55
+Information Technology,Hardware,Storage Systems,2025Q1,3053900,2,4.57,4.2
+Information Technology,Hardware,Storage Systems,2025Q2,1696200,3,4.47,4.73
+Information Technology,Hardware,Storage Systems,2025Q3,1528800,1,4.4,3.5
+Information Technology,Hardware,Storage Systems,2025Q4,5262200,3,4.18,4.5
+Information Technology,Software,Database Software,2025Q1,2387700,4,4.76,4.38
+Information Technology,Software,Database Software,2025Q2,384500,1,4.7,4.3
+Information Technology,Software,Database Software,2025Q3,1017800,3,4.2,4.13
+Information Technology,Software,Database Software,2025Q4,1225000,2,4.3,4.37
+Information Technology,Software,Development Tools,2025Q1,1697000,2,4.57,4.5
+Information Technology,Software,Development Tools,2025Q2,1560100,3,4.53,4.37
+Information Technology,Software,Development Tools,2025Q3,1617600,2,4.33,3.9
+Information Technology,Software,Development Tools,2025Q4,920700,2,4.0,4.15
+Information Technology,Software,Enterprise Software,2025Q1,5085600,6,4.51,4.46
+Information Technology,Software,Enterprise Software,2025Q3,7061600,6,4.48,4.18
+Information Technology,Software,Enterprise Software,2025Q4,359500,1,4.0,3.85
+Information Technology,Software,Productivity Software,2025Q1,3282000,5,4.45,4.37
+Information Technology,Software,Productivity Software,2025Q2,1850200,2,4.57,4.37
+Information Technology,Software,Productivity Software,2025Q3,2554000,4,4.12,4.24
+Information Technology,Software,Productivity Software,2025Q4,2308300,4,4.25,4.7
+Information Technology,Telecommunications,Internet Services,2025Q1,1281900,2,4.45,4.45
+Information Technology,Telecommunications,Internet Services,2025Q2,1909900,3,4.53,4.45
+Information Technology,Telecommunications,Internet Services,2025Q3,2450700,4,4.4,4.62
+Information Technology,Telecommunications,Internet Services,2025Q4,1359600,2,4.5,4.25
+Information Technology,Telecommunications,Mobile Services,2025Q1,2795700,5,4.33,4.38
+Information Technology,Telecommunications,Mobile Services,2025Q2,2004300,3,4.2,4.38
+Information Technology,Telecommunications,Mobile Services,2025Q3,2514100,4,4.42,4.4
+Information Technology,Telecommunications,Mobile Services,2025Q4,1129700,2,4.5,3.85
+Logistics & Transportation,Fleet Services,Fleet Maintenance,2025Q1,1819400,3,4.35,4.17
+Logistics & Transportation,Fleet Services,Fleet Maintenance,2025Q2,1662000,2,4.67,4.17
+Logistics & Transportation,Fleet Services,Fleet Maintenance,2025Q3,3862700,5,4.32,4.18
+Logistics & Transportation,Fleet Services,Fleet Maintenance,2025Q4,5410800,7,4.41,4.28
+Logistics & Transportation,Fleet Services,Fleet Telematics,2025Q1,3101200,6,4.47,4.17
+Logistics & Transportation,Fleet Services,Fleet Telematics,2025Q2,1921900,2,4.57,4.67
+Logistics & Transportation,Fleet Services,Fleet Telematics,2025Q3,4933700,5,4.32,4.34
+Logistics & Transportation,Fleet Services,Fleet Telematics,2025Q4,984900,2,4.45,4.15
+Logistics & Transportation,Fleet Services,Fleet Vehicles,2025Q1,3056900,5,4.38,4.6
+Logistics & Transportation,Fleet Services,Fleet Vehicles,2025Q2,3219600,5,4.38,4.15
+Logistics & Transportation,Fleet Services,Fleet Vehicles,2025Q3,1324700,2,4.95,3.9
+Logistics & Transportation,Fleet Services,Fleet Vehicles,2025Q4,1767500,2,4.27,4.07
+Logistics & Transportation,Freight Services,Air Freight,2025Q1,2945900,3,4.47,4.25
+Logistics & Transportation,Freight Services,Air Freight,2025Q2,4166600,4,4.45,4.35
+Logistics & Transportation,Freight Services,Air Freight,2025Q3,357600,1,4.3,3.9
+Logistics & Transportation,Freight Services,Air Freight,2025Q4,3217600,4,4.43,4.13
+Logistics & Transportation,Freight Services,Ocean Freight,2025Q1,2592000,2,4.75,4.55
+Logistics & Transportation,Freight Services,Ocean Freight,2025Q2,3857700,3,4.62,4.28
+Logistics & Transportation,Freight Services,Ocean Freight,2025Q3,2453800,2,4.17,4.55
+Logistics & Transportation,Freight Services,Ocean Freight,2025Q4,254800,1,4.8,4.3
+Logistics & Transportation,Freight Services,Rail Freight,2025Q1,2235100,2,4.7,4.37
+Logistics & Transportation,Freight Services,Rail Freight,2025Q2,2888300,3,4.47,4.22
+Logistics & Transportation,Freight Services,Rail Freight,2025Q3,1298400,2,4.4,3.75
+Logistics & Transportation,Freight Services,Rail Freight,2025Q4,916700,1,4.2,4.2
+Logistics & Transportation,Freight Services,Road Freight,2025Q1,2230800,4,4.26,4.38
+Logistics & Transportation,Freight Services,Road Freight,2025Q2,1872700,3,4.63,4.53
+Logistics & Transportation,Freight Services,Road Freight,2025Q3,2657700,2,4.68,4.2
+Logistics & Transportation,Freight Services,Road Freight,2025Q4,1504100,3,4.44,3.98
+Logistics & Transportation,Warehousing,3PL Services,2025Q1,3800200,4,4.52,4.48
+Logistics & Transportation,Warehousing,3PL Services,2025Q2,2973900,5,4.46,4.46
+Logistics & Transportation,Warehousing,3PL Services,2025Q3,1669900,3,4.37,3.9
+Logistics & Transportation,Warehousing,3PL Services,2025Q4,2258800,4,4.38,4.58
+Logistics & Transportation,Warehousing,Cold Storage,2025Q1,3045900,3,4.64,4.34
+Logistics & Transportation,Warehousing,Cold Storage,2025Q2,3013700,5,4.48,4.55
+Logistics & Transportation,Warehousing,Cold Storage,2025Q3,749400,1,4.15,4.25
+Logistics & Transportation,Warehousing,Cold Storage,2025Q4,2070600,3,4.32,4.5
+Logistics & Transportation,Warehousing,Distribution Centers,2025Q1,1893300,3,4.77,4.7
+Logistics & Transportation,Warehousing,Distribution Centers,2025Q2,2337800,4,4.6,3.9
+Logistics & Transportation,Warehousing,Distribution Centers,2025Q3,3847200,6,4.52,4.42
+Logistics & Transportation,Warehousing,Distribution Centers,2025Q4,1167700,4,4.78,4.17
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2025Q1,1372800,3,4.55,4.53
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2025Q2,5019800,5,4.24,4.21
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2025Q3,632500,1,4.9,4.6
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,2025Q4,1306000,3,4.4,4.03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,2025Q1,2898700,3,4.65,4.3
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,2025Q2,4102400,4,4.31,4.36
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,2025Q3,907500,2,4.0,4.35
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,2025Q4,542600,3,4.37,4.37
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,2026Q1,157300,1,4.7,4.2
+Manufacturing & Industrial,Chemicals,Petrochemicals,2025Q1,3020200,6,4.44,4.26
+Manufacturing & Industrial,Chemicals,Petrochemicals,2025Q2,4354100,6,4.26,4.41
+Manufacturing & Industrial,Chemicals,Petrochemicals,2025Q3,1679800,3,4.43,4.07
+Manufacturing & Industrial,Chemicals,Petrochemicals,2025Q4,1901500,4,4.57,4.38
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,2025Q1,702000,1,4.7,4.5
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,2025Q2,2566800,4,4.5,4.6
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,2025Q3,1273200,3,4.2,4.4
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,2025Q4,355100,1,4.3,4.4
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,2025Q1,4571000,3,4.58,4.4
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,2025Q2,8864600,4,4.58,4.42
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,2025Q3,384100,1,4.4,3.8
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,2025Q4,270800,1,4.1,4.3
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,2025Q1,6518600,3,4.73,4.47
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,2025Q2,5783000,3,4.77,4.67
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,2025Q3,2538000,1,4.8,4.7
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,2025Q4,9201700,2,4.35,4.45
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,2025Q1,3822500,5,4.4,4.48
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,2025Q2,3466100,3,4.77,4.5
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,2025Q3,2076200,3,4.15,4.45
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,2025Q4,6503000,3,4.28,4.12
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2025Q1,2908500,3,4.83,4.73
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2025Q2,2741100,2,4.55,4.5
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2025Q3,1952400,2,4.4,4.55
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,2025Q4,10702200,4,4.22,4.36
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,2025Q1,1803200,4,4.4,4.25
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,2025Q2,2291200,4,4.18,4.52
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,2025Q3,2786800,3,4.26,4.24
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,2025Q4,544000,1,4.65,4.85
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,2025Q1,615400,3,4.33,4.4
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,2025Q2,443200,2,4.3,4.5
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,2025Q3,2011200,4,4.28,4.0
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,2025Q4,3299400,6,4.44,4.23
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,2025Q1,3004500,7,4.47,4.28
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,2025Q2,2188400,4,4.48,4.34
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,2025Q3,340900,2,4.2,3.8
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,2025Q4,1139500,3,4.35,4.1
+Manufacturing & Industrial,MRO Supplies,Spare Parts,2025Q1,2292400,4,4.22,4.04
+Manufacturing & Industrial,MRO Supplies,Spare Parts,2025Q2,1535900,4,4.58,4.48
+Manufacturing & Industrial,MRO Supplies,Spare Parts,2025Q3,810700,2,4.85,4.25
+Manufacturing & Industrial,MRO Supplies,Spare Parts,2025Q4,1050300,2,4.3,4.5
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,2025Q1,7322900,5,4.55,4.38
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,2025Q2,4867500,4,4.33,4.0
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,2025Q3,9808800,4,4.82,4.28
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,2025Q4,5435900,3,4.03,4.25
+Manufacturing & Industrial,Raw Materials - Metals,Copper,2025Q1,3828200,2,4.63,4.17
+Manufacturing & Industrial,Raw Materials - Metals,Copper,2025Q2,3291800,3,4.47,4.15
+Manufacturing & Industrial,Raw Materials - Metals,Copper,2025Q3,3882300,4,4.42,4.1
+Manufacturing & Industrial,Raw Materials - Metals,Copper,2025Q4,1483400,1,4.5,4.3
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,2025Q1,9360900,5,4.22,4.58
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,2025Q2,6884600,4,4.21,4.1
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,2025Q3,2583200,2,4.3,4.43
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,2025Q4,7615300,4,4.42,4.3
+Manufacturing & Industrial,Raw Materials - Metals,Steel,2025Q1,12207900,5,4.43,4.17
+Manufacturing & Industrial,Raw Materials - Metals,Steel,2025Q2,9853000,5,4.67,4.52
+Manufacturing & Industrial,Raw Materials - Metals,Steel,2025Q3,1857600,1,4.7,4.5
+Manufacturing & Industrial,Raw Materials - Metals,Steel,2025Q4,2074000,1,4.8,3.7
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,2025Q1,5496200,6,4.5,4.36
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,2025Q2,2880100,4,4.22,3.97
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,2025Q3,8144000,5,4.41,4.37
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,2025Q4,2802900,3,4.17,4.17
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,2025Q1,2964800,5,4.61,4.3
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,2025Q2,1481800,2,4.4,4.43
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,2025Q3,1643500,3,4.42,4.45
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,2025Q4,1480300,3,4.13,4.37
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,2025Q1,3489800,6,4.46,4.3
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,2025Q2,1265200,3,4.43,4.33
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,2025Q3,2985100,4,4.48,4.24
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,2025Q4,3545900,7,4.3,4.31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,2025Q1,2121600,4,4.62,4.24
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,2025Q2,1436900,3,4.5,4.3
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,2025Q3,1431700,4,4.45,3.92
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,2025Q4,1761600,4,4.47,4.43
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,2025Q1,2097000,3,4.53,4.2
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,2025Q2,4383700,5,4.29,4.11
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,2025Q3,2218600,4,4.54,4.18
+Professional Services,Consulting,HR Consulting,2025Q1,7526700,6,4.75,4.35
+Professional Services,Consulting,HR Consulting,2025Q2,4397400,3,4.25,4.4
+Professional Services,Consulting,HR Consulting,2025Q3,3194800,3,4.23,4.2
+Professional Services,Consulting,HR Consulting,2025Q4,9098900,4,4.47,4.6
+Professional Services,Consulting,IT Consulting,2025Q1,3953900,4,4.42,4.15
+Professional Services,Consulting,IT Consulting,2025Q2,4213200,5,4.22,4.57
+Professional Services,Consulting,IT Consulting,2025Q3,10385100,6,4.66,4.4
+Professional Services,Consulting,IT Consulting,2025Q4,1708400,1,4.65,4.45
+Professional Services,Consulting,Management Consulting,2025Q1,4419400,4,4.53,4.53
+Professional Services,Consulting,Management Consulting,2025Q2,5649700,4,4.62,4.68
+Professional Services,Consulting,Management Consulting,2025Q3,3587100,3,4.22,4.53
+Professional Services,Consulting,Management Consulting,2025Q4,1205400,2,4.75,3.95
+Professional Services,Financial Services,Accounting,2025Q1,2831900,2,4.25,4.25
+Professional Services,Financial Services,Accounting,2025Q2,3690900,5,4.8,4.24
+Professional Services,Financial Services,Accounting,2025Q3,2291500,3,4.63,4.3
+Professional Services,Financial Services,Accounting,2025Q4,1248600,3,4.53,4.0
+Professional Services,Financial Services,Banking,2025Q1,2660100,4,4.35,4.22
+Professional Services,Financial Services,Banking,2025Q2,1704100,3,4.2,4.46
+Professional Services,Financial Services,Banking,2025Q3,235700,1,4.6,4.0
+Professional Services,Financial Services,Banking,2025Q4,883800,2,4.45,4.5
+Professional Services,Financial Services,Insurance,2025Q1,1289100,3,4.37,4.3
+Professional Services,Financial Services,Insurance,2025Q2,648000,1,4.7,4.6
+Professional Services,Financial Services,Insurance,2025Q3,1184100,2,4.64,4.14
+Professional Services,Financial Services,Insurance,2025Q4,726700,2,4.57,4.23
+Professional Services,Legal Services,Corporate Law,2025Q1,4209300,6,4.34,4.34
+Professional Services,Legal Services,Corporate Law,2025Q2,2929000,3,4.6,4.35
+Professional Services,Legal Services,Corporate Law,2025Q3,2429800,4,4.14,3.9
+Professional Services,Legal Services,Corporate Law,2025Q4,1410300,3,4.53,4.17
+Professional Services,Legal Services,Employment Law,2025Q1,1396500,3,4.6,4.37
+Professional Services,Legal Services,Employment Law,2025Q2,2113400,4,4.18,4.4
+Professional Services,Legal Services,Employment Law,2025Q3,2565700,3,4.4,4.36
+Professional Services,Legal Services,Employment Law,2025Q4,1637200,2,4.2,4.03
+Professional Services,Legal Services,Intellectual Property,2025Q1,3050800,4,4.38,4.25
+Professional Services,Legal Services,Intellectual Property,2025Q2,2081300,4,4.65,4.85
+Professional Services,Legal Services,Intellectual Property,2025Q3,779100,2,4.45,4.05
+Professional Services,Legal Services,Intellectual Property,2025Q4,1182600,3,4.47,4.7
+Professional Services,Marketing Services,Advertising,2025Q1,3063200,4,4.55,4.45
+Professional Services,Marketing Services,Advertising,2025Q2,640800,2,4.43,4.07
+Professional Services,Marketing Services,Advertising,2025Q3,1294500,2,4.35,4.25
+Professional Services,Marketing Services,Advertising,2025Q4,293000,1,4.7,4.8
+Professional Services,Marketing Services,Digital Marketing,2025Q1,2000600,4,4.78,4.33
+Professional Services,Marketing Services,Digital Marketing,2025Q2,3095000,4,4.57,4.28
+Professional Services,Marketing Services,Digital Marketing,2025Q3,1987900,4,4.38,4.42
+Professional Services,Marketing Services,Digital Marketing,2025Q4,957200,3,4.4,4.18
+Professional Services,Marketing Services,Market Research,2025Q1,1884100,3,4.28,3.95
+Professional Services,Marketing Services,Market Research,2025Q2,2227600,4,4.44,3.84
+Professional Services,Marketing Services,Market Research,2025Q3,1757100,2,4.57,3.9
+Professional Services,Marketing Services,Market Research,2025Q4,1340100,3,4.47,4.45
+Professional Services,Marketing Services,PR & Communications,2025Q1,2816300,4,4.58,4.02
+Professional Services,Marketing Services,PR & Communications,2025Q2,1289900,3,4.33,4.23
+Professional Services,Marketing Services,PR & Communications,2025Q3,352700,1,4.4,4.5
+Professional Services,Marketing Services,PR & Communications,2025Q4,1517300,2,4.3,4.47

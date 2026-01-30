@@ -1,0 +1,30 @@
+Rule_ID,Conflicts_With,Conflict_Type,Resolution_Strategy,Priority_Order
+R001,R003|R023,Diversification Paradox,Diversify BOTH regions AND suppliers simultaneously,R001 > R003 > R023
+R003,R001|R023,Diversification Paradox,Add suppliers in different regions,R001 > R003 > R023
+R023,R001|R003,Diversification Paradox,Reduce HHI by adding suppliers in different regions,R001 > R003 > R023
+R009,R014,Payment Terms vs Currency,Extend payment terms only for domestic suppliers OR implement hedging,R014 > R009
+R014,R009,Currency vs Payment Terms,Hedge foreign currency before extending payment terms,R014 > R009
+R015,R005,Diversity vs ESG,Source from diverse suppliers with high ESG scores,R005 > R015
+R005,R015,ESG vs Diversity,Prioritize ESG but seek diverse suppliers,R005 > R015
+R006,R019,Price Monitoring Overlap,R006 for historical variance R019 for market benchmark,Both Independent
+R019,R006,Price Monitoring Overlap,R006 for historical variance R019 for market benchmark,Both Independent
+R012,R022,MOQ vs Inventory,Negotiate lower MOQ to improve inventory turnover,R022 > R012
+R022,R012,Inventory vs MOQ,Optimize inventory turnover may require lower MOQ,R022 > R012
+R011,R029,Capacity vs Backup,High capacity utilization requires backup suppliers,R029 > R011
+R029,R011,Backup vs Capacity,Backup suppliers reduce capacity risk,R029 > R011
+R024,R001,Geopolitical vs Regional,Avoid high-risk regions when diversifying,R024 > R001
+R001,R024,Regional vs Geopolitical,Diversify to low-risk regions only,R024 > R001
+R017,R001,Local Content vs Regional,Local content may increase regional concentration,R017 > R001
+R001,R017,Regional vs Local Content,Balance local content with regional diversification,R017 > R001
+R034,R004,Long-term vs Expiry,Long-term contracts reduce expiry risks,R034 > R004
+R004,R034,Expiry vs Long-term,Renew with long-term agreements,R034 > R004
+R026,R032,Certification Overlap,Both require certifications - combine audits,Both Independent
+R032,R026,Certification Overlap,Both require certifications - combine audits,Both Independent
+R010,R029,Financial Risk vs Backup,Financial risk requires backup suppliers,R029 > R010
+R029,R010,Backup vs Financial Risk,Backup suppliers mitigate financial risk,R029 > R010
+R016,R030,Innovation Overlap,Both measure innovation - use R030 as primary,R030 > R016
+R030,R016,Innovation Overlap,Both measure innovation - use R030 as primary,R030 > R016
+R007,R035,Quality vs Performance,Quality is part of performance score,R035 > R007
+R035,R007,Performance vs Quality,Performance includes quality metrics,R035 > R007
+R008,R035,Delivery vs Performance,Delivery is part of performance score,R035 > R008
+R035,R008,Performance vs Delivery,Performance includes delivery metrics,R035 > R008

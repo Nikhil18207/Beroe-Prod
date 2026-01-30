@@ -1,0 +1,981 @@
+Sector,Category,SubCategory,Risk_ID,Risk_Name,Risk_Type,Likelihood,Impact,Risk_Score,Risk_Level,Mitigation_Strategy,Owner,Review_Date
+Construction & Real Estate,Building Materials,Cement,R0001,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0002,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0003,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0004,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0005,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0006,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Cement,R0007,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0008,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0009,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0010,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0011,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0012,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0013,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Concrete,R0014,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0015,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0016,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0017,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0018,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0019,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0020,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Glass,R0021,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0022,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0023,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0024,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0025,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0026,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0027,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Lumber,R0028,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0029,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0030,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0031,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0032,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0033,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0034,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Building Materials,Structural Steel,R0035,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0036,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0037,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0038,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0039,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0040,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0041,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Heavy Equipment,R0042,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0043,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0044,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0045,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0046,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0047,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0048,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Power Tools,R0049,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0050,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0051,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0052,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0053,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0054,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0055,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,Construction Equipment,Scaffolding,R0056,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0057,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0058,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0059,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0060,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0061,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0062,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Electrical Systems,R0063,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0064,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0065,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0066,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0067,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0068,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0069,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,HVAC Equipment,R0070,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0071,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0072,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0073,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0074,Geopolitical Risk,STRATEGIC,5,4,20,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0075,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0076,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Construction & Real Estate,MEP Systems,Plumbing Systems,R0077,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0078,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0079,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0080,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0081,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0082,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0083,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Backup Power,R0084,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0085,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0086,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0087,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0088,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0089,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0090,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Grid Electricity,R0091,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0092,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0093,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0094,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0095,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0096,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0097,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Electricity,Renewable Electricity,R0098,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0099,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0100,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0101,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0102,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0103,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0104,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Aviation Fuel,R0105,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0106,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0107,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0108,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0109,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0110,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0111,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Biofuels,R0112,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0113,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0114,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0115,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0116,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0117,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0118,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Diesel,R0119,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0120,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0121,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0122,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0123,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0124,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0125,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Fuels,Natural Gas,R0126,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0127,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0128,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0129,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0130,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0131,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0132,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Battery Storage,R0133,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0134,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0135,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0136,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0137,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0138,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0139,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Solar Panels,R0140,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0141,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0142,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0143,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0144,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0145,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0146,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Energy & Utilities,Renewable Equipment,Wind Turbines,R0147,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0148,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0149,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0150,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0151,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0152,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0153,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Building Maintenance,R0154,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0155,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0156,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0157,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0158,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0159,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0160,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Cleaning Services,R0161,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0162,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0163,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0164,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0165,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0166,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0167,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Facilities Management,Security Services,R0168,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0169,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0170,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0171,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0172,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0173,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0174,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Furniture,R0175,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0176,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0177,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0178,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0179,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0180,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0181,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Office Supplies,R0182,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0183,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0184,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0185,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0186,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0187,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0188,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Office Services,Printing Services,R0189,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0190,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0191,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0192,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0193,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0194,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0195,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Business Travel,R0196,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0197,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0198,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0199,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0200,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0201,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0202,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Facilities & Corporate Services,Travel & Events,Event Management,R0203,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0204,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0205,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0206,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0207,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0208,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0209,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Coffee,R0210,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0211,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0212,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0213,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0214,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0215,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0216,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Beverages,Tea,R0217,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0218,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0219,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0220,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0221,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0222,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0223,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Cheese,R0224,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0225,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0226,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0227,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0228,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0229,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0230,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Dairy Products,Milk & Cream,R0231,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0232,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0233,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0234,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0235,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0236,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0237,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Canola Oil,R0238,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0239,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0240,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0241,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0242,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0243,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0244,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Coconut Oil,R0245,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0246,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0247,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0248,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0249,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0250,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0251,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Olive Oil,R0252,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0253,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0254,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0255,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0256,Geopolitical Risk,STRATEGIC,5,4,20,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0257,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0258,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Palm Oil,R0259,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0260,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0261,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0262,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0263,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0264,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0265,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Peanut Oil,R0266,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0267,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0268,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0269,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0270,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0271,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0272,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Rice Bran Oil,R0273,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0274,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0275,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0276,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0277,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0278,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0279,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Soybean Oil,R0280,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0281,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0282,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0283,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0284,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0285,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0286,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Edible Oils,Sunflower Oil,R0287,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0288,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0289,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0290,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0291,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0292,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0293,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Corn/Maize,R0294,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0295,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0296,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0297,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0298,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0299,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0300,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Rice,R0301,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0302,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0303,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0304,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0305,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0306,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0307,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Grains & Cereals,Wheat,R0308,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0309,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0310,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0311,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0312,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0313,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0314,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Aluminum Cans,R0315,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0316,Supply Chain Disruption,OPERATIONAL,1,3,3,LOW,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0317,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0318,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0319,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0320,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0321,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Food-Grade Plastics,R0322,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0323,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0324,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0325,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0326,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0327,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0328,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Packaging Materials,Glass Containers,R0329,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0330,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0331,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0332,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0333,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0334,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0335,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Beef,R0336,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0337,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0338,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0339,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0340,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0341,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0342,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Poultry,R0343,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0344,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0345,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0346,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0347,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0348,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0349,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Proteins,Seafood,R0350,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0351,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0352,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0353,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0354,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0355,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0356,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Pepper,R0357,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0358,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0359,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0360,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0361,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0362,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0363,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Spices & Seasonings,Vanilla,R0364,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0365,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0366,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0367,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0368,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0369,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0370,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Food & Beverages,Sweeteners,Sugar,R0371,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0372,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0373,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0374,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0375,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0376,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0377,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,R0378,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0379,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0380,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0381,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0382,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0383,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0384,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,R0385,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0386,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0387,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0388,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0389,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0390,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0391,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,R0392,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0393,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0394,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0395,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0396,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0397,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0398,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Implants,R0399,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0400,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0401,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0402,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0403,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0404,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0405,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,R0406,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0407,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0408,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0409,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0410,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0411,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0412,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,R0413,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0414,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0415,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0416,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0417,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0418,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0419,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,R0420,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0421,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0422,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0423,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0424,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0425,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0426,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,R0427,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0428,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0429,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0430,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0431,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0432,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0433,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Medical Supplies,Wound Care,R0434,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0435,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0436,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0437,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0438,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0439,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0440,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,R0441,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0442,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0443,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0444,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0445,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0446,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0447,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,R0448,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0449,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0450,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0451,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0452,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0453,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0454,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,R0455,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0456,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0457,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0458,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0459,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0460,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0461,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,R0462,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0463,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0464,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0465,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0466,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0467,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0468,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,R0469,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0470,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0471,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0472,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0473,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0474,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0475,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,HR Technology,Benefits Administration,R0476,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0477,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0478,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0479,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0480,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0481,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0482,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,HR Technology,HRIS Systems,R0483,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0484,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0485,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0486,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0487,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0488,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0489,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,HR Technology,Payroll Services,R0490,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0491,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0492,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0493,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0494,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0495,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0496,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Learning & Development,E-Learning Platforms,R0497,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0498,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0499,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0500,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0501,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0502,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0503,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Leadership Development,R0504,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0505,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0506,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0507,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0508,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0509,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0510,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Learning & Development,Training Programs,R0511,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0512,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0513,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0514,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0515,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0516,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0517,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Executive Search,R0518,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0519,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0520,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0521,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0522,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0523,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0524,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Permanent Recruitment,R0525,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0526,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0527,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0528,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0529,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0530,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0531,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Human Resources,Staffing Services,Temporary Staffing,R0532,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0533,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0534,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0535,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0536,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0537,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0538,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cloud Services,Cloud Storage,R0539,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0540,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0541,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0542,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0543,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0544,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0545,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cloud Services,IaaS,R0546,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0547,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0548,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0549,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0550,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0551,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0552,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cloud Services,PaaS,R0553,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0554,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0555,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0556,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0557,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0558,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0559,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cloud Services,SaaS,R0560,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0561,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0562,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0563,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0564,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0565,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0566,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Endpoint Security,R0567,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0568,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0569,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0570,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0571,Geopolitical Risk,STRATEGIC,5,4,20,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0572,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0573,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Identity Management,R0574,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0575,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0576,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0577,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0578,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0579,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0580,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Network Security,R0581,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0582,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0583,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0584,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0585,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0586,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0587,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Cybersecurity,Security Operations,R0588,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0589,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0590,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0591,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0592,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0593,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0594,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Desktops,R0595,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0596,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0597,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0598,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0599,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0600,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0601,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Laptops,R0602,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0603,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0604,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0605,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0606,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0607,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0608,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Network Equipment,R0609,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0610,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0611,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0612,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0613,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0614,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0615,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Peripherals,R0616,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0617,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0618,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0619,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0620,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0621,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0622,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Servers,R0623,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0624,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0625,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0626,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0627,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0628,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0629,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Hardware,Storage Systems,R0630,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0631,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0632,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0633,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0634,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0635,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0636,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Software,Database Software,R0637,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0638,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0639,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0640,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0641,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0642,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0643,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Software,Development Tools,R0644,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0645,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0646,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0647,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0648,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0649,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0650,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Software,Enterprise Software,R0651,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0652,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0653,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0654,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0655,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0656,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0657,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Software,Productivity Software,R0658,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0659,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0660,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0661,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0662,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0663,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0664,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Internet Services,R0665,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0666,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0667,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0668,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0669,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0670,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0671,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Information Technology,Telecommunications,Mobile Services,R0672,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0673,Supply Chain Disruption,OPERATIONAL,1,3,3,LOW,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0674,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0675,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0676,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0677,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0678,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Maintenance,R0679,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0680,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0681,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0682,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0683,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0684,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0685,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Telematics,R0686,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0687,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0688,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0689,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0690,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0691,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0692,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Fleet Services,Fleet Vehicles,R0693,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0694,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0695,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0696,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0697,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0698,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0699,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Air Freight,R0700,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0701,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0702,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0703,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0704,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0705,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0706,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Ocean Freight,R0707,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0708,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0709,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0710,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0711,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0712,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0713,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Rail Freight,R0714,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0715,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0716,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0717,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0718,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0719,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0720,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Freight Services,Road Freight,R0721,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0722,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0723,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0724,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0725,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0726,Supplier Financial Stability,FINANCIAL,1,2,2,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0727,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,3PL Services,R0728,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0729,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0730,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0731,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0732,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0733,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0734,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Cold Storage,R0735,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0736,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0737,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0738,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0739,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0740,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0741,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Logistics & Transportation,Warehousing,Distribution Centers,R0742,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0743,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0744,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0745,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0746,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0747,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0748,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,R0749,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0750,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0751,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0752,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0753,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0754,Supplier Financial Stability,FINANCIAL,1,4,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0755,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,R0756,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0757,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0758,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0759,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0760,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0761,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0762,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Petrochemicals,R0763,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0764,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0765,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0766,Quality Issues,OPERATIONAL,1,2,2,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0767,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0768,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0769,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,R0770,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0771,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0772,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0773,Quality Issues,OPERATIONAL,3,4,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0774,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0775,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0776,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,R0777,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0778,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0779,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0780,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0781,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0782,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0783,Regulatory Compliance,COMPLIANCE,4,4,16,CRITICAL,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,R0784,ESG/Sustainability,COMPLIANCE,4,3,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0785,Supply Chain Disruption,OPERATIONAL,3,4,12,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0786,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0787,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0788,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0789,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0790,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,R0791,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0792,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0793,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0794,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0795,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0796,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0797,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,R0798,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0799,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0800,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0801,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0802,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0803,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0804,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,R0805,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0806,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0807,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0808,Quality Issues,OPERATIONAL,4,2,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0809,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0810,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0811,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,R0812,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0813,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0814,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0815,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0816,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0817,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0818,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,R0819,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0820,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0821,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0822,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0823,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0824,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0825,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,MRO Supplies,Spare Parts,R0826,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0827,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0828,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0829,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0830,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0831,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0832,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,R0833,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0834,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0835,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0836,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0837,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0838,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0839,Regulatory Compliance,COMPLIANCE,3,2,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Copper,R0840,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0841,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0842,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0843,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0844,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0845,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0846,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,R0847,ESG/Sustainability,COMPLIANCE,2,2,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0848,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0849,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0850,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0851,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0852,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0853,Regulatory Compliance,COMPLIANCE,2,4,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Steel,R0854,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0855,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0856,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0857,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0858,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0859,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0860,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,R0861,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0862,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0863,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0864,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0865,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0866,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0867,Regulatory Compliance,COMPLIANCE,3,3,9,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,R0868,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0869,Supply Chain Disruption,OPERATIONAL,1,3,3,LOW,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0870,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0871,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0872,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0873,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0874,Regulatory Compliance,COMPLIANCE,1,2,2,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,R0875,ESG/Sustainability,COMPLIANCE,3,3,9,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0876,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0877,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0878,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0879,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0880,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0881,Regulatory Compliance,COMPLIANCE,1,3,3,LOW,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,R0882,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0883,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0884,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0885,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0886,Geopolitical Risk,STRATEGIC,5,4,20,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0887,Supplier Financial Stability,FINANCIAL,2,2,4,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0888,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,R0889,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0890,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0891,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0892,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0893,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0894,Supplier Financial Stability,FINANCIAL,2,4,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0895,Regulatory Compliance,COMPLIANCE,4,3,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Consulting,HR Consulting,R0896,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0897,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0898,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0899,Quality Issues,OPERATIONAL,3,3,9,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0900,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0901,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0902,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Consulting,IT Consulting,R0903,ESG/Sustainability,COMPLIANCE,3,2,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0904,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0905,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0906,Quality Issues,OPERATIONAL,1,4,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0907,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0908,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0909,Regulatory Compliance,COMPLIANCE,3,4,12,HIGH,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Consulting,Management Consulting,R0910,ESG/Sustainability,COMPLIANCE,2,3,6,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0911,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0912,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0913,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0914,Geopolitical Risk,STRATEGIC,3,4,12,HIGH,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0915,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0916,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Financial Services,Accounting,R0917,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0918,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0919,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0920,Quality Issues,OPERATIONAL,4,4,16,CRITICAL,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0921,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0922,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0923,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Financial Services,Banking,R0924,ESG/Sustainability,COMPLIANCE,4,4,16,CRITICAL,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0925,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0926,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0927,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0928,Geopolitical Risk,STRATEGIC,4,4,16,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0929,Supplier Financial Stability,FINANCIAL,3,2,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0930,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Financial Services,Insurance,R0931,ESG/Sustainability,COMPLIANCE,4,2,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0932,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0933,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0934,Quality Issues,OPERATIONAL,2,2,4,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0935,Geopolitical Risk,STRATEGIC,5,4,20,CRITICAL,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0936,Supplier Financial Stability,FINANCIAL,1,3,3,LOW,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0937,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Legal Services,Corporate Law,R0938,ESG/Sustainability,COMPLIANCE,1,4,4,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0939,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0940,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0941,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0942,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0943,Supplier Financial Stability,FINANCIAL,4,2,8,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0944,Regulatory Compliance,COMPLIANCE,2,2,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Legal Services,Employment Law,R0945,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0946,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0947,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0948,Quality Issues,OPERATIONAL,1,3,3,LOW,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0949,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0950,Supplier Financial Stability,FINANCIAL,3,4,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0951,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Legal Services,Intellectual Property,R0952,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0953,Supply Chain Disruption,OPERATIONAL,3,3,9,HIGH,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0954,Price Volatility,FINANCIAL,3,3,9,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0955,Quality Issues,OPERATIONAL,2,4,8,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0956,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0957,Supplier Financial Stability,FINANCIAL,2,3,6,MEDIUM,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0958,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Advertising,R0959,ESG/Sustainability,COMPLIANCE,3,4,12,HIGH,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0960,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0961,Price Volatility,FINANCIAL,4,3,12,HIGH,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0962,Quality Issues,OPERATIONAL,4,3,12,HIGH,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0963,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0964,Supplier Financial Stability,FINANCIAL,3,3,9,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0965,Regulatory Compliance,COMPLIANCE,4,2,8,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Digital Marketing,R0966,ESG/Sustainability,COMPLIANCE,2,4,8,MEDIUM,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0967,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0968,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0969,Quality Issues,OPERATIONAL,3,2,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0970,Geopolitical Risk,STRATEGIC,1,3,3,LOW,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0971,Supplier Financial Stability,FINANCIAL,4,3,12,HIGH,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0972,Regulatory Compliance,COMPLIANCE,1,4,4,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Marketing Services,Market Research,R0973,ESG/Sustainability,COMPLIANCE,1,3,3,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0974,Supply Chain Disruption,OPERATIONAL,2,3,6,MEDIUM,Implement controls for supply chain disruption,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0975,Price Volatility,FINANCIAL,2,3,6,MEDIUM,Implement controls for price volatility,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0976,Quality Issues,OPERATIONAL,2,3,6,MEDIUM,Implement controls for quality issues,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0977,Geopolitical Risk,STRATEGIC,2,3,6,MEDIUM,Implement controls for geopolitical risk,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0978,Supplier Financial Stability,FINANCIAL,4,4,16,CRITICAL,Implement controls for supplier financial stability,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0979,Regulatory Compliance,COMPLIANCE,2,3,6,MEDIUM,Implement controls for regulatory compliance,Procurement Team,2026-04-03
+Professional Services,Marketing Services,PR & Communications,R0980,ESG/Sustainability,COMPLIANCE,1,2,2,LOW,Implement controls for esg/sustainability,Procurement Team,2026-04-03

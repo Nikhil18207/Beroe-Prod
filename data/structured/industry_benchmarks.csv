@@ -1,0 +1,981 @@
+Sector,Category,SubCategory,Metric,Industry_Benchmark,Our_Performance,Gap,Unit,Benchmark_Source,Last_Updated
+Logistics & Transportation,Warehousing,3PL Services,Average_Unit_Price,810.0,781.0,-29.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Warehousing,3PL Services,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Financial Services,Accounting,Average_Unit_Price,1012.0,1014.0,2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Financial Services,Accounting,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Financial Services,Accounting,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Financial Services,Accounting,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Financial Services,Accounting,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Financial Services,Accounting,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Professional Services,Financial Services,Accounting,Lead_Time,14.0,26.0,12.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Average_Unit_Price,459.0,477.0,18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,On_Time_Delivery_Rate,95.0,95.0,0.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Marketing Services,Advertising,Average_Unit_Price,991.0,1034.0,43.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Marketing Services,Advertising,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Marketing Services,Advertising,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Marketing Services,Advertising,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Marketing Services,Advertising,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Marketing Services,Advertising,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Professional Services,Marketing Services,Advertising,Lead_Time,14.0,12.0,-2.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,Average_Unit_Price,896.0,887.0,-9.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Freight Services,Air Freight,Lead_Time,14.0,30.0,16.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Average_Unit_Price,1026.0,1061.0,35.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,Average_Unit_Price,756.0,757.0,1.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Packaging Materials,Aluminum Cans,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Average_Unit_Price,1215.0,1214.0,-1.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,Average_Unit_Price,864.0,862.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Fuels,Aviation Fuel,Lead_Time,14.0,18.0,4.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Electricity,Backup Power,Average_Unit_Price,567.0,557.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Electricity,Backup Power,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Electricity,Backup Power,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Electricity,Backup Power,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Electricity,Backup Power,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Electricity,Backup Power,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Electricity,Backup Power,Lead_Time,14.0,20.0,6.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Financial Services,Banking,Average_Unit_Price,729.0,735.0,6.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Financial Services,Banking,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Financial Services,Banking,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Financial Services,Banking,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Financial Services,Banking,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Financial Services,Banking,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Professional Services,Financial Services,Banking,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,Average_Unit_Price,1242.0,1258.0,16.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,On_Time_Delivery_Rate,95.0,89.3,-5.7,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Renewable Equipment,Battery Storage,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Proteins,Beef,Average_Unit_Price,2209.0,2157.0,-52.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Proteins,Beef,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Proteins,Beef,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Proteins,Beef,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Proteins,Beef,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Proteins,Beef,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Proteins,Beef,Lead_Time,14.0,25.0,11.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,HR Technology,Benefits Administration,Average_Unit_Price,286.0,288.0,2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,HR Technology,Benefits Administration,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,HR Technology,Benefits Administration,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,HR Technology,Benefits Administration,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,HR Technology,Benefits Administration,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,HR Technology,Benefits Administration,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Human Resources,HR Technology,Benefits Administration,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Fuels,Biofuels,Average_Unit_Price,594.0,599.0,5.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Fuels,Biofuels,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Fuels,Biofuels,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Fuels,Biofuels,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Fuels,Biofuels,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Fuels,Biofuels,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Fuels,Biofuels,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Average_Unit_Price,2079.0,2106.0,27.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Average_Unit_Price,3183.0,3071.0,-112.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Average_Unit_Price,551.0,525.0,-26.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,On_Time_Delivery_Rate,95.0,90.7,-4.3,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Facilities Management,Building Maintenance,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,Average_Unit_Price,308.0,298.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Travel & Events,Business Travel,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,Average_Unit_Price,306.0,304.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Canola Oil,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Building Materials,Cement,Average_Unit_Price,1507.0,1462.0,-45.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Building Materials,Cement,On_Time_Delivery_Rate,95.0,89.7,-5.3,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Building Materials,Cement,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Building Materials,Cement,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Building Materials,Cement,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Building Materials,Cement,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Building Materials,Cement,Lead_Time,14.0,26.0,12.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Dairy Products,Cheese,Average_Unit_Price,918.0,957.0,39.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Dairy Products,Cheese,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Dairy Products,Cheese,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Dairy Products,Cheese,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Dairy Products,Cheese,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Dairy Products,Cheese,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Dairy Products,Cheese,Lead_Time,14.0,30.0,16.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Average_Unit_Price,335.0,320.0,-15.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,On_Time_Delivery_Rate,95.0,88.0,-7.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Facilities Management,Cleaning Services,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,Average_Unit_Price,119.0,115.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Information Technology,Cloud Services,Cloud Storage,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,Average_Unit_Price,227.0,226.0,-1.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,On_Time_Delivery_Rate,95.0,78.0,-17.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,Quality_Score,4.5,4.2,-0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Coconut Oil,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Beverages,Coffee,Average_Unit_Price,1174.0,1228.0,54.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Beverages,Coffee,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Beverages,Coffee,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Beverages,Coffee,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Beverages,Coffee,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Beverages,Coffee,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Beverages,Coffee,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,Average_Unit_Price,783.0,771.0,-12.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Warehousing,Cold Storage,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,Average_Unit_Price,783.0,804.0,21.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Building Materials,Concrete,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Average_Unit_Price,832.0,844.0,12.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,On_Time_Delivery_Rate,95.0,89.5,-5.5,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Copper,Lead_Time,14.0,15.0,1.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,Average_Unit_Price,1030.0,1041.0,11.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,On_Time_Delivery_Rate,95.0,92.7,-2.3,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Grains & Cereals,Corn/Maize,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Legal Services,Corporate Law,Average_Unit_Price,846.0,827.0,-19.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Legal Services,Corporate Law,On_Time_Delivery_Rate,95.0,91.3,-3.7,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Legal Services,Corporate Law,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Legal Services,Corporate Law,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Legal Services,Corporate Law,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Legal Services,Corporate Law,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Professional Services,Legal Services,Corporate Law,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Software,Database Software,Average_Unit_Price,702.0,733.0,31.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Software,Database Software,On_Time_Delivery_Rate,95.0,95.0,0.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Software,Database Software,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Software,Database Software,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Software,Database Software,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Software,Database Software,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Information Technology,Software,Database Software,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Desktops,Average_Unit_Price,459.0,468.0,9.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Desktops,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Desktops,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Desktops,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Desktops,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Desktops,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Desktops,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Software,Development Tools,Average_Unit_Price,189.0,189.0,0.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Software,Development Tools,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Software,Development Tools,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Software,Development Tools,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Software,Development Tools,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Software,Development Tools,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Information Technology,Software,Development Tools,Lead_Time,14.0,18.0,4.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Average_Unit_Price,1868.0,1880.0,12.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,Lead_Time,14.0,15.0,1.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Fuels,Diesel,Average_Unit_Price,729.0,714.0,-15.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Fuels,Diesel,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Fuels,Diesel,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Fuels,Diesel,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Fuels,Diesel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Fuels,Diesel,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Fuels,Diesel,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,Average_Unit_Price,702.0,705.0,3.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,On_Time_Delivery_Rate,95.0,96.0,1.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Professional Services,Marketing Services,Digital Marketing,Lead_Time,14.0,18.0,4.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Average_Unit_Price,1026.0,1073.0,47.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,Average_Unit_Price,907.0,866.0,-41.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Warehousing,Distribution Centers,Lead_Time,14.0,9.0,-5.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,Average_Unit_Price,216.0,213.0,-3.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Human Resources,Learning & Development,E-Learning Platforms,Lead_Time,14.0,27.0,13.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,Average_Unit_Price,729.0,711.0,-18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,MEP Systems,Electrical Systems,Lead_Time,14.0,13.0,-1.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Legal Services,Employment Law,Average_Unit_Price,432.0,419.0,-13.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Legal Services,Employment Law,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Legal Services,Employment Law,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Legal Services,Employment Law,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Legal Services,Employment Law,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Legal Services,Employment Law,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Professional Services,Legal Services,Employment Law,Lead_Time,14.0,15.0,1.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,Average_Unit_Price,450.0,469.0,19.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,On_Time_Delivery_Rate,95.0,94.7,-0.3,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cybersecurity,Endpoint Security,Lead_Time,14.0,15.0,1.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Average_Unit_Price,486.0,468.0,-18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,Lead_Time,14.0,30.0,16.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Software,Enterprise Software,Average_Unit_Price,1080.0,1089.0,9.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Software,Enterprise Software,On_Time_Delivery_Rate,95.0,92.4,-2.6,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Software,Enterprise Software,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Software,Enterprise Software,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Software,Enterprise Software,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Software,Enterprise Software,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Software,Enterprise Software,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,Average_Unit_Price,216.0,220.0,4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Travel & Events,Event Management,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Staffing Services,Executive Search,Average_Unit_Price,281.0,285.0,4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Staffing Services,Executive Search,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Staffing Services,Executive Search,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Staffing Services,Executive Search,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Staffing Services,Executive Search,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Staffing Services,Executive Search,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Human Resources,Staffing Services,Executive Search,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Average_Unit_Price,432.0,428.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Maintenance,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,Average_Unit_Price,270.0,259.0,-11.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Telematics,Lead_Time,14.0,7.0,-7.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Average_Unit_Price,621.0,650.0,29.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Fleet Services,Fleet Vehicles,Lead_Time,14.0,20.0,6.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Average_Unit_Price,675.0,685.0,10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Packaging Materials,Food-Grade Plastics,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Average_Unit_Price,1161.0,1178.0,17.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,On_Time_Delivery_Rate,95.0,87.0,-8.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Supplier_Diversity_Index,3.0,4.0,1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Building Materials,Glass,Average_Unit_Price,675.0,661.0,-14.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Building Materials,Glass,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Building Materials,Glass,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Building Materials,Glass,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Building Materials,Glass,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Building Materials,Glass,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Building Materials,Glass,Lead_Time,14.0,9.0,-5.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,Average_Unit_Price,540.0,548.0,8.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Packaging Materials,Glass Containers,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,Average_Unit_Price,1307.0,1338.0,31.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,On_Time_Delivery_Rate,95.0,91.2,-3.8,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Electricity,Grid Electricity,Lead_Time,14.0,12.0,-2.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Consulting,HR Consulting,Average_Unit_Price,675.0,669.0,-6.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Consulting,HR Consulting,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Consulting,HR Consulting,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Consulting,HR Consulting,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Consulting,HR Consulting,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Consulting,HR Consulting,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Professional Services,Consulting,HR Consulting,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,HR Technology,HRIS Systems,Average_Unit_Price,362.0,380.0,18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,HR Technology,HRIS Systems,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,HR Technology,HRIS Systems,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,HR Technology,HRIS Systems,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,HR Technology,HRIS Systems,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,HR Technology,HRIS Systems,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Human Resources,HR Technology,HRIS Systems,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,Average_Unit_Price,891.0,863.0,-28.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,MEP Systems,HVAC Equipment,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Average_Unit_Price,1548.0,1606.0,58.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,On_Time_Delivery_Rate,95.0,93.3,-1.7,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Construction Equipment,Heavy Equipment,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Consulting,IT Consulting,Average_Unit_Price,1485.0,1495.0,10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Consulting,IT Consulting,On_Time_Delivery_Rate,95.0,90.5,-4.5,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Consulting,IT Consulting,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Consulting,IT Consulting,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Consulting,IT Consulting,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Consulting,IT Consulting,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Professional Services,Consulting,IT Consulting,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cloud Services,IaaS,Average_Unit_Price,505.0,494.0,-11.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cloud Services,IaaS,On_Time_Delivery_Rate,95.0,96.2,1.2,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cloud Services,IaaS,Quality_Score,4.5,4.9,0.4,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cloud Services,IaaS,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cloud Services,IaaS,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cloud Services,IaaS,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cloud Services,IaaS,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cybersecurity,Identity Management,Average_Unit_Price,238.0,238.0,0.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cybersecurity,Identity Management,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cybersecurity,Identity Management,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cybersecurity,Identity Management,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cybersecurity,Identity Management,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cybersecurity,Identity Management,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cybersecurity,Identity Management,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,Average_Unit_Price,1296.0,1292.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Implants,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Average_Unit_Price,1069.0,1051.0,-18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,On_Time_Delivery_Rate,95.0,92.7,-2.3,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Average_Unit_Price,1836.0,1863.0,27.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,Lead_Time,14.0,12.0,-2.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Average_Unit_Price,324.0,308.0,-16.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Financial Services,Insurance,Average_Unit_Price,621.0,625.0,4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Financial Services,Insurance,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Financial Services,Insurance,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Financial Services,Insurance,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Financial Services,Insurance,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Financial Services,Insurance,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Professional Services,Financial Services,Insurance,Lead_Time,14.0,12.0,-2.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Legal Services,Intellectual Property,Average_Unit_Price,513.0,519.0,6.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Legal Services,Intellectual Property,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Legal Services,Intellectual Property,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Legal Services,Intellectual Property,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Legal Services,Intellectual Property,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Legal Services,Intellectual Property,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Professional Services,Legal Services,Intellectual Property,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Telecommunications,Internet Services,Average_Unit_Price,470.0,485.0,15.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Telecommunications,Internet Services,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Telecommunications,Internet Services,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Telecommunications,Internet Services,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Telecommunications,Internet Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Telecommunications,Internet Services,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Telecommunications,Internet Services,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Average_Unit_Price,864.0,828.0,-36.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Average_Unit_Price,810.0,784.0,-26.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Laptops,Average_Unit_Price,920.0,904.0,-16.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Laptops,On_Time_Delivery_Rate,95.0,92.4,-2.6,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Laptops,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Laptops,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Laptops,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Laptops,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Laptops,Lead_Time,14.0,7.0,-7.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Learning & Development,Leadership Development,Average_Unit_Price,308.0,300.0,-8.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Learning & Development,Leadership Development,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Learning & Development,Leadership Development,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Learning & Development,Leadership Development,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Learning & Development,Leadership Development,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Learning & Development,Leadership Development,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Human Resources,Learning & Development,Leadership Development,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Average_Unit_Price,270.0,277.0,7.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,Average_Unit_Price,925.0,933.0,8.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Building Materials,Lumber,Lead_Time,14.0,7.0,-7.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Consulting,Management Consulting,Average_Unit_Price,1898.0,1853.0,-45.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Consulting,Management Consulting,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Consulting,Management Consulting,Quality_Score,4.5,4.9,0.4,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Consulting,Management Consulting,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Consulting,Management Consulting,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Consulting,Management Consulting,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Professional Services,Consulting,Management Consulting,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Average_Unit_Price,2091.0,2036.0,-55.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Marketing Services,Market Research,Average_Unit_Price,459.0,457.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Marketing Services,Market Research,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Marketing Services,Market Research,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Marketing Services,Market Research,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Marketing Services,Market Research,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Marketing Services,Market Research,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Professional Services,Marketing Services,Market Research,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Average_Unit_Price,810.0,825.0,15.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,Average_Unit_Price,1584.0,1614.0,30.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Dairy Products,Milk & Cream,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Telecommunications,Mobile Services,Average_Unit_Price,594.0,586.0,-8.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Telecommunications,Mobile Services,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Telecommunications,Mobile Services,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Telecommunications,Mobile Services,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Telecommunications,Mobile Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Telecommunications,Mobile Services,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Telecommunications,Mobile Services,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,Average_Unit_Price,1062.0,1111.0,49.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,On_Time_Delivery_Rate,95.0,92.7,-2.3,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Fuels,Natural Gas,Lead_Time,14.0,11.0,-3.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Network Equipment,Average_Unit_Price,454.0,452.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Network Equipment,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Network Equipment,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Network Equipment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Network Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Network Equipment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Network Equipment,Lead_Time,14.0,18.0,4.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cybersecurity,Network Security,Average_Unit_Price,335.0,332.0,-3.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cybersecurity,Network Security,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cybersecurity,Network Security,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cybersecurity,Network Security,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cybersecurity,Network Security,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cybersecurity,Network Security,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cybersecurity,Network Security,Lead_Time,14.0,22.0,8.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Average_Unit_Price,675.0,692.0,17.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,On_Time_Delivery_Rate,95.0,81.0,-14.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Quality_Score,4.5,4.4,-0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,Lead_Time,14.0,13.0,-1.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Average_Unit_Price,621.0,637.0,16.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,Lead_Time,14.0,26.0,12.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,Average_Unit_Price,1288.0,1336.0,48.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,On_Time_Delivery_Rate,95.0,91.5,-3.5,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Freight Services,Ocean Freight,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,Average_Unit_Price,467.0,465.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,On_Time_Delivery_Rate,95.0,92.5,-2.5,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Office Services,Office Furniture,Lead_Time,14.0,18.0,4.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,Average_Unit_Price,92.0,88.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Office Services,Office Supplies,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,Average_Unit_Price,302.0,289.0,-13.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Olive Oil,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Professional Services,Marketing Services,PR & Communications,Average_Unit_Price,540.0,524.0,-16.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Professional Services,Marketing Services,PR & Communications,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Professional Services,Marketing Services,PR & Communications,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Professional Services,Marketing Services,PR & Communications,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Professional Services,Marketing Services,PR & Communications,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Professional Services,Marketing Services,PR & Communications,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Professional Services,Marketing Services,PR & Communications,Lead_Time,14.0,11.0,-3.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Average_Unit_Price,540.0,522.0,-18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,On_Time_Delivery_Rate,95.0,86.0,-9.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cloud Services,PaaS,Average_Unit_Price,189.0,182.0,-7.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cloud Services,PaaS,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cloud Services,PaaS,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cloud Services,PaaS,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cloud Services,PaaS,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cloud Services,PaaS,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cloud Services,PaaS,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,Average_Unit_Price,514.0,518.0,4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,On_Time_Delivery_Rate,95.0,88.8,-6.2,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Palm Oil,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Average_Unit_Price,756.0,752.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,HR Technology,Payroll Services,Average_Unit_Price,414.0,399.0,-15.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,HR Technology,Payroll Services,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,HR Technology,Payroll Services,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,HR Technology,Payroll Services,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,HR Technology,Payroll Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,HR Technology,Payroll Services,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Human Resources,HR Technology,Payroll Services,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,Average_Unit_Price,194.0,196.0,2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,On_Time_Delivery_Rate,95.0,84.0,-11.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,Quality_Score,4.5,4.4,-0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Peanut Oil,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,Average_Unit_Price,324.0,330.0,6.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,On_Time_Delivery_Rate,95.0,86.0,-9.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Spices & Seasonings,Pepper,Lead_Time,14.0,30.0,16.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Peripherals,Average_Unit_Price,216.0,206.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Peripherals,On_Time_Delivery_Rate,95.0,89.0,-6.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Peripherals,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Peripherals,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Peripherals,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Peripherals,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Peripherals,Lead_Time,14.0,7.0,-7.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,Average_Unit_Price,324.0,332.0,8.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Human Resources,Staffing Services,Permanent Recruitment,Lead_Time,14.0,9.0,-5.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,Average_Unit_Price,837.0,799.0,-38.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Chemicals,Petrochemicals,Lead_Time,14.0,29.0,15.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,Average_Unit_Price,513.0,491.0,-22.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,MEP Systems,Plumbing Systems,Lead_Time,14.0,9.0,-5.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Average_Unit_Price,706.0,740.0,34.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,On_Time_Delivery_Rate,95.0,90.7,-4.3,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Supplier_Diversity_Index,3.0,3.0,0.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Average_Unit_Price,610.0,597.0,-13.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,Lead_Time,14.0,11.0,-3.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Proteins,Poultry,Average_Unit_Price,1660.0,1705.0,45.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Proteins,Poultry,On_Time_Delivery_Rate,95.0,90.5,-4.5,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Proteins,Poultry,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Proteins,Poultry,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Proteins,Poultry,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Proteins,Poultry,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Proteins,Poultry,Lead_Time,14.0,27.0,13.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,Average_Unit_Price,756.0,791.0,35.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,On_Time_Delivery_Rate,95.0,94.0,-1.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Construction Equipment,Power Tools,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,Average_Unit_Price,74.0,74.0,0.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Office Services,Printing Services,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Software,Productivity Software,Average_Unit_Price,432.0,414.0,-18.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Software,Productivity Software,On_Time_Delivery_Rate,95.0,95.0,0.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Software,Productivity Software,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Software,Productivity Software,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Software,Productivity Software,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Software,Productivity Software,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Information Technology,Software,Productivity Software,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,Average_Unit_Price,567.0,546.0,-21.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Freight Services,Rail Freight,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,Average_Unit_Price,891.0,862.0,-29.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Electricity,Renewable Electricity,Lead_Time,14.0,19.0,5.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,Average_Unit_Price,810.0,812.0,2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,On_Time_Delivery_Rate,95.0,88.0,-7.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Grains & Cereals,Rice,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,Average_Unit_Price,644.0,665.0,21.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,On_Time_Delivery_Rate,95.0,83.5,-11.5,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,Quality_Score,4.5,4.4,-0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Rice Bran Oil,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,Average_Unit_Price,688.0,686.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,On_Time_Delivery_Rate,95.0,90.5,-4.5,Percentage,Supply_Chain_Council,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Logistics & Transportation,Freight Services,Road Freight,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Average_Unit_Price,1318.0,1308.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cloud Services,SaaS,Average_Unit_Price,248.0,242.0,-6.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cloud Services,SaaS,On_Time_Delivery_Rate,95.0,94.3,-0.7,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cloud Services,SaaS,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cloud Services,SaaS,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cloud Services,SaaS,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cloud Services,SaaS,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Information Technology,Cloud Services,SaaS,Lead_Time,14.0,11.0,-3.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Average_Unit_Price,459.0,449.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,On_Time_Delivery_Rate,95.0,95.0,0.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,Lead_Time,14.0,10.0,-4.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,Average_Unit_Price,432.0,412.0,-20.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Construction Equipment,Scaffolding,Lead_Time,14.0,20.0,6.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Proteins,Seafood,Average_Unit_Price,1242.0,1256.0,14.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Proteins,Seafood,On_Time_Delivery_Rate,95.0,88.7,-6.3,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Proteins,Seafood,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Proteins,Seafood,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Proteins,Seafood,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Proteins,Seafood,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Proteins,Seafood,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Cybersecurity,Security Operations,Average_Unit_Price,378.0,367.0,-11.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Cybersecurity,Security Operations,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Cybersecurity,Security Operations,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Cybersecurity,Security Operations,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Cybersecurity,Security Operations,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Cybersecurity,Security Operations,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Cybersecurity,Security Operations,Lead_Time,14.0,26.0,12.0,Days,Logistics_Benchmark,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,Average_Unit_Price,459.0,438.0,-21.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Facilities & Corporate Services,Facilities Management,Security Services,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Servers,Average_Unit_Price,981.0,1001.0,20.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Servers,On_Time_Delivery_Rate,95.0,93.2,-1.8,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Servers,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Servers,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Servers,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Servers,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Servers,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,Average_Unit_Price,972.0,995.0,23.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,On_Time_Delivery_Rate,95.0,90.5,-4.5,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Renewable Equipment,Solar Panels,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,Average_Unit_Price,364.0,355.0,-9.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,On_Time_Delivery_Rate,95.0,88.0,-7.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Soybean Oil,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Average_Unit_Price,540.0,521.0,-19.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,MRO Supplies,Spare Parts,Lead_Time,14.0,14.0,0.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Average_Unit_Price,675.0,696.0,21.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,Lead_Time,14.0,25.0,11.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Average_Unit_Price,1792.0,1759.0,-33.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,On_Time_Delivery_Rate,95.0,88.7,-6.3,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Steel,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Information Technology,Hardware,Storage Systems,Average_Unit_Price,621.0,641.0,20.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Information Technology,Hardware,Storage Systems,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Information Technology,Hardware,Storage Systems,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Information Technology,Hardware,Storage Systems,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Information Technology,Hardware,Storage Systems,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Information Technology,Hardware,Storage Systems,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Information Technology,Hardware,Storage Systems,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,Average_Unit_Price,1188.0,1233.0,45.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Construction & Real Estate,Building Materials,Structural Steel,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Sweeteners,Sugar,Average_Unit_Price,770.0,748.0,-22.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Sweeteners,Sugar,On_Time_Delivery_Rate,95.0,88.0,-7.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Sweeteners,Sugar,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Sweeteners,Sugar,Supplier_Diversity_Index,3.0,3.0,0.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Sweeteners,Sugar,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Sweeteners,Sugar,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Sweeteners,Sugar,Lead_Time,14.0,15.0,1.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,Average_Unit_Price,454.0,434.0,-20.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,On_Time_Delivery_Rate,95.0,80.0,-15.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Edible Oils,Sunflower Oil,Lead_Time,14.0,30.0,16.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Average_Unit_Price,1512.0,1574.0,62.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,On_Time_Delivery_Rate,95.0,93.0,-2.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Beverages,Tea,Average_Unit_Price,556.0,552.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Beverages,Tea,On_Time_Delivery_Rate,95.0,87.0,-8.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Beverages,Tea,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Beverages,Tea,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Beverages,Tea,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Beverages,Tea,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Beverages,Tea,Lead_Time,14.0,8.0,-6.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,Average_Unit_Price,427.0,447.0,20.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,On_Time_Delivery_Rate,95.0,88.5,-6.5,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,Quality_Score,4.5,4.5,0.0,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Human Resources,Staffing Services,Temporary Staffing,Lead_Time,14.0,28.0,14.0,Days,Logistics_Benchmark,2025-12-31
+Human Resources,Learning & Development,Training Programs,Average_Unit_Price,178.0,176.0,-2.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Human Resources,Learning & Development,Training Programs,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Human Resources,Learning & Development,Training Programs,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Human Resources,Learning & Development,Training Programs,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Human Resources,Learning & Development,Training Programs,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Human Resources,Learning & Development,Training Programs,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Human Resources,Learning & Development,Training Programs,Lead_Time,14.0,17.0,3.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Average_Unit_Price,1782.0,1817.0,35.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,On_Time_Delivery_Rate,95.0,91.3,-3.7,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Payment_Terms,45.0,45.0,0.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,Lead_Time,14.0,11.0,-3.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,Average_Unit_Price,513.0,503.0,-10.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,On_Time_Delivery_Rate,95.0,75.0,-20.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,Quality_Score,4.5,4.4,-0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Spices & Seasonings,Vanilla,Lead_Time,14.0,24.0,10.0,Days,Logistics_Benchmark,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,Average_Unit_Price,1202.0,1198.0,-4.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,On_Time_Delivery_Rate,95.0,91.0,-4.0,Percentage,Supply_Chain_Council,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,Supplier_Diversity_Index,3.0,3.0,0.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Food & Beverages,Grains & Cereals,Wheat,Lead_Time,14.0,16.0,2.0,Days,Logistics_Benchmark,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,Average_Unit_Price,1854.0,1920.0,66.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,Quality_Score,4.5,4.8,0.3,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,Supplier_Diversity_Index,3.0,2.0,-1.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,Payment_Terms,45.0,30.0,-15.0,Days,Industry_Average,2025-12-31
+Energy & Utilities,Renewable Equipment,Wind Turbines,Lead_Time,14.0,21.0,7.0,Days,Logistics_Benchmark,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Average_Unit_Price,540.0,562.0,22.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,On_Time_Delivery_Rate,95.0,92.0,-3.0,Percentage,Supply_Chain_Council,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Quality_Score,4.5,4.7,0.2,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Healthcare & Life Sciences,Medical Supplies,Wound Care,Lead_Time,14.0,20.0,6.0,Days,Logistics_Benchmark,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Average_Unit_Price,540.0,565.0,25.0,USD_per_unit,Industry_Survey_2025,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,On_Time_Delivery_Rate,95.0,90.0,-5.0,Percentage,Supply_Chain_Council,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Quality_Score,4.5,4.6,0.1,Rating_1_to_5,Quality_Standards_Board,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Supplier_Diversity_Index,3.0,1.0,-2.0,Number_of_Regions,Procurement_Best_Practices,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,ESG_Score,80.0,80.0,0.0,Score_0_to_100,Sustainability_Index,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Payment_Terms,45.0,60.0,15.0,Days,Industry_Average,2025-12-31
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,Lead_Time,14.0,23.0,9.0,Days,Logistics_Benchmark,2025-12-31

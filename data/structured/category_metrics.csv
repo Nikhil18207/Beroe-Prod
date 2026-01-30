@@ -1,0 +1,141 @@
+sector,category,subcategory,total_spend,supplier_count,diverse_supplier_pct,innovation_supplier_pct,local_content_pct,qualified_supplier_count,certified_suppliers_pct,backup_supplier_count,ethical_certified_pct,low_spend_supplier_count
+Construction & Real Estate,Building Materials,Cement,18205600,6,12.1,18.2,33.3,4,90.9,1,60.6,13
+Construction & Real Estate,Building Materials,Concrete,14236000,7,12.1,18.2,33.3,5,90.9,3,60.6,15
+Construction & Real Estate,Building Materials,Glass,14154600,5,12.1,18.2,33.3,4,90.9,1,60.6,23
+Construction & Real Estate,Building Materials,Lumber,20785600,8,12.1,18.2,33.3,6,90.9,3,60.6,4
+Construction & Real Estate,Building Materials,Structural Steel,18185600,7,12.1,18.2,33.3,5,90.9,2,60.6,9
+Construction & Real Estate,Construction Equipment,Heavy Equipment,8122300,7,5.3,52.6,26.3,5,84.2,0,57.9,4
+Construction & Real Estate,Construction Equipment,Power Tools,9423700,6,5.3,52.6,26.3,4,84.2,2,57.9,6
+Construction & Real Estate,Construction Equipment,Scaffolding,7021300,6,5.3,52.6,26.3,4,84.2,3,57.9,24
+Construction & Real Estate,MEP Systems,Electrical Systems,4264000,5,18.8,31.2,31.2,4,87.5,1,75.0,25
+Construction & Real Estate,MEP Systems,HVAC Equipment,9076700,6,18.8,31.2,31.2,4,87.5,3,75.0,12
+Construction & Real Estate,MEP Systems,Plumbing Systems,5573900,5,18.8,31.2,31.2,4,87.5,2,75.0,5
+Energy & Utilities,Electricity,Backup Power,14191600,6,11.1,33.3,27.8,4,88.9,0,55.6,2
+Energy & Utilities,Electricity,Grid Electricity,18192600,7,11.1,33.3,27.8,5,88.9,2,55.6,16
+Energy & Utilities,Electricity,Renewable Electricity,13379100,5,11.1,33.3,27.8,4,88.9,2,55.6,10
+Energy & Utilities,Fuels,Aviation Fuel,9139900,8,27.6,27.6,24.1,6,93.1,0,75.9,6
+Energy & Utilities,Fuels,Biofuels,6989600,8,27.6,27.6,24.1,6,93.1,0,75.9,7
+Energy & Utilities,Fuels,Diesel,5074900,5,27.6,27.6,24.1,4,93.1,3,75.9,16
+Energy & Utilities,Fuels,Natural Gas,9402100,8,27.6,27.6,24.1,6,93.1,3,75.9,5
+Energy & Utilities,Renewable Equipment,Battery Storage,11434800,7,16.7,27.8,22.2,5,94.4,0,44.4,4
+Energy & Utilities,Renewable Equipment,Solar Panels,9734000,6,16.7,27.8,22.2,4,94.4,2,44.4,19
+Energy & Utilities,Renewable Equipment,Wind Turbines,10556600,5,16.7,27.8,22.2,4,94.4,0,44.4,21
+Facilities & Corporate Services,Facilities Management,Building Maintenance,7125800,7,26.3,31.6,26.3,5,94.7,2,63.2,14
+Facilities & Corporate Services,Facilities Management,Cleaning Services,7279600,7,26.3,31.6,26.3,5,94.7,0,63.2,11
+Facilities & Corporate Services,Facilities Management,Security Services,5471500,5,26.3,31.6,26.3,4,94.7,3,63.2,14
+Facilities & Corporate Services,Office Services,Office Furniture,4134400,6,27.3,36.4,27.3,4,100.0,0,63.6,25
+Facilities & Corporate Services,Office Services,Office Supplies,7616800,8,27.3,36.4,27.3,6,100.0,1,63.6,20
+Facilities & Corporate Services,Office Services,Printing Services,9984560,8,27.3,36.4,27.3,6,100.0,1,63.6,23
+Facilities & Corporate Services,Travel & Events,Business Travel,9396500,8,7.7,23.1,15.4,6,100.0,3,61.5,7
+Facilities & Corporate Services,Travel & Events,Event Management,5317200,5,7.7,23.1,15.4,4,100.0,1,61.5,10
+Food & Beverages,Beverages,Coffee,11612200,5,16.7,33.3,25.0,4,83.3,2,33.3,10
+Food & Beverages,Beverages,Tea,4854900,7,16.7,33.3,25.0,5,83.3,3,33.3,6
+Food & Beverages,Dairy Products,Cheese,9042200,8,7.1,21.4,21.4,6,92.9,0,50.0,7
+Food & Beverages,Dairy Products,Milk & Cream,10576300,6,7.1,21.4,21.4,4,92.9,3,50.0,10
+Food & Beverages,Edible Oils,Canola Oil,7483300,6,24.0,26.0,10.0,4,96.0,3,72.0,11
+Food & Beverages,Edible Oils,Coconut Oil,8192500,7,24.0,26.0,10.0,5,96.0,3,72.0,4
+Food & Beverages,Edible Oils,Olive Oil,8952300,8,24.0,26.0,10.0,6,96.0,2,72.0,10
+Food & Beverages,Edible Oils,Palm Oil,8085000,6,24.0,26.0,10.0,4,96.0,1,72.0,25
+Food & Beverages,Edible Oils,Peanut Oil,6233700,5,24.0,26.0,10.0,4,96.0,3,72.0,21
+Food & Beverages,Edible Oils,Rice Bran Oil,8160300,6,24.0,26.0,10.0,4,96.0,1,72.0,16
+Food & Beverages,Edible Oils,Soybean Oil,3504200,6,24.0,26.0,10.0,4,96.0,0,72.0,6
+Food & Beverages,Edible Oils,Sunflower Oil,6633300,6,24.0,26.0,10.0,4,96.0,2,72.0,2
+Food & Beverages,Grains & Cereals,Corn/Maize,10039100,8,9.5,23.8,14.3,6,100.0,3,52.4,12
+Food & Beverages,Grains & Cereals,Rice,8655500,8,9.5,23.8,14.3,6,100.0,3,52.4,12
+Food & Beverages,Grains & Cereals,Wheat,7850600,5,9.5,23.8,14.3,4,100.0,3,52.4,12
+Food & Beverages,Packaging Materials,Aluminum Cans,8886800,8,9.1,27.3,22.7,6,95.5,3,54.5,22
+Food & Beverages,Packaging Materials,Food-Grade Plastics,12328400,8,9.1,27.3,22.7,6,95.5,1,54.5,11
+Food & Beverages,Packaging Materials,Glass Containers,6611800,6,9.1,27.3,22.7,4,95.5,2,54.5,21
+Food & Beverages,Proteins,Beef,15083000,6,19.0,28.6,23.8,4,100.0,1,47.6,17
+Food & Beverages,Proteins,Poultry,16346000,7,19.0,28.6,23.8,5,100.0,2,47.6,7
+Food & Beverages,Proteins,Seafood,8891000,8,19.0,28.6,23.8,6,100.0,3,47.6,12
+Food & Beverages,Spices & Seasonings,Pepper,7219000,5,16.7,33.3,8.3,4,91.7,2,58.3,25
+Food & Beverages,Spices & Seasonings,Vanilla,13199100,7,16.7,33.3,8.3,5,91.7,3,58.3,20
+Food & Beverages,Sweeteners,Sugar,7101500,5,0.0,60.0,20.0,4,100.0,1,60.0,12
+Healthcare & Life Sciences,Laboratory Equipment,Analytical Instruments,12752600,7,20.0,46.7,33.3,5,100.0,3,66.7,10
+Healthcare & Life Sciences,Laboratory Equipment,Lab Automation,11043500,8,20.0,46.7,33.3,6,100.0,3,66.7,13
+Healthcare & Life Sciences,Medical Devices,Diagnostic Equipment,28460900,7,26.1,34.8,30.4,5,87.0,0,60.9,20
+Healthcare & Life Sciences,Medical Devices,Implants,10662500,5,26.1,34.8,30.4,4,87.0,1,60.9,20
+Healthcare & Life Sciences,Medical Devices,Patient Monitoring,24004000,6,26.1,34.8,30.4,4,87.0,1,60.9,23
+Healthcare & Life Sciences,Medical Devices,Surgical Instruments,11863300,5,26.1,34.8,30.4,4,87.0,0,60.9,25
+Healthcare & Life Sciences,Medical Supplies,Disposable Supplies,9743200,6,27.8,22.2,44.4,4,100.0,3,77.8,24
+Healthcare & Life Sciences,Medical Supplies,Lab Supplies,6206000,6,27.8,22.2,44.4,4,100.0,1,77.8,16
+Healthcare & Life Sciences,Medical Supplies,Wound Care,8127100,6,27.8,22.2,44.4,4,100.0,2,77.8,24
+Healthcare & Life Sciences,Pharmaceuticals,Biologics,31882700,5,36.1,30.6,33.3,4,94.4,0,69.4,15
+Healthcare & Life Sciences,Pharmaceuticals,Branded Drugs,34287900,8,36.1,30.6,33.3,6,94.4,3,69.4,6
+Healthcare & Life Sciences,Pharmaceuticals,Generic Drugs,33976000,8,36.1,30.6,33.3,6,94.4,2,69.4,9
+Healthcare & Life Sciences,Pharmaceuticals,OTC Medications,38961400,8,36.1,30.6,33.3,6,94.4,2,69.4,23
+Healthcare & Life Sciences,Pharmaceuticals,Vaccines,23619100,7,36.1,30.6,33.3,5,94.4,1,69.4,24
+Human Resources,HR Technology,Benefits Administration,6129900,6,31.2,18.8,37.5,4,93.8,3,75.0,14
+Human Resources,HR Technology,HRIS Systems,3965000,5,31.2,18.8,37.5,4,93.8,0,75.0,16
+Human Resources,HR Technology,Payroll Services,6698100,5,31.2,18.8,37.5,4,93.8,3,75.0,20
+Human Resources,Learning & Development,E-Learning Platforms,6472300,5,22.2,33.3,38.9,4,100.0,3,50.0,19
+Human Resources,Learning & Development,Leadership Development,8925900,8,22.2,33.3,38.9,6,100.0,3,50.0,19
+Human Resources,Learning & Development,Training Programs,2240600,5,22.2,33.3,38.9,4,100.0,0,50.0,13
+Human Resources,Staffing Services,Executive Search,7086600,5,22.2,50.0,27.8,4,88.9,0,61.1,5
+Human Resources,Staffing Services,Permanent Recruitment,9932400,8,22.2,50.0,27.8,6,88.9,1,61.1,23
+Human Resources,Staffing Services,Temporary Staffing,5764100,5,22.2,50.0,27.8,4,88.9,2,61.1,7
+Information Technology,Cloud Services,Cloud Storage,5951200,6,13.6,22.7,59.1,4,100.0,0,68.2,20
+Information Technology,Cloud Services,IaaS,10841600,5,13.6,22.7,59.1,4,100.0,3,68.2,12
+Information Technology,Cloud Services,PaaS,6460800,5,13.6,22.7,59.1,4,100.0,3,68.2,5
+Information Technology,Cloud Services,SaaS,5761300,6,13.6,22.7,59.1,4,100.0,0,68.2,5
+Information Technology,Cybersecurity,Endpoint Security,10782400,5,33.3,50.0,37.5,4,87.5,2,54.2,9
+Information Technology,Cybersecurity,Identity Management,5149000,7,33.3,50.0,37.5,5,87.5,1,54.2,16
+Information Technology,Cybersecurity,Network Security,5101600,5,33.3,50.0,37.5,4,87.5,2,54.2,14
+Information Technology,Cybersecurity,Security Operations,10196500,7,33.3,50.0,37.5,5,87.5,3,54.2,23
+Information Technology,Hardware,Desktops,8931500,6,20.6,26.5,44.1,4,100.0,1,58.8,13
+Information Technology,Hardware,Laptops,13346900,5,20.6,26.5,44.1,4,100.0,0,58.8,17
+Information Technology,Hardware,Network Equipment,9024300,6,20.6,26.5,44.1,4,100.0,0,58.8,11
+Information Technology,Hardware,Peripherals,10790300,5,20.6,26.5,44.1,4,100.0,3,58.8,4
+Information Technology,Hardware,Servers,8446300,6,20.6,26.5,44.1,4,100.0,0,58.8,25
+Information Technology,Hardware,Storage Systems,11541100,6,20.6,26.5,44.1,4,100.0,1,58.8,13
+Information Technology,Software,Database Software,5015000,5,16.7,20.8,41.7,4,87.5,2,70.8,12
+Information Technology,Software,Development Tools,5795400,5,16.7,20.8,41.7,4,87.5,3,70.8,8
+Information Technology,Software,Enterprise Software,12506700,7,16.7,20.8,41.7,5,87.5,3,70.8,13
+Information Technology,Software,Productivity Software,9994500,7,16.7,20.8,41.7,5,87.5,3,70.8,5
+Information Technology,Telecommunications,Internet Services,7002100,5,25.0,33.3,50.0,4,83.3,3,41.7,25
+Information Technology,Telecommunications,Mobile Services,8443800,7,25.0,33.3,50.0,5,83.3,3,41.7,12
+Logistics & Transportation,Fleet Services,Fleet Maintenance,12754900,8,17.4,39.1,30.4,6,95.7,0,56.5,11
+Logistics & Transportation,Fleet Services,Fleet Telematics,10941700,8,17.4,39.1,30.4,6,95.7,0,56.5,24
+Logistics & Transportation,Fleet Services,Fleet Vehicles,9368700,7,17.4,39.1,30.4,5,95.7,0,56.5,2
+Logistics & Transportation,Freight Services,Air Freight,10687700,6,30.4,47.8,47.8,4,87.0,2,52.2,22
+Logistics & Transportation,Freight Services,Ocean Freight,9158300,5,30.4,47.8,47.8,4,87.0,0,52.2,23
+Logistics & Transportation,Freight Services,Rail Freight,7338500,5,30.4,47.8,47.8,4,87.0,1,52.2,25
+Logistics & Transportation,Freight Services,Road Freight,8265300,7,30.4,47.8,47.8,5,87.0,1,52.2,18
+Logistics & Transportation,Warehousing,3PL Services,10702800,8,22.7,18.2,40.9,6,100.0,1,54.5,19
+Logistics & Transportation,Warehousing,Cold Storage,8879600,6,22.7,18.2,40.9,4,100.0,1,54.5,12
+Logistics & Transportation,Warehousing,Distribution Centers,9246000,8,22.7,18.2,40.9,6,100.0,3,54.5,16
+Manufacturing & Industrial,Chemicals,Adhesives & Sealants,8331100,6,12.0,24.0,36.0,4,88.0,1,56.0,14
+Manufacturing & Industrial,Chemicals,Industrial Chemicals,8608500,6,12.0,24.0,36.0,4,88.0,1,56.0,7
+Manufacturing & Industrial,Chemicals,Petrochemicals,10955600,8,12.0,24.0,36.0,6,88.0,3,56.0,14
+Manufacturing & Industrial,Chemicals,Specialty Chemicals,4897100,5,12.0,24.0,36.0,4,88.0,0,56.0,25
+Manufacturing & Industrial,Equipment & Machinery,Industrial Machinery,14090500,5,12.0,24.0,48.0,4,92.0,1,56.0,16
+Manufacturing & Industrial,Equipment & Machinery,Manufacturing Equipment,24041300,6,12.0,24.0,48.0,4,92.0,3,56.0,14
+Manufacturing & Industrial,Equipment & Machinery,Material Handling,15867800,7,12.0,24.0,48.0,5,92.0,0,56.0,24
+Manufacturing & Industrial,Equipment & Machinery,Robotics & Automation,18304200,7,12.0,24.0,48.0,5,92.0,1,56.0,8
+Manufacturing & Industrial,MRO Supplies,Industrial Tools,7425200,6,8.0,36.0,40.0,4,88.0,2,36.0,24
+Manufacturing & Industrial,MRO Supplies,Lubricants & Fluids,6369200,7,8.0,36.0,40.0,5,88.0,0,36.0,20
+Manufacturing & Industrial,MRO Supplies,Safety Equipment,6673300,7,8.0,36.0,40.0,5,88.0,0,36.0,19
+Manufacturing & Industrial,MRO Supplies,Spare Parts,5689300,5,8.0,36.0,40.0,4,88.0,1,36.0,13
+Manufacturing & Industrial,Raw Materials - Metals,Aluminum,27435100,7,13.9,27.8,19.4,5,86.1,2,58.3,8
+Manufacturing & Industrial,Raw Materials - Metals,Copper,12485700,6,13.9,27.8,19.4,4,86.1,3,58.3,5
+Manufacturing & Industrial,Raw Materials - Metals,Nickel,26444000,8,13.9,27.8,19.4,6,86.1,2,58.3,23
+Manufacturing & Industrial,Raw Materials - Metals,Steel,25992500,7,13.9,27.8,19.4,5,86.1,3,58.3,18
+Manufacturing & Industrial,Raw Materials - Metals,Zinc,19323200,8,13.9,27.8,19.4,6,86.1,2,58.3,21
+Manufacturing & Industrial,Raw Materials - Plastics,Engineering Plastics,7570400,6,14.3,14.3,21.4,4,100.0,3,42.9,21
+Manufacturing & Industrial,Raw Materials - Plastics,PVC,11286000,8,14.3,14.3,21.4,6,100.0,3,42.9,20
+Manufacturing & Industrial,Raw Materials - Plastics,Polyethylene,6751800,7,14.3,14.3,21.4,5,100.0,0,42.9,13
+Manufacturing & Industrial,Raw Materials - Plastics,Polypropylene,8699300,7,14.3,14.3,21.4,5,100.0,2,42.9,16
+Professional Services,Consulting,HR Consulting,24217800,7,27.3,31.8,31.8,5,95.5,1,50.0,23
+Professional Services,Consulting,IT Consulting,20260600,8,27.3,31.8,31.8,6,95.5,2,50.0,21
+Professional Services,Consulting,Management Consulting,14861600,7,27.3,31.8,31.8,5,95.5,0,50.0,23
+Professional Services,Financial Services,Accounting,10062900,7,33.3,38.9,38.9,5,61.1,1,61.1,12
+Professional Services,Financial Services,Banking,5483700,5,33.3,38.9,38.9,4,61.1,0,61.1,9
+Professional Services,Financial Services,Insurance,3847900,6,33.3,38.9,38.9,4,61.1,2,61.1,5
+Professional Services,Legal Services,Corporate Law,10978400,8,25.0,35.0,35.0,6,65.0,1,55.0,13
+Professional Services,Legal Services,Employment Law,7712800,5,25.0,35.0,35.0,4,65.0,1,55.0,18
+Professional Services,Legal Services,Intellectual Property,7093800,7,25.0,35.0,35.0,5,65.0,3,55.0,15
+Professional Services,Marketing Services,Advertising,5291500,5,18.2,50.0,45.5,4,50.0,1,59.1,20
+Professional Services,Marketing Services,Digital Marketing,8040700,6,18.2,50.0,45.5,4,50.0,3,59.1,15
+Professional Services,Marketing Services,Market Research,7208900,6,18.2,50.0,45.5,4,50.0,1,59.1,17
+Professional Services,Marketing Services,PR & Communications,5976200,5,18.2,50.0,45.5,4,50.0,1,59.1,19

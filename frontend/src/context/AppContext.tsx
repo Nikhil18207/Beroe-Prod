@@ -1,0 +1,588 @@
+"use client";
+
+import React, { createContext, useContext, useReducer, useCallback } from "react";
+import type {
+  AnalysisResponse,
+  Category,
+  Opportunity,
+  SavingsSummary,
+  User,
+} from "@/types/api";
+
+// ============================================================================
+// Portfolio Types
+// ============================================================================
+
+export interface PortfolioItem {
+  id: string;
+  name: string;
+  spend: number;
+  locations: string[];
+}
+
+// Data Point Types for Review Page
+export interface DataPointItem {
+  id: string;
+  name: string;
+  fileName?: string;
+  uploadedAt?: Date;
+}
+
+export interface DataPoint {
+  id: string;
+  name: string;
+  items: DataPointItem[];
+  canUpload: boolean;
+  canView: boolean;
+  isSpendData?: boolean;
+}
+
+// Proof Point and Opportunity Types for Review Page
+export interface ProofPoint {
+  id: string;
+  name: string;
+  description: string;
+  isValidated: boolean;
+}
+
+export interface SetupOpportunity {
+  id: string;
+  name: string;
+  description: string;
+  potentialSavings: string;
+  proofPoints: ProofPoint[];
+}
+
+// ============================================================================
+// State Types
+// ============================================================================
+
+interface AppState {
+  // Auth
+  user: User | null;
+  isAuthenticated: boolean;
+
+  // Session
+  sessionId: string | null;
+  isLoading: boolean;
+  error: string | null;
+
+  // Analysis Data
+  category: Category | null;
+  opportunities: Opportunity[];
+  savingsSummary: SavingsSummary | null;
+  analysisResponse: AnalysisResponse | null;
+
+  // Portfolio Data (persisted across pages)
+  portfolioItems: PortfolioItem[];
+  portfolioLoaded: boolean;
+
+  // Review Data (persisted across pages)
+  dataPoints: DataPoint[];
+  setupOpportunities: SetupOpportunity[];
+
+  // Setup Flow
+  setupStep: number;
+  setupData: {
+    categoryName: string;
+    spend: number;
+    addressableSpendPct: number;
+    savingsBenchmarkLow: number;
+    savingsBenchmarkHigh: number;
+    maturityScore: number;
+    uploadedFile: File | null;
+    goals: {
+      cost: number;
+      risk: number;
+      esg: number;
+    };
+  };
+
+  // Simulation Settings (for dynamic results)
+  simulationSettings: {
+    malaysiaPercent: number;
+    indonesiaPercent: number;
+    selectedCountry: "australia" | "canada";
+  };
+
+  // Computed procurement metrics (from frontend calculations)
+  computedMetrics: Record<string, number> | null;
+}
+
+// ============================================================================
+// Actions
+// ============================================================================
+
+type AppAction =
+  | { type: "SET_USER"; payload: User | null }
+  | { type: "SET_SESSION"; payload: string | null }
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_ERROR"; payload: string | null }
+  | { type: "SET_ANALYSIS_RESPONSE"; payload: AnalysisResponse }
+  | { type: "SET_OPPORTUNITIES"; payload: Opportunity[] }
+  | { type: "UPDATE_OPPORTUNITY"; payload: { id: string; updates: Partial<Opportunity> } }
+  | { type: "SET_SETUP_STEP"; payload: number }
+  | { type: "UPDATE_SETUP_DATA"; payload: Partial<AppState["setupData"]> }
+  | { type: "SET_PORTFOLIO_ITEMS"; payload: PortfolioItem[] }
+  | { type: "ADD_PORTFOLIO_ITEM"; payload: PortfolioItem }
+  | { type: "UPDATE_PORTFOLIO_ITEM"; payload: PortfolioItem }
+  | { type: "REMOVE_PORTFOLIO_ITEM"; payload: string }
+  | { type: "SET_PORTFOLIO_LOADED"; payload: boolean }
+  | { type: "SET_DATA_POINTS"; payload: DataPoint[] }
+  | { type: "UPDATE_DATA_POINT"; payload: DataPoint }
+  | { type: "SET_SETUP_OPPORTUNITIES"; payload: SetupOpportunity[] }
+  | { type: "UPDATE_SETUP_OPPORTUNITY"; payload: SetupOpportunity }
+  | { type: "UPDATE_SIMULATION_SETTINGS"; payload: Partial<AppState["simulationSettings"]> }
+  | { type: "SET_COMPUTED_METRICS"; payload: Record<string, number> | null }
+  | { type: "SET_SAVINGS_SUMMARY"; payload: SavingsSummary | null }
+  | { type: "RESET_STATE" }
+  | { type: "LOGOUT" };
+
+// ============================================================================
+// Initial State
+// ============================================================================
+
+// Default data points for review page
+const defaultDataPoints: DataPoint[] = [
+  { id: "spend", name: "Overall Spend", items: [], canUpload: true, canView: false, isSpendData: true },
+  { id: "supply-master", name: "Supply Master", items: [], canUpload: true, canView: true },
+  { id: "contracts", name: "Contracts", items: [], canUpload: true, canView: true },
+  { id: "playbook", name: "Category Playbook", items: [], canUpload: true, canView: true },
+  { id: "other", name: "Other", items: [], canUpload: true, canView: true },
+];
+
+// Default opportunities for review page - Matches backend agents
+const defaultSetupOpportunities: SetupOpportunity[] = [
+  {
+    id: "volume-bundling",
+    name: "Volume Bundling",
+    description: "Aggregate demand across regions, consolidate tail spend, and leverage volume to achieve better pricing",
+    potentialSavings: "0-5%",
+    proofPoints: [
+      { id: "vb-pp-1", name: "Regional Spend", description: "Spend distribution across different geographic regions", isValidated: false },
+      { id: "vb-pp-2", name: "Tail Spend", description: "Fragmented spend across multiple small suppliers", isValidated: false },
+      { id: "vb-pp-3", name: "Volume Leverage", description: "Total volume that can be consolidated for negotiations", isValidated: false },
+      { id: "vb-pp-4", name: "Price Variance", description: "Price differences across suppliers for similar items", isValidated: false },
+      { id: "vb-pp-5", name: "Avg Spend/Supplier", description: "Average spend per supplier indicating consolidation potential", isValidated: false },
+      { id: "vb-pp-6", name: "Market Consolidation", description: "Market structure and consolidation opportunities", isValidated: false },
+      { id: "vb-pp-7", name: "Supplier Location", description: "Geographic distribution of suppliers", isValidated: false },
+      { id: "vb-pp-8", name: "Supplier Risk Rating", description: "Risk assessment of current supplier base", isValidated: false },
+    ],
+  },
+  {
+    id: "target-pricing",
+    name: "Target Pricing",
+    description: "Analyze price variances, tariff impacts, and cost structures to achieve optimal pricing",
+    potentialSavings: "1-2%",
+    proofPoints: [
+      { id: "tp-pp-1", name: "Price Variance", description: "Price differences across suppliers and regions", isValidated: false },
+      { id: "tp-pp-2", name: "Tariff Rate", description: "Import/export tariff impacts on pricing", isValidated: false },
+      { id: "tp-pp-3", name: "Cost Structure", description: "Breakdown of cost components (raw materials, labor, logistics)", isValidated: false },
+      { id: "tp-pp-4", name: "Unit Price", description: "Per-unit pricing analysis across suppliers", isValidated: false },
+    ],
+  },
+  {
+    id: "risk-management",
+    name: "Risk Management",
+    description: "Identify and mitigate supply chain risks including single sourcing, concentration, and external factors",
+    potentialSavings: "1-3% cost avoidance",
+    proofPoints: [
+      { id: "rm-pp-1", name: "Single Sourcing", description: "Items or categories with only one supplier", isValidated: false },
+      { id: "rm-pp-2", name: "Supplier Concentration", description: "Over-reliance on specific suppliers", isValidated: false },
+      { id: "rm-pp-3", name: "Category Risk", description: "Inherent risk level of the category", isValidated: false },
+      { id: "rm-pp-4", name: "Inflation", description: "Inflation impact on category costs", isValidated: false },
+      { id: "rm-pp-5", name: "Exchange Rate", description: "Currency fluctuation risks", isValidated: false },
+      { id: "rm-pp-6", name: "Geo Political", description: "Geopolitical risks affecting supply", isValidated: false },
+      { id: "rm-pp-7", name: "Supplier Risk Rating", description: "Overall supplier risk assessment", isValidated: false },
+    ],
+  },
+  {
+    id: "respec-pack",
+    name: "Re-specification Pack",
+    description: "Identify opportunities to optimize specifications for cost savings without compromising quality",
+    potentialSavings: "2-3%",
+    proofPoints: [
+      { id: "rp-pp-1", name: "Price Variance", description: "Price differences indicating specification optimization opportunities", isValidated: false },
+      { id: "rp-pp-2", name: "Export Data", description: "Export patterns and alternative sourcing options", isValidated: false },
+      { id: "rp-pp-3", name: "Cost Structure", description: "Cost breakdown to identify specification-driven savings", isValidated: false },
+    ],
+  },
+];
+
+const initialState: AppState = {
+  user: null,
+  isAuthenticated: false,
+  sessionId: null,
+  isLoading: false,
+  error: null,
+  category: null,
+  opportunities: [],
+  savingsSummary: null,
+  analysisResponse: null,
+  portfolioItems: [],
+  portfolioLoaded: false,
+  dataPoints: defaultDataPoints,
+  setupOpportunities: defaultSetupOpportunities,
+  setupStep: 0,
+  simulationSettings: {
+    malaysiaPercent: 20,
+    indonesiaPercent: 80,
+    selectedCountry: "australia" as const,
+  },
+  computedMetrics: null,
+  setupData: {
+    categoryName: "",
+    spend: 0,
+    addressableSpendPct: 0.8,
+    savingsBenchmarkLow: 0.04,
+    savingsBenchmarkHigh: 0.1,
+    maturityScore: 2.5,
+    uploadedFile: null,
+    goals: {
+      cost: 50,
+      risk: 50,
+      esg: 0, // ESG removed from UI, kept for API compatibility
+    },
+  },
+};
+
+// ============================================================================
+// Reducer
+// ============================================================================
+
+function appReducer(state: AppState, action: AppAction): AppState {
+  switch (action.type) {
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: action.payload !== null,
+      };
+
+    case "SET_SESSION":
+      return {
+        ...state,
+        sessionId: action.payload,
+      };
+
+    case "SET_LOADING":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+
+    case "SET_ERROR":
+      return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+      };
+
+    case "SET_ANALYSIS_RESPONSE":
+      return {
+        ...state,
+        analysisResponse: action.payload,
+        sessionId: action.payload.session_id,
+        category: action.payload.category,
+        opportunities: action.payload.opportunities,
+        savingsSummary: action.payload.savings_summary,
+        isLoading: false,
+        error: null,
+      };
+
+    case "SET_OPPORTUNITIES":
+      return {
+        ...state,
+        opportunities: action.payload,
+      };
+
+    case "UPDATE_OPPORTUNITY":
+      return {
+        ...state,
+        opportunities: state.opportunities.map((opp) =>
+          opp.id === action.payload.id
+            ? { ...opp, ...action.payload.updates }
+            : opp
+        ),
+      };
+
+    case "SET_SETUP_STEP":
+      return {
+        ...state,
+        setupStep: action.payload,
+      };
+
+    case "UPDATE_SETUP_DATA":
+      return {
+        ...state,
+        setupData: {
+          ...state.setupData,
+          ...action.payload,
+        },
+      };
+
+    case "SET_PORTFOLIO_ITEMS":
+      return {
+        ...state,
+        portfolioItems: action.payload,
+        portfolioLoaded: true,
+      };
+
+    case "ADD_PORTFOLIO_ITEM":
+      return {
+        ...state,
+        portfolioItems: [...state.portfolioItems, action.payload],
+      };
+
+    case "UPDATE_PORTFOLIO_ITEM":
+      return {
+        ...state,
+        portfolioItems: state.portfolioItems.map((item) =>
+          item.id === action.payload.id ? action.payload : item
+        ),
+      };
+
+    case "REMOVE_PORTFOLIO_ITEM":
+      return {
+        ...state,
+        portfolioItems: state.portfolioItems.filter((item) => item.id !== action.payload),
+      };
+
+    case "SET_PORTFOLIO_LOADED":
+      return {
+        ...state,
+        portfolioLoaded: action.payload,
+      };
+
+    case "SET_DATA_POINTS":
+      return {
+        ...state,
+        dataPoints: action.payload,
+      };
+
+    case "UPDATE_DATA_POINT":
+      return {
+        ...state,
+        dataPoints: state.dataPoints.map((dp) =>
+          dp.id === action.payload.id ? action.payload : dp
+        ),
+      };
+
+    case "SET_SETUP_OPPORTUNITIES":
+      return {
+        ...state,
+        setupOpportunities: action.payload,
+      };
+
+    case "UPDATE_SETUP_OPPORTUNITY":
+      return {
+        ...state,
+        setupOpportunities: state.setupOpportunities.map((opp) =>
+          opp.id === action.payload.id ? action.payload : opp
+        ),
+      };
+
+    case "UPDATE_SIMULATION_SETTINGS":
+      return {
+        ...state,
+        simulationSettings: {
+          ...state.simulationSettings,
+          ...action.payload,
+        },
+      };
+
+    case "SET_COMPUTED_METRICS":
+      return {
+        ...state,
+        computedMetrics: action.payload,
+      };
+
+    case "SET_SAVINGS_SUMMARY":
+      return {
+        ...state,
+        savingsSummary: action.payload,
+      };
+
+    case "RESET_STATE":
+      return {
+        ...initialState,
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      };
+
+    case "LOGOUT":
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+// ============================================================================
+// Context
+// ============================================================================
+
+interface AppContextType {
+  state: AppState;
+  dispatch: React.Dispatch<AppAction>;
+  actions: {
+    setUser: (user: User | null) => void;
+    setSession: (sessionId: string | null) => void;
+    setLoading: (loading: boolean) => void;
+    setError: (error: string | null) => void;
+    setAnalysisResponse: (response: AnalysisResponse) => void;
+    setOpportunities: (opportunities: Opportunity[]) => void;
+    updateOpportunity: (id: string, updates: Partial<Opportunity>) => void;
+    setSetupStep: (step: number) => void;
+    updateSetupData: (data: Partial<AppState["setupData"]>) => void;
+    setPortfolioItems: (items: PortfolioItem[]) => void;
+    addPortfolioItem: (item: PortfolioItem) => void;
+    updatePortfolioItem: (item: PortfolioItem) => void;
+    removePortfolioItem: (id: string) => void;
+    setPortfolioLoaded: (loaded: boolean) => void;
+    setDataPoints: (dataPoints: DataPoint[]) => void;
+    updateDataPoint: (dataPoint: DataPoint) => void;
+    setSetupOpportunities: (opportunities: SetupOpportunity[]) => void;
+    updateSetupOpportunity: (opportunity: SetupOpportunity) => void;
+    updateSimulationSettings: (settings: Partial<AppState["simulationSettings"]>) => void;
+    setComputedMetrics: (metrics: Record<string, number> | null) => void;
+    setSavingsSummary: (summary: SavingsSummary | null) => void;
+    resetState: () => void;
+    logout: () => void;
+  };
+}
+
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
+// ============================================================================
+// Provider
+// ============================================================================
+
+export function AppProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(appReducer, initialState);
+
+  const actions = {
+    setUser: useCallback(
+      (user: User | null) => dispatch({ type: "SET_USER", payload: user }),
+      []
+    ),
+    setSession: useCallback(
+      (sessionId: string | null) =>
+        dispatch({ type: "SET_SESSION", payload: sessionId }),
+      []
+    ),
+    setLoading: useCallback(
+      (loading: boolean) => dispatch({ type: "SET_LOADING", payload: loading }),
+      []
+    ),
+    setError: useCallback(
+      (error: string | null) => dispatch({ type: "SET_ERROR", payload: error }),
+      []
+    ),
+    setAnalysisResponse: useCallback(
+      (response: AnalysisResponse) =>
+        dispatch({ type: "SET_ANALYSIS_RESPONSE", payload: response }),
+      []
+    ),
+    setOpportunities: useCallback(
+      (opportunities: Opportunity[]) =>
+        dispatch({ type: "SET_OPPORTUNITIES", payload: opportunities }),
+      []
+    ),
+    updateOpportunity: useCallback(
+      (id: string, updates: Partial<Opportunity>) =>
+        dispatch({ type: "UPDATE_OPPORTUNITY", payload: { id, updates } }),
+      []
+    ),
+    setSetupStep: useCallback(
+      (step: number) => dispatch({ type: "SET_SETUP_STEP", payload: step }),
+      []
+    ),
+    updateSetupData: useCallback(
+      (data: Partial<AppState["setupData"]>) =>
+        dispatch({ type: "UPDATE_SETUP_DATA", payload: data }),
+      []
+    ),
+    setPortfolioItems: useCallback(
+      (items: PortfolioItem[]) =>
+        dispatch({ type: "SET_PORTFOLIO_ITEMS", payload: items }),
+      []
+    ),
+    addPortfolioItem: useCallback(
+      (item: PortfolioItem) =>
+        dispatch({ type: "ADD_PORTFOLIO_ITEM", payload: item }),
+      []
+    ),
+    updatePortfolioItem: useCallback(
+      (item: PortfolioItem) =>
+        dispatch({ type: "UPDATE_PORTFOLIO_ITEM", payload: item }),
+      []
+    ),
+    removePortfolioItem: useCallback(
+      (id: string) => dispatch({ type: "REMOVE_PORTFOLIO_ITEM", payload: id }),
+      []
+    ),
+    setPortfolioLoaded: useCallback(
+      (loaded: boolean) =>
+        dispatch({ type: "SET_PORTFOLIO_LOADED", payload: loaded }),
+      []
+    ),
+    setDataPoints: useCallback(
+      (dataPoints: DataPoint[]) =>
+        dispatch({ type: "SET_DATA_POINTS", payload: dataPoints }),
+      []
+    ),
+    updateDataPoint: useCallback(
+      (dataPoint: DataPoint) =>
+        dispatch({ type: "UPDATE_DATA_POINT", payload: dataPoint }),
+      []
+    ),
+    setSetupOpportunities: useCallback(
+      (opportunities: SetupOpportunity[]) =>
+        dispatch({ type: "SET_SETUP_OPPORTUNITIES", payload: opportunities }),
+      []
+    ),
+    updateSetupOpportunity: useCallback(
+      (opportunity: SetupOpportunity) =>
+        dispatch({ type: "UPDATE_SETUP_OPPORTUNITY", payload: opportunity }),
+      []
+    ),
+    updateSimulationSettings: useCallback(
+      (settings: Partial<AppState["simulationSettings"]>) =>
+        dispatch({ type: "UPDATE_SIMULATION_SETTINGS", payload: settings }),
+      []
+    ),
+    setComputedMetrics: useCallback(
+      (metrics: Record<string, number> | null) =>
+        dispatch({ type: "SET_COMPUTED_METRICS", payload: metrics }),
+      []
+    ),
+    setSavingsSummary: useCallback(
+      (summary: SavingsSummary | null) =>
+        dispatch({ type: "SET_SAVINGS_SUMMARY", payload: summary }),
+      []
+    ),
+    resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),
+    logout: useCallback(() => dispatch({ type: "LOGOUT" }), []),
+  };
+
+  return (
+    <AppContext.Provider value={{ state, dispatch, actions }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+// ============================================================================
+// Hook
+// ============================================================================
+
+export function useApp() {
+  const context = useContext(AppContext);
+  if (context === undefined) {
+    throw new Error("useApp must be used within an AppProvider");
+  }
+  return context;
+}
+
+export default AppContext;

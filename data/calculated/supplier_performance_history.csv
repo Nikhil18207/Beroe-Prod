@@ -1,0 +1,201 @@
+Supplier_ID,Supplier_Name,Period,Quality_Score,Delivery_Score,Cost_Competitiveness,Responsiveness,Overall_Score,Trend
+S1523,Health Pharma Co,Q1 2025,4.25,4.86,4.18,3.86,3.86,Improving
+S1523,Health Pharma Co,Q2 2025,4.75,4.43,3.57,4.42,3.81,Stable
+S1523,Health Pharma Co,Q3 2025,4.59,4.49,4.69,4.0,3.91,Stable
+S1523,Health Pharma Co,Q4 2025,4.84,4.47,3.8,4.03,4.78,Improving
+S601,Pfizer,Q1 2025,4.88,4.23,4.28,3.62,4.0,Stable
+S601,Pfizer,Q2 2025,4.47,4.57,3.55,4.79,4.1,Stable
+S601,Pfizer,Q3 2025,4.27,3.74,3.95,3.99,4.43,Improving
+S601,Pfizer,Q4 2025,5.0,4.97,3.86,3.59,4.06,Stable
+S1532,Med Source Corp,Q1 2025,4.87,4.72,3.54,4.28,4.08,Improving
+S1532,Med Source Corp,Q2 2025,4.21,4.09,3.68,4.52,4.32,Declining
+S1532,Med Source Corp,Q3 2025,4.53,4.44,3.8,3.84,3.95,Stable
+S1532,Med Source Corp,Q4 2025,4.89,3.99,4.2,3.79,3.94,Declining
+S1525,India Med Source Corp,Q1 2025,4.62,3.8,3.68,4.46,4.7,Improving
+S1525,India Med Source Corp,Q2 2025,4.32,4.86,4.5,4.42,4.36,Improving
+S1525,India Med Source Corp,Q3 2025,4.18,4.34,4.73,3.67,4.12,Improving
+S1525,India Med Source Corp,Q4 2025,4.67,4.65,4.64,4.08,4.21,Stable
+S1541,Malaysia Medical Solutions Trading,Q1 2025,4.69,4.73,4.33,4.53,3.95,Improving
+S1541,Malaysia Medical Solutions Trading,Q2 2025,3.93,3.78,4.49,4.36,4.07,Declining
+S1541,Malaysia Medical Solutions Trading,Q3 2025,4.53,4.39,3.8,3.54,3.88,Stable
+S1541,Malaysia Medical Solutions Trading,Q4 2025,3.96,4.77,4.11,4.41,3.98,Stable
+S1538,Spain Health Pharma Co,Q1 2025,4.39,3.71,3.75,3.55,4.56,Improving
+S1538,Spain Health Pharma Co,Q2 2025,4.91,4.93,3.79,4.44,4.0,Improving
+S1538,Spain Health Pharma Co,Q3 2025,3.88,4.89,4.78,4.71,4.29,Stable
+S1538,Spain Health Pharma Co,Q4 2025,4.84,4.83,4.06,4.59,4.41,Stable
+S617,Siemens Healthineers,Q1 2025,4.66,4.09,4.72,4.3,4.34,Declining
+S617,Siemens Healthineers,Q2 2025,4.85,4.68,4.18,4.13,4.63,Improving
+S617,Siemens Healthineers,Q3 2025,4.85,3.87,4.2,4.88,3.84,Stable
+S617,Siemens Healthineers,Q4 2025,4.42,4.45,3.56,3.91,4.2,Stable
+S1534,Nigeria Life Sciences Group,Q1 2025,4.73,3.93,3.72,3.91,4.72,Declining
+S1534,Nigeria Life Sciences Group,Q2 2025,4.42,3.71,4.58,4.13,4.52,Improving
+S1534,Nigeria Life Sciences Group,Q3 2025,4.02,4.38,4.66,4.26,4.19,Stable
+S1534,Nigeria Life Sciences Group,Q4 2025,4.34,3.77,4.27,4.5,4.0,Stable
+S1415,Peru Industrial Machines Ltd,Q1 2025,3.91,3.99,4.34,4.5,3.96,Declining
+S1415,Peru Industrial Machines Ltd,Q2 2025,3.95,3.67,4.08,4.01,4.32,Stable
+S1415,Peru Industrial Machines Ltd,Q3 2025,4.67,4.96,4.3,3.72,4.35,Improving
+S1415,Peru Industrial Machines Ltd,Q4 2025,4.72,4.87,4.24,4.42,3.95,Improving
+S402,Tata Steel,Q1 2025,4.01,4.57,4.05,3.93,4.57,Stable
+S402,Tata Steel,Q2 2025,4.15,3.77,4.67,4.84,3.8,Stable
+S402,Tata Steel,Q3 2025,3.81,4.25,4.15,4.63,4.41,Stable
+S402,Tata Steel,Q4 2025,4.09,4.38,4.12,4.07,3.88,Declining
+S701,NextEra Energy,Q1 2025,3.81,4.82,3.86,4.38,4.62,Improving
+S701,NextEra Energy,Q2 2025,3.86,3.72,4.35,3.55,4.65,Declining
+S701,NextEra Energy,Q3 2025,4.49,4.4,3.93,3.62,3.91,Improving
+S701,NextEra Energy,Q4 2025,3.99,3.93,4.36,4.48,4.37,Declining
+S1529,Med Source Solutions,Q1 2025,4.01,4.18,4.25,4.8,3.89,Stable
+S1529,Med Source Solutions,Q2 2025,4.19,4.85,4.57,4.56,4.64,Improving
+S1529,Med Source Solutions,Q3 2025,4.15,3.7,4.4,3.88,4.33,Declining
+S1529,Med Source Solutions,Q4 2025,4.05,3.81,3.58,4.3,4.78,Declining
+S1411,France Industrial Machines Trading,Q1 2025,4.98,4.23,4.4,4.81,4.79,Stable
+S1411,France Industrial Machines Trading,Q2 2025,4.31,4.77,3.84,4.31,4.42,Improving
+S1411,France Industrial Machines Trading,Q3 2025,4.54,4.24,4.45,4.2,4.61,Declining
+S1411,France Industrial Machines Trading,Q4 2025,4.08,3.94,3.75,3.67,4.26,Improving
+S1410,Belgium Tech Machinery Group,Q1 2025,4.68,3.81,4.3,4.08,3.85,Stable
+S1410,Belgium Tech Machinery Group,Q2 2025,4.47,4.46,3.51,3.78,4.08,Improving
+S1410,Belgium Tech Machinery Group,Q3 2025,4.17,4.26,3.92,3.51,4.49,Stable
+S1410,Belgium Tech Machinery Group,Q4 2025,4.28,4.35,4.75,4.66,3.99,Stable
+S602,Johnson & Johnson,Q1 2025,4.91,4.22,4.12,3.55,3.94,Improving
+S602,Johnson & Johnson,Q2 2025,4.55,4.84,4.2,3.97,4.58,Stable
+S602,Johnson & Johnson,Q3 2025,4.91,3.58,4.18,4.29,4.48,Declining
+S602,Johnson & Johnson,Q4 2025,4.44,3.81,4.39,4.62,4.69,Stable
+S1442,Metal Pro Co,Q1 2025,3.88,3.72,4.59,3.97,4.18,Declining
+S1442,Metal Pro Co,Q2 2025,4.81,4.36,4.01,4.33,4.66,Stable
+S1442,Metal Pro Co,Q3 2025,4.65,3.97,3.54,4.08,4.3,Improving
+S1442,Metal Pro Co,Q4 2025,4.25,4.74,3.89,4.24,3.98,Stable
+S1452,Forge Inc Group,Q1 2025,4.74,4.67,4.69,4.12,3.82,Stable
+S1452,Forge Inc Group,Q2 2025,4.89,3.73,3.94,4.18,4.67,Stable
+S1452,Forge Inc Group,Q3 2025,4.73,3.71,4.63,4.65,4.74,Declining
+S1452,Forge Inc Group,Q4 2025,4.99,3.81,3.55,4.04,4.66,Improving
+S1524,Brazil Pharma Pro Trading,Q1 2025,3.8,4.9,4.39,4.33,3.89,Stable
+S1524,Brazil Pharma Pro Trading,Q2 2025,4.87,3.65,4.5,4.54,3.82,Stable
+S1524,Brazil Pharma Pro Trading,Q3 2025,4.57,3.81,3.76,3.9,4.33,Stable
+S1524,Brazil Pharma Pro Trading,Q4 2025,4.61,3.91,3.7,3.66,4.76,Declining
+S1453,Metal Works International,Q1 2025,4.42,3.81,3.96,3.95,3.94,Declining
+S1453,Metal Works International,Q2 2025,4.76,4.36,3.72,3.94,4.69,Declining
+S1453,Metal Works International,Q3 2025,4.33,3.7,4.11,4.45,3.91,Improving
+S1453,Metal Works International,Q4 2025,3.9,4.09,4.42,4.75,4.43,Declining
+S1361,Germany Tech Mart Inc,Q1 2025,4.64,4.42,3.91,4.64,4.51,Declining
+S1361,Germany Tech Mart Inc,Q2 2025,4.77,3.62,4.7,4.57,4.37,Improving
+S1361,Germany Tech Mart Inc,Q3 2025,4.78,4.88,4.11,4.14,4.48,Declining
+S1361,Germany Tech Mart Inc,Q4 2025,4.72,4.21,4.73,3.7,4.7,Stable
+S1441,USA Metal Pro Co,Q1 2025,4.9,4.09,4.41,4.43,4.59,Stable
+S1441,USA Metal Pro Co,Q2 2025,4.34,3.55,4.12,3.99,4.26,Improving
+S1441,USA Metal Pro Co,Q3 2025,4.14,4.02,4.25,4.21,4.21,Declining
+S1441,USA Metal Pro Co,Q4 2025,4.76,3.99,4.34,4.61,4.33,Stable
+S1418,Industrial Machines Solutions,Q1 2025,4.51,3.86,3.82,3.72,4.28,Improving
+S1418,Industrial Machines Solutions,Q2 2025,4.21,4.72,4.27,4.6,4.24,Stable
+S1418,Industrial Machines Solutions,Q3 2025,4.45,3.85,4.36,3.61,4.73,Declining
+S1418,Industrial Machines Solutions,Q4 2025,4.8,3.67,4.27,3.96,3.9,Stable
+S1531,Medical Solutions International,Q1 2025,4.01,4.93,3.59,3.65,4.61,Stable
+S1531,Medical Solutions International,Q2 2025,4.19,4.47,3.58,3.8,3.94,Declining
+S1531,Medical Solutions International,Q3 2025,4.88,4.45,3.5,3.71,3.95,Declining
+S1531,Medical Solutions International,Q4 2025,4.15,4.42,4.08,3.79,4.68,Stable
+S401,ArcelorMittal,Q1 2025,4.48,4.87,3.9,4.82,4.23,Stable
+S401,ArcelorMittal,Q2 2025,4.99,4.37,4.29,4.21,4.65,Stable
+S401,ArcelorMittal,Q3 2025,3.87,4.85,4.76,3.5,4.36,Stable
+S401,ArcelorMittal,Q4 2025,3.93,3.92,3.54,4.1,4.39,Declining
+S034,JBS S.A.,Q1 2025,4.18,4.07,4.0,4.26,4.46,Stable
+S034,JBS S.A.,Q2 2025,3.97,4.33,4.6,4.0,4.22,Stable
+S034,JBS S.A.,Q3 2025,5.0,4.51,3.67,3.6,3.82,Declining
+S034,JBS S.A.,Q4 2025,4.86,4.49,4.77,3.69,3.94,Stable
+S1602,Canada Build Solutions Ltd,Q1 2025,4.83,4.84,4.4,4.8,4.42,Stable
+S1602,Canada Build Solutions Ltd,Q2 2025,4.41,4.33,4.09,4.0,3.99,Declining
+S1602,Canada Build Solutions Ltd,Q3 2025,3.81,4.25,4.45,4.5,4.07,Declining
+S1602,Canada Build Solutions Ltd,Q4 2025,4.49,3.55,3.55,4.18,4.17,Declining
+S1364,Sweden Digital Depot Enterprises,Q1 2025,4.38,4.54,3.68,4.52,4.78,Stable
+S1364,Sweden Digital Depot Enterprises,Q2 2025,4.36,3.62,4.66,3.62,4.27,Declining
+S1364,Sweden Digital Depot Enterprises,Q3 2025,4.6,4.5,4.39,4.25,4.38,Declining
+S1364,Sweden Digital Depot Enterprises,Q4 2025,3.86,4.02,4.51,4.16,4.31,Stable
+S1530,Belgium Life Sciences Trading,Q1 2025,4.49,4.0,3.96,4.87,4.09,Improving
+S1530,Belgium Life Sciences Trading,Q2 2025,3.84,4.88,4.47,4.52,4.36,Improving
+S1530,Belgium Life Sciences Trading,Q3 2025,4.56,4.37,4.24,4.42,4.09,Declining
+S1530,Belgium Life Sciences Trading,Q4 2025,4.55,3.93,3.61,4.21,4.65,Stable
+S1536,Australia Health Pharma Co,Q1 2025,4.1,4.42,3.86,3.86,4.54,Declining
+S1536,Australia Health Pharma Co,Q2 2025,4.01,4.39,3.7,4.13,4.61,Stable
+S1536,Australia Health Pharma Co,Q3 2025,4.74,3.85,3.74,4.24,3.83,Improving
+S1536,Australia Health Pharma Co,Q4 2025,4.96,4.39,4.57,4.67,4.55,Stable
+S1507,Australia Diagnostic Pro Group,Q1 2025,4.72,3.86,4.07,4.39,4.01,Declining
+S1507,Australia Diagnostic Pro Group,Q2 2025,4.81,3.58,3.84,4.65,3.85,Stable
+S1507,Australia Diagnostic Pro Group,Q3 2025,4.28,3.95,4.47,4.55,4.33,Stable
+S1507,Australia Diagnostic Pro Group,Q4 2025,4.62,4.09,3.84,4.24,4.23,Stable
+S406,Alcoa,Q1 2025,4.91,4.17,4.38,4.85,4.48,Improving
+S406,Alcoa,Q2 2025,3.92,4.3,3.96,4.68,4.41,Declining
+S406,Alcoa,Q3 2025,4.83,4.0,3.85,3.64,4.45,Stable
+S406,Alcoa,Q4 2025,4.35,4.51,3.81,4.44,4.57,Declining
+S1505,Health Devices Inc,Q1 2025,4.2,4.54,3.73,4.27,4.47,Improving
+S1505,Health Devices Inc,Q2 2025,3.81,3.65,3.64,4.12,4.02,Stable
+S1505,Health Devices Inc,Q3 2025,4.1,3.55,4.31,3.58,4.39,Improving
+S1505,Health Devices Inc,Q4 2025,4.94,4.46,4.42,3.67,4.66,Improving
+S1448,Metal Works Group,Q1 2025,4.25,4.65,4.34,4.62,3.98,Improving
+S1448,Metal Works Group,Q2 2025,4.63,3.88,4.11,4.81,4.44,Stable
+S1448,Metal Works Group,Q3 2025,4.72,4.54,4.37,4.58,4.06,Improving
+S1448,Metal Works Group,Q4 2025,4.13,3.59,4.01,4.89,4.06,Stable
+S624,Masimo,Q1 2025,4.01,3.6,4.77,3.78,4.19,Declining
+S624,Masimo,Q2 2025,4.39,3.72,4.5,3.81,4.44,Stable
+S624,Masimo,Q3 2025,4.66,3.65,3.59,4.3,4.05,Stable
+S624,Masimo,Q4 2025,3.82,4.25,4.35,3.5,3.84,Stable
+S1459,Alloy Co Group,Q1 2025,4.12,4.55,4.68,4.3,4.32,Stable
+S1459,Alloy Co Group,Q2 2025,4.37,4.11,4.45,4.64,3.87,Improving
+S1459,Alloy Co Group,Q3 2025,3.8,4.93,4.56,4.17,4.37,Stable
+S1459,Alloy Co Group,Q4 2025,4.2,3.95,3.57,4.9,4.45,Stable
+S1499,Malaysia Care Tech Enterprises,Q1 2025,4.44,4.94,3.6,4.14,4.57,Declining
+S1499,Malaysia Care Tech Enterprises,Q2 2025,4.04,4.33,4.76,4.43,4.1,Stable
+S1499,Malaysia Care Tech Enterprises,Q3 2025,4.88,4.45,3.97,3.62,4.43,Declining
+S1499,Malaysia Care Tech Enterprises,Q4 2025,4.03,3.55,3.53,4.89,4.04,Stable
+S031,Tyson Foods,Q1 2025,3.88,4.31,3.9,4.25,4.63,Stable
+S031,Tyson Foods,Q2 2025,4.96,3.52,3.94,3.97,4.52,Stable
+S031,Tyson Foods,Q3 2025,3.94,4.71,4.37,4.14,4.48,Declining
+S031,Tyson Foods,Q4 2025,3.98,4.37,4.7,3.55,3.94,Declining
+S801,Cemex,Q1 2025,3.82,4.86,4.3,3.84,4.45,Improving
+S801,Cemex,Q2 2025,4.01,3.57,3.9,4.61,4.26,Improving
+S801,Cemex,Q3 2025,4.8,3.6,4.56,3.66,4.39,Declining
+S801,Cemex,Q4 2025,4.06,4.71,4.05,4.64,4.78,Declining
+S1535,Malaysia Medical Solutions Ltd,Q1 2025,4.28,3.68,4.39,4.26,4.12,Improving
+S1535,Malaysia Medical Solutions Ltd,Q2 2025,4.72,4.39,3.94,3.67,3.94,Stable
+S1535,Malaysia Medical Solutions Ltd,Q3 2025,4.0,4.05,3.71,3.84,4.38,Improving
+S1535,Malaysia Medical Solutions Ltd,Q4 2025,3.92,4.77,4.3,4.59,3.82,Stable
+S1498,Care Tech Co,Q1 2025,3.9,3.51,4.7,4.49,4.39,Stable
+S1498,Care Tech Co,Q2 2025,4.3,4.71,4.5,4.47,4.01,Declining
+S1498,Care Tech Co,Q3 2025,4.13,4.18,3.81,3.74,4.49,Declining
+S1498,Care Tech Co,Q4 2025,4.02,4.25,4.74,4.38,4.58,Stable
+S1683,Argentina Strategy Co International,Q1 2025,4.3,4.34,3.75,4.88,4.78,Declining
+S1683,Argentina Strategy Co International,Q2 2025,4.23,4.64,4.2,3.81,4.57,Declining
+S1683,Argentina Strategy Co International,Q3 2025,4.05,3.58,3.65,3.71,4.64,Stable
+S1683,Argentina Strategy Co International,Q4 2025,4.4,3.74,4.7,3.58,4.16,Improving
+S501,Siemens,Q1 2025,4.32,4.0,4.55,4.56,3.84,Declining
+S501,Siemens,Q2 2025,3.86,4.31,3.71,3.54,4.31,Improving
+S501,Siemens,Q3 2025,4.87,4.58,4.27,3.96,4.0,Declining
+S501,Siemens,Q4 2025,4.88,3.85,3.64,3.82,4.04,Stable
+S1409,Chile Industrial Machines International,Q1 2025,4.84,4.06,3.79,4.16,4.28,Stable
+S1409,Chile Industrial Machines International,Q2 2025,3.97,4.89,4.09,4.04,3.94,Declining
+S1409,Chile Industrial Machines International,Q3 2025,4.03,4.04,3.85,3.97,3.83,Declining
+S1409,Chile Industrial Machines International,Q4 2025,3.87,3.7,4.61,4.14,3.97,Stable
+S1546,Energy Co Trading,Q1 2025,4.06,3.94,3.7,4.61,4.75,Improving
+S1546,Energy Co Trading,Q2 2025,4.49,4.33,3.8,4.08,4.32,Improving
+S1546,Energy Co Trading,Q3 2025,4.51,4.76,3.86,4.52,4.54,Improving
+S1546,Energy Co Trading,Q4 2025,4.1,4.15,3.79,4.8,4.75,Declining
+S1684,Business Consulting International,Q1 2025,4.88,4.13,3.56,4.89,4.53,Declining
+S1684,Business Consulting International,Q2 2025,3.84,4.3,4.12,4.62,4.62,Stable
+S1684,Business Consulting International,Q3 2025,4.39,3.62,4.48,4.47,4.21,Improving
+S1684,Business Consulting International,Q4 2025,3.96,3.94,4.34,3.63,4.28,Stable
+S1553,Taiwan Grid Masters Solutions,Q1 2025,3.99,4.19,4.24,4.32,4.78,Stable
+S1553,Taiwan Grid Masters Solutions,Q2 2025,4.73,4.81,4.03,4.61,4.17,Stable
+S1553,Taiwan Grid Masters Solutions,Q3 2025,4.64,3.5,4.32,4.04,4.49,Declining
+S1553,Taiwan Grid Masters Solutions,Q4 2025,3.84,4.14,3.85,4.82,4.34,Improving
+S1007,Mercer,Q1 2025,4.75,3.62,4.65,4.53,3.85,Declining
+S1007,Mercer,Q2 2025,4.24,3.58,4.0,4.15,3.84,Stable
+S1007,Mercer,Q3 2025,4.01,4.34,3.59,4.49,4.0,Stable
+S1007,Mercer,Q4 2025,4.09,3.67,4.12,4.81,4.38,Declining
+S1533,Bio Pharma Enterprises,Q1 2025,4.05,4.62,3.79,3.99,4.07,Declining
+S1533,Bio Pharma Enterprises,Q2 2025,4.31,3.58,3.98,4.13,4.3,Improving
+S1533,Bio Pharma Enterprises,Q3 2025,4.36,4.3,4.57,4.76,4.25,Stable
+S1533,Bio Pharma Enterprises,Q4 2025,4.76,4.92,4.55,4.82,3.87,Stable
+S1595,UK Structure Co Co,Q1 2025,3.9,4.09,3.73,4.84,3.88,Improving
+S1595,UK Structure Co Co,Q2 2025,4.13,4.55,4.15,4.72,4.32,Declining
+S1595,UK Structure Co Co,Q3 2025,3.83,4.12,4.39,4.8,4.27,Stable
+S1595,UK Structure Co Co,Q4 2025,4.33,4.47,3.88,3.59,4.67,Improving
+S1528,Saudi Arabia Pharma Pro Corp,Q1 2025,4.8,4.28,3.94,4.31,4.46,Stable
+S1528,Saudi Arabia Pharma Pro Corp,Q2 2025,4.38,4.5,4.19,4.27,4.26,Declining
+S1528,Saudi Arabia Pharma Pro Corp,Q3 2025,3.96,4.68,3.72,3.86,4.28,Stable
+S1528,Saudi Arabia Pharma Pro Corp,Q4 2025,4.72,3.57,3.96,4.14,3.97,Improving
