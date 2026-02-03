@@ -15,12 +15,14 @@ import {
   Send,
   Check,
   Users,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import { procurementApi } from "@/lib/api/procurement";
 
 // ============================================================================
 // DYNAMIC DATA CONFIGURATIONS
@@ -214,6 +216,14 @@ const INITIATIVE_TITLES: Record<string, string[]> = {
   ]
 };
 
+// Chat message type
+interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
 export default function OpportunityDetailPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -227,6 +237,12 @@ export default function OpportunityDetailPage() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
+
+  // Chat state
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [aiInsight, setAiInsight] = useState<string | null>(null);
 
   // Get data from context
   const categoryName = state.setupData.categoryName || "Edible Oils";
@@ -294,6 +310,77 @@ export default function OpportunityDetailPage() {
       }
     }
   };
+
+  // Handle chat submission
+  const handleChatSubmit = async () => {
+    if (!chatInput.trim() || isLoading) return;
+
+    const userMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: chatInput.trim(),
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+    setChatInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await procurementApi.getOpportunityInsights(
+        oppId,
+        categoryName,
+        totalSpend,
+        proofPoints,
+        userMessage.content
+      );
+
+      const assistantMessage: ChatMessage = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: response.assistant_message.content,
+        timestamp: new Date()
+      };
+
+      setChatMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage: ChatMessage = {
+        id: `error-${Date.now()}`,
+        role: "assistant",
+        content: "Sorry, I couldn't process your request. Please make sure the backend server is running on port 8000.",
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch initial AI insight on load
+  useEffect(() => {
+    const fetchInitialInsight = async () => {
+      if (aiInsight) return; // Already fetched
+
+      try {
+        const response = await procurementApi.getOpportunityInsights(
+          oppId,
+          categoryName,
+          totalSpend,
+          proofPoints
+        );
+        setAiInsight(response.assistant_message.content);
+      } catch (error) {
+        console.error("Failed to fetch AI insight:", error);
+        // Silently fail - will use static insight
+      }
+    };
+
+    // Only fetch if we have meaningful data
+    if (categoryName && oppId) {
+      fetchInitialInsight();
+    }
+  }, [oppId, categoryName, totalSpend, proofPoints, aiInsight]);
 
   // Generate insight text based on opportunity type and data
   const getInsightText = () => {
@@ -452,6 +539,38 @@ export default function OpportunityDetailPage() {
               </div>
             )}
 
+            {/* Chat Messages */}
+            {chatMessages.length > 0 && (
+              <div className="space-y-4 border-t border-gray-100 pt-4">
+                <h4 className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Conversation</h4>
+                <div className="space-y-3 max-h-48 overflow-y-auto">
+                  {chatMessages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`p-3 rounded-xl text-[13px] ${
+                        msg.role === "user"
+                          ? "bg-blue-50 text-blue-900 ml-4"
+                          : "bg-gray-50 text-gray-700 mr-4"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-semibold uppercase text-gray-400">
+                          {msg.role === "user" ? "You" : "Coco AI"}
+                        </span>
+                      </div>
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                    </div>
+                  ))}
+                  {isLoading && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-gray-50 mr-4">
+                      <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                      <span className="text-[13px] text-gray-500">Thinking...</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Proof Points Status */}
             <div className="space-y-3">
               <h4 className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Proof Points Validated</h4>
@@ -477,25 +596,44 @@ export default function OpportunityDetailPage() {
 
           {/* Input Area */}
           <div className="p-5 border-t border-gray-100">
-            <div className="relative flex items-center gap-3 rounded-2xl bg-[#F5F7F9] p-3 ring-1 ring-gray-200/50">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleChatSubmit();
+              }}
+              className="relative flex items-center gap-3 rounded-2xl bg-[#F5F7F9] p-3 ring-1 ring-gray-200/50"
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-blue-400 to-purple-400 p-[1px] shrink-0">
                 <div className="h-full w-full rounded-full bg-white flex items-center justify-center">
                   <div className="h-2.5 w-2.5 rounded-full bg-gradient-to-tr from-blue-400 to-purple-400" />
                 </div>
               </div>
-              <Plus className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
               <input
                 type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
                 placeholder="Ask about this opportunity..."
-                className="flex-1 bg-transparent text-sm font-medium text-gray-900 outline-none placeholder:text-gray-400"
+                disabled={isLoading}
+                className="flex-1 bg-transparent text-sm font-medium text-gray-900 outline-none placeholder:text-gray-400 disabled:opacity-50"
               />
               <div className="flex items-center gap-2">
-                <Mic className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
-                <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors">
-                  <Send className="h-4 w-4" />
+                <button
+                  type="submit"
+                  disabled={!chatInput.trim() || isLoading}
+                  className={`flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
+                    chatInput.trim() && !isLoading
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
 
@@ -580,12 +718,23 @@ export default function OpportunityDetailPage() {
               >
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="text-lg font-bold text-gray-900">What did I find?</h2>
-                  <ChevronUp className="h-5 w-5 text-gray-400 cursor-pointer" />
+                  <div className="flex items-center gap-2">
+                    {aiInsight && (
+                      <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                        AI Powered
+                      </span>
+                    )}
+                    <ChevronUp className="h-5 w-5 text-gray-400 cursor-pointer" />
+                  </div>
                 </div>
 
-                <p className="mb-6 text-[14px] text-gray-600 leading-relaxed">
-                  {getInsightText()}
-                </p>
+                <div className="mb-6 text-[14px] text-gray-600 leading-relaxed">
+                  {aiInsight ? (
+                    <p className="whitespace-pre-wrap">{aiInsight}</p>
+                  ) : (
+                    <p>{getInsightText()}</p>
+                  )}
+                </div>
 
                 <div className="flex gap-6">
                   {/* Chart Area */}

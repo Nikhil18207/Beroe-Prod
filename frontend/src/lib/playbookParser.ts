@@ -630,7 +630,7 @@ export function generateOpportunitiesFromPlaybook(
         maturityScore
       );
 
-      // Debug logging
+      // Count tested proof points
       const testedCount = proofPoints.filter(pp => pp.isTested).length;
       console.log(`[Playbook] "${recommendation.substring(0, 30)}..." -> ${opportunityId}: ${testedCount}/${proofPoints.length} tested (${Math.round(savingsResult.confidenceScore * 100)}%)`);
 
@@ -642,7 +642,6 @@ export function generateOpportunitiesFromPlaybook(
       const impact = savingsResult.impactBucket;
       const confidence = Math.round(savingsResult.confidenceScore * 100);
       // Potential = 1 proof point, Qualified = 2+ proof points validated
-      const testedCount = proofPointResults.filter(pp => pp.isTested).length;
       const status: "Qualified" | "Potential" = testedCount >= 2 ? "Qualified" : "Potential";
 
       opportunities.push({

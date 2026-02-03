@@ -585,6 +585,57 @@ export const procurementApi = {
       ...updatedSession,
     };
   },
+
+  // ============================================================================
+  // Chat / LLM Recommendations
+  // ============================================================================
+
+  /**
+   * Send a message to the AI assistant (demo mode - no auth required)
+   * Used for opportunity insights and recommendations
+   */
+  chatDemo: async (message: string) => {
+    return apiClient.post<{
+      status: string;
+      user_message: { content: string };
+      assistant_message: {
+        content: string;
+        thinking_time: string;
+      };
+    }>("/chat/demo-message", { content: message });
+  },
+
+  /**
+   * Generate opportunity insights using LLM
+   * Sends context about the opportunity and gets AI recommendations
+   */
+  getOpportunityInsights: async (
+    opportunityType: string,
+    categoryName: string,
+    totalSpend: number,
+    proofPoints: Array<{ name: string; isValidated: boolean }>,
+    question?: string
+  ) => {
+    const validatedPoints = proofPoints.filter(pp => pp.isValidated);
+    const confidence = proofPoints.length > 0
+      ? Math.round((validatedPoints.length / proofPoints.length) * 100)
+      : 0;
+
+    const contextMessage = question
+      ? `Context: Category "${categoryName}", Opportunity: ${opportunityType}, Total Spend: $${totalSpend.toLocaleString()}, Confidence: ${confidence}%, Validated Proof Points: ${validatedPoints.map(p => p.name).join(", ") || "None"}.
+
+User Question: ${question}`
+      : `Provide strategic recommendations for a ${opportunityType} opportunity in the ${categoryName} category with $${totalSpend.toLocaleString()} spend. Current confidence is ${confidence}% with ${validatedPoints.length}/${proofPoints.length} proof points validated: ${validatedPoints.map(p => p.name).join(", ") || "None validated yet"}.`;
+
+    return apiClient.post<{
+      status: string;
+      user_message: { content: string };
+      assistant_message: {
+        content: string;
+        thinking_time: string;
+      };
+    }>("/chat/demo-message", { content: contextMessage });
+  },
 };
 
 export default procurementApi;
