@@ -329,98 +329,87 @@ const parseTextFile = async (file: File): Promise<ParsedFileData> => {
 
 // Parse Word document (docx) - returns both HTML for editing and smart-extracted fields
 const parseDocx = async (file: File): Promise<ParsedFileData> => {
-  // Dynamic import for mammoth
-  const mammoth = await import('mammoth');
+  // Dynamic import for mammoth - need to get default export
+  const mammothModule = await import('mammoth');
+  const mammoth = mammothModule.default || mammothModule;
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+  // Read file as ArrayBuffer directly (simpler than FileReader)
+  const arrayBuffer = await file.arrayBuffer();
 
-    reader.onload = async (e) => {
-      try {
-        const arrayBuffer = e.target?.result as ArrayBuffer;
+  // Get both HTML (for rich editing) and raw text (for extraction)
+  const [htmlResult, textResult] = await Promise.all([
+    mammoth.convertToHtml({ arrayBuffer }),
+    mammoth.extractRawText({ arrayBuffer })
+  ]);
 
-        // Get both HTML (for rich editing) and raw text (for extraction)
-        const [htmlResult, textResult] = await Promise.all([
-          mammoth.convertToHtml({ arrayBuffer }),
-          mammoth.extractRawText({ arrayBuffer })
-        ]);
+  const htmlContent = htmlResult.value;
+  const text = textResult.value;
 
-        const htmlContent = htmlResult.value;
-        const text = textResult.value;
+  // Try to detect tables in text (tab-separated or consistent spacing)
+  const lines = text.split(/\r?\n/).filter((l: string) => l.trim());
 
-        // Try to detect tables in text (tab-separated or consistent spacing)
-        const lines = text.split(/\r?\n/).filter(l => l.trim());
+  // Check if it looks like a table (has tabs or consistent | separators)
+  const hasTable = lines.some((l: string) => l.includes('\t') || l.split('|').length > 2);
 
-        // Check if it looks like a table (has tabs or consistent | separators)
-        const hasTable = lines.some(l => l.includes('\t') || l.split('|').length > 2);
+  if (hasTable) {
+    // Try to parse as table
+    const delimiter = lines[0].includes('\t') ? '\t' : '|';
+    const headers = lines[0].split(delimiter).map((h: string) => h.trim()).filter((h: string) => h);
+    const rows = lines.slice(1).map((line: string) => {
+      const values = line.split(delimiter).map((v: string) => v.trim());
+      const row: Record<string, string> = {};
+      headers.forEach((h: string, idx: number) => {
+        row[h] = values[idx] || '';
+      });
+      return row;
+    }).filter((row: Record<string, string>) => Object.values(row).some(v => v));
 
-        if (hasTable) {
-          // Try to parse as table
-          const delimiter = lines[0].includes('\t') ? '\t' : '|';
-          const headers = lines[0].split(delimiter).map(h => h.trim()).filter(h => h);
-          const rows = lines.slice(1).map(line => {
-            const values = line.split(delimiter).map(v => v.trim());
-            const row: Record<string, string> = {};
-            headers.forEach((h, idx) => {
-              row[h] = values[idx] || '';
-            });
-            return row;
-          }).filter(row => Object.values(row).some(v => v));
-
-          resolve({
-            headers,
-            rows,
-            rawText: text,
-            htmlContent,
-            metadata: { fileName: file.name, fileType: 'docx', fileSize: file.size, isDocument: false }
-          });
-        } else {
-          // Smart field extraction for documents
-          const documentType = detectDocumentType(text);
-          const extractedFields = extractDocumentFields(text);
-          const { headers, rows } = fieldsToTableData(extractedFields);
-
-          // If we extracted fields, use them; otherwise fall back to showing content
-          if (headers.length > 0) {
-            resolve({
-              headers,
-              rows,
-              rawText: text,
-              htmlContent,
-              extractedFields,
-              metadata: {
-                fileName: file.name,
-                fileType: 'docx',
-                fileSize: file.size,
-                isDocument: true,
-                documentType
-              }
-            });
-          } else {
-            // Fallback: return as document content with HTML for rich editing
-            resolve({
-              headers: ['Content'],
-              rows: [{ 'Content': text }],
-              rawText: text,
-              htmlContent,
-              metadata: {
-                fileName: file.name,
-                fileType: 'docx',
-                fileSize: file.size,
-                isDocument: true,
-                documentType
-              }
-            });
-          }
-        }
-      } catch (err) {
-        reject(new Error(`Failed to parse Word document: ${err}`));
-      }
+    return {
+      headers,
+      rows,
+      rawText: text,
+      htmlContent,
+      metadata: { fileName: file.name, fileType: 'docx', fileSize: file.size, isDocument: false }
     };
+  } else {
+    // Smart field extraction for documents
+    const documentType = detectDocumentType(text);
+    const extractedFields = extractDocumentFields(text);
+    const { headers, rows } = fieldsToTableData(extractedFields);
 
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsArrayBuffer(file);
-  });
+    // If we extracted fields, use them; otherwise fall back to showing content
+    if (headers.length > 0) {
+      return {
+        headers,
+        rows,
+        rawText: text,
+        htmlContent,
+        extractedFields,
+        metadata: {
+          fileName: file.name,
+          fileType: 'docx',
+          fileSize: file.size,
+          isDocument: true,
+          documentType
+        }
+      };
+    } else {
+      // Fallback: return as document content with HTML for rich editing
+      return {
+        headers: ['Content'],
+        rows: [{ 'Content': text }],
+        rawText: text,
+        htmlContent,
+        metadata: {
+          fileName: file.name,
+          fileType: 'docx',
+          fileSize: file.size,
+          isDocument: true,
+          documentType
+        }
+      };
+    }
+  }
 };
 
 // Parse PDF file

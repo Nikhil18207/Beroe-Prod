@@ -23,40 +23,40 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
-import {
-  generateOpportunitiesFromPlaybook,
-  enrichOpportunitiesWithSpendData,
-  type GeneratedOpportunity
-} from "@/lib/playbookParser";
 
-// Initiative recommendations for each opportunity type
-const OPPORTUNITY_INITIATIVES: Record<string, Array<{
-  title: string;
+// Opportunity type configuration
+const OPPORTUNITY_TYPE_CONFIG: Record<string, {
+  name: string;
   type: "Savings" | "Resilience";
   impactLabel?: string;
   effort: string;
-  risk?: string;
-  esg?: string;
-}>> = {
-  "volume-bundling": [
-    { title: "Consolidate demands across sites to leverage economies of scale", type: "Savings", effort: "3-6 months", risk: "-2", esg: "0" },
-    { title: "Consider volume consolidation for better discounts", type: "Savings", effort: "3-6 months", risk: "-2", esg: "0" },
-    { title: "Bundle similar categories to increase negotiating leverage", type: "Savings", effort: "6-12 months", risk: "-1", esg: "0" },
-  ],
-  "target-pricing": [
-    { title: "Use cost model driven pricing mechanisms", type: "Savings", effort: "3-6 months", risk: "-2", esg: "0" },
-    { title: "Implement should-cost analysis for key items", type: "Savings", effort: "3-6 months", risk: "-1", esg: "0" },
-    { title: "Adjust sourcing mix to minimize tariff impact", type: "Resilience", impactLabel: "Risk Reduction", effort: "3-6 months", esg: "-2" },
-  ],
-  "risk-management": [
-    { title: "Explore adding new suppliers to reduce supplier risk", type: "Resilience", impactLabel: "Risk Reduction", effort: "3-6 months", esg: "-2" },
-    { title: "Standardize payment terms across suppliers to 60 days", type: "Resilience", impactLabel: "Risk Reduction", effort: "3-6 months", esg: "-2" },
-    { title: "Develop contingency sourcing plans for high-risk regions", type: "Resilience", impactLabel: "Risk Reduction", effort: "6-12 months", esg: "-1" },
-  ],
-  "respec-pack": [
-    { title: "Rationalize SKUs to reduce low value/volume items", type: "Savings", effort: "3-6 months", risk: "-1", esg: "0" },
-    { title: "Standardize specifications across regions", type: "Savings", effort: "6-12 months", risk: "0", esg: "+1" },
-  ],
+  description: string;
+}> = {
+  "volume-bundling": {
+    name: "Volume Bundling",
+    type: "Savings",
+    effort: "3-6 months",
+    description: "Aggregate demand across regions, consolidate tail spend, and leverage volume to achieve better pricing"
+  },
+  "target-pricing": {
+    name: "Target Pricing",
+    type: "Savings",
+    effort: "3-6 months",
+    description: "Analyze price variances, tariff impacts, and cost structures to achieve optimal pricing"
+  },
+  "risk-management": {
+    name: "Risk Management",
+    type: "Resilience",
+    impactLabel: "Risk Reduction",
+    effort: "6-12 months",
+    description: "Identify and mitigate supply chain risks including single sourcing, concentration, and external factors"
+  },
+  "respec-pack": {
+    name: "Re-specification Pack",
+    type: "Savings",
+    effort: "6-12 months",
+    description: "Identify opportunities to optimize specifications for cost savings without compromising quality"
+  },
 };
 
 export default function OpportunitiesPage() {
@@ -75,229 +75,117 @@ export default function OpportunitiesPage() {
   // Get data from context
   const savingsSummary = state.savingsSummary;
   const setupOpportunities = state.setupOpportunities;
-  const playbookData = state.playbookData;
-  const spendAnalysis = state.spendAnalysis;
+  const opportunityMetrics = state.opportunityMetrics; // Real 7-step calculated metrics
   const categoryName = state.setupData.categoryName?.toUpperCase() || "CATEGORY";
-  const totalSpend = spendAnalysis?.totalSpend ||
+  const totalSpend = state.spendAnalysis?.totalSpend ||
     (state.portfolioItems.length > 0
       ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
       : state.setupData.spend || 0);
 
-  // Generate opportunities - group playbook recommendations into 4 Beroe opportunity types
+  // Generate exactly 4 bento cards - one for each opportunity type
+  // Each card shows proof points as initiatives inside
   const generatedOpportunities = useMemo(() => {
-    // If we have playbook data, group recommendations into the 4 main opportunity types
-    if (playbookData && playbookData.entries.length > 0) {
-      console.log('Generating opportunities from playbook:', playbookData.entries.length, 'entries');
-
-      // Generate all opportunities from playbook
-      let playbookOpportunities = generateOpportunitiesFromPlaybook(
-        playbookData.entries,
-        totalSpend,
-        undefined
-      );
-
-      // Enrich with spend analysis data if available
-      if (spendAnalysis) {
-        playbookOpportunities = enrichOpportunitiesWithSpendData(
-          playbookOpportunities,
-          spendAnalysis.spendBySupplier,
-          spendAnalysis.spendByRegion,
-          spendAnalysis.totalSpend,
-          state.setupData.maturityScore || 2.5,
-          spendAnalysis.priceData
-        );
-      }
-
-      // Group playbook opportunities into the 4 Beroe opportunity types
-      const opportunityGroups: Record<string, typeof playbookOpportunities> = {
-        "volume-bundling": [],
-        "target-pricing": [],
-        "risk-management": [],
-        "respec-pack": [],
-      };
-
-      // Map each playbook opportunity to its Beroe type
-      playbookOpportunities.forEach(opp => {
-        const titleLower = opp.title.toLowerCase();
-
-        // Determine which Beroe opportunity type this belongs to
-        let groupId = "volume-bundling"; // default
-
-        if (titleLower.includes("diversif") || titleLower.includes("backup") ||
-            titleLower.includes("dual") || titleLower.includes("risk") ||
-            titleLower.includes("monitor") || titleLower.includes("safety stock") ||
-            titleLower.includes("tracking") || titleLower.includes("compliance") ||
-            opp.type === "Resilience") {
-          groupId = "risk-management";
-        } else if (titleLower.includes("negotiat") || titleLower.includes("fixed-price") ||
-                   titleLower.includes("pricing") || titleLower.includes("cost model") ||
-                   titleLower.includes("index") || titleLower.includes("tariff")) {
-          groupId = "target-pricing";
-        } else if (titleLower.includes("standard") || titleLower.includes("spec") ||
-                   titleLower.includes("recyclable") || titleLower.includes("sku") ||
-                   titleLower.includes("design-to-value")) {
-          groupId = "respec-pack";
-        } else if (titleLower.includes("consolidat") || titleLower.includes("bundle") ||
-                   titleLower.includes("volume") || titleLower.includes("supplier")) {
-          groupId = "volume-bundling";
-        }
-
-        opportunityGroups[groupId].push(opp);
-      });
-
-      // Create 4 Bento cards, one for each opportunity type
-      const bentoOpportunities: Array<{
-        id: string;
-        category: string;
-        title: string;
-        opportunityName: string;
-        type: "Savings" | "Resilience";
-        impactLabel?: string;
-        impact: "High" | "Medium" | "Low";
-        effort: string;
-        risk?: string;
-        esg?: string;
-        savings?: string;
-        confidence: number;
-        status: "Qualified" | "Potential";
-        isNew: boolean;
-        questionsToAnswer: number;
-        badge?: string;
-        savings_low?: number;
-        savings_high?: number;
-        initiatives?: typeof playbookOpportunities;
-      }> = [];
-
-      const opportunityTypeConfig: Record<string, { name: string; type: "Savings" | "Resilience"; impactLabel?: string }> = {
-        "volume-bundling": { name: "Volume Bundling", type: "Savings" },
-        "target-pricing": { name: "Target Pricing", type: "Savings" },
-        "risk-management": { name: "Risk Management", type: "Resilience", impactLabel: "Risk Reduction" },
-        "respec-pack": { name: "Respec-Pack", type: "Savings" },
-      };
-
-      Object.entries(opportunityGroups).forEach(([groupId, initiatives]) => {
-        if (initiatives.length === 0) return; // Skip empty groups
-
-        const config = opportunityTypeConfig[groupId];
-
-        // Calculate aggregated metrics for the group
-        const totalSavingsLow = initiatives.reduce((sum, i) => sum + (i.savings_low || 0), 0);
-        const totalSavingsHigh = initiatives.reduce((sum, i) => sum + (i.savings_high || 0), 0);
-        const avgConfidence = Math.round(initiatives.reduce((sum, i) => sum + i.confidence, 0) / initiatives.length);
-        const totalQuestions = initiatives.reduce((sum, i) => sum + i.questionsToAnswer, 0);
-
-        // Determine impact based on average confidence
-        const impact: "High" | "Medium" | "Low" = avgConfidence >= 70 ? "High" : avgConfidence >= 40 ? "Medium" : "Low";
-        const status: "Qualified" | "Potential" = avgConfidence >= 70 ? "Qualified" : "Potential";
-
-        bentoOpportunities.push({
-          id: groupId,
-          category: categoryName,
-          title: config.name,
-          opportunityName: config.name,
-          type: config.type,
-          impactLabel: config.impactLabel,
-          impact,
-          effort: "3-6 months",
-          risk: "-2",
-          esg: "0",
-          savings: config.type === "Resilience" ? "Low" : undefined,
-          confidence: avgConfidence,
-          status,
-          isNew: true,
-          questionsToAnswer: totalQuestions,
-          savings_low: totalSavingsLow,
-          savings_high: totalSavingsHigh,
-          initiatives, // Store the individual recommendations
-        });
-      });
-
-      console.log(`Created ${bentoOpportunities.length} Bento cards from ${playbookOpportunities.length} playbook recommendations`);
-      return bentoOpportunities;
-    }
-
-    // Fallback to setupOpportunities-based generation
     const opportunities: Array<{
       id: string;
       category: string;
       title: string;
+      description: string;
       opportunityName: string;
       type: "Savings" | "Resilience";
       impactLabel?: string;
       impact: "High" | "Medium" | "Low";
       effort: string;
-      risk?: string;
-      esg?: string;
-      savings?: string;
+      potentialSavings: string;
       confidence: number;
       status: "Qualified" | "Potential";
       isNew: boolean;
       questionsToAnswer: number;
-      badge?: string;
       savings_low?: number;
       savings_high?: number;
+      proofPoints: Array<{
+        id: string;
+        name: string;
+        description: string;
+        isValidated: boolean;
+      }>;
     }> = [];
 
-    // Process each of the 4 main opportunities
+    // Process each of the 4 main opportunities from setupOpportunities
     setupOpportunities.forEach(opp => {
+      const config = OPPORTUNITY_TYPE_CONFIG[opp.id];
+      if (!config) return;
+
       const validatedCount = opp.proofPoints.filter(pp => pp.isValidated).length;
       const totalPoints = opp.proofPoints.length;
       const validationRatio = totalPoints > 0 ? validatedCount / totalPoints : 0;
-      const confidence = Math.round(validationRatio * 100);
 
-      // Qualified = 3+ proof points validated, Potential = <3
-      const status: "Qualified" | "Potential" = validatedCount >= 3 ? "Qualified" : "Potential";
+      // Get real metrics from 7-step calculation if available
+      const realMetrics = opportunityMetrics?.find(m => m.opportunityId === opp.id);
 
-      // Determine impact based on validation ratio
-      const impact: "High" | "Medium" | "Low" =
-        validationRatio >= 0.7 ? "High" :
-        validationRatio >= 0.4 ? "Medium" : "Low";
+      // Use real confidence from 7-step calculation, or fallback to validation ratio
+      const confidence = realMetrics
+        ? Math.round(realMetrics.confidenceScore * 100)
+        : Math.round(validationRatio * 100);
 
-      // Get initiatives for this opportunity type
-      const initiatives = OPPORTUNITY_INITIATIVES[opp.id] || [];
+      // Potential = exactly 1 proof point validated (shows opportunity exists)
+      // Qualified = 2 or more proof points validated (enough evidence)
+      const status: "Qualified" | "Potential" =
+        validatedCount >= 2 ? "Qualified" : "Potential";
 
-      // Parse savings percentage from potentialSavings string (e.g., "0-5%", "1-2%")
-      const savingsMatch = opp.potentialSavings.match(/(\d+)-(\d+)%/);
-      const lowPct = savingsMatch ? parseInt(savingsMatch[1]) / 100 : 0;
-      const highPct = savingsMatch ? parseInt(savingsMatch[2]) / 100 : 0;
+      // Use impact from 7-step calculation, or fallback to validation ratio
+      const impact: "High" | "Medium" | "Low" = realMetrics?.impactBucket ||
+        (validationRatio >= 0.7 ? "High" :
+        validationRatio >= 0.4 ? "Medium" : "Low");
 
-      // Calculate actual savings based on total spend and validation
-      const addressableSpend = totalSpend * 0.8; // 80% addressable
-      const savings_low = Math.round(addressableSpend * lowPct * validationRatio);
-      const savings_high = Math.round(addressableSpend * highPct * validationRatio);
+      // Use real savings from 7-step calculation if available
+      let savings_low: number;
+      let savings_high: number;
 
-      // Generate opportunities from initiatives
-      initiatives.forEach((init, idx) => {
-        opportunities.push({
-          id: `${opp.id}-init-${idx}`,
-          category: categoryName,
-          title: init.title,
-          opportunityName: opp.name,
-          type: init.type,
-          impactLabel: init.impactLabel,
-          impact,
-          effort: init.effort,
-          risk: init.risk,
-          esg: init.esg,
-          savings: init.type === "Resilience" ? "Low" : undefined,
-          confidence: Math.max(confidence, 40), // Minimum 40% confidence if any data
-          status,
-          isNew: true,
-          questionsToAnswer: totalPoints - validatedCount,
-          savings_low,
-          savings_high,
-        });
+      if (realMetrics) {
+        // Use actual calculated savings from 7-step methodology
+        savings_low = Math.round(realMetrics.savingsLow);
+        savings_high = Math.round(realMetrics.savingsHigh);
+      } else {
+        // Fallback: Parse savings percentage from potentialSavings string (e.g., "0-5%", "1-2%")
+        const savingsMatch = opp.potentialSavings.match(/(\d+)-(\d+)%/);
+        const lowPct = savingsMatch ? parseInt(savingsMatch[1]) / 100 : 0;
+        const highPct = savingsMatch ? parseInt(savingsMatch[2]) / 100 : 0;
+
+        // Calculate fallback savings based on total spend and validation
+        const addressableSpend = totalSpend * 0.8; // 80% addressable
+        savings_low = Math.round(addressableSpend * lowPct * validationRatio);
+        savings_high = Math.round(addressableSpend * highPct * validationRatio);
+      }
+
+      opportunities.push({
+        id: opp.id,
+        category: categoryName,
+        title: config.name,
+        description: config.description,
+        opportunityName: opp.name,
+        type: config.type,
+        impactLabel: config.impactLabel,
+        impact,
+        effort: config.effort,
+        potentialSavings: opp.potentialSavings,
+        confidence: Math.max(confidence, 10), // Minimum 10% confidence
+        status,
+        isNew: true,
+        questionsToAnswer: totalPoints - validatedCount,
+        savings_low,
+        savings_high,
+        proofPoints: opp.proofPoints, // Include all proof points as initiatives
       });
     });
 
     return opportunities;
-  }, [playbookData, spendAnalysis, setupOpportunities, categoryName, totalSpend]);
+  }, [setupOpportunities, categoryName, totalSpend, opportunityMetrics]);
 
   // Calculate totals
   const totalSavingsLow = savingsSummary?.total_savings_low ||
-    generatedOpportunities.reduce((sum, o) => sum + (o.savings_low || 0), 0) / 3; // Divide by avg initiatives per opp
+    generatedOpportunities.reduce((sum, o) => sum + (o.savings_low || 0), 0);
   const totalSavingsHigh = savingsSummary?.total_savings_high ||
-    generatedOpportunities.reduce((sum, o) => sum + (o.savings_high || 0), 0) / 3;
+    generatedOpportunities.reduce((sum, o) => sum + (o.savings_high || 0), 0);
 
   const avgConfidence = generatedOpportunities.length > 0
     ? Math.round(generatedOpportunities.reduce((sum, o) => sum + o.confidence, 0) / generatedOpportunities.length)
@@ -305,6 +193,14 @@ export default function OpportunitiesPage() {
   const confidenceScore = savingsSummary?.confidence_score
     ? Math.round(savingsSummary.confidence_score * 100)
     : avgConfidence || 0;
+
+  // Calculate total proof points validated
+  const totalValidatedProofPoints = generatedOpportunities.reduce(
+    (sum, o) => sum + (o.proofPoints?.filter((pp: any) => pp.isValidated).length || 0), 0
+  );
+  const totalProofPoints = generatedOpportunities.reduce(
+    (sum, o) => sum + (o.proofPoints?.length || 0), 0
+  );
 
   // Calculate savings percentage
   const savingsPercentageLow = totalSpend > 0 ? Math.round((totalSavingsLow / totalSpend) * 100) : 0;
@@ -488,11 +384,15 @@ export default function OpportunitiesPage() {
                 against the opportunities.
               </p>
 
-              {/* Confidence & Addressable Spend */}
+              {/* Confidence, Proof Points & Addressable Spend */}
               <div className="flex items-center gap-10">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-gray-600">Confidence level:</span>
                   <span className="font-bold text-gray-900">{confidenceScore}%</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-gray-600">Proof Points Validated:</span>
+                  <span className="font-bold text-gray-900">{totalValidatedProofPoints}/{totalProofPoints}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-gray-600">Addressable Spend:</span>
@@ -587,14 +487,26 @@ export default function OpportunitiesPage() {
 
 function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; variant: "qualified" | "potential" }) {
   const router = useRouter();
-  const isImpacted = opp.badge === "Impacted";
   const isPotential = variant === "potential";
   const isResilience = opp.type === "Resilience";
-  const initiativeCount = opp.initiatives?.length || 0;
+  const proofPoints = opp.proofPoints || [];
+  const validatedCount = proofPoints.filter((pp: any) => pp.isValidated).length;
+  const totalPoints = proofPoints.length;
 
   const handleClick = () => {
     // Navigate to the opportunity details page with the opportunity ID
     router.push(`/opportunities/details?opp=${opp.id}`);
+  };
+
+  // Format savings for display
+  const formatSavings = (low: number, high: number) => {
+    const formatAmount = (amount: number) => {
+      if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
+      if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
+      return `$${amount.toFixed(0)}`;
+    };
+    if (low === 0 && high === 0) return opp.potentialSavings || "0-5%";
+    return `${formatAmount(low)} - ${formatAmount(high)}`;
   };
 
   return (
@@ -604,11 +516,7 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
       viewport={{ once: true }}
       transition={{ duration: 0.3 }}
       onClick={handleClick}
-      className={`group relative flex flex-col rounded-3xl p-5 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-visible ${
-        isImpacted
-          ? 'bg-amber-50/90 ring-1 ring-amber-200/50'
-          : 'bg-white ring-1 ring-gray-100'
-      }`}
+      className="group relative flex flex-col rounded-3xl p-5 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-visible bg-white ring-1 ring-gray-100"
     >
       {/* Top Badges - positioned outside card */}
       <div className="absolute -top-3 right-4 flex gap-2">
@@ -617,26 +525,16 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
             New
           </div>
         )}
-        {isImpacted && (
-          <div className="rounded-full bg-orange-500 px-3 py-1 text-[10px] font-bold text-white shadow-md">
-            Impacted
-          </div>
-        )}
       </div>
 
       {/* Header Row */}
-      <div className="flex items-start justify-between mb-4 mt-1">
+      <div className="flex items-start justify-between mb-3 mt-1">
         <div className="flex items-center gap-2">
           {/* Icon */}
           <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${
-            isImpacted ? 'bg-amber-100' : isPotential ? 'bg-gray-100' : 'bg-emerald-50'
+            isPotential ? 'bg-gray-100' : 'bg-emerald-50'
           }`}>
-            {isImpacted ? (
-              <>
-                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                <AlertTriangle className="h-3 w-3 text-amber-500 absolute ml-4 mt-3" />
-              </>
-            ) : isPotential ? (
+            {isPotential ? (
               <div className="h-4 w-4 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center">
                 <div className="h-1 w-1 bg-gray-400 rounded-full" />
               </div>
@@ -648,9 +546,7 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
 
         {/* Type & Status Badges */}
         <div className="flex gap-1.5">
-          <div className={`rounded-md px-2.5 py-1 text-[10px] font-semibold ${
-            isResilience ? 'bg-gray-100 text-gray-600' : 'bg-gray-100 text-gray-600'
-          }`}>
+          <div className="rounded-md px-2.5 py-1 text-[10px] font-semibold bg-gray-100 text-gray-600">
             {isResilience ? "Resilience" : "Savings"}
           </div>
           <div className={`rounded-md px-2.5 py-1 text-[10px] font-semibold ${
@@ -664,29 +560,29 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
       </div>
 
       {/* Category & Title */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-1.5">
+      <div className="mb-3">
+        <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] font-bold text-gray-400 tracking-wider">
             {opp.category}
           </span>
-          {initiativeCount > 0 && (
-            <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
-              {initiativeCount} initiative{initiativeCount > 1 ? 's' : ''}
-            </span>
-          )}
         </div>
-        <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 min-h-[2.5rem]">
+        <h3 className="text-base font-bold text-gray-900 leading-snug mb-1">
           {opp.title}
         </h3>
+        <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
+          {opp.description}
+        </p>
       </div>
 
       {/* Metrics Box */}
-      <div className="grid grid-cols-2 gap-3 rounded-xl bg-gray-50/80 p-3.5 mb-4">
+      <div className="grid grid-cols-2 gap-3 rounded-xl bg-gray-50/80 p-3 mb-3">
         <div>
           <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-            {opp.impactLabel || (isResilience ? "Risk Reduction" : "Savings Impact")}
+            Potential Savings
           </span>
-          <span className="text-sm font-bold text-gray-900">{opp.impact}</span>
+          <span className="text-sm font-bold text-emerald-600">
+            {formatSavings(opp.savings_low || 0, opp.savings_high || 0)}
+          </span>
         </div>
         <div>
           <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
@@ -694,106 +590,95 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
           </span>
           <span className="text-sm font-bold text-gray-900">{opp.effort}</span>
         </div>
-        {opp.risk !== undefined && (
-          <div>
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-              Risk
-            </span>
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-bold text-gray-900">{opp.risk}</span>
-              <ChevronDown className="h-3 w-3 text-red-500" />
+        <div>
+          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
+            {isResilience ? "Risk Reduction" : "Savings Impact"}
+          </span>
+          <span className="text-sm font-bold text-gray-900">{opp.impact}</span>
+        </div>
+        <div>
+          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
+            Proof Points
+          </span>
+          <span className="text-sm font-bold text-gray-900">
+            {validatedCount}/{totalPoints}
+          </span>
+        </div>
+      </div>
+
+      {/* Proof Points / Initiatives List */}
+      <div className="mb-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">
+            Proof Points ({validatedCount} validated)
+          </span>
+        </div>
+        <div className="space-y-1.5 max-h-32 overflow-y-auto">
+          {proofPoints.slice(0, 5).map((pp: any) => (
+            <div
+              key={pp.id}
+              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] ${
+                pp.isValidated
+                  ? 'bg-emerald-50 text-emerald-700'
+                  : 'bg-gray-50 text-gray-500'
+              }`}
+            >
+              {pp.isValidated ? (
+                <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
+              ) : (
+                <div className="h-3 w-3 rounded-full border border-gray-300 shrink-0" />
+              )}
+              <span className="truncate">{pp.name}</span>
             </div>
-          </div>
-        )}
-        {opp.esg !== undefined && (
-          <div>
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-              ESG
-            </span>
-            <div className="flex items-center gap-1">
-              <span className="text-sm font-bold text-gray-900">{opp.esg}</span>
-              <span className="text-gray-400 text-xs">~</span>
+          ))}
+          {proofPoints.length > 5 && (
+            <div className="text-[10px] text-gray-400 pl-2">
+              +{proofPoints.length - 5} more proof points
             </div>
-          </div>
-        )}
-        {opp.savings !== undefined && (
-          <div>
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-              Savings
-            </span>
-            <span className="text-sm font-bold text-gray-900">{opp.savings}</span>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Confidence Score */}
-      {isImpacted ? (
-        <div className="bg-white rounded-xl p-3.5 ring-1 ring-gray-100 mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
-              Initiative Confidence Score:
-            </span>
-            <span className="text-sm font-bold text-orange-500">{opp.confidence}%</span>
-          </div>
-          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${opp.confidence}%` }}
-              viewport={{ once: true }}
-              className="h-full bg-orange-400 rounded-full"
-            />
-          </div>
+      <div className="mb-3">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
+            Confidence Score:
+          </span>
+          <span className={`text-sm font-bold ${opp.confidence >= 70 ? 'text-emerald-600' : opp.confidence >= 40 ? 'text-amber-600' : 'text-gray-600'}`}>
+            {opp.confidence}%
+          </span>
         </div>
-      ) : (
-        <div className="mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
-              Initiative Confidence Score:
-            </span>
-            <span className="text-sm font-bold text-gray-900">{opp.confidence}%</span>
-          </div>
-          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${opp.confidence}%` }}
-              viewport={{ once: true }}
-              className="h-full bg-gray-300 rounded-full"
-            />
-          </div>
+        <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: `${opp.confidence}%` }}
+            viewport={{ once: true }}
+            className={`h-full rounded-full ${
+              opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
+            }`}
+          />
         </div>
-      )}
-
-      {/* Impacted Message */}
-      {isImpacted && (
-        <div className="mb-3">
-          <p className="text-[11px] text-gray-500 leading-relaxed mb-2">
-            This action is still valid, however the confidence level and the savings impact has been modified
-          </p>
-          <button className="flex items-center gap-1.5 text-[11px] font-semibold text-gray-600 hover:text-gray-900 transition-colors">
-            Show the alert impacting this opportunity
-            <ExternalLink className="h-3 w-3" />
-          </button>
-        </div>
-      )}
+      </div>
 
       {/* Potential Card Message */}
       {isPotential && (
         <div className="mb-3">
           <p className="text-[11px] text-gray-500 leading-relaxed">
-            To get a better confidence on the savings and narrow down the savings range, you can answer a few questions to uncover the potential opportunities:
+            Validate more proof points to increase confidence and qualify this opportunity.
           </p>
         </div>
       )}
 
       {/* Questions Footer */}
-      <div className="flex items-center gap-2 mt-auto pt-2">
+      <div className="flex items-center gap-2 mt-auto pt-2 border-t border-gray-100">
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[1.5px]">
           <div className="flex h-full w-full items-center justify-center rounded-full bg-white">
             <div className="h-2 w-2 rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400" />
           </div>
         </div>
         <span className="text-[11px] text-gray-400">
-          {opp.questionsToAnswer || 2} question to be answered
+          {opp.questionsToAnswer} proof point{opp.questionsToAnswer !== 1 ? 's' : ''} to validate
         </span>
       </div>
     </motion.div>

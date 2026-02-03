@@ -91,6 +91,7 @@ venv/
 env/
 .venv/
 ENV/
+prod/
 *.egg-info/
 .eggs/
 *.egg

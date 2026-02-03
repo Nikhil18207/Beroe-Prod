@@ -469,6 +469,44 @@ const PROOF_POINT_MAPPINGS: ProofPointMapping[] = [
   },
 ];
 
+// ============================================================================
+// PROOF POINT ID MAPPING
+// Maps review page proof point IDs to procurement-metrics.ts threshold IDs
+// ============================================================================
+const PROOF_POINT_ID_TO_THRESHOLD_ID: Record<string, string> = {
+  // Volume Bundling
+  'vb-pp-1': 'PP_REGIONAL_SPEND',
+  'vb-pp-2': 'PP_TAIL_SPEND',
+  'vb-pp-3': 'PP_VOLUME_LEVERAGE',
+  'vb-pp-4': 'PP_PRICE_VARIANCE',
+  'vb-pp-5': 'PP_AVG_SPEND_SUPPLIER',
+  'vb-pp-6': 'PP_MARKET_CONSOLIDATION',
+  'vb-pp-7': 'PP_SUPPLIER_LOCATION',
+  'vb-pp-8': 'PP_SUPPLIER_RISK_RATING',
+  // Target Pricing
+  'tp-pp-1': 'PP_PRICE_VARIANCE',
+  'tp-pp-2': 'PP_TARIFF_RATE',
+  'tp-pp-3': 'PP_COST_STRUCTURE',
+  'tp-pp-4': 'PP_UNIT_PRICE',
+  // Risk Management
+  'rm-pp-1': 'PP_SINGLE_SOURCING',
+  'rm-pp-2': 'PP_SUPPLIER_CONCENTRATION',
+  'rm-pp-3': 'PP_CATEGORY_RISK',
+  'rm-pp-4': 'PP_INFLATION',
+  'rm-pp-5': 'PP_EXCHANGE_RATE',
+  'rm-pp-6': 'PP_GEO_POLITICAL',
+  'rm-pp-7': 'PP_SUPPLIER_RISK_RATING',
+  // Re-specification Pack
+  'rp-pp-1': 'PP_PRICE_VARIANCE',
+  'rp-pp-2': 'PP_EXPORT_DATA',
+  'rp-pp-3': 'PP_COST_STRUCTURE',
+};
+
+// Get the threshold ID for evaluation, returns original ID if no mapping exists
+const getThresholdId = (proofPointId: string): string => {
+  return PROOF_POINT_ID_TO_THRESHOLD_ID[proofPointId] || proofPointId;
+};
+
 export default function ReviewDataPage() {
   const router = useRouter();
   const { state, actions } = useApp();
@@ -478,6 +516,10 @@ export default function ReviewDataPage() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(state.setupData.uploadedFile);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+
+  // Processing modal state
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStatus, setProcessingStatus] = useState("Analyzing your spend data...");
   const [csvColumns, setCsvColumns] = useState<string[]>([]);
   const [isParsingCsv, setIsParsingCsv] = useState(false);
   const [isSpendExpanded, setIsSpendExpanded] = useState(false);
@@ -500,10 +542,15 @@ export default function ReviewDataPage() {
   const [parsingDataPoints, setParsingDataPoints] = useState<Set<string>>(new Set());
   const [expandedDataPoints, setExpandedDataPoints] = useState<Set<string>>(new Set());
 
-  // Store fully parsed CSV data for summary display
+  // Store fully parsed data for summary display (CSV, XLSX, DOCX, PDF, etc.)
   interface ParsedCsvData {
     headers: string[];
     rows: Record<string, string>[];
+    // Document-specific content (for DOCX, PDF, etc.)
+    htmlContent?: string;
+    rawText?: string;
+    isDocument?: boolean;
+    documentType?: string;
   }
   const [parsedCsvDataStore, setParsedCsvDataStore] = useState<Record<string, ParsedCsvData>>({});
 
@@ -654,7 +701,14 @@ export default function ReviewDataPage() {
   // Category filter state for validation modal
   // "selected" = show only rows matching selected portfolio categories
   // "original" = show all original data without filtering
-  const [categoryFilterMode, setCategoryFilterMode] = useState<"selected" | "original">("original");
+  // Default to "selected" if a category is already selected from portfolio page
+  const [categoryFilterMode, setCategoryFilterMode] = useState<"selected" | "original">(() => {
+    // If user has selected categories or a category name, default to "selected" filter
+    if (state.selectedCategories.length > 0 || (state.setupData.categoryName && state.setupData.categoryName !== "Category" && state.setupData.categoryName !== "")) {
+      return "selected";
+    }
+    return "original";
+  });
 
   // Document editor state for DOCX/document files
   const [documentContent, setDocumentContent] = useState<string>("");
@@ -687,15 +741,18 @@ export default function ReviewDataPage() {
             parsedData: { headers, rows },
           });
 
-          // Extract category name from the first row and update context
-          const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
-          const categoryColIdx = normalizedHeaders.findIndex(h =>
-            h.includes('category') || h.includes('commodity') || h.includes('segment')
-          );
-          if (categoryColIdx !== -1 && rows.length > 0) {
-            const categoryValue = rows[0][headers[categoryColIdx]];
-            if (categoryValue && categoryValue.trim()) {
-              actions.updateSetupData({ categoryName: categoryValue.trim() });
+          // Extract category name from the first row ONLY if not already set from portfolio
+          // Portfolio selection takes priority over CSV-extracted category
+          if (!state.setupData.categoryName || state.setupData.categoryName === "Category") {
+            const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
+            const categoryColIdx = normalizedHeaders.findIndex(h =>
+              h.includes('category') || h.includes('commodity') || h.includes('segment')
+            );
+            if (categoryColIdx !== -1 && rows.length > 0) {
+              const categoryValue = rows[0][headers[categoryColIdx]];
+              if (categoryValue && categoryValue.trim()) {
+                actions.updateSetupData({ categoryName: categoryValue.trim() });
+              }
             }
           }
         } else {
@@ -725,6 +782,7 @@ export default function ReviewDataPage() {
   }, [parsedData]);
 
   // Compute procurement metrics when CSV data changes
+  // IMPORTANT: This respects the categoryFilterMode - calculations use filtered or original data
   useEffect(() => {
     const spendData = parsedCsvDataStore["spend"];
     const supplyMasterData = parsedCsvDataStore["supply-master"];
@@ -747,13 +805,85 @@ export default function ReviewDataPage() {
     }>();
 
     const spendRecords: SpendRecord[] = [];
-    const { headers, rows } = spendData;
+    const { headers } = spendData;
 
     // Use smart column detection
     const columns = detectAllColumns(headers);
 
+    // Debug: Log detected columns and headers
+    console.log('[Review] CSV Headers:', headers);
+    console.log('[Review] Detected columns:', columns);
+    console.log('[Review] Spend column detected:', columns.spend);
+    console.log('[Review] Category filter mode:', categoryFilterMode);
+
+    // Filter rows based on categoryFilterMode
+    let rowsToProcess = spendData.rows;
+
+    if (categoryFilterMode === "selected") {
+      // Get selected category names
+      let selectedCategoryNames: string[] = [];
+      if (state.selectedCategories && state.selectedCategories.length > 0) {
+        selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
+      } else if (state.setupData.categoryName && state.setupData.categoryName !== "Category") {
+        selectedCategoryNames = state.setupData.categoryName
+          .split(',')
+          .map(name => name.trim().toLowerCase())
+          .filter(name => name.length > 0);
+      }
+
+      if (selectedCategoryNames.length > 0) {
+        // Find category column
+        const priorityColumns = [
+          "category_level_3", "categorylevel3", "category_level3",
+          "commodity_type", "commoditytype",
+          "sub_category", "subcategory",
+          "category", "commodity", "segment", "product_type", "product", "type", "item_category"
+        ];
+
+        let categoryColIdx = -1;
+        const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+        for (const priorityCol of priorityColumns) {
+          const normalizedPriority = priorityCol.replace(/[^a-z0-9]/g, '');
+          const idx = normalizedHeaders.findIndex(h => h.includes(normalizedPriority));
+          if (idx !== -1) {
+            categoryColIdx = idx;
+            break;
+          }
+        }
+
+        if (categoryColIdx !== -1) {
+          const categoryColName = headers[categoryColIdx];
+          const normalizeCategory = (cat: string) => cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
+          const normalizedSelectedSet = new Set(selectedCategoryNames.map(normalizeCategory));
+
+          // Filter rows to only include selected categories
+          rowsToProcess = spendData.rows.filter(row => {
+            const rowCategory = row[categoryColName];
+            if (!rowCategory) return false;
+            const normalizedRowCat = normalizeCategory(rowCategory);
+
+            // Check exact match or partial match
+            if (normalizedSelectedSet.has(normalizedRowCat)) return true;
+
+            // Check if any selected category is contained in or contains the row category
+            for (const selected of normalizedSelectedSet) {
+              if (normalizedRowCat.includes(selected) || selected.includes(normalizedRowCat)) {
+                return true;
+              }
+            }
+            return false;
+          });
+
+          console.log('[Review] Filtered rows for selected categories:', rowsToProcess.length, 'of', spendData.rows.length);
+        }
+      }
+    }
+
+    console.log('[Review] Processing', rowsToProcess.length, 'rows (filter mode:', categoryFilterMode, ')');
+
     // Process rows using smart column matcher
-    rows.forEach(row => {
+    rowsToProcess.forEach(row => {
       const supplier = getRowSupplier(row, columns) || 'Unknown';
       const spend = calculateRowSpend(row, columns);
       const country = getRowLocation(row, columns);
@@ -777,6 +907,11 @@ export default function ReviewDataPage() {
     });
 
     const totalSpend = Array.from(supplierSpend.values()).reduce((sum, s) => sum + s.spend, 0);
+
+    // Debug: Log total spend calculation
+    console.log('[Review] Total spend calculated from CSV:', totalSpend);
+    console.log('[Review] Number of suppliers:', supplierSpend.size);
+    console.log('[Review] Number of spend records:', spendRecords.length);
 
     // Convert to supplier profiles
     const suppliers: SupplierProfile[] = Array.from(supplierSpend.entries()).map(([name, data], idx) => ({
@@ -887,7 +1022,10 @@ export default function ReviewDataPage() {
             value = 50; // Default
         }
 
-        return evaluateProofPoint(pp.id, value, opp.id);
+        // Map proof point ID to threshold ID for correct evaluation
+        const thresholdId = getThresholdId(pp.id);
+        // Pass isValidated so confidence is calculated based on actual validation status
+        return evaluateProofPoint(thresholdId, value, opp.id, pp.isValidated);
       });
 
       // Calculate savings using 7-step methodology
@@ -914,6 +1052,18 @@ export default function ReviewDataPage() {
     });
 
     setOpportunityMetrics(oppMetrics);
+    // Store opportunity metrics in context for opportunities page to use
+    actions.setOpportunityMetrics(oppMetrics.map(m => ({
+      opportunityId: m.opportunityId,
+      name: m.name,
+      impactScore: m.impactScore,
+      impactBucket: m.impactBucket,
+      savingsLow: m.savingsLow,
+      savingsHigh: m.savingsHigh,
+      savingsEstimate: m.savingsEstimate,
+      confidenceScore: m.confidenceScore,
+      confidenceBucket: m.confidenceBucket,
+    })));
     // Opportunity metrics calculated
 
     // Calculate and store savings summary
@@ -934,7 +1084,7 @@ export default function ReviewDataPage() {
     // Savings summary calculated
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend]);
+  }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend, categoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
 
   // Calculate field availability based on CSV columns (for spend data) - USES FLEXIBLE MATCHING
   const getFieldStatus = (field: DataField): { available: boolean; matchedColumn?: string } => {
@@ -1188,24 +1338,32 @@ export default function ReviewDataPage() {
       // Use the universal file parser
       parseFile(file).then((result) => {
         if (result.success && result.data) {
-          const { headers, rows } = result.data;
+          const { headers, rows, htmlContent, rawText, metadata } = result.data;
 
           // Set columns for display
           setDataPointColumns(prev => ({ ...prev, [currentUploadTarget!]: headers }));
 
-          // Store parsed data for summary
+          // Store parsed data for summary (including document content for DOCX/PDF)
           setParsedCsvDataStore(prev => ({
             ...prev,
-            [currentUploadTarget!]: { headers, rows }
+            [currentUploadTarget!]: { headers, rows, htmlContent, rawText }
           }));
 
           // Persist data point file for navigation/refresh survival
+          // Include htmlContent and rawText for document files
           actions.updatePersistedDataPointFile(currentUploadTarget!, {
             fileName: file.name,
             fileSize: file.size,
             uploadedAt: Date.now(),
             columns: headers,
-            parsedData: { headers, rows },
+            parsedData: {
+              headers,
+              rows,
+              htmlContent,
+              rawText,
+              isDocument: metadata?.isDocument,
+              documentType: metadata?.documentType,
+            },
           });
         } else {
           // Parsing failed, show error info
@@ -1962,25 +2120,90 @@ export default function ReviewDataPage() {
     setCellErrors([]);
     setEditingCell(null);
     setScrollTop(0);
-    setCategoryFilterMode("original"); // Reset to original view when opening modal
+    // Keep the user's categoryFilterMode selection - don't reset it
 
     // Get the file to validate
-    if (dataPointId === "spend" && uploadedFile) {
-      setValidationDataPoint({ id: dataPointId, name: dataPointName, file: uploadedFile });
-      await parseAndValidateFile(uploadedFile, dataPointId);
-    } else {
-      // For other data points, use the stored file if available
-      const storedFile = dataPointFiles[dataPointId];
-      if (storedFile) {
-        setValidationDataPoint({ id: dataPointId, name: dataPointName, file: storedFile });
-        await parseAndValidateFile(storedFile, dataPointId);
-      } else {
-        // Check if we have columns but no file (from previous session)
-        const dataPoint = contextDataPoints.find(dp => dp.id === dataPointId);
-        if (dataPoint && dataPoint.items.length > 0) {
-          // Show message that file needs to be re-uploaded for detailed validation
-          setParsedData(null);
+    if (dataPointId === "spend") {
+      if (uploadedFile) {
+        setValidationDataPoint({ id: dataPointId, name: dataPointName, file: uploadedFile });
+        await parseAndValidateFile(uploadedFile, dataPointId);
+        return;
+      }
+      // Check persisted spend data (after refresh)
+      const persistedSpend = state.persistedReviewData.spendFile;
+      const storedSpendData = parsedCsvDataStore["spend"];
+      if (storedSpendData || persistedSpend?.parsedData) {
+        const data = storedSpendData || persistedSpend?.parsedData;
+        if (data) {
+          const rows2D = data.rows.map(row =>
+            data.headers.map(h => row[h] || '')
+          );
+          setParsedData({
+            headers: data.headers,
+            rows: rows2D,
+            totalRows: rows2D.length,
+          });
+          // Validate
+          const errors: CellError[] = [];
+          rows2D.forEach((row, rowIdx) => {
+            row.forEach((cell, colIdx) => {
+              const error = validateCell(cell, data.headers[colIdx], rowIdx + 1, colIdx);
+              if (error) errors.push(error);
+            });
+          });
+          setCellErrors(errors);
         }
+        return;
+      }
+    }
+
+    // For other data points, use the stored file if available
+    const storedFile = dataPointFiles[dataPointId];
+    if (storedFile) {
+      setValidationDataPoint({ id: dataPointId, name: dataPointName, file: storedFile });
+      await parseAndValidateFile(storedFile, dataPointId);
+    } else {
+      // No file object, but check if we have persisted parsed data (from refresh)
+      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+      const storedParsedData = parsedCsvDataStore[dataPointId];
+
+      if (storedParsedData || persistedFileData?.parsedData) {
+        // Use the already parsed/persisted data - no need to re-parse
+        const data = storedParsedData || persistedFileData?.parsedData;
+        if (data) {
+          const isDocument = data.isDocument || persistedFileData?.parsedData?.isDocument ||
+            (data.htmlContent !== undefined || data.rawText !== undefined);
+
+          // Convert rows to 2D array format for the modal
+          const rows2D = data.rows.map(row =>
+            data.headers.map(h => row[h] || '')
+          );
+
+          setParsedData({
+            headers: data.headers,
+            rows: rows2D,
+            totalRows: rows2D.length,
+            htmlContent: data.htmlContent,
+            rawText: data.rawText,
+            isDocument,
+            documentType: data.documentType || persistedFileData?.parsedData?.documentType,
+          });
+
+          // Validate tabular data
+          if (!isDocument) {
+            const errors: CellError[] = [];
+            rows2D.forEach((row, rowIdx) => {
+              row.forEach((cell, colIdx) => {
+                const error = validateCell(cell, data.headers[colIdx], rowIdx + 1, colIdx);
+                if (error) errors.push(error);
+              });
+            });
+            setCellErrors(errors);
+          }
+        }
+      } else {
+        // No data available
+        setParsedData(null);
       }
     }
   };
@@ -2110,6 +2333,59 @@ export default function ReviewDataPage() {
       return;
     }
 
+    // For document files (DOCX, PDF), just save the content and close
+    // No need to create CSV files or re-parse
+    if (currentData.isDocument) {
+      // Update persisted data with any edits to the document content
+      const dataPointId = validationDataPoint.id;
+      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+
+      if (persistedFileData) {
+        // Update the persisted data with edited content
+        actions.updatePersistedDataPointFile(dataPointId, {
+          ...persistedFileData,
+          parsedData: {
+            ...persistedFileData.parsedData!,
+            headers: currentData.headers,
+            rows: currentData.rows.map(row => {
+              const rowObj: Record<string, string> = {};
+              currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+              return rowObj;
+            }),
+            htmlContent: currentData.htmlContent,
+            rawText: currentData.rawText,
+            isDocument: true,
+            documentType: currentData.documentType,
+          },
+        });
+      }
+
+      // Also update parsedCsvDataStore
+      setParsedCsvDataStore(prev => ({
+        ...prev,
+        [dataPointId]: {
+          headers: currentData.headers,
+          rows: currentData.rows.map(row => {
+            const rowObj: Record<string, string> = {};
+            currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+            return rowObj;
+          }),
+          htmlContent: currentData.htmlContent,
+          rawText: currentData.rawText,
+          isDocument: true,
+          documentType: currentData.documentType,
+        }
+      }));
+
+      setIsValidationModalOpen(false);
+
+      // Auto-validate proof points
+      setTimeout(() => {
+        autoValidateProofPoints();
+      }, 100);
+      return;
+    }
+
     // Determine which rows to validate based on category filter mode
     const rowsToValidate = categoryFilterMode === "selected"
       ? filteredData.rows
@@ -2129,62 +2405,77 @@ export default function ReviewDataPage() {
       return;
     }
 
-    // No errors - create updated file with edits
+    // No errors - create updated file with edits (only if we have original file)
     const updatedFile = createUpdatedFile();
 
     // IMPORTANT: Always save ALL rows to preserve original data
     // The filter toggle is just for display/viewing - we don't permanently filter the data
     const allRows = currentData.rows;
 
-    if (updatedFile) {
-      if (validationDataPoint.id === "spend") {
-        // Update the spend data file
+    // Update parsed data store even if no file (persisted data case)
+    const dataPointId = validationDataPoint.id;
+    const rowsAsObjects = allRows.map(row => {
+      const rowObj: Record<string, string> = {};
+      currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+      return rowObj;
+    });
+
+    if (dataPointId === "spend") {
+      // Update parsed data store for spend
+      setParsedCsvDataStore(prev => ({
+        ...prev,
+        spend: { headers: currentData.headers, rows: rowsAsObjects }
+      }));
+
+      // Update persisted data
+      const persistedSpend = state.persistedReviewData.spendFile;
+      if (persistedSpend) {
+        actions.updatePersistedSpendFile({
+          ...persistedSpend,
+          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+        });
+      }
+
+      if (updatedFile) {
         setUploadedFile(updatedFile);
         actions.updateSetupData({ uploadedFile: updatedFile });
-
-        // Update parsed data store with ALL rows (preserve original data)
-        // Filter toggle is only for viewing, not for permanent data modification
-        setParsedCsvDataStore(prev => ({
-          ...prev,
-          spend: {
-            headers: currentData.headers,
-            rows: allRows.map(row => {
-              const rowObj: Record<string, string> = {};
-              currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
-              return rowObj;
-            })
-          }
-        }));
-
-        // Re-parse to update columns for field detection using universal parser
+        // Re-parse to update columns
         parseFile(updatedFile).then((result) => {
           if (result.success && result.data) {
             setCsvColumns(result.data.headers);
           }
         });
       } else {
-        // For other data points (supply-master, contracts, playbook)
-        setDataPointFiles(prev => ({ ...prev, [validationDataPoint.id]: updatedFile }));
+        // No file but update columns from data
+        setCsvColumns(currentData.headers);
+      }
+    } else {
+      // For other data points (supply-master, contracts, playbook)
+      setParsedCsvDataStore(prev => ({
+        ...prev,
+        [dataPointId]: { headers: currentData.headers, rows: rowsAsObjects }
+      }));
 
-        // Update parsed data store with ALL rows (preserve original data)
-        setParsedCsvDataStore(prev => ({
-          ...prev,
-          [validationDataPoint.id]: {
-            headers: currentData.headers,
-            rows: allRows.map(row => {
-              const rowObj: Record<string, string> = {};
-              currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
-              return rowObj;
-            })
-          }
-        }));
+      // Update persisted data
+      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+      if (persistedFileData) {
+        actions.updatePersistedDataPointFile(dataPointId, {
+          ...persistedFileData,
+          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+        });
+      }
 
-        // Re-parse to update columns for validation using universal parser
+      if (updatedFile) {
+        setDataPointFiles(prev => ({ ...prev, [dataPointId]: updatedFile }));
+        // Re-parse to update columns
         parseFile(updatedFile).then((result) => {
           if (result.success && result.data) {
-            setDataPointColumns(prev => ({ ...prev, [validationDataPoint.id]: result.data!.headers }));
+            setDataPointColumns(prev => ({ ...prev, [dataPointId]: result.data!.headers }));
           }
         });
+      } else {
+        // No file but update columns from data
+        setDataPointColumns(prev => ({ ...prev, [dataPointId]: currentData.headers }));
       }
     }
 
@@ -2194,8 +2485,7 @@ export default function ReviewDataPage() {
 
     // Auto-validate proof points after successful data validation
     setTimeout(() => {
-      const count = autoValidateProofPoints();
-      // Auto-validated proof points after data validation
+      autoValidateProofPoints();
     }, 100);
   };
 
@@ -2240,12 +2530,14 @@ export default function ReviewDataPage() {
   const needsValidationCount = contextDataPoints.filter(dp => dp.items.length > 0 || (dp.isSpendData && hasSpendData)).length;
   const notAvailableCount = contextDataPoints.filter(dp => dp.items.length === 0 && !(dp.isSpendData && hasSpendData)).length;
 
-  // Calculate opportunity classification (Qualified = more than 2 validated proof points, Potential = 2 or less)
+  // Calculate opportunity classification
+  // Potential = exactly 1 proof point validated (shows opportunity exists)
+  // Qualified = 2 or more proof points validated (enough evidence)
   const getValidatedProofPointsCount = (opportunity: SetupOpportunity) =>
     opportunity.proofPoints.filter(pp => pp.isValidated).length;
 
   const isQualifiedOpportunity = (opportunity: SetupOpportunity) =>
-    getValidatedProofPointsCount(opportunity) > 2;
+    getValidatedProofPointsCount(opportunity) >= 2;
 
   const qualifiedCount = opportunities.filter(isQualifiedOpportunity).length;
   const potentialCount = opportunities.filter(opp => !isQualifiedOpportunity(opp)).length;
@@ -2856,16 +3148,64 @@ export default function ReviewDataPage() {
           spendByRegion[l.name] = l.spend;
         });
 
-        // Calculate price data from CSV for proof point testing
+        // Calculate price data from CSV for proof point testing (respecting filter mode)
         let priceData: { prices: number[]; avgPrice: number; priceVariance: number } | undefined;
         const spendCsvData = parsedCsvDataStore["spend"];
         if (spendCsvData && spendCsvData.rows.length > 0) {
-          const { headers, rows } = spendCsvData;
+          const { headers } = spendCsvData;
+          let priceRows = spendCsvData.rows;
+
+          // Filter rows based on categoryFilterMode (same logic as getSummaryData)
+          if (categoryFilterMode === "selected") {
+            let selectedCategoryNames: string[] = [];
+            if (state.selectedCategories && state.selectedCategories.length > 0) {
+              selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
+            } else if (state.setupData.categoryName) {
+              selectedCategoryNames = state.setupData.categoryName
+                .split(',')
+                .map(name => name.trim().toLowerCase())
+                .filter(name => name.length > 0);
+            }
+
+            if (selectedCategoryNames.length > 0) {
+              const priorityColumns = [
+                "category_level_3", "categorylevel3", "category_level3",
+                "commodity_type", "commoditytype",
+                "sub_category", "subcategory",
+                "category", "commodity", "segment", "product_type", "product", "type", "item_category"
+              ];
+
+              let categoryColName: string | null = null;
+              for (const priorityCol of priorityColumns) {
+                const foundHeader = headers.find(h =>
+                  h.toLowerCase().replace(/[^a-z0-9]/g, '').includes(priorityCol.replace(/[^a-z0-9]/g, ''))
+                );
+                if (foundHeader) {
+                  categoryColName = foundHeader;
+                  break;
+                }
+              }
+
+              if (categoryColName) {
+                const normalizeCategory = (cat: string) => cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
+                const normalizedSet = new Set(selectedCategoryNames.map(normalizeCategory));
+                const normalizedArray = Array.from(normalizedSet);
+
+                priceRows = spendCsvData.rows.filter(row => {
+                  const categoryValue = row[categoryColName!] || "";
+                  const normalizedValue = normalizeCategory(categoryValue);
+                  if (normalizedSet.has(normalizedValue)) return true;
+                  return normalizedArray.some(cat => normalizedValue.includes(cat) || cat.includes(normalizedValue));
+                });
+              }
+            }
+          }
+
           const columns = detectAllColumns(headers);
 
           if (columns.price) {
             const prices: number[] = [];
-            rows.forEach(row => {
+            priceRows.forEach(row => {
               const price = parseNumericValue(row[columns.price!]);
               if (price > 0) {
                 prices.push(price);
@@ -2884,7 +3224,7 @@ export default function ReviewDataPage() {
                 avgPrice,
                 priceVariance,
               };
-              // Price data calculated
+              // Price data calculated from filtered rows
             }
           }
         }
@@ -2911,10 +3251,14 @@ export default function ReviewDataPage() {
       }
     }
 
-    // Calculate total spend from portfolio or uploaded data
-    const totalSpend = state.portfolioItems.length > 0
-      ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
-      : state.setupData.spend || 50000000;
+    // Calculate total spend - prefer filtered spend summary, then portfolio, then setupData
+    const spendSummaryForTotal = getSummaryData("spend");
+    const filteredSpend = spendSummaryForTotal?.totalSpend || 0;
+    const totalSpend = filteredSpend > 0
+      ? filteredSpend
+      : (state.portfolioItems.length > 0
+          ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
+          : state.setupData.spend || 50000000);
 
     try {
       let response;
@@ -2980,7 +3324,9 @@ export default function ReviewDataPage() {
       });
 
       actions.setSetupStep(3);
-      router.push("/setup/processing");
+      // Show processing modal instead of navigating to a separate page
+      setIsProcessing(true);
+      setProcessingStatus("Analyzing your spend data...");
     } catch (err) {
       console.error("Analysis error:", err);
       setUploadError(err instanceof Error ? err.message : "Analysis failed. Please try again.");
@@ -2998,11 +3344,41 @@ export default function ReviewDataPage() {
 
       // For demo, allow continuing even if backend is down
       actions.setSetupStep(3);
-      router.push("/setup/processing");
+      // Show processing modal instead of navigating to a separate page
+      setIsProcessing(true);
+      setProcessingStatus("Analyzing your spend data...");
     } finally {
       setIsUploading(false);
     }
   };
+
+  // Handle processing animation and redirect
+  useEffect(() => {
+    if (!isProcessing) return;
+
+    const statuses = [
+      "Analyzing your spend data...",
+      "Evaluating proof points...",
+      "Calculating savings opportunities...",
+      "Preparing your dashboard..."
+    ];
+
+    let currentIndex = 0;
+    const statusInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % statuses.length;
+      setProcessingStatus(statuses[currentIndex]);
+    }, 1000);
+
+    const timer = setTimeout(() => {
+      actions.setSetupStep(5);
+      router.push("/dashboard");
+    }, 4000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(statusInterval);
+    };
+  }, [isProcessing, router, actions]);
   // Get category name from context or default
   const categoryName = state.setupData.categoryName || "Category";
 
@@ -3326,11 +3702,11 @@ export default function ReviewDataPage() {
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Cost</span>
                   <div className="mt-2">
                     <span className={`text-xl font-semibold ${
-                      state.setupData.goals.cost >= 50 ? 'text-emerald-500' :
-                      state.setupData.goals.cost >= 25 ? 'text-amber-500' : 'text-red-500'
+                      state.setupData.goals.cost >= 66 ? 'text-emerald-500' :
+                      state.setupData.goals.cost >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.cost >= 50 ? 'High' :
-                       state.setupData.goals.cost >= 25 ? 'Medium' : 'Low'}
+                      {state.setupData.goals.cost >= 66 ? 'High' :
+                       state.setupData.goals.cost >= 33 ? 'Medium' : 'Low'}
                     </span>
                   </div>
                   <Link
@@ -3345,11 +3721,11 @@ export default function ReviewDataPage() {
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Risk</span>
                   <div className="mt-2">
                     <span className={`text-xl font-semibold ${
-                      state.setupData.goals.risk >= 50 ? 'text-emerald-500' :
-                      state.setupData.goals.risk >= 25 ? 'text-amber-500' : 'text-red-500'
+                      state.setupData.goals.risk >= 66 ? 'text-emerald-500' :
+                      state.setupData.goals.risk >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.risk >= 50 ? 'High' :
-                       state.setupData.goals.risk >= 25 ? 'Medium' : 'Low'}
+                      {state.setupData.goals.risk >= 66 ? 'High' :
+                       state.setupData.goals.risk >= 33 ? 'Medium' : 'Low'}
                     </span>
                   </div>
                   <Link
@@ -3364,11 +3740,11 @@ export default function ReviewDataPage() {
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">ESG</span>
                   <div className="mt-2">
                     <span className={`text-xl font-semibold ${
-                      state.setupData.goals.esg >= 50 ? 'text-emerald-500' :
-                      state.setupData.goals.esg >= 25 ? 'text-amber-500' : 'text-red-500'
+                      state.setupData.goals.esg >= 66 ? 'text-emerald-500' :
+                      state.setupData.goals.esg >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.esg >= 50 ? 'High' :
-                       state.setupData.goals.esg >= 25 ? 'Medium' : 'Low'}
+                      {state.setupData.goals.esg >= 66 ? 'High' :
+                       state.setupData.goals.esg >= 33 ? 'Medium' : 'Low'}
                     </span>
                   </div>
                   <Link
@@ -4236,108 +4612,29 @@ export default function ReviewDataPage() {
                   </div>
                 </div>
               ) : parsedData?.isDocument ? (
-                /* Document View with Extracted Fields Table + Rich Content Editor */
+                /* Document View - Fullscreen Editable Document */
                 <div className="border border-gray-200 rounded-xl overflow-hidden flex-1 flex flex-col bg-white">
                   {/* Document Type Badge & Toolbar */}
                   <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-gray-50">
                     <div className="flex items-center gap-2">
                       <FileText className="h-4 w-4 text-blue-500" />
                       <span className="text-[13px] font-medium text-gray-700">
-                        {parsedData.headers.length > 1 ? 'Extracted Fields' : 'Document Content'}
+                        Document Editor
                       </span>
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-indigo-100 text-indigo-700 uppercase">
                         {(parsedData as ParsedData & { documentType?: string }).documentType || 'Document'}
                       </span>
                     </div>
                     <span className="text-[11px] text-gray-400">
-                      {parsedData.headers.length} fields extracted
+                      Edit document content below
                     </span>
                   </div>
 
-                  {/* Extracted Fields Table - if we have more than just "Content" */}
-                  {parsedData.headers.length > 1 || (parsedData.headers.length === 1 && parsedData.headers[0] !== 'Content') ? (
-                    <div className="overflow-auto" style={{ maxHeight: '50%', minHeight: 200 }}>
-                      <table className="w-full text-[13px] border-collapse">
-                        <thead className="bg-gray-50 sticky top-0 z-10">
-                          <tr>
-                            <th className="px-4 py-2.5 text-left font-semibold text-gray-600 border-b border-gray-200 w-[200px]">
-                              Field
-                            </th>
-                            <th className="px-4 py-2.5 text-left font-semibold text-gray-600 border-b border-gray-200">
-                              Value
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {parsedData.headers.map((header, idx) => {
-                            const value = parsedData.rows[0]?.[idx] || '';
-                            const isEditing = editingCell?.row === 0 && editingCell?.col === idx;
-
-                            return (
-                              <tr key={idx} className="hover:bg-blue-50/30 border-b border-gray-100">
-                                <td className="px-4 py-2.5 font-medium text-gray-700 bg-gray-50/50">
-                                  {header}
-                                </td>
-                                <td className="px-4 py-2.5">
-                                  {isEditing ? (
-                                    <div className="flex items-center gap-1">
-                                      <input
-                                        type="text"
-                                        value={editValue}
-                                        onChange={(e) => setEditValue(e.target.value)}
-                                        onKeyDown={(e) => {
-                                          if (e.key === 'Enter') saveEditedCell();
-                                          if (e.key === 'Escape') cancelEdit();
-                                        }}
-                                        className="flex-1 px-2 py-1 text-[13px] border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        autoFocus
-                                      />
-                                      <button
-                                        onClick={saveEditedCell}
-                                        className="p-1 text-emerald-600 hover:bg-emerald-50 rounded"
-                                      >
-                                        <Check className="h-3.5 w-3.5" />
-                                      </button>
-                                      <button
-                                        onClick={cancelEdit}
-                                        className="p-1 text-gray-400 hover:bg-gray-100 rounded"
-                                      >
-                                        <X className="h-3.5 w-3.5" />
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      className="flex items-center gap-2 group cursor-pointer min-h-[24px]"
-                                      onClick={() => startEditingCell(0, idx, value)}
-                                    >
-                                      <span className="flex-1 text-gray-700">
-                                        {value || <span className="text-gray-300 italic">Not detected</span>}
-                                      </span>
-                                      <Pencil className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 flex-shrink-0" />
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  ) : null}
-
-                  {/* Separator if we have both table and content */}
-                  {parsedData.headers.length > 1 && parsedData.htmlContent && (
-                    <div className="px-4 py-2 border-t border-b border-gray-100 bg-gray-50 flex items-center gap-2">
-                      <FileText className="h-3.5 w-3.5 text-gray-400" />
-                      <span className="text-[12px] font-medium text-gray-500">Original Document Content</span>
-                    </div>
-                  )}
-
-                  {/* Editable Document Content (collapsible if we have extracted fields) */}
+                  {/* Fullscreen Editable Document Content */}
                   <div
                     ref={documentEditorRef}
-                    className={`flex-1 overflow-auto p-6 ${parsedData.headers.length > 1 ? 'border-t border-gray-100' : ''}`}
-                    style={{ minHeight: parsedData.headers.length > 1 ? 200 : 400 }}
+                    className="flex-1 overflow-auto p-6"
+                    style={{ minHeight: 400 }}
                   >
                     <div
                       contentEditable
@@ -4350,8 +4647,9 @@ export default function ReviewDataPage() {
                         color: '#374151',
                       }}
                       dangerouslySetInnerHTML={{ __html: parsedData.htmlContent || parsedData.rawText || '' }}
-                      onInput={(e) => {
-                        // Update rawText when content changes
+                      onBlur={(e) => {
+                        // Only update state when user leaves the editor (not on every keystroke)
+                        // This prevents cursor jumping caused by React re-renders
                         const target = e.target as HTMLDivElement;
                         setParsedData(prev => prev ? {
                           ...prev,
@@ -4362,7 +4660,7 @@ export default function ReviewDataPage() {
                     />
                   </div>
 
-                  {/* Document Stats */}
+                  {/* Document Stats - shows "Editing..." while focused */}
                   <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
                     <span className="text-[11px] text-gray-400">
                       {(parsedData.rawText?.split(/\s+/).filter(Boolean).length || 0).toLocaleString()} words
@@ -5121,6 +5419,115 @@ export default function ReviewDataPage() {
           })()}
         </DialogContent>
       </Dialog>
+
+      {/* Processing Overlay Modal */}
+      <AnimatePresence>
+        {isProcessing && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#F8FBFE]/95 backdrop-blur-sm"
+          >
+            <div className="relative flex flex-col items-center max-w-2xl text-center space-y-8">
+              {/* Central AI Orb Animation */}
+              <div className="relative h-40 w-40">
+                {/* Animated Glow Layers */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.6, 0.3],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-400/30 via-purple-500/20 to-indigo-400/30 blur-3xl"
+                />
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, -180, -360]
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  className="absolute inset-4 rounded-full bg-gradient-to-bl from-cyan-400/20 via-blue-500/20 to-purple-400/20 blur-2xl"
+                />
+
+                {/* Core Orb */}
+                <motion.div
+                  animate={{
+                    y: [0, -8, 0],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="relative h-full w-full rounded-full bg-white shadow-[0_0_60px_rgba(59,130,246,0.3)] ring-1 ring-white/50 overflow-hidden"
+                >
+                  {/* Internal Swirls */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-white to-purple-500/10" />
+
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.5, 0.8, 0.5],
+                      x: [-20, 20, -20],
+                      y: [-20, 20, -20]
+                    }}
+                    transition={{
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="absolute -inset-10 bg-gradient-to-tr from-blue-400 via-indigo-500 to-purple-500 blur-xl opacity-40 mix-blend-multiply"
+                  />
+
+                  <motion.div
+                    animate={{
+                      scale: [1.2, 0.8, 1.2],
+                      x: [20, -20, 20],
+                      y: [20, -20, 20]
+                    }}
+                    transition={{
+                      duration: 7,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="absolute -inset-10 bg-gradient-to-br from-cyan-300 via-blue-400 to-indigo-500 blur-xl opacity-30 mix-blend-screen"
+                  />
+
+                  {/* Surface Reflection */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-black/5" />
+                </motion.div>
+              </div>
+
+              {/* Text Content */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="space-y-4"
+              >
+                <h1 className="text-3xl font-medium tracking-tight text-[#1A1C1E] font-serif italic">
+                  Thanks for validating your data
+                </h1>
+                <p className="text-lg text-gray-400/80 font-medium">
+                  {processingStatus}
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

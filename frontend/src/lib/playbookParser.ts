@@ -641,7 +641,9 @@ export function generateOpportunitiesFromPlaybook(
       // Use Beroe methodology's impact bucket and confidence
       const impact = savingsResult.impactBucket;
       const confidence = Math.round(savingsResult.confidenceScore * 100);
-      const status: "Qualified" | "Potential" = savingsResult.confidenceBucket === "High" ? "Qualified" : "Potential";
+      // Potential = 1 proof point, Qualified = 2+ proof points validated
+      const testedCount = proofPointResults.filter(pp => pp.isTested).length;
+      const status: "Qualified" | "Potential" = testedCount >= 2 ? "Qualified" : "Potential";
 
       opportunities.push({
         id: `playbook-opp-${oppIndex++}`,
@@ -698,9 +700,9 @@ export function generateOpportunitiesFromPlaybook(
         esg: "0",
         savings: strategyDetection.type === "Resilience" ? "Low" : undefined,
         confidence: Math.round(savingsResult.confidenceScore * 100),
-        status: savingsResult.confidenceBucket === "High" ? "Qualified" : "Potential",
+        status: proofPointResults.filter(pp => pp.isTested).length >= 2 ? "Qualified" : "Potential",
         isNew: true,
-        questionsToAnswer: savingsResult.confidenceBucket === "High" ? 2 : 4,
+        questionsToAnswer: totalPoints - proofPointResults.filter(pp => pp.isTested).length,
         savings_low: savingsResult.savingsLow,
         savings_high: savingsResult.savingsHigh,
         marketContext: entry.marketTrend,
@@ -1007,8 +1009,8 @@ export function enrichOpportunitiesWithSpendData(
     return {
       ...opp,
       confidence: adjustedConfidence,
-      status: savingsResult.confidenceBucket === "High" ? "Qualified" : "Potential",
-      questionsToAnswer: savingsResult.confidenceBucket === "High" ? 2 : Math.max(2, 6 - Math.floor(adjustedConfidence / 20)),
+      status: testedCount >= 2 ? "Qualified" : "Potential",
+      questionsToAnswer: proofPoints.length - testedCount,
       savings_low: savingsResult.savingsLow,
       savings_high: savingsResult.savingsHigh,
       impact: savingsResult.impactBucket,

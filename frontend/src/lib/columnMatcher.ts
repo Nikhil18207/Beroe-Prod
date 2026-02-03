@@ -31,10 +31,11 @@ const COLUMN_PATTERNS: Record<ColumnType, string[]> = {
   ],
   spend: [
     'extendedlineamount', 'lineamount', 'totalamount', 'spendamount',
-    'invoicedamount', 'purchaseamount', 'orderamount',
+    'invoicedamount', 'purchaseamount', 'orderamount', 'annualspend',
+    'totalspend', 'totalvalue', 'spendvalue', 'purchasevalue',
     'spend', 'expenditure', 'disbursement', 'outlay', 'payment',
-    'extended', 'invoice'
-    // Removed generic words like 'amount', 'total', 'value' that match too much
+    'extended', 'invoice', 'amount', 'value', 'total'
+    // Note: 'amount', 'value', 'total' are generic but commonly used for spend
   ],
   country: [
     'suppliercountry', 'buyercountry', 'vendorcountry', 'shipcountry',

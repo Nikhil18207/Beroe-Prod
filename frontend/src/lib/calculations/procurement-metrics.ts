@@ -435,11 +435,13 @@ export function calculateOverallRiskScore(metrics: Partial<ComputedMetrics>): nu
 
 /**
  * Evaluate a proof point and assign impact flag based on thresholds
+ * @param isValidated - Whether the proof point is actually validated by the user's data
  */
 export function evaluateProofPoint(
   proofPointId: string,
   value: number,
-  opportunityId: string
+  opportunityId: string,
+  isValidated: boolean = true
 ): ProofPointResult {
   const thresholds = PROOF_POINT_THRESHOLDS[proofPointId];
 
@@ -488,7 +490,7 @@ export function evaluateProofPoint(
     value,
     impact,
     insight,
-    isTested: true,
+    isTested: isValidated, // Use actual validation status for confidence calculation
     threshold: {
       high: context.highThreshold,
       medium: context.mediumThreshold,

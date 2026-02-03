@@ -77,6 +77,11 @@ export interface PersistedFileData {
   parsedData?: {
     headers: string[];
     rows: Record<string, string>[];
+    // Document-specific content (for DOCX, PDF, etc.)
+    htmlContent?: string;
+    rawText?: string;
+    isDocument?: boolean;
+    documentType?: string;
   };
 }
 
@@ -154,6 +159,22 @@ interface AppState {
 
   // Spend analysis data for enriching opportunities
   spendAnalysis: SpendAnalysis | null;
+
+  // Opportunity metrics from 7-step calculation (per-opportunity savings)
+  opportunityMetrics: OpportunityMetricsData[] | null;
+}
+
+// Opportunity metrics data (simplified from procurement-metrics.ts)
+export interface OpportunityMetricsData {
+  opportunityId: string;
+  name: string;
+  impactScore: number;
+  impactBucket: 'High' | 'Medium' | 'Low';
+  savingsLow: number;
+  savingsHigh: number;
+  savingsEstimate: number;
+  confidenceScore: number;
+  confidenceBucket: 'High' | 'Medium' | 'Low';
 }
 
 // Playbook data structure
@@ -172,7 +193,7 @@ interface PlaybookData {
 }
 
 // Spend analysis results
-interface SpendAnalysis {
+export interface SpendAnalysis {
   totalSpend: number;
   spendBySupplier: Record<string, number>;
   spendByRegion: Record<string, number>;
@@ -224,6 +245,7 @@ type AppAction =
   | { type: "CLEAR_PERSISTED_REVIEW_DATA" }
   | { type: "SET_PLAYBOOK_DATA"; payload: PlaybookData | null }
   | { type: "SET_SPEND_ANALYSIS"; payload: SpendAnalysis | null }
+  | { type: "SET_OPPORTUNITY_METRICS"; payload: OpportunityMetricsData[] | null }
   | { type: "RESET_STATE" }
   | { type: "LOGOUT" };
 
@@ -327,6 +349,7 @@ const initialState: AppState = {
   },
   playbookData: null,
   spendAnalysis: null,
+  opportunityMetrics: null,
   setupData: {
     categoryName: "",
     spend: 0,
@@ -576,6 +599,12 @@ function appReducer(state: AppState, action: AppAction): AppState {
         spendAnalysis: action.payload,
       };
 
+    case "SET_OPPORTUNITY_METRICS":
+      return {
+        ...state,
+        opportunityMetrics: action.payload,
+      };
+
     case "RESET_STATE":
       return {
         ...initialState,
@@ -629,6 +658,7 @@ interface AppContextType {
     clearPersistedReviewData: () => void;
     setPlaybookData: (data: PlaybookData | null) => void;
     setSpendAnalysis: (data: SpendAnalysis | null) => void;
+    setOpportunityMetrics: (metrics: OpportunityMetricsData[] | null) => void;
     resetState: () => void;
     logout: () => void;
   };
@@ -643,6 +673,10 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Local storage keys for persistence
 const ACTIVITY_STORAGE_KEY = "beroe_activity_history";
 const REVIEW_DATA_STORAGE_KEY = "beroe_review_data";
+const SETUP_DATA_STORAGE_KEY = "beroe_setup_data";
+const SPEND_ANALYSIS_STORAGE_KEY = "beroe_spend_analysis";
+const OPPORTUNITY_METRICS_STORAGE_KEY = "beroe_opportunity_metrics";
+const SAVINGS_SUMMARY_STORAGE_KEY = "beroe_savings_summary";
 
 // Load activity history from localStorage
 const loadActivityHistory = (): ActivityItem[] => {
@@ -697,10 +731,143 @@ const savePersistedReviewData = (data: PersistedReviewData) => {
   }
 };
 
+// Persistable setup data (excluding File objects)
+interface PersistedSetupData {
+  categoryName: string;
+  spend: number;
+  addressableSpendPct: number;
+  savingsBenchmarkLow: number;
+  savingsBenchmarkHigh: number;
+  maturityScore: number;
+  goals: {
+    cost: number;
+    risk: number;
+    esg: number;
+  };
+}
+
+// Load setup data from localStorage
+const loadPersistedSetupData = (): Partial<PersistedSetupData> | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(SETUP_DATA_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading setup data:", error);
+  }
+  return null;
+};
+
+// Save setup data to localStorage (excluding File objects)
+const savePersistedSetupData = (data: AppState["setupData"]) => {
+  if (typeof window === "undefined") return;
+  try {
+    // Don't persist File objects - they can't be serialized
+    const persistable: PersistedSetupData = {
+      categoryName: data.categoryName,
+      spend: data.spend,
+      addressableSpendPct: data.addressableSpendPct,
+      savingsBenchmarkLow: data.savingsBenchmarkLow,
+      savingsBenchmarkHigh: data.savingsBenchmarkHigh,
+      maturityScore: data.maturityScore,
+      goals: data.goals,
+    };
+    localStorage.setItem(SETUP_DATA_STORAGE_KEY, JSON.stringify(persistable));
+  } catch (error) {
+    console.error("Error saving setup data:", error);
+  }
+};
+
+// Load spend analysis from localStorage
+const loadSpendAnalysis = (): SpendAnalysis | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(SPEND_ANALYSIS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading spend analysis:", error);
+  }
+  return null;
+};
+
+// Save spend analysis to localStorage
+const saveSpendAnalysis = (data: SpendAnalysis | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data) {
+      localStorage.setItem(SPEND_ANALYSIS_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving spend analysis:", error);
+  }
+};
+
+// Load opportunity metrics from localStorage
+const loadOpportunityMetrics = (): OpportunityMetricsData[] | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading opportunity metrics:", error);
+  }
+  return null;
+};
+
+// Save opportunity metrics to localStorage
+const saveOpportunityMetrics = (data: OpportunityMetricsData[] | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data && data.length > 0) {
+      localStorage.setItem(OPPORTUNITY_METRICS_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving opportunity metrics:", error);
+  }
+};
+
+// Load savings summary from localStorage
+const loadSavingsSummary = (): SavingsSummary | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(SAVINGS_SUMMARY_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading savings summary:", error);
+  }
+  return null;
+};
+
+// Save savings summary to localStorage
+const saveSavingsSummary = (data: SavingsSummary | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data) {
+      localStorage.setItem(SAVINGS_SUMMARY_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving savings summary:", error);
+  }
+};
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // Load activity history and review data from localStorage on mount
+  // Load activity history, review data, and setup data from localStorage on mount
   React.useEffect(() => {
     const savedActivities = loadActivityHistory();
     if (savedActivities.length > 0) {
@@ -711,6 +878,30 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const hasDataPointFiles = savedReviewData.dataPointFiles && Object.keys(savedReviewData.dataPointFiles).length > 0;
     if (savedReviewData.spendFile || hasDataPointFiles) {
       dispatch({ type: "SET_PERSISTED_REVIEW_DATA", payload: savedReviewData });
+    }
+
+    // Load setup data (category name, spend, goals, etc.)
+    const savedSetupData = loadPersistedSetupData();
+    if (savedSetupData && savedSetupData.categoryName) {
+      dispatch({ type: "UPDATE_SETUP_DATA", payload: savedSetupData });
+    }
+
+    // Load spend analysis
+    const savedSpendAnalysis = loadSpendAnalysis();
+    if (savedSpendAnalysis) {
+      dispatch({ type: "SET_SPEND_ANALYSIS", payload: savedSpendAnalysis });
+    }
+
+    // Load opportunity metrics (7-step calculation results)
+    const savedOpportunityMetrics = loadOpportunityMetrics();
+    if (savedOpportunityMetrics && savedOpportunityMetrics.length > 0) {
+      dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: savedOpportunityMetrics });
+    }
+
+    // Load savings summary
+    const savedSavingsSummary = loadSavingsSummary();
+    if (savedSavingsSummary) {
+      dispatch({ type: "SET_SAVINGS_SUMMARY", payload: savedSavingsSummary });
     }
   }, []);
 
@@ -723,6 +914,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     savePersistedReviewData(state.persistedReviewData);
   }, [state.persistedReviewData]);
+
+  // Save setup data to localStorage whenever it changes
+  React.useEffect(() => {
+    // Only save if there's meaningful data (category name set)
+    if (state.setupData.categoryName && state.setupData.categoryName !== "") {
+      savePersistedSetupData(state.setupData);
+    }
+  }, [state.setupData]);
+
+  // Save spend analysis to localStorage whenever it changes
+  React.useEffect(() => {
+    saveSpendAnalysis(state.spendAnalysis);
+  }, [state.spendAnalysis]);
+
+  // Save opportunity metrics to localStorage whenever it changes
+  React.useEffect(() => {
+    saveOpportunityMetrics(state.opportunityMetrics);
+  }, [state.opportunityMetrics]);
+
+  // Save savings summary to localStorage whenever it changes
+  React.useEffect(() => {
+    saveSavingsSummary(state.savingsSummary);
+  }, [state.savingsSummary]);
 
   const actions = {
     setUser: useCallback(
@@ -885,6 +1099,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSpendAnalysis: useCallback(
       (data: SpendAnalysis | null) =>
         dispatch({ type: "SET_SPEND_ANALYSIS", payload: data }),
+      []
+    ),
+    setOpportunityMetrics: useCallback(
+      (metrics: OpportunityMetricsData[] | null) =>
+        dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: metrics }),
       []
     ),
     resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),
