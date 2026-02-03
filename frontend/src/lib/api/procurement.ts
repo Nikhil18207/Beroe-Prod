@@ -381,6 +381,113 @@ export const procurementApi = {
     }>("/data/ingest/playbook", formData, { timeout: 60000 });
   },
 
+  // ============================================================================
+  // Document Analysis (PDF/DOCX extraction with Qwen 2.5)
+  // ============================================================================
+
+  /**
+   * Analyze a single document (contract or playbook)
+   * Uses Ollama + Qwen 2.5 for local AI extraction
+   */
+  analyzeDocument: async (
+    file: File,
+    documentType: "contract" | "playbook" | "supplier_agreement" | "policy" | "other",
+    options?: {
+      category?: string;
+      sessionId?: string;
+      extractionFocus?: string[];
+    }
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("document_type", documentType);
+
+    if (options?.category) {
+      formData.append("category", options.category);
+    }
+    if (options?.sessionId) {
+      formData.append("session_id", options.sessionId);
+    }
+    if (options?.extractionFocus) {
+      formData.append("extraction_focus", options.extractionFocus.join(","));
+    }
+
+    return apiClient.upload<{
+      document_id: string;
+      document_name: string;
+      document_type: string;
+      summary: string;
+      key_terms: Array<{ term: string; details: string; risk_level: string }>;
+      pricing_info: Record<string, unknown>;
+      risks: Array<{ risk: string; severity: string; mitigation: string }>;
+      opportunities: Array<{ opportunity: string; potential_impact: string; action: string }>;
+      compliance: Record<string, unknown>;
+      recommendations: Array<{ recommendation: string; priority: string; rationale: string }>;
+      processed_at: string;
+    }>("/documents/analyze", formData, { timeout: 120000 });
+  },
+
+  /**
+   * Demo document analysis (no auth required)
+   * For testing document extraction
+   */
+  analyzeDocumentDemo: async (
+    file: File,
+    documentType: "contract" | "playbook" = "contract"
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("document_type", documentType);
+
+    return apiClient.upload<{
+      document_name: string;
+      document_type: string;
+      summary: string;
+      key_terms: Array<{ term: string; details: string; risk_level: string }>;
+      risks: Array<{ risk: string; severity: string; mitigation: string }>;
+      opportunities: Array<{ opportunity: string; potential_impact: string; action: string }>;
+      recommendations: Array<{ recommendation: string; priority: string; rationale: string }>;
+      processed_at: string;
+    }>("/documents/demo-analyze", formData, { timeout: 120000 });
+  },
+
+  /**
+   * Get document analysis by ID
+   */
+  getDocumentAnalysis: (documentId: string) =>
+    apiClient.get<{
+      document_id: string;
+      document_name: string;
+      document_type: string;
+      summary: string;
+      key_terms: Array<{ term: string; details: string; risk_level: string }>;
+      pricing_info: Record<string, unknown>;
+      risks: Array<{ risk: string; severity: string; mitigation: string }>;
+      opportunities: Array<{ opportunity: string; potential_impact: string; action: string }>;
+      compliance: Record<string, unknown>;
+      recommendations: Array<{ recommendation: string; priority: string; rationale: string }>;
+      processed_at: string;
+    }>(`/documents/${documentId}`),
+
+  /**
+   * List documents for a session
+   */
+  listSessionDocuments: (sessionId: string) =>
+    apiClient.get<{
+      documents: Array<{
+        id: string;
+        file_name: string;
+        document_type: string;
+        status: string;
+        word_count: number;
+        page_count: number;
+        has_analysis: boolean;
+        created_at: string;
+        processed_at: string | null;
+      }>;
+      total: number;
+    }>(`/documents/session/${sessionId}`),
+
   /**
    * Compute metrics after data ingestion
    */

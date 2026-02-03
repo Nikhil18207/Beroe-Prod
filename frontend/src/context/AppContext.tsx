@@ -53,6 +53,38 @@ export interface SetupOpportunity {
   proofPoints: ProofPoint[];
 }
 
+// Activity History for Recent Conversations
+export interface ActivityItem {
+  id: string;
+  type: "analysis" | "upload" | "validation" | "chat" | "portfolio" | "goals";
+  title: string;
+  description: string;
+  timestamp: number; // Unix timestamp in ms
+  metadata?: {
+    categoryName?: string;
+    fileName?: string;
+    savings?: string;
+    opportunityCount?: number;
+  };
+}
+
+// Persisted file data (can't store File objects, so store metadata + parsed data)
+export interface PersistedFileData {
+  fileName: string;
+  fileSize: number;
+  uploadedAt: number;
+  columns: string[];
+  parsedData?: {
+    headers: string[];
+    rows: Record<string, string>[];
+  };
+}
+
+export interface PersistedReviewData {
+  spendFile?: PersistedFileData;
+  dataPointFiles: Record<string, PersistedFileData>;
+}
+
 // ============================================================================
 // State Types
 // ============================================================================
@@ -76,6 +108,9 @@ interface AppState {
   // Portfolio Data (persisted across pages)
   portfolioItems: PortfolioItem[];
   portfolioLoaded: boolean;
+
+  // Selected categories for analysis (multi-select from portfolio page)
+  selectedCategories: string[];
 
   // Review Data (persisted across pages)
   dataPoints: DataPoint[];
@@ -107,6 +142,50 @@ interface AppState {
 
   // Computed procurement metrics (from frontend calculations)
   computedMetrics: Record<string, number> | null;
+
+  // Activity history for recent conversations
+  activityHistory: ActivityItem[];
+
+  // Persisted review page data (survives navigation and refresh)
+  persistedReviewData: PersistedReviewData;
+
+  // Playbook data for dynamic opportunities
+  playbookData: PlaybookData | null;
+
+  // Spend analysis data for enriching opportunities
+  spendAnalysis: SpendAnalysis | null;
+}
+
+// Playbook data structure
+interface PlaybookData {
+  entries: Array<{
+    category: string;
+    strategy: string;
+    marketTrend: string;
+    riskFactor: string;
+    recommendations: string[];
+    riskLevel?: string;
+    priority?: string;
+  }>;
+  fileName: string;
+  uploadedAt: number;
+}
+
+// Spend analysis results
+interface SpendAnalysis {
+  totalSpend: number;
+  spendBySupplier: Record<string, number>;
+  spendByRegion: Record<string, number>;
+  spendByCountry: Record<string, number>;
+  supplierCount: number;
+  topSuppliers: Array<{ name: string; spend: number; percentage: number }>;
+  topRegions: Array<{ name: string; spend: number; percentage: number }>;
+  // Price data for testing price-related proof points
+  priceData?: {
+    prices: number[];
+    avgPrice: number;
+    priceVariance: number;
+  };
 }
 
 // ============================================================================
@@ -128,6 +207,7 @@ type AppAction =
   | { type: "UPDATE_PORTFOLIO_ITEM"; payload: PortfolioItem }
   | { type: "REMOVE_PORTFOLIO_ITEM"; payload: string }
   | { type: "SET_PORTFOLIO_LOADED"; payload: boolean }
+  | { type: "SET_SELECTED_CATEGORIES"; payload: string[] }
   | { type: "SET_DATA_POINTS"; payload: DataPoint[] }
   | { type: "UPDATE_DATA_POINT"; payload: DataPoint }
   | { type: "SET_SETUP_OPPORTUNITIES"; payload: SetupOpportunity[] }
@@ -135,6 +215,15 @@ type AppAction =
   | { type: "UPDATE_SIMULATION_SETTINGS"; payload: Partial<AppState["simulationSettings"]> }
   | { type: "SET_COMPUTED_METRICS"; payload: Record<string, number> | null }
   | { type: "SET_SAVINGS_SUMMARY"; payload: SavingsSummary | null }
+  | { type: "ADD_ACTIVITY"; payload: ActivityItem }
+  | { type: "SET_ACTIVITY_HISTORY"; payload: ActivityItem[] }
+  | { type: "CLEAR_ACTIVITY_HISTORY" }
+  | { type: "SET_PERSISTED_REVIEW_DATA"; payload: PersistedReviewData }
+  | { type: "UPDATE_PERSISTED_SPEND_FILE"; payload: PersistedFileData | undefined }
+  | { type: "UPDATE_PERSISTED_DATA_POINT_FILE"; payload: { dataPointId: string; data: PersistedFileData | undefined } }
+  | { type: "CLEAR_PERSISTED_REVIEW_DATA" }
+  | { type: "SET_PLAYBOOK_DATA"; payload: PlaybookData | null }
+  | { type: "SET_SPEND_ANALYSIS"; payload: SpendAnalysis | null }
   | { type: "RESET_STATE" }
   | { type: "LOGOUT" };
 
@@ -221,6 +310,7 @@ const initialState: AppState = {
   analysisResponse: null,
   portfolioItems: [],
   portfolioLoaded: false,
+  selectedCategories: [],
   dataPoints: defaultDataPoints,
   setupOpportunities: defaultSetupOpportunities,
   setupStep: 0,
@@ -230,6 +320,13 @@ const initialState: AppState = {
     selectedCountry: "australia" as const,
   },
   computedMetrics: null,
+  activityHistory: [],
+  persistedReviewData: {
+    spendFile: undefined,
+    dataPointFiles: {},
+  },
+  playbookData: null,
+  spendAnalysis: null,
   setupData: {
     categoryName: "",
     spend: 0,
@@ -239,9 +336,9 @@ const initialState: AppState = {
     maturityScore: 2.5,
     uploadedFile: null,
     goals: {
-      cost: 50,
-      risk: 50,
-      esg: 0, // ESG removed from UI, kept for API compatibility
+      cost: 34,
+      risk: 33,
+      esg: 33,
     },
   },
 };
@@ -354,6 +451,12 @@ function appReducer(state: AppState, action: AppAction): AppState {
         portfolioLoaded: action.payload,
       };
 
+    case "SET_SELECTED_CATEGORIES":
+      return {
+        ...state,
+        selectedCategories: action.payload,
+      };
+
     case "SET_DATA_POINTS":
       return {
         ...state,
@@ -403,6 +506,76 @@ function appReducer(state: AppState, action: AppAction): AppState {
         savingsSummary: action.payload,
       };
 
+    case "ADD_ACTIVITY":
+      return {
+        ...state,
+        // Add new activity to the beginning, keep max 50 items
+        activityHistory: [action.payload, ...state.activityHistory].slice(0, 50),
+      };
+
+    case "SET_ACTIVITY_HISTORY":
+      return {
+        ...state,
+        activityHistory: action.payload,
+      };
+
+    case "CLEAR_ACTIVITY_HISTORY":
+      return {
+        ...state,
+        activityHistory: [],
+      };
+
+    case "SET_PERSISTED_REVIEW_DATA":
+      return {
+        ...state,
+        persistedReviewData: action.payload,
+      };
+
+    case "UPDATE_PERSISTED_SPEND_FILE":
+      return {
+        ...state,
+        persistedReviewData: {
+          ...state.persistedReviewData,
+          spendFile: action.payload,
+        },
+      };
+
+    case "UPDATE_PERSISTED_DATA_POINT_FILE":
+      return {
+        ...state,
+        persistedReviewData: {
+          ...state.persistedReviewData,
+          dataPointFiles: action.payload.data
+            ? { ...state.persistedReviewData.dataPointFiles, [action.payload.dataPointId]: action.payload.data }
+            : Object.fromEntries(
+                Object.entries(state.persistedReviewData.dataPointFiles).filter(
+                  ([key]) => key !== action.payload.dataPointId
+                )
+              ),
+        },
+      };
+
+    case "CLEAR_PERSISTED_REVIEW_DATA":
+      return {
+        ...state,
+        persistedReviewData: {
+          spendFile: undefined,
+          dataPointFiles: {},
+        },
+      };
+
+    case "SET_PLAYBOOK_DATA":
+      return {
+        ...state,
+        playbookData: action.payload,
+      };
+
+    case "SET_SPEND_ANALYSIS":
+      return {
+        ...state,
+        spendAnalysis: action.payload,
+      };
+
     case "RESET_STATE":
       return {
         ...initialState,
@@ -440,6 +613,7 @@ interface AppContextType {
     updatePortfolioItem: (item: PortfolioItem) => void;
     removePortfolioItem: (id: string) => void;
     setPortfolioLoaded: (loaded: boolean) => void;
+    setSelectedCategories: (categories: string[]) => void;
     setDataPoints: (dataPoints: DataPoint[]) => void;
     updateDataPoint: (dataPoint: DataPoint) => void;
     setSetupOpportunities: (opportunities: SetupOpportunity[]) => void;
@@ -447,6 +621,14 @@ interface AppContextType {
     updateSimulationSettings: (settings: Partial<AppState["simulationSettings"]>) => void;
     setComputedMetrics: (metrics: Record<string, number> | null) => void;
     setSavingsSummary: (summary: SavingsSummary | null) => void;
+    addActivity: (activity: Omit<ActivityItem, "id" | "timestamp">) => void;
+    clearActivityHistory: () => void;
+    setPersistedReviewData: (data: PersistedReviewData) => void;
+    updatePersistedSpendFile: (data: PersistedFileData | undefined) => void;
+    updatePersistedDataPointFile: (dataPointId: string, data: PersistedFileData | undefined) => void;
+    clearPersistedReviewData: () => void;
+    setPlaybookData: (data: PlaybookData | null) => void;
+    setSpendAnalysis: (data: SpendAnalysis | null) => void;
     resetState: () => void;
     logout: () => void;
   };
@@ -458,8 +640,89 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Provider
 // ============================================================================
 
+// Local storage keys for persistence
+const ACTIVITY_STORAGE_KEY = "beroe_activity_history";
+const REVIEW_DATA_STORAGE_KEY = "beroe_review_data";
+
+// Load activity history from localStorage
+const loadActivityHistory = (): ActivityItem[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const saved = localStorage.getItem(ACTIVITY_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading activity history:", error);
+  }
+  return [];
+};
+
+// Save activity history to localStorage
+const saveActivityHistory = (activities: ActivityItem[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activities));
+  } catch (error) {
+    console.error("Error saving activity history:", error);
+  }
+};
+
+// Load review data from localStorage
+const loadPersistedReviewData = (): PersistedReviewData => {
+  if (typeof window === "undefined") return { spendFile: undefined, dataPointFiles: {} };
+  try {
+    const saved = localStorage.getItem(REVIEW_DATA_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Ensure dataPointFiles is always an object (handle corrupted/old data)
+      return {
+        spendFile: parsed.spendFile,
+        dataPointFiles: parsed.dataPointFiles || {},
+      };
+    }
+  } catch (error) {
+    console.error("Error loading review data:", error);
+  }
+  return { spendFile: undefined, dataPointFiles: {} };
+};
+
+// Save review data to localStorage
+const savePersistedReviewData = (data: PersistedReviewData) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(REVIEW_DATA_STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving review data:", error);
+  }
+};
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  // Load activity history and review data from localStorage on mount
+  React.useEffect(() => {
+    const savedActivities = loadActivityHistory();
+    if (savedActivities.length > 0) {
+      dispatch({ type: "SET_ACTIVITY_HISTORY", payload: savedActivities });
+    }
+
+    const savedReviewData = loadPersistedReviewData();
+    const hasDataPointFiles = savedReviewData.dataPointFiles && Object.keys(savedReviewData.dataPointFiles).length > 0;
+    if (savedReviewData.spendFile || hasDataPointFiles) {
+      dispatch({ type: "SET_PERSISTED_REVIEW_DATA", payload: savedReviewData });
+    }
+  }, []);
+
+  // Save activity history to localStorage whenever it changes
+  React.useEffect(() => {
+    saveActivityHistory(state.activityHistory);
+  }, [state.activityHistory]);
+
+  // Save review data to localStorage whenever it changes
+  React.useEffect(() => {
+    savePersistedReviewData(state.persistedReviewData);
+  }, [state.persistedReviewData]);
 
   const actions = {
     setUser: useCallback(
@@ -527,6 +790,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "SET_PORTFOLIO_LOADED", payload: loaded }),
       []
     ),
+    setSelectedCategories: useCallback(
+      (categories: string[]) =>
+        dispatch({ type: "SET_SELECTED_CATEGORIES", payload: categories }),
+      []
+    ),
     setDataPoints: useCallback(
       (dataPoints: DataPoint[]) =>
         dispatch({ type: "SET_DATA_POINTS", payload: dataPoints }),
@@ -560,6 +828,63 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSavingsSummary: useCallback(
       (summary: SavingsSummary | null) =>
         dispatch({ type: "SET_SAVINGS_SUMMARY", payload: summary }),
+      []
+    ),
+    addActivity: useCallback(
+      (activity: Omit<ActivityItem, "id" | "timestamp">) =>
+        dispatch({
+          type: "ADD_ACTIVITY",
+          payload: {
+            ...activity,
+            id: `activity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            timestamp: Date.now(),
+          },
+        }),
+      []
+    ),
+    clearActivityHistory: useCallback(
+      () => {
+        dispatch({ type: "CLEAR_ACTIVITY_HISTORY" });
+        // Also clear from localStorage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        }
+      },
+      []
+    ),
+    setPersistedReviewData: useCallback(
+      (data: PersistedReviewData) =>
+        dispatch({ type: "SET_PERSISTED_REVIEW_DATA", payload: data }),
+      []
+    ),
+    updatePersistedSpendFile: useCallback(
+      (data: PersistedFileData | undefined) =>
+        dispatch({ type: "UPDATE_PERSISTED_SPEND_FILE", payload: data }),
+      []
+    ),
+    updatePersistedDataPointFile: useCallback(
+      (dataPointId: string, data: PersistedFileData | undefined) =>
+        dispatch({ type: "UPDATE_PERSISTED_DATA_POINT_FILE", payload: { dataPointId, data } }),
+      []
+    ),
+    clearPersistedReviewData: useCallback(
+      () => {
+        dispatch({ type: "CLEAR_PERSISTED_REVIEW_DATA" });
+        // Also clear from localStorage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(REVIEW_DATA_STORAGE_KEY);
+        }
+      },
+      []
+    ),
+    setPlaybookData: useCallback(
+      (data: PlaybookData | null) =>
+        dispatch({ type: "SET_PLAYBOOK_DATA", payload: data }),
+      []
+    ),
+    setSpendAnalysis: useCallback(
+      (data: SpendAnalysis | null) =>
+        dispatch({ type: "SET_SPEND_ANALYSIS", payload: data }),
       []
     ),
     resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),

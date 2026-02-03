@@ -149,6 +149,9 @@ export default function PortfolioSetupPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Track which categories are selected for analysis (multi-select)
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set());
+
   // Add/Edit Category Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<PortfolioItem | null>(null);
@@ -212,15 +215,41 @@ export default function PortfolioSetupPage() {
   }, [state.portfolioLoaded, state.portfolioItems.length, actions]);
 
   const handleContinue = () => {
-    // Update setup data with first category
-    if (portfolioItems.length > 0) {
+    // Get all selected categories
+    const selectedCategories = portfolioItems.filter(item => selectedCategoryIds.has(item.id));
+
+    if (selectedCategories.length > 0) {
+      // Calculate total spend across selected categories
+      const totalSpend = selectedCategories.reduce((sum, cat) => sum + cat.spend, 0);
+
+      // Store selected category names (comma-separated if multiple)
+      const categoryNames = selectedCategories.map(c => c.name).join(", ");
+
       actions.updateSetupData({
-        categoryName: portfolioItems[0].name,
-        spend: portfolioItems[0].spend,
+        categoryName: categoryNames,
+        spend: totalSpend,
       });
+
+      // Also store the individual selected items in portfolioItems context
+      // Filter to only keep selected ones for the analysis flow
+      actions.setSelectedCategories(selectedCategories.map(c => c.name));
     }
     actions.setSetupStep(1);
     router.push("/setup/goals");
+  };
+
+  // Handle category selection (multi-select with toggle)
+  const handleSelectCategory = (categoryId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Don't trigger card click (edit)
+    setSelectedCategoryIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
   };
 
   // Open delete confirmation dialog
@@ -475,15 +504,21 @@ export default function PortfolioSetupPage() {
              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
                {portfolioItems.length}
              </span>
+             {selectedCategoryIds.size > 0 && (
+               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold">
+                 <Check className="h-3 w-3" />
+                 {selectedCategoryIds.size} selected
+               </span>
+             )}
           </div>
 
           <div className="flex items-center gap-3">
             <Button
               onClick={handleContinue}
-              disabled={portfolioItems.length === 0}
-              className="h-11 rounded-xl bg-[#1A1C1E] px-6 text-sm font-medium text-white transition-all hover:bg-black"
+              disabled={selectedCategoryIds.size === 0}
+              className="h-11 rounded-xl bg-[#1A1C1E] px-6 text-sm font-medium text-white transition-all hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Apply & Continue
+              {selectedCategoryIds.size === 0 ? "Select categories" : `Continue with ${selectedCategoryIds.size} ${selectedCategoryIds.size === 1 ? 'category' : 'categories'}`}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -558,48 +593,73 @@ export default function PortfolioSetupPage() {
               </div>
             ) : (
               <>
-                {portfolioItems.map((item, idx) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    onClick={() => openEditModal(item)}
-                    className="group relative flex min-h-[340px] flex-col rounded-[48px] bg-white p-12 shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] ring-1 ring-black/5 cursor-pointer"
-                  >
-                    <div className="flex items-center justify-between mb-10">
-                       <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-sky-50 transition-colors group-hover:bg-sky-100">
-                          <Folder className="h-8 w-8 text-sky-500" />
-                       </div>
-                       <button
-                         className="text-gray-300 transition-colors hover:text-red-500 z-10"
-                         onClick={(e) => handleDeleteClick(item, e)}
-                       >
-                          <Trash2 className="h-6 w-6" />
-                       </button>
-                    </div>
+                {portfolioItems.map((item, idx) => {
+                  const isSelected = selectedCategoryIds.has(item.id);
+                  return (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      onClick={() => openEditModal(item)}
+                      className={`group relative flex min-h-[340px] flex-col rounded-[48px] bg-white p-12 shadow-[0_15px_30px_rgba(0,0,0,0.03)] transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] cursor-pointer ${
+                        isSelected
+                          ? "ring-2 ring-emerald-500 ring-offset-2"
+                          : "ring-1 ring-black/5"
+                      }`}
+                    >
+                      {/* Selection Checkbox - Top Left */}
+                      <button
+                        onClick={(e) => handleSelectCategory(item.id, e)}
+                        className={`absolute top-6 left-6 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all z-20 ${
+                          isSelected
+                            ? "bg-emerald-500 border-emerald-500 text-white"
+                            : "bg-white border-gray-300 hover:border-emerald-400 hover:bg-emerald-50"
+                        }`}
+                      >
+                        {isSelected && <Check className="h-5 w-5" />}
+                      </button>
 
-                    <h3 className="mb-6 text-3xl font-semibold text-[#1A1C1E]">{item.name}</h3>
-
-                    <div className="flex flex-wrap gap-3 mb-8">
-                      {item.locations.map((loc) => (
-                        <Badge
-                          key={loc}
-                          variant="secondary"
-                          className="rounded-xl bg-gray-50 px-5 py-3 text-[15px] font-medium text-[#4A4D55] border-none"
-                        >
-                          {loc}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    <div className="mt-auto flex justify-end">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500">
-                        <Pencil className="h-5 w-5" />
+                      <div className="flex items-center justify-between mb-10">
+                         <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-sky-50 transition-colors group-hover:bg-sky-100 ml-8">
+                            <Folder className="h-8 w-8 text-sky-500" />
+                         </div>
+                         <button
+                           className="text-gray-300 transition-colors hover:text-red-500 z-10"
+                           onClick={(e) => handleDeleteClick(item, e)}
+                         >
+                            <Trash2 className="h-6 w-6" />
+                         </button>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+
+                      <h3 className="mb-6 text-3xl font-semibold text-[#1A1C1E]">{item.name}</h3>
+
+                      <div className="flex flex-wrap gap-3 mb-8">
+                        {item.locations.map((loc) => (
+                          <Badge
+                            key={loc}
+                            variant="secondary"
+                            className="rounded-xl bg-gray-50 px-5 py-3 text-[15px] font-medium text-[#4A4D55] border-none"
+                          >
+                            {loc}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      <div className="mt-auto flex items-center justify-between">
+                        {/* Selected indicator */}
+                        {isSelected && (
+                          <span className="text-[12px] font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
+                            Selected for analysis
+                          </span>
+                        )}
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500 ${!isSelected ? 'ml-auto' : ''}`}>
+                          <Pencil className="h-5 w-5" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
 
                 {/* Add Category Card */}
                 <motion.div

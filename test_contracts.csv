@@ -1,9 +1,0 @@
-contract_id,contract_name,supplier_name,supplier_id,start_date,end_date,contract_value,payment_terms,status,category,auto_renewal
-CON001,Master Supply Agreement - APAC,Asia Pacific Grains,SUP001,2024-01-15,2025-12-31,150000,Net 30,Active,Edible Oils,Yes
-CON002,Framework Contract - Europe,EuroGrain Trading,SUP003,2024-03-01,2025-03-31,85000,Net 45,Active,Edible Oils,No
-CON003,Annual Purchase Order - NA,Pacific Rim Cereals,SUP002,2024-06-01,2025-06-30,120000,Net 30,Active,Edible Oils,Yes
-CON004,Spot Buy Agreement - LATAM,Brazilian Grain Consortium,SUP005,2024-09-01,2025-01-31,45000,Net 15,Expiring,Edible Oils,No
-CON005,Emergency Supply Contract,Orient Food Supply,SUP004,2024-04-15,2025-09-30,65000,Net 30,Active,Edible Oils,No
-CON006,Bulk Purchase Agreement,Nordic Cereals Ltd,SUP006,2024-07-01,2025-07-31,30000,Net 60,Active,Edible Oils,Yes
-CON007,Regional Distribution Contract,Pacific Rim Cereals,SUP002,2024-02-01,2025-02-28,55000,Net 30,Expiring,Edible Oils,No
-CON008,Quality Assurance Agreement,Asia Pacific Grains,SUP001,2024-05-01,2026-04-30,25000,Net 45,Active,Edible Oils,Yes

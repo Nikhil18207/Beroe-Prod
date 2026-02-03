@@ -19,10 +19,15 @@ import {
   Send,
   Mic
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import {
+  generateOpportunitiesFromPlaybook,
+  enrichOpportunitiesWithSpendData,
+  type GeneratedOpportunity
+} from "@/lib/playbookParser";
 
 // Initiative recommendations for each opportunity type
 const OPPORTUNITY_INITIATIVES: Record<string, Array<{
@@ -70,84 +75,223 @@ export default function OpportunitiesPage() {
   // Get data from context
   const savingsSummary = state.savingsSummary;
   const setupOpportunities = state.setupOpportunities;
+  const playbookData = state.playbookData;
+  const spendAnalysis = state.spendAnalysis;
   const categoryName = state.setupData.categoryName?.toUpperCase() || "CATEGORY";
-  const totalSpend = state.portfolioItems.length > 0
-    ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
-    : state.setupData.spend || 0;
+  const totalSpend = spendAnalysis?.totalSpend ||
+    (state.portfolioItems.length > 0
+      ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
+      : state.setupData.spend || 0);
 
-  // Generate opportunities from setupOpportunities (4 main opportunities with proof points)
-  const generatedOpportunities: Array<{
-    id: string;
-    category: string;
-    title: string;
-    opportunityName: string;
-    type: "Savings" | "Resilience";
-    impactLabel?: string;
-    impact: "High" | "Medium" | "Low";
-    effort: string;
-    risk?: string;
-    esg?: string;
-    savings?: string;
-    confidence: number;
-    status: "Qualified" | "Potential";
-    isNew: boolean;
-    questionsToAnswer: number;
-    badge?: string;
-    savings_low?: number;
-    savings_high?: number;
-  }> = [];
+  // Generate opportunities - group playbook recommendations into 4 Beroe opportunity types
+  const generatedOpportunities = useMemo(() => {
+    // If we have playbook data, group recommendations into the 4 main opportunity types
+    if (playbookData && playbookData.entries.length > 0) {
+      console.log('Generating opportunities from playbook:', playbookData.entries.length, 'entries');
 
-  // Process each of the 4 main opportunities
-  setupOpportunities.forEach(opp => {
-    const validatedCount = opp.proofPoints.filter(pp => pp.isValidated).length;
-    const totalPoints = opp.proofPoints.length;
-    const validationRatio = totalPoints > 0 ? validatedCount / totalPoints : 0;
-    const confidence = Math.round(validationRatio * 100);
+      // Generate all opportunities from playbook
+      let playbookOpportunities = generateOpportunitiesFromPlaybook(
+        playbookData.entries,
+        totalSpend,
+        undefined
+      );
 
-    // Qualified = 3+ proof points validated, Potential = <3
-    const status: "Qualified" | "Potential" = validatedCount >= 3 ? "Qualified" : "Potential";
+      // Enrich with spend analysis data if available
+      if (spendAnalysis) {
+        playbookOpportunities = enrichOpportunitiesWithSpendData(
+          playbookOpportunities,
+          spendAnalysis.spendBySupplier,
+          spendAnalysis.spendByRegion,
+          spendAnalysis.totalSpend,
+          state.setupData.maturityScore || 2.5,
+          spendAnalysis.priceData
+        );
+      }
 
-    // Determine impact based on validation ratio
-    const impact: "High" | "Medium" | "Low" =
-      validationRatio >= 0.7 ? "High" :
-      validationRatio >= 0.4 ? "Medium" : "Low";
+      // Group playbook opportunities into the 4 Beroe opportunity types
+      const opportunityGroups: Record<string, typeof playbookOpportunities> = {
+        "volume-bundling": [],
+        "target-pricing": [],
+        "risk-management": [],
+        "respec-pack": [],
+      };
 
-    // Get initiatives for this opportunity type
-    const initiatives = OPPORTUNITY_INITIATIVES[opp.id] || [];
+      // Map each playbook opportunity to its Beroe type
+      playbookOpportunities.forEach(opp => {
+        const titleLower = opp.title.toLowerCase();
 
-    // Parse savings percentage from potentialSavings string (e.g., "0-5%", "1-2%")
-    const savingsMatch = opp.potentialSavings.match(/(\d+)-(\d+)%/);
-    const lowPct = savingsMatch ? parseInt(savingsMatch[1]) / 100 : 0;
-    const highPct = savingsMatch ? parseInt(savingsMatch[2]) / 100 : 0;
+        // Determine which Beroe opportunity type this belongs to
+        let groupId = "volume-bundling"; // default
 
-    // Calculate actual savings based on total spend and validation
-    const addressableSpend = totalSpend * 0.8; // 80% addressable
-    const savings_low = Math.round(addressableSpend * lowPct * validationRatio);
-    const savings_high = Math.round(addressableSpend * highPct * validationRatio);
+        if (titleLower.includes("diversif") || titleLower.includes("backup") ||
+            titleLower.includes("dual") || titleLower.includes("risk") ||
+            titleLower.includes("monitor") || titleLower.includes("safety stock") ||
+            titleLower.includes("tracking") || titleLower.includes("compliance") ||
+            opp.type === "Resilience") {
+          groupId = "risk-management";
+        } else if (titleLower.includes("negotiat") || titleLower.includes("fixed-price") ||
+                   titleLower.includes("pricing") || titleLower.includes("cost model") ||
+                   titleLower.includes("index") || titleLower.includes("tariff")) {
+          groupId = "target-pricing";
+        } else if (titleLower.includes("standard") || titleLower.includes("spec") ||
+                   titleLower.includes("recyclable") || titleLower.includes("sku") ||
+                   titleLower.includes("design-to-value")) {
+          groupId = "respec-pack";
+        } else if (titleLower.includes("consolidat") || titleLower.includes("bundle") ||
+                   titleLower.includes("volume") || titleLower.includes("supplier")) {
+          groupId = "volume-bundling";
+        }
 
-    // Generate opportunities from initiatives
-    initiatives.forEach((init, idx) => {
-      generatedOpportunities.push({
-        id: `${opp.id}-init-${idx}`,
-        category: categoryName,
-        title: init.title,
-        opportunityName: opp.name,
-        type: init.type,
-        impactLabel: init.impactLabel,
-        impact,
-        effort: init.effort,
-        risk: init.risk,
-        esg: init.esg,
-        savings: init.type === "Resilience" ? "Low" : undefined,
-        confidence: Math.max(confidence, 40), // Minimum 40% confidence if any data
-        status,
-        isNew: true,
-        questionsToAnswer: totalPoints - validatedCount,
-        savings_low,
-        savings_high,
+        opportunityGroups[groupId].push(opp);
+      });
+
+      // Create 4 Bento cards, one for each opportunity type
+      const bentoOpportunities: Array<{
+        id: string;
+        category: string;
+        title: string;
+        opportunityName: string;
+        type: "Savings" | "Resilience";
+        impactLabel?: string;
+        impact: "High" | "Medium" | "Low";
+        effort: string;
+        risk?: string;
+        esg?: string;
+        savings?: string;
+        confidence: number;
+        status: "Qualified" | "Potential";
+        isNew: boolean;
+        questionsToAnswer: number;
+        badge?: string;
+        savings_low?: number;
+        savings_high?: number;
+        initiatives?: typeof playbookOpportunities;
+      }> = [];
+
+      const opportunityTypeConfig: Record<string, { name: string; type: "Savings" | "Resilience"; impactLabel?: string }> = {
+        "volume-bundling": { name: "Volume Bundling", type: "Savings" },
+        "target-pricing": { name: "Target Pricing", type: "Savings" },
+        "risk-management": { name: "Risk Management", type: "Resilience", impactLabel: "Risk Reduction" },
+        "respec-pack": { name: "Respec-Pack", type: "Savings" },
+      };
+
+      Object.entries(opportunityGroups).forEach(([groupId, initiatives]) => {
+        if (initiatives.length === 0) return; // Skip empty groups
+
+        const config = opportunityTypeConfig[groupId];
+
+        // Calculate aggregated metrics for the group
+        const totalSavingsLow = initiatives.reduce((sum, i) => sum + (i.savings_low || 0), 0);
+        const totalSavingsHigh = initiatives.reduce((sum, i) => sum + (i.savings_high || 0), 0);
+        const avgConfidence = Math.round(initiatives.reduce((sum, i) => sum + i.confidence, 0) / initiatives.length);
+        const totalQuestions = initiatives.reduce((sum, i) => sum + i.questionsToAnswer, 0);
+
+        // Determine impact based on average confidence
+        const impact: "High" | "Medium" | "Low" = avgConfidence >= 70 ? "High" : avgConfidence >= 40 ? "Medium" : "Low";
+        const status: "Qualified" | "Potential" = avgConfidence >= 70 ? "Qualified" : "Potential";
+
+        bentoOpportunities.push({
+          id: groupId,
+          category: categoryName,
+          title: config.name,
+          opportunityName: config.name,
+          type: config.type,
+          impactLabel: config.impactLabel,
+          impact,
+          effort: "3-6 months",
+          risk: "-2",
+          esg: "0",
+          savings: config.type === "Resilience" ? "Low" : undefined,
+          confidence: avgConfidence,
+          status,
+          isNew: true,
+          questionsToAnswer: totalQuestions,
+          savings_low: totalSavingsLow,
+          savings_high: totalSavingsHigh,
+          initiatives, // Store the individual recommendations
+        });
+      });
+
+      console.log(`Created ${bentoOpportunities.length} Bento cards from ${playbookOpportunities.length} playbook recommendations`);
+      return bentoOpportunities;
+    }
+
+    // Fallback to setupOpportunities-based generation
+    const opportunities: Array<{
+      id: string;
+      category: string;
+      title: string;
+      opportunityName: string;
+      type: "Savings" | "Resilience";
+      impactLabel?: string;
+      impact: "High" | "Medium" | "Low";
+      effort: string;
+      risk?: string;
+      esg?: string;
+      savings?: string;
+      confidence: number;
+      status: "Qualified" | "Potential";
+      isNew: boolean;
+      questionsToAnswer: number;
+      badge?: string;
+      savings_low?: number;
+      savings_high?: number;
+    }> = [];
+
+    // Process each of the 4 main opportunities
+    setupOpportunities.forEach(opp => {
+      const validatedCount = opp.proofPoints.filter(pp => pp.isValidated).length;
+      const totalPoints = opp.proofPoints.length;
+      const validationRatio = totalPoints > 0 ? validatedCount / totalPoints : 0;
+      const confidence = Math.round(validationRatio * 100);
+
+      // Qualified = 3+ proof points validated, Potential = <3
+      const status: "Qualified" | "Potential" = validatedCount >= 3 ? "Qualified" : "Potential";
+
+      // Determine impact based on validation ratio
+      const impact: "High" | "Medium" | "Low" =
+        validationRatio >= 0.7 ? "High" :
+        validationRatio >= 0.4 ? "Medium" : "Low";
+
+      // Get initiatives for this opportunity type
+      const initiatives = OPPORTUNITY_INITIATIVES[opp.id] || [];
+
+      // Parse savings percentage from potentialSavings string (e.g., "0-5%", "1-2%")
+      const savingsMatch = opp.potentialSavings.match(/(\d+)-(\d+)%/);
+      const lowPct = savingsMatch ? parseInt(savingsMatch[1]) / 100 : 0;
+      const highPct = savingsMatch ? parseInt(savingsMatch[2]) / 100 : 0;
+
+      // Calculate actual savings based on total spend and validation
+      const addressableSpend = totalSpend * 0.8; // 80% addressable
+      const savings_low = Math.round(addressableSpend * lowPct * validationRatio);
+      const savings_high = Math.round(addressableSpend * highPct * validationRatio);
+
+      // Generate opportunities from initiatives
+      initiatives.forEach((init, idx) => {
+        opportunities.push({
+          id: `${opp.id}-init-${idx}`,
+          category: categoryName,
+          title: init.title,
+          opportunityName: opp.name,
+          type: init.type,
+          impactLabel: init.impactLabel,
+          impact,
+          effort: init.effort,
+          risk: init.risk,
+          esg: init.esg,
+          savings: init.type === "Resilience" ? "Low" : undefined,
+          confidence: Math.max(confidence, 40), // Minimum 40% confidence if any data
+          status,
+          isNew: true,
+          questionsToAnswer: totalPoints - validatedCount,
+          savings_low,
+          savings_high,
+        });
       });
     });
-  });
+
+    return opportunities;
+  }, [playbookData, spendAnalysis, setupOpportunities, categoryName, totalSpend]);
 
   // Calculate totals
   const totalSavingsLow = savingsSummary?.total_savings_low ||
@@ -446,13 +590,11 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
   const isImpacted = opp.badge === "Impacted";
   const isPotential = variant === "potential";
   const isResilience = opp.type === "Resilience";
+  const initiativeCount = opp.initiatives?.length || 0;
 
   const handleClick = () => {
-    // Extract opportunity type and initiative index from the ID (e.g., "volume-bundling-init-0")
-    const parts = opp.id.split("-init-");
-    const oppType = parts[0]; // e.g., "volume-bundling"
-    const initIndex = parts[1] || "0"; // e.g., "0"
-    router.push(`/opportunities/details?opp=${oppType}&init=${initIndex}`);
+    // Navigate to the opportunity details page with the opportunity ID
+    router.push(`/opportunities/details?opp=${opp.id}`);
   };
 
   return (
@@ -523,9 +665,16 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
 
       {/* Category & Title */}
       <div className="mb-4">
-        <span className="text-[10px] font-bold text-gray-400 tracking-wider block mb-1.5">
-          {opp.category}
-        </span>
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[10px] font-bold text-gray-400 tracking-wider">
+            {opp.category}
+          </span>
+          {initiativeCount > 0 && (
+            <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+              {initiativeCount} initiative{initiativeCount > 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
         <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 min-h-[2.5rem]">
           {opp.title}
         </h3>

@@ -41,7 +41,9 @@ import {
   DollarSign,
   TrendingUp,
   Building2,
-  FileCheck
+  FileCheck,
+  Filter,
+  ListFilter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +55,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { useApp, type DataPoint, type DataPointItem, type SetupOpportunity, type ProofPoint } from "@/context/AppContext";
 import { procurementApi } from "@/lib/api";
 import {
@@ -67,6 +69,8 @@ import {
   type ComputedMetrics,
   type OpportunityMetrics,
 } from "@/lib/calculations";
+import { parseFile, getFileCategory, SUPPORTED_FORMATS_STRING } from "@/lib/fileParser";
+import { detectAllColumns, parseNumericValue, calculateRowSpend, getRowLocation, getRowSupplier } from "@/lib/columnMatcher";
 
 // Extended DataPoint with icon for UI
 interface DataPointWithIcon extends DataPoint {
@@ -196,7 +200,7 @@ const PLAYBOOK_FIELDS: DataField[] = [
   },
   {
     name: "Recommendations",
-    requiredColumns: ["recommendations", "actions", "initiatives", "opportunities"],
+    requiredColumns: ["recommendation", "recommendations", "recommend", "action", "actions", "initiative", "initiatives", "opportunity", "opportunities", "suggestion", "suggestions", "next_steps", "nextsteps"],
     description: "Strategic recommendations"
   }
 ];
@@ -220,20 +224,118 @@ const getFieldsForDataPoint = (dataPointId: string): DataField[] => {
   }
 };
 
-// Check if a column matches any of the required columns
-// Uses strict matching - column must start with or equal the required name
+// ============================================================================
+// SUPER FLEXIBLE COLUMN MATCHING SYSTEM
+// Handles: ANY case, numbers, symbols, abbreviations, partial matches
+// Examples that ALL match "recommendations":
+//   "Recommendation", "RECOMM", "rec_1", "Rec123", "RECOM-2", "recomm11", "REC", "recOM 1"
+// ============================================================================
+
+// Extract only letters from a string (removes numbers, symbols, spaces, underscores, etc.)
+const extractLetters = (str: string): string => {
+  return str.toLowerCase().replace(/[^a-z]/g, '');
+};
+
+// Check if two strings match flexibly
+const flexibleMatch = (csvColumn: string, requiredColumn: string): boolean => {
+  const csvLetters = extractLetters(csvColumn);
+  const requiredLetters = extractLetters(requiredColumn);
+
+  // Skip if either is too short
+  if (csvLetters.length < 2 || requiredLetters.length < 2) {
+    return false;
+  }
+
+  // 1. Exact match (after extracting letters only)
+  if (csvLetters === requiredLetters) {
+    return true;
+  }
+
+  // 2. One contains the other fully
+  if (csvLetters.includes(requiredLetters) || requiredLetters.includes(csvLetters)) {
+    return true;
+  }
+
+  // 3. Prefix match - CSV starts with required OR required starts with CSV
+  //    Handles: "rec" -> "recommendations", "recomm" -> "recommendations"
+  if (csvLetters.length >= 2 && requiredLetters.startsWith(csvLetters)) {
+    return true;
+  }
+  if (requiredLetters.length >= 2 && csvLetters.startsWith(requiredLetters)) {
+    return true;
+  }
+
+  // 4. First N characters match (minimum 3)
+  //    Handles: "recom" matching "recommendations", "supp" matching "supplier"
+  const minChars = Math.min(csvLetters.length, requiredLetters.length, 3);
+  if (minChars >= 3) {
+    if (csvLetters.substring(0, minChars) === requiredLetters.substring(0, minChars)) {
+      return true;
+    }
+  }
+
+  // 5. Check if CSV matches any common short form (2-4 chars)
+  //    Handles: "cat" -> "category", "qty" -> "quantity", "amt" -> "amount"
+  if (csvLetters.length >= 2 && csvLetters.length <= 4 && requiredLetters.startsWith(csvLetters)) {
+    return true;
+  }
+
+  // 6. Significant overlap - if 70%+ of shorter string matches start of longer
+  const shorter = csvLetters.length <= requiredLetters.length ? csvLetters : requiredLetters;
+  const longer = csvLetters.length > requiredLetters.length ? csvLetters : requiredLetters;
+  const overlapLength = Math.floor(shorter.length * 0.7);
+  if (overlapLength >= 3 && longer.startsWith(shorter.substring(0, overlapLength))) {
+    return true;
+  }
+
+  // 7. Check if either string starts with first 3+ chars of the other
+  if (csvLetters.length >= 3 && requiredLetters.substring(0, 3) === csvLetters.substring(0, 3)) {
+    return true;
+  }
+
+  return false;
+};
+
+// Check if a column matches any of the required columns (SUPER FLEXIBLE)
 const hasColumn = (csvColumns: string[], requiredColumns: string[]): boolean => {
-  const normalizedCsvColumns = csvColumns.map(col => col.toLowerCase().replace(/[\s_-]/g, ''));
   return requiredColumns.some(required => {
-    const normalizedRequired = required.replace(/[\s_-]/g, '').toLowerCase();
-    return normalizedCsvColumns.some(csv =>
-      // Exact match OR starts with required name (e.g., "spendamount" starts with "spend")
-      csv === normalizedRequired ||
-      csv.startsWith(normalizedRequired) ||
-      // Allow suffix match for common patterns (e.g., "unitprice" ends with "price")
-      (normalizedRequired.length >= 4 && csv.endsWith(normalizedRequired))
-    );
+    return csvColumns.some(csv => flexibleMatch(csv, required));
   });
+};
+
+// Negative patterns - columns that should be excluded for certain types
+const EXCLUDED_PATTERNS: Record<string, string[]> = {
+  price: ['proof', 'point', 'primary', 'secondary', 'benchmark', 'reference', 'market'],
+  rate: ['proof', 'point', 'primary', 'secondary', 'benchmark'],
+  cost: ['proof', 'point', 'primary', 'secondary', 'benchmark'],
+  spend: ['proof', 'point', 'benchmark', 'target', 'market'],
+  supplier: [],  // Handled separately with scoring
+};
+
+// Check if a column should be excluded based on the required pattern
+const shouldExcludeColumn = (csvColumn: string, requiredColumn: string): boolean => {
+  const csvLower = csvColumn.toLowerCase();
+  const excludePatterns = EXCLUDED_PATTERNS[requiredColumn.toLowerCase()];
+  if (!excludePatterns) return false;
+
+  return excludePatterns.some(pattern => csvLower.includes(pattern));
+};
+
+// Find which CSV column matches a required column (returns the original CSV column name)
+const findMatchingColumn = (csvColumns: string[], requiredColumns: string[]): string | null => {
+  // First pass: look for exact or strong matches, excluding bad patterns
+  for (const required of requiredColumns) {
+    for (const csv of csvColumns) {
+      // Skip columns that should be excluded for this required type
+      if (shouldExcludeColumn(csv, required)) {
+        continue;
+      }
+      if (flexibleMatch(csv, required)) {
+        return csv; // Return original column name (with original case/numbers)
+      }
+    }
+  }
+  return null;
 };
 
 // ============================================================================
@@ -379,6 +481,18 @@ export default function ReviewDataPage() {
   const [csvColumns, setCsvColumns] = useState<string[]>([]);
   const [isParsingCsv, setIsParsingCsv] = useState(false);
   const [isSpendExpanded, setIsSpendExpanded] = useState(false);
+
+  // Check if we have spend data (either actual file OR persisted data)
+  const hasSpendData = uploadedFile || state.persistedReviewData.spendFile;
+  const spendFileName = uploadedFile?.name || state.persistedReviewData.spendFile?.fileName || "";
+
+  // Check if we have data point files (either actual OR persisted)
+  const hasDataPointFile = (dataPointId: string): boolean => {
+    return !!dataPointFiles[dataPointId] || !!state.persistedReviewData.dataPointFiles[dataPointId];
+  };
+  const getDataPointFileName = (dataPointId: string): string => {
+    return dataPointFiles[dataPointId]?.name || state.persistedReviewData.dataPointFiles[dataPointId]?.fileName || "";
+  };
   
   // Track parsed columns and files for each data point
   const [dataPointColumns, setDataPointColumns] = useState<Record<string, string[]>>({});
@@ -430,6 +544,68 @@ export default function ReviewDataPage() {
   // Sidebar accordion state - "Review your data" starts collapsed
   const [isReviewDataExpanded, setIsReviewDataExpanded] = useState(false);
 
+  // ============================================================================
+  // PERSISTENCE - Keep uploaded data after page refresh and navigation
+  // Uses AppContext which persists to localStorage automatically
+  // ============================================================================
+
+  // Track if we've already restored persisted data to avoid duplicate restorations
+  const [hasRestoredPersisted, setHasRestoredPersisted] = useState(false);
+
+  // Load persisted data from context when it becomes available
+  useEffect(() => {
+    const persistedData = state.persistedReviewData;
+
+    // Only restore once, and only if there's data to restore
+    if (hasRestoredPersisted) return;
+    if (!persistedData.spendFile && (!persistedData.dataPointFiles || Object.keys(persistedData.dataPointFiles).length === 0)) return;
+
+    // Restore spend file data
+    if (persistedData.spendFile) {
+      setCsvColumns(persistedData.spendFile.columns);
+      if (persistedData.spendFile.parsedData) {
+        setParsedCsvDataStore(prev => ({
+          ...prev,
+          spend: persistedData.spendFile!.parsedData!
+        }));
+      }
+      // Create a placeholder to show file is "uploaded" (actual File object can't be persisted)
+      // The UI will show the file name from persisted data
+    }
+
+    // Restore data point files
+    if (persistedData.dataPointFiles) {
+      Object.entries(persistedData.dataPointFiles).forEach(([dataPointId, fileData]) => {
+        setDataPointColumns(prev => ({ ...prev, [dataPointId]: fileData.columns }));
+        if (fileData.parsedData) {
+          setParsedCsvDataStore(prev => ({
+            ...prev,
+            [dataPointId]: fileData.parsedData!
+          }));
+        }
+
+        // Update the data point items in context to show file is uploaded
+        const targetDataPoint = state.dataPoints.find(dp => dp.id === dataPointId);
+        if (targetDataPoint && targetDataPoint.items.length === 0) {
+          actions.updateDataPoint({
+            ...targetDataPoint,
+            items: [{
+              id: `persisted-${dataPointId}`,
+              name: fileData.fileName.replace(/\.[^/.]+$/, ""),
+              fileName: fileData.fileName,
+              uploadedAt: new Date(fileData.uploadedAt),
+            }]
+          });
+        }
+      });
+    }
+
+    setHasRestoredPersisted(true);
+  }, [state.persistedReviewData, hasRestoredPersisted, state.dataPoints, actions]); // Run when persisted data changes
+
+  // Note: The hasSpendData variable already handles checking both uploadedFile and persistedReviewData
+  // so no additional sync effect is needed here
+
   // Data Validation Modal state
   interface CellError {
     row: number;
@@ -444,6 +620,10 @@ export default function ReviewDataPage() {
     headers: string[];
     rows: string[][];
     totalRows: number; // Total rows in file (may be more than displayed)
+    htmlContent?: string; // Rich HTML content for document files (DOCX)
+    isDocument?: boolean; // True if this is a document file (not tabular data)
+    rawText?: string; // Raw text content for editing
+    documentType?: string; // Detected document type (contract, supplier_master, playbook, etc.)
   }
 
   const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
@@ -462,43 +642,50 @@ export default function ReviewDataPage() {
 
   // Virtual scrolling state
   const [scrollTop, setScrollTop] = useState(0);
+  // Virtual scrolling constants - optimized for 1M+ rows
   const ROW_HEIGHT = 36; // Height of each row in pixels
-  const VISIBLE_ROWS = 30; // Number of rows to render at once
-  const BUFFER_ROWS = 10; // Extra rows to render above/below viewport
+  const VISIBLE_ROWS = 50; // Number of rows to render at once (increased for smoother scrolling)
+  const BUFFER_ROWS = 20; // Extra rows to render above/below viewport (increased buffer)
 
   // Computed metrics state - stores calculated procurement analytics
   const [computedMetrics, setComputedMetrics] = useState<ComputedMetrics | null>(null);
   const [opportunityMetrics, setOpportunityMetrics] = useState<OpportunityMetrics[]>([]);
 
-  // Parse CSV to extract column headers and full data when file changes
+  // Category filter state for validation modal
+  // "selected" = show only rows matching selected portfolio categories
+  // "original" = show all original data without filtering
+  const [categoryFilterMode, setCategoryFilterMode] = useState<"selected" | "original">("original");
+
+  // Document editor state for DOCX/document files
+  const [documentContent, setDocumentContent] = useState<string>("");
+  const documentEditorRef = useRef<HTMLDivElement>(null);
+
+  // Parse uploaded file to extract column headers and full data when file changes
   useEffect(() => {
     if (uploadedFile) {
       setIsParsingCsv(true);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        if (text) {
-          const lines = text.split('\n').filter(line => line.trim());
-          // Get headers
-          const headers = lines[0].split(',').map(col => col.trim().replace(/"/g, ''));
-          setCsvColumns(headers);
 
-          // Parse all rows into objects for summary
-          const rows: Record<string, string>[] = [];
-          for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(val => val.trim().replace(/"/g, ''));
-            const row: Record<string, string> = {};
-            headers.forEach((header, idx) => {
-              row[header] = values[idx] || '';
-            });
-            rows.push(row);
-          }
+      // Use universal file parser for all file types
+      parseFile(uploadedFile).then((result) => {
+        if (result.success && result.data) {
+          const { headers, rows } = result.data;
+
+          setCsvColumns(headers);
 
           // Store parsed data for spend summary
           setParsedCsvDataStore(prev => ({
             ...prev,
             spend: { headers, rows }
           }));
+
+          // Persist spend file data for navigation/refresh survival
+          actions.updatePersistedSpendFile({
+            fileName: uploadedFile.name,
+            fileSize: uploadedFile.size,
+            uploadedAt: Date.now(),
+            columns: headers,
+            parsedData: { headers, rows },
+          });
 
           // Extract category name from the first row and update context
           const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
@@ -511,14 +698,15 @@ export default function ReviewDataPage() {
               actions.updateSetupData({ categoryName: categoryValue.trim() });
             }
           }
+        } else {
+          // Parsing failed, show error
+          setCsvColumns([result.error || 'Failed to parse file']);
         }
         setIsParsingCsv(false);
-      };
-      reader.onerror = () => {
+      }).catch(() => {
         setIsParsingCsv(false);
-        setCsvColumns([]);
-      };
-      reader.readAsText(uploadedFile);
+        setCsvColumns(['Failed to parse file']);
+      });
     } else {
       setCsvColumns([]);
       setIsSpendExpanded(false);
@@ -548,7 +736,7 @@ export default function ReviewDataPage() {
       return;
     }
 
-    console.log("Computing procurement metrics from CSV data...");
+    // Computing procurement metrics from CSV data
 
     // Extract supplier profiles from spend data
     const supplierSpend = new Map<string, {
@@ -561,48 +749,29 @@ export default function ReviewDataPage() {
     const spendRecords: SpendRecord[] = [];
     const { headers, rows } = spendData;
 
-    // Find columns
-    const findCol = (possibleNames: string[]): string | null => {
-      const normalized = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
-      for (const name of possibleNames) {
-        const idx = normalized.findIndex(h => h.includes(name.toLowerCase()));
-        if (idx !== -1) return headers[idx];
-      }
-      return null;
-    };
+    // Use smart column detection
+    const columns = detectAllColumns(headers);
 
-    const supplierCol = findCol(['supplier', 'vendor', 'suppliername', 'vendorname']);
-    const spendCol = findCol(['spend', 'amount', 'value', 'totalspend']);
-    const countryCol = findCol(['country', 'location', 'region']);
-    const priceCol = findCol(['price', 'unitprice']);
-    const volumeCol = findCol(['volume', 'quantity', 'qty']);
-
-    // Process rows
+    // Process rows using smart column matcher
     rows.forEach(row => {
-      const supplier = supplierCol ? row[supplierCol] : 'Unknown';
-      let spend = spendCol ? parseFloat(row[spendCol]?.replace(/[$,]/g, '') || '0') : 0;
-
-      // Calculate spend from price * volume if spend not available
-      if (spend === 0 && priceCol && volumeCol) {
-        const price = parseFloat(row[priceCol]?.replace(/[$,]/g, '') || '0');
-        const volume = parseFloat(row[volumeCol]?.replace(/[,]/g, '') || '0');
-        spend = price * volume;
-      }
+      const supplier = getRowSupplier(row, columns) || 'Unknown';
+      const spend = calculateRowSpend(row, columns);
+      const country = getRowLocation(row, columns);
 
       if (supplier && spend > 0) {
         const existing = supplierSpend.get(supplier) || { spend: 0 };
         supplierSpend.set(supplier, {
           ...existing,
           spend: existing.spend + spend,
-          country: countryCol ? row[countryCol] : existing.country,
+          country: country || existing.country,
         });
 
         spendRecords.push({
           supplier,
           spend,
-          country: countryCol ? row[countryCol] : undefined,
-          price: priceCol ? parseFloat(row[priceCol]?.replace(/[$,]/g, '') || '0') : undefined,
-          quantity: volumeCol ? parseFloat(row[volumeCol]?.replace(/[,]/g, '') || '0') : undefined,
+          country: country || undefined,
+          price: columns.price ? parseNumericValue(row[columns.price]) : undefined,
+          quantity: columns.quantity ? parseNumericValue(row[columns.quantity]) : undefined,
         });
       }
     });
@@ -623,18 +792,14 @@ export default function ReviewDataPage() {
     // Extract contracts if available
     const contracts: ContractInfo[] = [];
     if (contractsData && contractsData.rows.length > 0) {
-      const contractHeaders = contractsData.headers;
-      const contractIdCol = findCol(['contractid', 'contractnumber']);
-      const contractSupplierCol = findCol(['supplier', 'vendor']);
-      const contractValueCol = findCol(['value', 'amount', 'contractvalue']);
-      const contractStatusCol = findCol(['status']);
+      const contractColumns = detectAllColumns(contractsData.headers);
 
       contractsData.rows.forEach((row, idx) => {
         contracts.push({
-          id: contractIdCol ? row[contractIdCol] : `contract-${idx}`,
-          supplierId: contractSupplierCol ? row[contractSupplierCol] : `supplier-${idx}`,
-          value: contractValueCol ? parseFloat(row[contractValueCol]?.replace(/[$,]/g, '') || '0') : 0,
-          status: (contractStatusCol ? row[contractStatusCol]?.toLowerCase() : 'active') as 'active' | 'expired' | 'pending',
+          id: contractColumns.id ? row[contractColumns.id] : `contract-${idx}`,
+          supplierId: getRowSupplier(row, contractColumns) || `supplier-${idx}`,
+          value: calculateRowSpend(row, contractColumns),
+          status: (contractColumns.status ? row[contractColumns.status]?.toLowerCase() : 'active') as 'active' | 'expired' | 'pending',
         });
       });
     }
@@ -642,7 +807,7 @@ export default function ReviewDataPage() {
     // Compute all metrics
     const metrics = computeAllMetrics(suppliers, contracts, spendRecords);
     setComputedMetrics(metrics);
-    console.log("Computed metrics:", metrics);
+    // Metrics computed successfully
 
     // Store metrics in context for dashboard use
     actions.setComputedMetrics(metrics as unknown as Record<string, number>);
@@ -749,7 +914,7 @@ export default function ReviewDataPage() {
     });
 
     setOpportunityMetrics(oppMetrics);
-    console.log("Opportunity metrics:", oppMetrics);
+    // Opportunity metrics calculated
 
     // Calculate and store savings summary
     const savingsSummary = calculateSavingsSummary(
@@ -766,50 +931,75 @@ export default function ReviewDataPage() {
       confidence_bucket: savingsSummary.confidenceBucket,
     });
 
-    console.log("Savings summary:", savingsSummary);
+    // Savings summary calculated
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend]);
 
-  // Calculate field availability based on CSV columns (for spend data)
+  // Calculate field availability based on CSV columns (for spend data) - USES FLEXIBLE MATCHING
   const getFieldStatus = (field: DataField): { available: boolean; matchedColumn?: string } => {
     if (!uploadedFile || csvColumns.length === 0) {
       return { available: false };
     }
 
-    const normalizedCsvColumns = csvColumns.map(col => col.toLowerCase().replace(/[\s_-]/g, ''));
-
-    for (const required of field.requiredColumns) {
-      const normalizedRequired = required.replace(/[\s_-]/g, '');
-      const matchIndex = normalizedCsvColumns.findIndex(csv => csv.includes(normalizedRequired));
-      if (matchIndex !== -1) {
-        return { available: true, matchedColumn: csvColumns[matchIndex] };
-      }
+    // Use the flexible matching function
+    const matchedColumn = findMatchingColumn(csvColumns, field.requiredColumns);
+    if (matchedColumn) {
+      return { available: true, matchedColumn };
     }
 
     return { available: false };
   };
 
-  // Calculate field availability for any data point
+  // Calculate field availability for any data point - USES FLEXIBLE MATCHING
+  // For document files (DOCX, PDF), also checks content for relevant keywords
   const getDataPointFieldStatus = (dataPointId: string, field: DataField): { available: boolean; matchedColumn?: string } => {
     // For spend data, use the main csvColumns
     if (dataPointId === "spend") {
       return getFieldStatus(field);
     }
-    
+
     // For other data points, use their stored columns
     const columns = dataPointColumns[dataPointId];
-    if (!columns || columns.length === 0) {
-      return { available: false };
+
+    // First try column matching (for spreadsheet files)
+    if (columns && columns.length > 0) {
+      const matchedColumn = findMatchingColumn(columns, field.requiredColumns);
+      if (matchedColumn) {
+        return { available: true, matchedColumn };
+      }
     }
 
-    const normalizedColumns = columns.map(col => col.toLowerCase().replace(/[\s_-]/g, ''));
+    // For document files (DOCX, PDF, etc.), check if content contains relevant keywords
+    // Get the stored parsed data and check content
+    const parsedData = parsedCsvDataStore[dataPointId];
+    if (parsedData && parsedData.rows.length > 0) {
+      // Combine all row values into searchable text
+      const allContent = parsedData.rows
+        .map(row => Object.values(row).join(' '))
+        .join(' ')
+        .toLowerCase();
 
-    for (const required of field.requiredColumns) {
-      const normalizedRequired = required.replace(/[\s_-]/g, '');
-      const matchIndex = normalizedColumns.findIndex(csv => csv.includes(normalizedRequired));
-      if (matchIndex !== -1) {
-        return { available: true, matchedColumn: columns[matchIndex] };
+      // Check if any of the required column keywords appear in the content
+      const keywordsToCheck = field.requiredColumns.flatMap(col => {
+        // Split column names like "supplier_name" into ["supplier", "name"]
+        const parts = col.toLowerCase().replace(/[_-]/g, ' ').split(' ');
+        return [col.toLowerCase().replace(/[_-]/g, ' '), ...parts];
+      });
+
+      // Check for keyword matches in content
+      for (const keyword of keywordsToCheck) {
+        if (keyword.length >= 3 && allContent.includes(keyword)) {
+          return { available: true, matchedColumn: `(from: Content)` };
+        }
+      }
+
+      // Also check field name itself
+      const fieldNameKeywords = field.name.toLowerCase().split(' ');
+      for (const keyword of fieldNameKeywords) {
+        if (keyword.length >= 3 && allContent.includes(keyword)) {
+          return { available: true, matchedColumn: `(from: Content)` };
+        }
       }
     }
 
@@ -839,17 +1029,21 @@ export default function ReviewDataPage() {
   // Helper to check if file format is supported
   const isSupportedFormat = (file: File): boolean => {
     const ext = getFileExtension(file.name);
-    const supportedExtensions = ['csv', 'xlsx', 'xls', 'pdf', 'doc', 'docx', 'txt', 'json'];
+    const supportedExtensions = [
+      // Spreadsheets
+      'csv', 'xlsx', 'xls', 'xlsm', 'xlsb', 'ods',
+      // Documents
+      'pdf', 'doc', 'docx', 'rtf', 'odt',
+      // Text-based
+      'txt', 'md', 'markdown', 'json', 'xml', 'yaml', 'yml',
+      'tex', 'latex', 'html', 'htm', 'log', 'ini', 'cfg', 'conf'
+    ];
     return supportedExtensions.includes(ext);
   };
 
-  // Helper to get file type category
+  // Helper to get file type category - use imported function
   const getFileTypeCategory = (file: File): 'spreadsheet' | 'document' | 'text' | 'unknown' => {
-    const ext = getFileExtension(file.name);
-    if (['csv', 'xlsx', 'xls'].includes(ext)) return 'spreadsheet';
-    if (['pdf', 'doc', 'docx'].includes(ext)) return 'document';
-    if (['txt', 'json'].includes(ext)) return 'text';
-    return 'unknown';
+    return getFileCategory(file.name);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -862,15 +1056,42 @@ export default function ReviewDataPage() {
       setUploadedFile(file);
       setUploadError(null);
       actions.updateSetupData({ uploadedFile: file });
+
+      // Record activity
+      actions.addActivity({
+        type: "upload",
+        title: `Uploaded spend data`,
+        description: `Uploaded ${file.name} for ${state.setupData.categoryName || 'category'} analysis.`,
+        metadata: {
+          fileName: file.name,
+          categoryName: state.setupData.categoryName,
+        },
+      });
     }
   };
 
   const handleRemoveFile = () => {
     setUploadedFile(null);
-    actions.updateSetupData({ uploadedFile: null });
+    actions.updateSetupData({ uploadedFile: null, spend: 0 });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    // Collapse the spend data expanded section
+    setIsSpendExpanded(false);
+    // Clear CSV columns
+    setCsvColumns([]);
+    // Clear parsed CSV data for spend (this resets the Spend card to show "-")
+    setParsedCsvDataStore(prev => {
+      const updated = { ...prev };
+      delete updated.spend;
+      return updated;
+    });
+    // Clear persisted spend file data
+    actions.updatePersistedSpendFile(undefined);
+    // Close validation modal if it's open
+    setIsValidationModalOpen(false);
+    setParsedData(null);
+    setCellErrors([]);
   };
 
   // Handle removing a data point file
@@ -887,6 +1108,14 @@ export default function ReviewDataPage() {
       delete updated[dataPointId];
       return updated;
     });
+    // Clear parsed CSV data for this data point
+    setParsedCsvDataStore(prev => {
+      const updated = { ...prev };
+      delete updated[dataPointId];
+      return updated;
+    });
+    // Clear persisted data for this data point
+    actions.updatePersistedDataPointFile(dataPointId, undefined);
     // Clear items in the data point using context actions
     const targetDataPoint = state.dataPoints.find(dp => dp.id === dataPointId);
     if (targetDataPoint) {
@@ -896,6 +1125,16 @@ export default function ReviewDataPage() {
     if (dataPointFileInputRef.current) {
       dataPointFileInputRef.current.value = "";
     }
+    // Collapse the expanded row
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(dataPointId);
+      return newSet;
+    });
+    // Close validation modal if it's open
+    setIsValidationModalOpen(false);
+    setParsedData(null);
+    setCellErrors([]);
   };
 
   // Handle file upload for data points
@@ -931,103 +1170,68 @@ export default function ReviewDataPage() {
       // Store the file reference
       setDataPointFiles(prev => ({ ...prev, [currentUploadTarget!]: file }));
 
-      // Parse spreadsheet files (CSV, Excel) for column detection and validation
-      if (fileCategory === 'spreadsheet') {
-        setParsingDataPoints(prev => new Set([...prev, currentUploadTarget]));
+      // Record activity for data point upload
+      const dataPointName = targetDataPoint?.name || currentUploadTarget;
+      actions.addActivity({
+        type: "upload",
+        title: `Uploaded ${dataPointName}`,
+        description: `Added ${file.name} to ${dataPointName} for analysis.`,
+        metadata: {
+          fileName: file.name,
+          categoryName: state.setupData.categoryName,
+        },
+      });
 
-        if (ext === 'csv') {
-          // Parse CSV file
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-            const text = ev.target?.result as string;
-            if (text) {
-              const lines = text.split('\n').filter(line => line.trim());
-              const headers = lines[0].split(',').map(col => col.trim().replace(/"/g, ''));
-              setDataPointColumns(prev => ({ ...prev, [currentUploadTarget!]: headers }));
+      // Parse all file types using universal file parser
+      setParsingDataPoints(prev => new Set([...prev, currentUploadTarget]));
 
-              // Parse all rows into objects for summary
-              const rows: Record<string, string>[] = [];
-              for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(val => val.trim().replace(/"/g, ''));
-                const row: Record<string, string> = {};
-                headers.forEach((header, idx) => {
-                  row[header] = values[idx] || '';
-                });
-                rows.push(row);
-              }
+      // Use the universal file parser
+      parseFile(file).then((result) => {
+        if (result.success && result.data) {
+          const { headers, rows } = result.data;
 
-              // Store parsed data for summary
-              setParsedCsvDataStore(prev => ({
-                ...prev,
-                [currentUploadTarget!]: { headers, rows }
-              }));
-            }
-            setParsingDataPoints(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(currentUploadTarget!);
-              return newSet;
-            });
-          };
-          reader.onerror = () => {
-            setParsingDataPoints(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(currentUploadTarget!);
-              return newSet;
-            });
-          };
-          reader.readAsText(file);
-        } else if (ext === 'xlsx' || ext === 'xls') {
-          // For Excel files, we'll process them on the backend
-          // For now, just mark as uploaded and let backend handle parsing
+          // Set columns for display
+          setDataPointColumns(prev => ({ ...prev, [currentUploadTarget!]: headers }));
+
+          // Store parsed data for summary
+          setParsedCsvDataStore(prev => ({
+            ...prev,
+            [currentUploadTarget!]: { headers, rows }
+          }));
+
+          // Persist data point file for navigation/refresh survival
+          actions.updatePersistedDataPointFile(currentUploadTarget!, {
+            fileName: file.name,
+            fileSize: file.size,
+            uploadedAt: Date.now(),
+            columns: headers,
+            parsedData: { headers, rows },
+          });
+        } else {
+          // Parsing failed, show error info
           setDataPointColumns(prev => ({
             ...prev,
-            [currentUploadTarget!]: ['Excel file - columns will be detected on processing']
+            [currentUploadTarget!]: [result.error || `${ext.toUpperCase()} file - will be processed on analysis`]
           }));
-          setParsingDataPoints(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(currentUploadTarget!);
-            return newSet;
-          });
         }
-      } else if (fileCategory === 'document') {
-        // For documents (PDF, Word), mark as uploaded
-        // Backend will extract text/tables from these
+
+        setParsingDataPoints(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(currentUploadTarget!);
+          return newSet;
+        });
+      }).catch(() => {
+        // Handle any unexpected errors
         setDataPointColumns(prev => ({
           ...prev,
-          [currentUploadTarget!]: [`${ext.toUpperCase()} document - content will be extracted on processing`]
+          [currentUploadTarget!]: [`${ext.toUpperCase()} file - will be processed on analysis`]
         }));
-      } else if (fileCategory === 'text') {
-        // For text/JSON files, try to parse
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          const text = ev.target?.result as string;
-          if (text && ext === 'json') {
-            try {
-              const jsonData = JSON.parse(text);
-              // If JSON is an array of objects, extract keys as headers
-              if (Array.isArray(jsonData) && jsonData.length > 0) {
-                const headers = Object.keys(jsonData[0]);
-                setDataPointColumns(prev => ({ ...prev, [currentUploadTarget!]: headers }));
-                setParsedCsvDataStore(prev => ({
-                  ...prev,
-                  [currentUploadTarget!]: { headers, rows: jsonData }
-                }));
-              }
-            } catch {
-              setDataPointColumns(prev => ({
-                ...prev,
-                [currentUploadTarget!]: ['JSON file - structure will be analyzed on processing']
-              }));
-            }
-          } else {
-            setDataPointColumns(prev => ({
-              ...prev,
-              [currentUploadTarget!]: ['Text file - content will be analyzed on processing']
-            }));
-          }
-        };
-        reader.readAsText(file);
-      }
+        setParsingDataPoints(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(currentUploadTarget!);
+          return newSet;
+        });
+      });
 
       setCurrentUploadTarget(null);
       if (dataPointFileInputRef.current) {
@@ -1089,7 +1293,7 @@ export default function ReviewDataPage() {
   // Get status text for data point
   const getDataPointStatus = (dataPoint: DataPoint) => {
     if (dataPoint.isSpendData) {
-      return uploadedFile ? "Uploaded" : "Not Uploaded";
+      return hasSpendData ? "Uploaded" : "Not Uploaded";
     }
     const count = dataPoint.items.length;
     if (count === 0) return "Not Uploaded";
@@ -1098,7 +1302,12 @@ export default function ReviewDataPage() {
 
   // Get last updated date for data point (returns Date object or null)
   const getLastUpdatedDate = (dataPoint: DataPoint): Date | null => {
-    if (dataPoint.isSpendData && uploadedFile) {
+    if (dataPoint.isSpendData && hasSpendData) {
+      // Use persisted timestamp if available
+      const persistedSpend = state.persistedReviewData.spendFile;
+      if (persistedSpend) {
+        return new Date(persistedSpend.uploadedAt);
+      }
       return new Date();
     }
     if (dataPoint.items.length === 0) return null;
@@ -1168,28 +1377,86 @@ export default function ReviewDataPage() {
   };
 
   // HIGH PERFORMANCE: Parse large files with streaming and chunking
-  const parseAndValidateFile = async (file: File) => {
+  const parseAndValidateFile = async (file: File, dataPointId?: string) => {
     setIsValidating(true);
     setParsedData(null);
     setCellErrors([]);
     setParseProgress(0);
     setScrollTop(0);
-    
+
     try {
+      const ext = getFileExtension(file.name);
       const fileSize = file.size;
       const isLargeFile = fileSize > 5 * 1024 * 1024; // > 5MB
-      
-      // For very large files, use streaming approach
-      if (isLargeFile) {
-        await parseLargeFile(file);
+
+      // For non-CSV files (Excel, PDF, etc.), use universal parser
+      if (ext !== 'csv') {
+        setParseProgress(30);
+        const result = await parseFile(file);
+        setParseProgress(80);
+
+        if (result.success && result.data) {
+          const { headers, rows: parsedRows, htmlContent, rawText, metadata } = result.data;
+          const isDocument = metadata?.isDocument || false;
+          const documentType = metadata?.documentType;
+
+          // Convert Record<string, string>[] to string[][] for validation modal
+          const rows: string[][] = parsedRows.slice(0, 10000).map(row =>
+            headers.map(h => row[h] || '')
+          );
+
+          setParsedData({
+            headers,
+            rows,
+            totalRows: parsedRows.length,
+            htmlContent,
+            isDocument,
+            rawText,
+            documentType
+          });
+          setParseProgress(100);
+
+          // Update dataPointColumns to keep in sync with parsed headers
+          if (dataPointId) {
+            if (dataPointId === "spend") {
+              setCsvColumns(headers);
+            } else {
+              setDataPointColumns(prev => ({ ...prev, [dataPointId]: headers }));
+            }
+          }
+
+          // Only validate tabular data, not documents
+          if (!isDocument) {
+            validateDataAsync(headers, rows, dataPointId);
+          } else {
+            setIsValidating(false);
+          }
+        } else {
+          setCellErrors([{
+            row: 0,
+            column: "File",
+            columnIndex: 0,
+            value: "",
+            error: result.error || "Failed to parse file",
+            severity: "error"
+          }]);
+          setParsedData({ headers: [], rows: [], totalRows: 0 });
+          setIsValidating(false);
+        }
         return;
       }
-      
-      // For smaller files, use simple approach
+
+      // For large CSV files, use streaming approach
+      if (isLargeFile) {
+        await parseLargeFile(file, dataPointId);
+        return;
+      }
+
+      // For smaller CSV files, use simple approach
       const text = await file.text();
       const lines = text.split('\n');
       const nonEmptyLines = lines.filter(line => line.trim());
-      
+
       if (nonEmptyLines.length === 0) {
         setCellErrors([{
           row: 0,
@@ -1206,11 +1473,11 @@ export default function ReviewDataPage() {
 
       const headers = parseCSVLine(nonEmptyLines[0]);
       const totalRows = nonEmptyLines.length - 1;
-      
+
       // Parse all rows for display (virtual scroll will handle rendering)
       const maxRowsToStore = Math.min(totalRows, 10000); // Store max 10k rows in memory
       const rows: string[][] = [];
-      
+
       for (let i = 1; i <= maxRowsToStore; i++) {
         rows.push(parseCSVLine(nonEmptyLines[i]));
         if (i % 1000 === 0) {
@@ -1221,10 +1488,19 @@ export default function ReviewDataPage() {
 
       setParsedData({ headers, rows, totalRows });
       setParseProgress(100);
-      
-      // Validate asynchronously in background
-      validateDataAsync(headers, rows);
-      
+
+      // Update dataPointColumns to keep in sync with parsed headers
+      if (dataPointId) {
+        if (dataPointId === "spend") {
+          setCsvColumns(headers);
+        } else {
+          setDataPointColumns(prev => ({ ...prev, [dataPointId]: headers }));
+        }
+      }
+
+      // Validate asynchronously in background - pass dataPointId
+      validateDataAsync(headers, rows, dataPointId);
+
     } catch (err) {
       console.error("Error parsing file:", err);
       setCellErrors([{
@@ -1240,7 +1516,7 @@ export default function ReviewDataPage() {
   };
 
   // Parse very large files (> 5MB) with streaming
-  const parseLargeFile = async (file: File) => {
+  const parseLargeFile = async (file: File, dataPointId?: string) => {
     const CHUNK_SIZE = 1024 * 1024; // 1MB chunks
     const decoder = new TextDecoder();
     let headers: string[] = [];
@@ -1296,10 +1572,19 @@ export default function ReviewDataPage() {
       
       setParsedData({ headers, rows, totalRows });
       setParseProgress(100);
-      
-      // Validate in background
-      validateDataAsync(headers, rows);
-      
+
+      // Update dataPointColumns to keep in sync with parsed headers
+      if (dataPointId) {
+        if (dataPointId === "spend") {
+          setCsvColumns(headers);
+        } else {
+          setDataPointColumns(prev => ({ ...prev, [dataPointId]: headers }));
+        }
+      }
+
+      // Validate in background - pass dataPointId
+      validateDataAsync(headers, rows, dataPointId);
+
     } catch (err) {
       console.error("Error streaming file:", err);
       setCellErrors([{
@@ -1315,13 +1600,15 @@ export default function ReviewDataPage() {
   };
 
   // Validate data asynchronously to not block UI
-  const validateDataAsync = async (headers: string[], rows: string[][]) => {
+  // Optimized for large datasets - validates in larger batches with smart sampling
+  const validateDataAsync = async (headers: string[], rows: string[][], dataPointIdOverride?: string) => {
     const errors: CellError[] = [];
-    const maxValidateRows = Math.min(rows.length, 1000); // Validate first 1000 rows
+    // For large datasets, validate first 2000 rows + sample every Nth row
+    const directValidateRows = Math.min(rows.length, 2000);
     const maxErrors = 100; // Limit errors shown
-    
+
     // ========== HEADER-LEVEL CHECKS ==========
-    
+
     // Check for empty headers
     headers.forEach((header, idx) => {
       if (!header || header.trim() === '' && errors.length < maxErrors) {
@@ -1335,6 +1622,30 @@ export default function ReviewDataPage() {
         });
       }
     });
+
+    // ========== MISSING REQUIRED FIELDS CHECK ==========
+    // Check if required fields are missing based on the data point being validated
+    // Uses the SUPER FLEXIBLE matching system (handles any case, numbers, symbols, abbreviations)
+    const dataPointId = dataPointIdOverride || validationDataPoint?.id;
+    if (dataPointId) {
+      const fields = getFieldsForDataPoint(dataPointId);
+
+      fields.forEach((field) => {
+        // Use the flexible matching function - same as used in getDataPointFieldStatus
+        const matchedColumn = findMatchingColumn(headers, field.requiredColumns);
+
+        if (!matchedColumn && errors.length < maxErrors) {
+          errors.push({
+            row: 0,
+            column: field.name,
+            columnIndex: -1,
+            value: `Expected: ${field.requiredColumns.slice(0, 3).join(', ')} (or similar)`,
+            error: `Missing required field: ${field.name}`,
+            severity: "warning"
+          });
+        }
+      });
+    }
     
     // ========== SIMPLE VALIDATION ==========
     // Only check for:
@@ -1343,37 +1654,51 @@ export default function ReviewDataPage() {
     
     // Track for duplicate detection (use ALL columns EXCEPT the first one which is ID)
     const rowHashes = new Map<string, number>();
-    
-    // Validate in batches to keep UI responsive
-    const BATCH_SIZE = 100;
-    for (let batchStart = 0; batchStart < maxValidateRows && errors.length < maxErrors; batchStart += BATCH_SIZE) {
-      const batchEnd = Math.min(batchStart + BATCH_SIZE, maxValidateRows);
-      
+
+    // Optimized validation for large datasets
+    // Use larger batches and reduced yields for better throughput
+    const BATCH_SIZE = 500; // Increased from 100
+    const headerCount = headers.length;
+    const hasMultipleColumns = headerCount > 1;
+
+    for (let batchStart = 0; batchStart < directValidateRows && errors.length < maxErrors; batchStart += BATCH_SIZE) {
+      const batchEnd = Math.min(batchStart + BATCH_SIZE, directValidateRows);
+
       for (let rowIdx = batchStart; rowIdx < batchEnd && errors.length < maxErrors; rowIdx++) {
         const row = rows[rowIdx];
-        
-        // Check for completely empty rows
-        const isEmptyRow = row.every(cell => !cell || cell.trim() === '');
-        if (isEmptyRow) {
-          if (errors.length < maxErrors) {
-            errors.push({
-              row: rowIdx + 1,
-              column: "Row",
-              columnIndex: 0,
-              value: "(empty row)",
-              error: "Empty row detected",
-              severity: "warning"
-            });
+
+        // Check for completely empty rows - optimized with early exit
+        let isEmpty = true;
+        for (let i = 0; i < row.length; i++) {
+          if (row[i] && row[i].trim() !== '') {
+            isEmpty = false;
+            break;
           }
-          continue; // Skip further checks for empty rows
         }
-        
-        // Check for duplicate rows (using all columns EXCEPT the first one - which is typically ID)
-        // Skip column 0, use columns 1 onwards for duplicate detection
-        if (headers.length > 1) {
-          const rowKey = row.slice(1).map(cell => (cell || '').trim().toLowerCase()).join('|');
+
+        if (isEmpty) {
+          errors.push({
+            row: rowIdx + 1,
+            column: "Row",
+            columnIndex: 0,
+            value: "(empty row)",
+            error: "Empty row detected",
+            severity: "warning"
+          });
+          continue;
+        }
+
+        // Check for duplicate rows - optimized key generation
+        if (hasMultipleColumns) {
+          // Build key without creating intermediate array
+          let rowKey = '';
+          for (let i = 1; i < row.length; i++) {
+            if (i > 1) rowKey += '|';
+            rowKey += (row[i] || '').trim().toLowerCase();
+          }
+
           const existingRow = rowHashes.get(rowKey);
-          if (existingRow !== undefined && errors.length < maxErrors) {
+          if (existingRow !== undefined) {
             errors.push({
               row: rowIdx + 1,
               column: "Row",
@@ -1388,16 +1713,19 @@ export default function ReviewDataPage() {
         }
 
         // Check each cell for empty values
-        for (let colIdx = 0; colIdx < Math.min(row.length, headers.length) && errors.length < maxErrors; colIdx++) {
+        const colCount = Math.min(row.length, headerCount);
+        for (let colIdx = 0; colIdx < colCount && errors.length < maxErrors; colIdx++) {
           const error = validateCell(row[colIdx], headers[colIdx], rowIdx + 1, colIdx);
           if (error) {
             errors.push(error);
           }
         }
       }
-      
-      // Yield to UI between batches
-      await new Promise(resolve => setTimeout(resolve, 0));
+
+      // Yield to UI less frequently - every 2000 rows instead of 100
+      if (batchStart % 2000 === 0) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
     }
 
     setCellErrors(errors);
@@ -1405,27 +1733,226 @@ export default function ReviewDataPage() {
     return errors; // Return errors for checking
   };
 
-  // Virtual scrolling: Calculate which rows to render
-  const getVisibleRows = () => {
-    if (!parsedData) return { startIndex: 0, endIndex: 0, rows: [] };
-    
+  // MEMOIZED: Get filtered rows based on category filter mode
+  // When "selected", only show rows where the category column matches one of the selected portfolio items
+  // Optimized for 1M+ rows - avoids unnecessary array allocations
+  const filteredData = useMemo(() => {
+    if (!parsedData) return { rows: [] as string[][], originalIndices: null as number[] | null, isFiltered: false };
+
+    // If showing original data, return all rows - use null for originalIndices to signal "use index directly"
+    if (categoryFilterMode === "original") {
+      return {
+        rows: parsedData.rows,
+        originalIndices: null, // null means use direct index (optimization for large datasets)
+        isFiltered: false
+      };
+    }
+
+    // Get selected category names from context (set on portfolio page)
+    let selectedCategoryNames: string[] = [];
+
+    if (state.selectedCategories && state.selectedCategories.length > 0) {
+      selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
+    } else if (state.setupData.categoryName) {
+      selectedCategoryNames = state.setupData.categoryName
+        .split(',')
+        .map(name => name.trim().toLowerCase())
+        .filter(name => name.length > 0);
+    }
+
+    if (selectedCategoryNames.length === 0) {
+      return {
+        rows: parsedData.rows,
+        originalIndices: null,
+        isFiltered: false
+      };
+    }
+
+    // Find category column index - use Set for O(1) lookup
+    const priorityColumns = [
+      "category_level_3", "categorylevel3", "category_level3",
+      "commodity_type", "commoditytype",
+      "sub_category", "subcategory",
+      "category", "commodity", "segment", "product_type", "product", "type", "item_category"
+    ];
+
+    let categoryColIdx = -1;
+    const normalizedHeaders = parsedData.headers.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+    for (const priorityCol of priorityColumns) {
+      const normalizedPriority = priorityCol.replace(/[^a-z0-9]/g, '');
+      const idx = normalizedHeaders.findIndex(h => h.includes(normalizedPriority));
+      if (idx !== -1) {
+        categoryColIdx = idx;
+        break;
+      }
+    }
+
+    if (categoryColIdx === -1) {
+      return {
+        rows: parsedData.rows,
+        originalIndices: null,
+        isFiltered: false
+      };
+    }
+
+    // Pre-compute normalized selected categories with Set for O(1) exact match lookup
+    const normalizeCategory = (cat: string) => {
+      return cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
+    };
+
+    const normalizedSelectedSet = new Set(selectedCategoryNames.map(normalizeCategory));
+    const normalizedSelectedArray = Array.from(normalizedSelectedSet);
+
+    // Pre-allocate arrays with estimated size for better performance
+    const estimatedSize = Math.min(parsedData.rows.length, 100000);
+    const filteredRows: string[][] = [];
+    const originalIndices: number[] = [];
+
+    // Reserve capacity hint (doesn't actually pre-allocate in JS, but helps V8 optimize)
+    filteredRows.length = estimatedSize;
+    filteredRows.length = 0;
+    originalIndices.length = estimatedSize;
+    originalIndices.length = 0;
+
+    // Optimized loop with cached values
+    const rowCount = parsedData.rows.length;
+    for (let idx = 0; idx < rowCount; idx++) {
+      const row = parsedData.rows[idx];
+      const categoryValue = row[categoryColIdx] || "";
+      const normalizedValue = normalizeCategory(categoryValue);
+
+      // Fast path: exact match using Set (O(1))
+      if (normalizedSelectedSet.has(normalizedValue)) {
+        filteredRows.push(row);
+        originalIndices.push(idx);
+        continue;
+      }
+
+      // Slow path: contains match (only if exact match failed)
+      let matches = false;
+      for (let i = 0; i < normalizedSelectedArray.length; i++) {
+        const cat = normalizedSelectedArray[i];
+        if (normalizedValue.includes(cat) || cat.includes(normalizedValue)) {
+          matches = true;
+          break;
+        }
+      }
+
+      if (matches) {
+        filteredRows.push(row);
+        originalIndices.push(idx);
+      }
+    }
+
+    return { rows: filteredRows, originalIndices, isFiltered: true };
+  }, [parsedData, categoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
+
+  // MEMOIZED: Virtual scrolling - Calculate which rows to render
+  // Optimized for 1M+ rows - avoids slice when possible
+  const visibleRows = useMemo(() => {
+    if (!parsedData) return { startIndex: 0, endIndex: 0, rows: [] as string[][], originalIndices: [] as number[], totalFilteredRows: 0 };
+
+    const { rows: filteredRows, originalIndices, isFiltered } = filteredData;
+
     const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER_ROWS);
     const endIndex = Math.min(
-      parsedData.rows.length,
+      filteredRows.length,
       startIndex + VISIBLE_ROWS + BUFFER_ROWS * 2
     );
-    
+
+    // Generate indices for visible range - avoid creating full index array
+    const visibleIndices: number[] = new Array(endIndex - startIndex);
+    if (isFiltered && originalIndices) {
+      // Use actual original indices for filtered data
+      for (let i = 0; i < visibleIndices.length; i++) {
+        visibleIndices[i] = originalIndices[startIndex + i];
+      }
+    } else {
+      // Direct mapping for original data (no filtering)
+      for (let i = 0; i < visibleIndices.length; i++) {
+        visibleIndices[i] = startIndex + i;
+      }
+    }
+
     return {
       startIndex,
       endIndex,
-      rows: parsedData.rows.slice(startIndex, endIndex)
+      rows: filteredRows.slice(startIndex, endIndex),
+      originalIndices: visibleIndices,
+      totalFilteredRows: filteredRows.length
     };
-  };
+  }, [parsedData, filteredData, scrollTop]);
 
-  // Handle table scroll for virtual scrolling
-  const handleTableScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setScrollTop(e.currentTarget.scrollTop);
-  };
+  // MEMOIZED: Filter cell errors based on category filter mode
+  // When viewing "Selected Categories", only show errors for rows that are in the filtered view
+  const filteredCellErrors = useMemo(() => {
+    const { originalIndices, isFiltered } = filteredData;
+
+    // If showing original data (not filtered), return all errors
+    if (!isFiltered || !originalIndices) {
+      return cellErrors;
+    }
+
+    // Get the set of original row indices that are in the filtered view
+    const filteredRowSet = new Set(originalIndices);
+
+    // Filter errors to only include those for rows in the filtered view
+    // Note: error.row is 1-based, originalIndices are 0-based
+    return cellErrors.filter(error => {
+      // Header-level errors (row 0) should always be shown
+      if (error.row === 0) return true;
+      // For row errors, check if the original row index is in the filtered set
+      return filteredRowSet.has(error.row - 1);
+    });
+  }, [cellErrors, categoryFilterMode, filteredData]);
+
+  // MEMOIZED: Count errors by severity for quick checks
+  const errorCounts = useMemo(() => {
+    let errors = 0;
+    let warnings = 0;
+    for (const e of cellErrors) {
+      if (e.severity === "error") errors++;
+      else warnings++;
+    }
+    return { errors, warnings, total: cellErrors.length };
+  }, [cellErrors]);
+
+  // MEMOIZED: Count filtered errors by severity
+  const filteredErrorCounts = useMemo(() => {
+    let errors = 0;
+    let warnings = 0;
+    for (const e of filteredCellErrors) {
+      if (e.severity === "error") errors++;
+      else warnings++;
+    }
+    return { errors, warnings, total: filteredCellErrors.length };
+  }, [filteredCellErrors]);
+
+  // Reset scroll position when category filter mode changes
+  useEffect(() => {
+    setScrollTop(0);
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollTop = 0;
+    }
+  }, [categoryFilterMode]);
+
+  // Handle table scroll for virtual scrolling - throttled with RAF for performance
+  const scrollRafRef = useRef<number | null>(null);
+  const handleTableScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    const newScrollTop = e.currentTarget.scrollTop;
+
+    // Cancel any pending RAF
+    if (scrollRafRef.current !== null) {
+      cancelAnimationFrame(scrollRafRef.current);
+    }
+
+    // Schedule update on next animation frame for smooth performance
+    scrollRafRef.current = requestAnimationFrame(() => {
+      setScrollTop(newScrollTop);
+      scrollRafRef.current = null;
+    });
+  }, []);
 
   // Open validation modal for a data point
   const openValidationModal = async (dataPointId: string, dataPointName: string) => {
@@ -1435,17 +1962,18 @@ export default function ReviewDataPage() {
     setCellErrors([]);
     setEditingCell(null);
     setScrollTop(0);
+    setCategoryFilterMode("original"); // Reset to original view when opening modal
 
     // Get the file to validate
     if (dataPointId === "spend" && uploadedFile) {
       setValidationDataPoint({ id: dataPointId, name: dataPointName, file: uploadedFile });
-      await parseAndValidateFile(uploadedFile);
+      await parseAndValidateFile(uploadedFile, dataPointId);
     } else {
       // For other data points, use the stored file if available
       const storedFile = dataPointFiles[dataPointId];
       if (storedFile) {
         setValidationDataPoint({ id: dataPointId, name: dataPointName, file: storedFile });
-        await parseAndValidateFile(storedFile);
+        await parseAndValidateFile(storedFile, dataPointId);
       } else {
         // Check if we have columns but no file (from previous session)
         const dataPoint = contextDataPoints.find(dp => dp.id === dataPointId);
@@ -1495,17 +2023,33 @@ export default function ReviewDataPage() {
     setEditValue("");
   };
 
-  // Check if a cell has an error
-  const getCellError = (rowIdx: number, colIdx: number): CellError | undefined => {
-    return cellErrors.find(e => e.row === rowIdx + 1 && e.columnIndex === colIdx);
-  };
+  // MEMOIZED: Create error lookup map for O(1) cell error checking
+  const cellErrorMap = useMemo(() => {
+    const map = new Map<string, CellError>();
+    for (const error of cellErrors) {
+      const key = `${error.row}-${error.columnIndex}`;
+      map.set(key, error);
+    }
+    return map;
+  }, [cellErrors]);
+
+  // Check if a cell has an error - O(1) lookup
+  const getCellError = useCallback((rowIdx: number, colIdx: number): CellError | undefined => {
+    const key = `${rowIdx + 1}-${colIdx}`;
+    return cellErrorMap.get(key);
+  }, [cellErrorMap]);
 
   // Convert parsed data back to CSV and create a new File object
+  // ALWAYS saves ALL rows - filter toggle is only for viewing, not for permanent modification
   const createUpdatedFile = (): File | null => {
     // Use ref to get the LATEST parsedData (includes all edits)
     const currentData = parsedDataRef.current;
 
     if (!currentData || !validationDataPoint?.file) return null;
+
+    // ALWAYS save ALL rows - preserve original data integrity
+    // The category filter is only for display/viewing purposes
+    const rowsToSave = currentData.rows;
 
     // Build CSV content from parsed data
     const csvRows: string[] = [];
@@ -1519,8 +2063,8 @@ export default function ReviewDataPage() {
       return h;
     }).join(','));
 
-    // Add data rows
-    currentData.rows.forEach(row => {
+    // Add ALL data rows
+    rowsToSave.forEach(row => {
       csvRows.push(row.map(cell => {
         if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
           return `"${cell.replace(/"/g, '""')}"`;
@@ -1528,12 +2072,12 @@ export default function ReviewDataPage() {
         return cell;
       }).join(','));
     });
-    
+
     const csvContent = csvRows.join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const originalName = validationDataPoint.file.name;
-    const updatedFileName = originalName.replace(/\.csv$/i, '_updated.csv');
-    
+    const updatedFileName = originalName.replace(/\.(csv|xlsx?)$/i, `_updated.csv`);
+
     return new File([blob], updatedFileName, { type: 'text/csv' });
   };
 
@@ -1566,12 +2110,17 @@ export default function ReviewDataPage() {
       return;
     }
 
-    // First, revalidate the entire file with current edits (using ref for latest data)
+    // Determine which rows to validate based on category filter mode
+    const rowsToValidate = categoryFilterMode === "selected"
+      ? filteredData.rows
+      : currentData.rows;
+
+    // Revalidate the data we're about to save
     setIsValidating(true);
     setCellErrors([]);
-    const errors = await validateDataAsync(currentData.headers, currentData.rows);
+    const errors = await validateDataAsync(currentData.headers, rowsToValidate);
 
-    // Check if errors still exist after revalidation
+    // Check if errors still exist in the data we're saving
     const hasErrors = errors.filter(e => e.severity === "error").length > 0;
 
     // If errors still exist, don't close - let user continue fixing
@@ -1583,38 +2132,59 @@ export default function ReviewDataPage() {
     // No errors - create updated file with edits
     const updatedFile = createUpdatedFile();
 
+    // IMPORTANT: Always save ALL rows to preserve original data
+    // The filter toggle is just for display/viewing - we don't permanently filter the data
+    const allRows = currentData.rows;
+
     if (updatedFile) {
       if (validationDataPoint.id === "spend") {
         // Update the spend data file
         setUploadedFile(updatedFile);
         actions.updateSetupData({ uploadedFile: updatedFile });
 
-        // Re-parse to update CSV columns for field detection
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const text = e.target?.result as string;
-          if (text) {
-            const firstLine = text.split('\n')[0];
-            const columns = firstLine.split(',').map(col => col.trim().replace(/"/g, ''));
-            setCsvColumns(columns);
+        // Update parsed data store with ALL rows (preserve original data)
+        // Filter toggle is only for viewing, not for permanent data modification
+        setParsedCsvDataStore(prev => ({
+          ...prev,
+          spend: {
+            headers: currentData.headers,
+            rows: allRows.map(row => {
+              const rowObj: Record<string, string> = {};
+              currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+              return rowObj;
+            })
           }
-        };
-        reader.readAsText(updatedFile);
+        }));
+
+        // Re-parse to update columns for field detection using universal parser
+        parseFile(updatedFile).then((result) => {
+          if (result.success && result.data) {
+            setCsvColumns(result.data.headers);
+          }
+        });
       } else {
         // For other data points (supply-master, contracts, playbook)
         setDataPointFiles(prev => ({ ...prev, [validationDataPoint.id]: updatedFile }));
 
-        // Re-parse to update columns for validation
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const text = e.target?.result as string;
-          if (text) {
-            const firstLine = text.split('\n')[0];
-            const columns = firstLine.split(',').map(col => col.trim().replace(/"/g, ''));
-            setDataPointColumns(prev => ({ ...prev, [validationDataPoint.id]: columns }));
+        // Update parsed data store with ALL rows (preserve original data)
+        setParsedCsvDataStore(prev => ({
+          ...prev,
+          [validationDataPoint.id]: {
+            headers: currentData.headers,
+            rows: allRows.map(row => {
+              const rowObj: Record<string, string> = {};
+              currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+              return rowObj;
+            })
           }
-        };
-        reader.readAsText(updatedFile);
+        }));
+
+        // Re-parse to update columns for validation using universal parser
+        parseFile(updatedFile).then((result) => {
+          if (result.success && result.data) {
+            setDataPointColumns(prev => ({ ...prev, [validationDataPoint.id]: result.data!.headers }));
+          }
+        });
       }
     }
 
@@ -1625,7 +2195,7 @@ export default function ReviewDataPage() {
     // Auto-validate proof points after successful data validation
     setTimeout(() => {
       const count = autoValidateProofPoints();
-      console.log(`Auto-validated ${count} proof points after data validation`);
+      // Auto-validated proof points after data validation
     }, 100);
   };
 
@@ -1654,8 +2224,8 @@ export default function ReviewDataPage() {
       }
       
       setValidationDataPoint({ ...validationDataPoint, file });
-      await parseAndValidateFile(file);
-      
+      await parseAndValidateFile(file, validationDataPoint.id);
+
       if (validationFileInputRef.current) {
         validationFileInputRef.current.value = "";
       }
@@ -1667,8 +2237,8 @@ export default function ReviewDataPage() {
   // ============================================================================
 
   // Calculate validation counts
-  const needsValidationCount = contextDataPoints.filter(dp => dp.items.length > 0 || (dp.isSpendData && uploadedFile)).length;
-  const notAvailableCount = contextDataPoints.filter(dp => dp.items.length === 0 && !(dp.isSpendData && uploadedFile)).length;
+  const needsValidationCount = contextDataPoints.filter(dp => dp.items.length > 0 || (dp.isSpendData && hasSpendData)).length;
+  const notAvailableCount = contextDataPoints.filter(dp => dp.items.length === 0 && !(dp.isSpendData && hasSpendData)).length;
 
   // Calculate opportunity classification (Qualified = more than 2 validated proof points, Potential = 2 or less)
   const getValidatedProofPointsCount = (opportunity: SetupOpportunity) =>
@@ -1708,8 +2278,8 @@ export default function ReviewDataPage() {
       }
     });
 
-    // Also check if spend data is validated via uploadedFile
-    if (uploadedFile && isDataPointFullyValidated("spend")) {
+    // Also check if spend data is validated via uploadedFile or persisted data
+    if (hasSpendData && isDataPointFullyValidated("spend")) {
       validated.add("spend");
     }
 
@@ -1731,9 +2301,7 @@ export default function ReviewDataPage() {
   const autoValidateProofPoints = () => {
     const validatedDataPoints = getValidatedDataPoints();
 
-    console.log("Auto-validating proof points...");
-    console.log("Validated data points:", Array.from(validatedDataPoints));
-    console.log("Available columns per data point:", dataPointColumns);
+    // Auto-validating proof points
 
     // Track which proof points should be validated
     const proofPointsToValidate = new Set<string>();
@@ -1760,7 +2328,7 @@ export default function ReviewDataPage() {
 
       if (columnsExist) {
         proofPointsToValidate.add(mapping.proofPointId);
-        console.log(`✓ Proof point ${mapping.proofPointId} validated`);
+        // Proof point validated
       }
     });
 
@@ -1832,39 +2400,112 @@ export default function ReviewDataPage() {
     const fallbackSpend = state.setupData.spend || 50000000;
 
     // ============================================================================
-    // SPEND DATA EXTRACTION
+    // SPEND DATA EXTRACTION - Using Smart Column Matcher
     // ============================================================================
     if (dataPointId === "spend" && csvData && csvData.rows.length > 0) {
-      const { headers, rows } = csvData;
+      const { headers } = csvData;
 
-      const supplierCol = findColumn(headers, ['supplier_name', 'supplier', 'vendor_name', 'vendor']);
-      const countryCol = findColumn(headers, ['country', 'location', 'geography', 'region']);
-      const spendCol = findColumn(headers, ['spend_amount', 'spend', 'amount', 'total_spend', 'value']);
-      const volumeCol = findColumn(headers, ['volume', 'quantity', 'qty', 'units']);
-      const priceCol = findColumn(headers, ['price', 'unit_price', 'price_per_unit', 'rate']);
+      // Filter rows based on categoryFilterMode
+      let rows = csvData.rows;
 
-      const getRowSpend = (row: Record<string, string>): number => {
-        if (spendCol && row[spendCol]) return parseFloat(row[spendCol]) || 0;
-        if (volumeCol && priceCol && row[volumeCol] && row[priceCol]) {
-          return (parseFloat(row[volumeCol]) || 0) * (parseFloat(row[priceCol]) || 0);
+      if (categoryFilterMode === "selected") {
+        // Get selected category names from context
+        let selectedCategoryNames: string[] = [];
+        if (state.selectedCategories && state.selectedCategories.length > 0) {
+          selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
+        } else if (state.setupData.categoryName) {
+          selectedCategoryNames = state.setupData.categoryName
+            .split(',')
+            .map(name => name.trim().toLowerCase())
+            .filter(name => name.length > 0);
         }
-        return 0;
-      };
 
+        if (selectedCategoryNames.length > 0) {
+          // Find category column by header name
+          const priorityColumns = [
+            "category_level_3", "categorylevel3", "category_level3",
+            "commodity_type", "commoditytype",
+            "sub_category", "subcategory",
+            "category", "commodity", "segment", "product_type", "product", "type", "item_category"
+          ];
+
+          let categoryColName: string | null = null;
+          for (const priorityCol of priorityColumns) {
+            const foundHeader = headers.find(h =>
+              h.toLowerCase().replace(/[^a-z0-9]/g, '').includes(priorityCol.replace(/[^a-z0-9]/g, ''))
+            );
+            if (foundHeader) {
+              categoryColName = foundHeader;
+              break;
+            }
+          }
+
+          if (categoryColName) {
+            // Normalize and filter - optimized with Set for O(1) exact match
+            const normalizeCategory = (cat: string) => {
+              return cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
+            };
+            const normalizedSet = new Set(selectedCategoryNames.map(normalizeCategory));
+            const normalizedArray = Array.from(normalizedSet);
+
+            // Pre-allocate for performance
+            const filtered: Record<string, string>[] = [];
+            const rowCount = csvData.rows.length;
+
+            for (let i = 0; i < rowCount; i++) {
+              const row = csvData.rows[i];
+              const categoryValue = row[categoryColName!] || "";
+              const normalizedValue = normalizeCategory(categoryValue);
+
+              // Fast path: exact match
+              if (normalizedSet.has(normalizedValue)) {
+                filtered.push(row);
+                continue;
+              }
+
+              // Slow path: contains match
+              let matches = false;
+              for (let j = 0; j < normalizedArray.length; j++) {
+                const cat = normalizedArray[j];
+                if (normalizedValue.includes(cat) || cat.includes(normalizedValue)) {
+                  matches = true;
+                  break;
+                }
+              }
+              if (matches) filtered.push(row);
+            }
+            rows = filtered;
+          }
+        }
+      }
+
+      // Use smart column detection
+      const columns = detectAllColumns(headers);
+
+      // Single pass: calculate totalSpend and aggregate by location/supplier simultaneously
       const locationMap = new Map<string, number>();
       const supplierMap = new Map<string, number>();
+      let totalSpend = 0;
 
-      rows.forEach(row => {
-        const spend = getRowSpend(row);
-        if (countryCol && row[countryCol]) {
-          locationMap.set(row[countryCol], (locationMap.get(row[countryCol]) || 0) + spend);
-        }
-        if (supplierCol && row[supplierCol]) {
-          supplierMap.set(row[supplierCol], (supplierMap.get(row[supplierCol]) || 0) + spend);
-        }
-      });
+      const rowCount = rows.length;
+      for (let i = 0; i < rowCount; i++) {
+        const row = rows[i];
+        const spend = calculateRowSpend(row, columns);
 
-      const totalSpend = rows.reduce((sum, row) => sum + getRowSpend(row), 0);
+        if (spend > 0) {
+          totalSpend += spend;
+
+          const location = getRowLocation(row, columns);
+          const supplier = getRowSupplier(row, columns);
+
+          if (location) {
+            locationMap.set(location, (locationMap.get(location) || 0) + spend);
+          }
+          if (supplier) {
+            supplierMap.set(supplier, (supplierMap.get(supplier) || 0) + spend);
+          }
+        }
+      }
 
       const locations = Array.from(locationMap.entries())
         .map(([name, spend]) => ({ name, spend, percentage: totalSpend > 0 ? Math.round((spend / totalSpend) * 100) : 0 }))
@@ -1890,12 +2531,12 @@ export default function ReviewDataPage() {
     if (dataPointId === "supply-master" && csvData && csvData.rows.length > 0) {
       const { headers, rows } = csvData;
 
-      const supplierNameCol = findColumn(headers, ['supplier_name', 'supplier', 'vendor_name', 'vendor']);
-      const countryCol = findColumn(headers, ['country', 'location', 'region']);
-      const statusCol = findColumn(headers, ['status', 'supplier_status']);
-      const spendCol = findColumn(headers, ['annual_spend', 'spend', 'total_spend', 'value']);
-      const riskCol = findColumn(headers, ['risk_rating', 'risk', 'risk_level']);
-      const categoryCol = findColumn(headers, ['category', 'product_category']);
+      const supplierNameCol = findColumn(headers, ['supplier_name', 'supplier', 'vendor_name', 'vendor', 'Supplier_Name', 'Vendor_Name']);
+      const countryCol = findColumn(headers, ['country', 'location', 'region', 'supplier_country', 'Supplier_Country', 'Supplier_Region']);
+      const statusCol = findColumn(headers, ['status', 'supplier_status', 'Supplier_Status']);
+      const spendCol = findColumn(headers, ['annual_spend', 'spend', 'total_spend', 'value', 'extended_line_amount', 'Extended_Line_Amount']);
+      const riskCol = findColumn(headers, ['risk_rating', 'risk', 'risk_level', 'Risk_Rating']);
+      const categoryCol = findColumn(headers, ['category', 'product_category', 'spend_category', 'Spend_Category', 'Category_Level_1']);
 
       // Extract unique suppliers with their data
       const suppliers = rows.map(row => ({
@@ -2133,12 +2774,142 @@ export default function ReviewDataPage() {
 
     // Auto-validate proof points based on uploaded and validated data
     const validatedCount = autoValidateProofPoints();
-    console.log(`Auto-validated ${validatedCount} proof points before running analysis`);
+    // Auto-validated proof points before running analysis
 
     // Gather all uploaded files from data points
     const supplyMasterFile = dataPointFiles["supply-master"];
     const contractsFile = dataPointFiles["contracts"];
     const playbookFile = dataPointFiles["playbook"];
+
+    // Store playbook data in context for opportunities page
+    if (playbookFile) {
+      // Processing playbook file for context
+      try {
+        const playbookResult = await parseFile(playbookFile);
+        // Playbook parse result processed
+        if (playbookResult.success && playbookResult.data) {
+          const { headers, rows } = playbookResult.data;
+          // Playbook headers detected
+
+          // Find columns once (not in loop)
+          const categoryCol = findColumn(headers, ['category', 'product_category']);
+          const strategyCol = findColumn(headers, ['strategy', 'sourcing_strategy']);
+          const trendCol = findColumn(headers, ['market_trend', 'trend', 'market_trends']);
+          const riskFactorCol = findColumn(headers, ['risk_factor', 'risk_name', 'risk']);
+          const riskLevelCol = findColumn(headers, ['risk_level', 'level', 'severity']);
+          const recommendationCol = findColumn(headers, ['recommendation', 'recommendations', 'action']);
+          const priorityCol = findColumn(headers, ['priority', 'importance']);
+
+          // Playbook columns detected
+
+          // Parse playbook entries - split recommendations by semicolons
+          const parseRecommendationText = (text: string): string[] => {
+            if (!text) return [];
+            return text
+              .split(/[;]|\d+\.\s*/)
+              .map(item => item.trim())
+              .filter(item => item.length > 10);
+          };
+
+          const entries = rows.map(row => {
+            const recText = recommendationCol ? row[recommendationCol] : '';
+            return {
+              category: categoryCol ? row[categoryCol] : '',
+              strategy: strategyCol ? row[strategyCol] : '',
+              marketTrend: trendCol ? row[trendCol] : '',
+              riskFactor: riskFactorCol ? row[riskFactorCol] : '',
+              recommendations: parseRecommendationText(recText),
+              riskLevel: riskLevelCol ? row[riskLevelCol] : undefined,
+              priority: priorityCol ? row[priorityCol] : undefined,
+            };
+          }).filter(entry => entry.category || entry.strategy);
+
+          // Playbook entries parsed
+
+          actions.setPlaybookData({
+            entries,
+            fileName: playbookFile.name,
+            uploadedAt: Date.now(),
+          });
+          // Playbook data stored in context
+        }
+      } catch (err) {
+        console.error('Error parsing playbook for context:', err);
+      }
+    }
+
+    // Store spend analysis data in context
+    if (uploadedFile && parsedData) {
+      const spendSummary = getSummaryData("spend");
+      if (spendSummary && spendSummary.totalSpend > 0) {
+        const spendBySupplier: Record<string, number> = {};
+        const spendByRegion: Record<string, number> = {};
+        const spendByCountry: Record<string, number> = {};
+
+        spendSummary.suppliers.forEach(s => {
+          spendBySupplier[s.name] = s.spend;
+        });
+
+        spendSummary.locations.forEach(l => {
+          spendByCountry[l.name] = l.spend;
+          // Try to group by region if available
+          spendByRegion[l.name] = l.spend;
+        });
+
+        // Calculate price data from CSV for proof point testing
+        let priceData: { prices: number[]; avgPrice: number; priceVariance: number } | undefined;
+        const spendCsvData = parsedCsvDataStore["spend"];
+        if (spendCsvData && spendCsvData.rows.length > 0) {
+          const { headers, rows } = spendCsvData;
+          const columns = detectAllColumns(headers);
+
+          if (columns.price) {
+            const prices: number[] = [];
+            rows.forEach(row => {
+              const price = parseNumericValue(row[columns.price!]);
+              if (price > 0) {
+                prices.push(price);
+              }
+            });
+
+            if (prices.length > 0) {
+              const avgPrice = prices.reduce((sum, p) => sum + p, 0) / prices.length;
+              // Calculate price variance as coefficient of variation (stddev/mean * 100)
+              const variance = prices.reduce((sum, p) => sum + Math.pow(p - avgPrice, 2), 0) / prices.length;
+              const stdDev = Math.sqrt(variance);
+              const priceVariance = avgPrice > 0 ? (stdDev / avgPrice) * 100 : 0;
+
+              priceData = {
+                prices,
+                avgPrice,
+                priceVariance,
+              };
+              // Price data calculated
+            }
+          }
+        }
+
+        actions.setSpendAnalysis({
+          totalSpend: spendSummary.totalSpend,
+          spendBySupplier,
+          spendByRegion,
+          spendByCountry,
+          supplierCount: spendSummary.suppliers.length,
+          topSuppliers: spendSummary.suppliers.slice(0, 5).map(s => ({
+            name: s.name,
+            spend: s.spend,
+            percentage: s.percentage,
+          })),
+          topRegions: spendSummary.locations.slice(0, 5).map(l => ({
+            name: l.name,
+            spend: l.spend,
+            percentage: l.percentage,
+          })),
+          priceData,
+        });
+        // Spend analysis stored in context
+      }
+    }
 
     // Calculate total spend from portfolio or uploaded data
     const totalSpend = state.portfolioItems.length > 0
@@ -2153,12 +2924,7 @@ export default function ReviewDataPage() {
 
       if (uploadedFile || hasAdditionalFiles) {
         // Use full analysis with all data files
-        console.log("Running full analysis with files:", {
-          spend: uploadedFile?.name,
-          supplyMaster: supplyMasterFile?.name,
-          contracts: contractsFile?.name,
-          playbook: playbookFile?.name,
-        });
+        // Running full analysis with files
 
         response = await procurementApi.runFullAnalysis(
           state.setupData.categoryName || "Edible Oils",
@@ -2190,13 +2956,46 @@ export default function ReviewDataPage() {
 
       // Store the analysis response in context
       actions.setAnalysisResponse(response);
-      console.log("Analysis complete:", response);
+      // Analysis complete
+
+      // Record activity for dashboard
+      const categoryForActivity = state.setupData.categoryName || "Edible Oils";
+      const savingsLow = response.savings_summary?.total_savings_low || 0;
+      const savingsHigh = response.savings_summary?.total_savings_high || 0;
+      const formatSavings = (amount: number) => {
+        if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
+        if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
+        return `$${amount.toFixed(0)}`;
+      };
+
+      actions.addActivity({
+        type: "analysis",
+        title: `Analysis completed for ${categoryForActivity}`,
+        description: `Max identified ${response.opportunities?.length || 0} opportunities with potential savings of ${formatSavings(savingsLow)} - ${formatSavings(savingsHigh)}.`,
+        metadata: {
+          categoryName: categoryForActivity,
+          savings: `${formatSavings(savingsLow)} - ${formatSavings(savingsHigh)}`,
+          opportunityCount: response.opportunities?.length || 0,
+        },
+      });
 
       actions.setSetupStep(3);
       router.push("/setup/processing");
     } catch (err) {
       console.error("Analysis error:", err);
       setUploadError(err instanceof Error ? err.message : "Analysis failed. Please try again.");
+
+      // Record activity even for demo/fallback mode
+      const categoryForActivity = state.setupData.categoryName || "Edible Oils";
+      actions.addActivity({
+        type: "analysis",
+        title: `Analysis started for ${categoryForActivity}`,
+        description: `Running analysis on ${categoryForActivity} category with ${uploadedFile ? 'uploaded spend data' : 'default data'}.`,
+        metadata: {
+          categoryName: categoryForActivity,
+        },
+      });
+
       // For demo, allow continuing even if backend is down
       actions.setSetupStep(3);
       router.push("/setup/processing");
@@ -2210,9 +3009,9 @@ export default function ReviewDataPage() {
   // Calculate data review status for all data points based on validation
   const getDataPointReviewStatus = () => {
     const items: { name: string; status: "All Good" | "Needs Review" | "Not Uploaded"; id: string }[] = [];
-    
+
     // Check Spend Data - based on field availability
-    if (!uploadedFile) {
+    if (!hasSpendData) {
       items.push({
         id: "spend",
         name: `Spend Data (${categoryName})`,
@@ -2303,7 +3102,7 @@ export default function ReviewDataPage() {
 
   // Hidden file inputs
   // Supported file formats for all data uploads
-  const SUPPORTED_FORMATS = ".csv,.xlsx,.xls,.pdf,.doc,.docx,.txt,.json";
+  const SUPPORTED_FORMATS = SUPPORTED_FORMATS_STRING;
 
   const FileInput = (
     <>
@@ -2504,67 +3303,95 @@ export default function ReviewDataPage() {
           {/* Right Column - Data Review Content */}
           <div className="space-y-8">
             {/* Top Stats Cards */}
-            <div className="grid grid-cols-4 gap-4">
-               <div className="rounded-[32px] bg-white p-6 shadow-sm ring-1 ring-black/[0.03]">
+            <div className="grid grid-cols-5 gap-4">
+               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03]">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Spend</span>
                   <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-2xl font-semibold text-[#1A1C1E]">
-                      -
+                    <span className="text-xl font-semibold text-[#1A1C1E]">
+                      {(() => {
+                        // Only show spend from actual uploaded CSV data - not from hardcoded portfolio defaults
+                        const spendCsvData = parsedCsvDataStore["spend"];
+                        if (spendCsvData && spendCsvData.rows.length > 0) {
+                          const summaryData = getSummaryData("spend");
+                          return summaryData.totalSpend > 0 ? formatCurrency(summaryData.totalSpend) : '-';
+                        }
+                        // No data uploaded yet - show placeholder
+                        return <span className="text-gray-400">Upload Data</span>;
+                      })()}
                     </span>
                   </div>
                </div>
 
-               <div className="rounded-[32px] bg-white p-6 shadow-sm ring-1 ring-black/[0.03] relative group">
+               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Cost</span>
                   <div className="mt-2">
-                    <span className={`text-2xl font-semibold ${
-                      state.setupData.goals.cost >= 66 ? 'text-emerald-500' :
-                      state.setupData.goals.cost >= 33 ? 'text-amber-500' : 'text-red-500'
+                    <span className={`text-xl font-semibold ${
+                      state.setupData.goals.cost >= 50 ? 'text-emerald-500' :
+                      state.setupData.goals.cost >= 25 ? 'text-amber-500' : 'text-red-500'
                     }`}>
-                      {state.setupData.goals.cost >= 66 ? 'High' :
-                       state.setupData.goals.cost >= 33 ? 'Medium' : 'Low'}
+                      {state.setupData.goals.cost >= 50 ? 'High' :
+                       state.setupData.goals.cost >= 25 ? 'Medium' : 'Low'}
                     </span>
                   </div>
                   <Link
                     href="/setup/goals"
-                    className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
                   >
-                    <Pencil className="h-5 w-5" />
+                    <Pencil className="h-4 w-4" />
                   </Link>
                </div>
 
-               <div className="rounded-[32px] bg-white p-6 shadow-sm ring-1 ring-black/[0.03] relative group">
+               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Risk</span>
                   <div className="mt-2">
-                    <span className={`text-2xl font-semibold ${
-                      state.setupData.goals.risk >= 66 ? 'text-emerald-500' :
-                      state.setupData.goals.risk >= 33 ? 'text-amber-500' : 'text-red-500'
+                    <span className={`text-xl font-semibold ${
+                      state.setupData.goals.risk >= 50 ? 'text-emerald-500' :
+                      state.setupData.goals.risk >= 25 ? 'text-amber-500' : 'text-red-500'
                     }`}>
-                      {state.setupData.goals.risk >= 66 ? 'High' :
-                       state.setupData.goals.risk >= 33 ? 'Medium' : 'Low'}
+                      {state.setupData.goals.risk >= 50 ? 'High' :
+                       state.setupData.goals.risk >= 25 ? 'Medium' : 'Low'}
                     </span>
                   </div>
                   <Link
                     href="/setup/goals"
-                    className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
                   >
-                    <Pencil className="h-5 w-5" />
+                    <Pencil className="h-4 w-4" />
+                  </Link>
+               </div>
+
+               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">ESG</span>
+                  <div className="mt-2">
+                    <span className={`text-xl font-semibold ${
+                      state.setupData.goals.esg >= 50 ? 'text-emerald-500' :
+                      state.setupData.goals.esg >= 25 ? 'text-amber-500' : 'text-red-500'
+                    }`}>
+                      {state.setupData.goals.esg >= 50 ? 'High' :
+                       state.setupData.goals.esg >= 25 ? 'Medium' : 'Low'}
+                    </span>
+                  </div>
+                  <Link
+                    href="/setup/goals"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                  >
+                    <Pencil className="h-4 w-4" />
                   </Link>
                </div>
 
                <button
                   onClick={() => setIsOpportunitiesListOpen(true)}
-                  className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-6 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] text-left"
+                  className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] text-left"
                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Opportunities</span>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="text-2xl font-semibold text-white">
+                    <span className="text-xl font-semibold text-white">
                       {qualifiedCount + potentialCount}
                     </span>
-                    <span className="text-[13px] text-blue-100">available</span>
+                    <span className="text-[12px] text-blue-100">available</span>
                   </div>
-                  <div className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white">
-                    <ArrowRight className="h-5 w-5" />
+                  <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white">
+                    <ArrowRight className="h-4 w-4" />
                   </div>
                </button>
             </div>
@@ -2615,7 +3442,7 @@ export default function ReviewDataPage() {
                                  <td className="py-6 pl-4">
                                     <div className="flex items-center gap-3">
                                        {/* Expand/collapse for spend data or items */}
-                                       {((dataPoint.isSpendData && uploadedFile) || (!dataPoint.isSpendData && dataPoint.items.length > 0)) && (
+                                       {((dataPoint.isSpendData && hasSpendData) || (!dataPoint.isSpendData && dataPoint.items.length > 0)) && (
                                           <button
                                              onClick={(e) => {
                                                 e.stopPropagation();
@@ -2636,13 +3463,13 @@ export default function ReviewDataPage() {
                                              <span className="ml-2 text-gray-400 font-normal">{dataPoint.items.length}</span>
                                           )}
                                        </span>
-                                       {dataPoint.isSpendData && uploadedFile && (
+                                       {dataPoint.isSpendData && hasSpendData && (
                                           <span className="ml-2 text-[13px] text-gray-500">
-                                             ({uploadedFile.name})
+                                             ({spendFileName})
                                           </span>
                                        )}
                                        {/* Show field counts for spend data */}
-                                       {dataPoint.isSpendData && uploadedFile && !isParsingCsv && (
+                                       {dataPoint.isSpendData && hasSpendData && !isParsingCsv && (
                                           <span className="ml-2 text-[11px] font-medium text-gray-400">
                                              {availableFieldsCount}/{DATA_FIELDS.length} fields available
                                           </span>
@@ -2678,7 +3505,7 @@ export default function ReviewDataPage() {
                                  <td className="py-6">
                                     <div className="flex items-center gap-2 text-[14px] text-gray-600 font-medium">
                                        {(() => {
-                                          const hasFile = dataPoint.isSpendData ? !!uploadedFile : dataPoint.items.length > 0;
+                                          const hasFile = dataPoint.isSpendData ? !!hasSpendData : dataPoint.items.length > 0;
                                           const fields = getFieldsForDataPoint(dataPoint.id);
                                           const hasFieldDefs = fields.length > 0;
                                           
@@ -2748,7 +3575,7 @@ export default function ReviewDataPage() {
                                  <td className="py-6 pr-4 text-right">
                                     {dataPoint.isSpendData ? (
                                        <div className="flex items-center justify-end gap-2">
-                                          {uploadedFile && (
+                                          {hasSpendData && (
                                              <button
                                                 onClick={handleRemoveFile}
                                                 className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
@@ -2760,18 +3587,20 @@ export default function ReviewDataPage() {
                                              onClick={() => fileInputRef.current?.click()}
                                              className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-colors hover:text-blue-600"
                                           >
-                                             {uploadedFile ? "Change" : "Upload"}
+                                             {hasSpendData ? "Change" : "Upload"}
                                              <Upload className="h-4 w-4" />
                                           </button>
-                                          {uploadedFile && (
+                                          {hasSpendData && (
                                              <>
-                                                <button
-                                                   onClick={() => openValidationModal("spend", `Spend Data (${categoryName})`)}
-                                                   className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
-                                                >
-                                                   Validate
-                                                   <ArrowRight className="h-4 w-4" />
-                                                </button>
+                                                {uploadedFile && (
+                                                   <button
+                                                      onClick={() => openValidationModal("spend", `Spend Data (${categoryName})`)}
+                                                      className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
+                                                   >
+                                                      Validate
+                                                      <ArrowRight className="h-4 w-4" />
+                                                   </button>
+                                                )}
                                                 {isDataPointFullyValidated("spend") && (
                                                    <button
                                                       onClick={() => openSummaryModal("spend")}
@@ -2829,7 +3658,7 @@ export default function ReviewDataPage() {
                                  </td>
                               </tr>
                               {/* Collapsible sub-items for spend data */}
-                              {dataPoint.isSpendData && uploadedFile && isSpendExpanded && DATA_FIELDS.map((field, sIdx) => {
+                              {dataPoint.isSpendData && hasSpendData && isSpendExpanded && DATA_FIELDS.map((field, sIdx) => {
                                  const status = getFieldStatus(field);
                                  return (
                                     <tr key={sIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
@@ -3168,19 +3997,59 @@ export default function ReviewDataPage() {
                   </p>
                 </div>
               </div>
-              
-              {/* Error Summary */}
+
+              {/* Category Filter Toggle - only show for Spend Data, not for other data points */}
+              {parsedData && validationDataPoint?.id === "spend" && !parsedData.isDocument && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <ListFilter className="h-4 w-4 text-gray-500" />
+                  <div className="flex items-center gap-1 bg-white rounded-lg p-0.5 border border-gray-100">
+                    <button
+                      onClick={() => setCategoryFilterMode("selected")}
+                      className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-all ${
+                        categoryFilterMode === "selected"
+                          ? "bg-indigo-500 text-white shadow-sm"
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      Selected Categories
+                    </button>
+                    <button
+                      onClick={() => setCategoryFilterMode("original")}
+                      className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-all ${
+                        categoryFilterMode === "original"
+                          ? "bg-indigo-500 text-white shadow-sm"
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      Original Data
+                    </button>
+                  </div>
+                  {categoryFilterMode === "selected" && parsedData && (
+                    <span className="text-[11px] text-gray-500">
+                      ({visibleRows.totalFilteredRows || 0} of {parsedData.rows.length} rows)
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Error Summary - uses memoized filteredErrorCounts for performance */}
               <div className="flex items-center gap-4">
-                {cellErrors.length > 0 ? (
+                {filteredErrorCounts.total > 0 ? (
                   <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-red-50 border border-red-100">
                     <AlertTriangle className="h-5 w-5 text-red-500" />
                     <div>
                       <span className="text-[14px] font-semibold text-red-600">
-                        {cellErrors.filter(e => e.severity === "error").length} Errors
+                        {filteredErrorCounts.errors} Errors
                       </span>
-                      {cellErrors.filter(e => e.severity === "warning").length > 0 && (
+                      {filteredErrorCounts.warnings > 0 && (
                         <span className="text-[14px] text-amber-600 ml-2">
-                          · {cellErrors.filter(e => e.severity === "warning").length} Warnings
+                          · {filteredErrorCounts.warnings} Warnings
+                        </span>
+                      )}
+                      {/* Show total errors if in filtered view and there are more in original */}
+                      {categoryFilterMode === "selected" && errorCounts.total > filteredErrorCounts.total && (
+                        <span className="text-[12px] text-gray-500 ml-2">
+                          ({cellErrors.length} total in original)
                         </span>
                       )}
                     </div>
@@ -3199,26 +4068,30 @@ export default function ReviewDataPage() {
           <div className="flex-1 overflow-hidden flex">
             {/* Left Panel - Error List + Required Fields */}
             <div className="w-[320px] border-r border-gray-100 flex flex-col bg-gray-50/50">
-              {/* Required Fields Section */}
+              {/* Required Fields Section - Uses parsedData.headers for real-time matching */}
               {validationDataPoint && getFieldsForDataPoint(validationDataPoint.id).length > 0 && (
                 <div className="p-4 border-b border-gray-100">
                   <h3 className="text-[14px] font-semibold text-gray-900">Required Fields</h3>
                   <div className="mt-3 space-y-2">
                     {getFieldsForDataPoint(validationDataPoint.id).map((field, idx) => {
-                      const status = getDataPointFieldStatus(validationDataPoint.id, field);
+                      // Use parsedData.headers directly if available (most up-to-date)
+                      const columnsToCheck = parsedData?.headers || dataPointColumns[validationDataPoint.id] || [];
+                      const matchedColumn = findMatchingColumn(columnsToCheck, field.requiredColumns);
+                      const isAvailable = !!matchedColumn;
+
                       return (
                         <div key={idx} className="flex items-center gap-2">
-                          {status.available ? (
+                          {isAvailable ? (
                             <Check className="h-3.5 w-3.5 text-emerald-500" />
                           ) : (
                             <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
                           )}
-                          <span className={`text-[12px] ${status.available ? 'text-gray-600' : 'text-amber-600'}`}>
+                          <span className={`text-[12px] ${isAvailable ? 'text-gray-600' : 'text-amber-600'}`}>
                             {field.name}
                           </span>
-                          {status.available && status.matchedColumn && (
+                          {isAvailable && matchedColumn && (
                             <span className="text-[10px] text-gray-400 ml-auto">
-                              {status.matchedColumn}
+                              {matchedColumn}
                             </span>
                           )}
                         </div>
@@ -3238,11 +4111,11 @@ export default function ReviewDataPage() {
                   <div className="flex items-center justify-center py-12">
                     <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
                   </div>
-                ) : cellErrors.length === 0 && parsedData ? (
+                ) : filteredErrorCounts.total === 0 && parsedData ? (
                   <div className="text-center py-12">
                     <CheckCircle2 className="h-12 w-12 text-emerald-400 mx-auto mb-3" />
                     <p className="text-[14px] font-medium text-gray-600">No issues found</p>
-                    <p className="text-[12px] text-gray-400 mt-1">Your data looks good!</p>
+                    <p className="text-[12px] text-gray-400 mt-1">{categoryFilterMode === "selected" ? "Your filtered data looks good!" : "Your data looks good!"}</p>
                   </div>
                 ) : !parsedData ? (
                   <div className="text-center py-12">
@@ -3251,69 +4124,101 @@ export default function ReviewDataPage() {
                     <p className="text-[12px] text-gray-400 mt-1">Close and upload a file first (CSV, Excel, PDF, Word, etc.)</p>
                   </div>
                 ) : (
-                  cellErrors.map((error, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        // For virtual scrolling, first update scrollTop to bring the row into view
-                        if (tableContainerRef.current && parsedData) {
-                          const targetRow = error.row - 1; // Convert to 0-based index
-                          const containerHeight = tableContainerRef.current.clientHeight;
-                          const targetScrollTop = Math.max(0, targetRow * ROW_HEIGHT - (containerHeight / 2) + ROW_HEIGHT);
-                          
-                          // Update state to trigger re-render with correct rows
-                          setScrollTop(targetScrollTop);
-                          
-                          // Also scroll the container
-                          tableContainerRef.current.scrollTo({
-                            top: targetScrollTop,
-                            behavior: 'smooth'
-                          });
-                          
-                          // Wait for render and scroll, then highlight the cell
-                          setTimeout(() => {
-                            const cell = document.getElementById(`cell-${error.row}-${error.columnIndex}`);
-                            if (cell) {
-                              // Horizontal scroll to show the column
-                              cell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                              cell.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
-                              setTimeout(() => {
-                                cell.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
-                              }, 2500);
-                            }
-                          }, 350);
-                        }
-                      }}
-                      className="w-full text-left p-3 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
-                    >
-                      <div className="flex items-start gap-3">
-                        {error.severity === "error" ? (
-                          <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                        ) : (
-                          <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-[13px] font-medium ${error.severity === "error" ? "text-red-600" : "text-amber-600"}`}>
-                            {error.error}
-                          </p>
-                          <p className="text-[11px] text-gray-500 mt-1">
-                            Row {error.row} · Column "{error.column}"
-                          </p>
-                          {error.value && (
-                            <p className="text-[11px] text-gray-400 mt-0.5 truncate">
-                              Value: "{error.value}"
-                            </p>
+                  filteredCellErrors.map((error, idx) => {
+                    // Calculate the row position in the filtered view for scrolling
+                    // error.row is 1-based original row index
+                    // We need to find where this row appears in filteredData.originalIndices
+                    const originalRowIndex = error.row - 1; // Convert to 0-based
+                    let filteredRowIndex = originalRowIndex; // Default to original for scrolling
+                    let filteredRowNumber = error.row; // Row number to display in error list
+
+                    if (categoryFilterMode === "selected") {
+                      // Find the position of this row in the filtered data
+                      const filteredPosition = filteredData.originalIndices.indexOf(originalRowIndex);
+                      if (filteredPosition !== -1) {
+                        filteredRowIndex = filteredPosition; // Position in filtered view for scrolling
+                        filteredRowNumber = filteredPosition + 1; // 1-based for display
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          // For virtual scrolling, first update scrollTop to bring the row into view
+                          if (tableContainerRef.current && parsedData) {
+                            const containerHeight = tableContainerRef.current.clientHeight;
+                            // Use filteredRowIndex for scroll position (position in current view)
+                            const targetScrollTop = Math.max(0, filteredRowIndex * ROW_HEIGHT - (containerHeight / 2) + ROW_HEIGHT);
+
+                            // Update state to trigger re-render with correct rows
+                            setScrollTop(targetScrollTop);
+
+                            // Also scroll the container
+                            tableContainerRef.current.scrollTo({
+                              top: targetScrollTop,
+                              behavior: 'smooth'
+                            });
+
+                            // Wait for render and scroll, then highlight the cell
+                            // Cell ID always uses ORIGINAL row number (error.row) because that's how the table renders
+                            setTimeout(() => {
+                              const cellId = `cell-${error.row}-${error.columnIndex}`;
+                              const cell = document.getElementById(cellId);
+                              if (cell) {
+                                // Only scroll horizontally to show the column - vertical position is already set
+                                const cellRect = cell.getBoundingClientRect();
+                                const container = tableContainerRef.current;
+                                if (container) {
+                                  const containerRect = container.getBoundingClientRect();
+                                  // Check if cell is outside horizontal view
+                                  if (cellRect.left < containerRect.left || cellRect.right > containerRect.right) {
+                                    cell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                                  }
+                                }
+                                cell.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
+                                setTimeout(() => {
+                                  cell.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
+                                }, 2500);
+                              }
+                            }, 350);
+                          }
+                        }}
+                        className="w-full text-left p-3 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
+                      >
+                        <div className="flex items-start gap-3">
+                          {error.severity === "error" ? (
+                            <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
+                          ) : (
+                            <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
                           )}
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-[13px] font-medium ${error.severity === "error" ? "text-red-600" : "text-amber-600"}`}>
+                              {error.error}
+                            </p>
+                            <p className="text-[11px] text-gray-500 mt-1">
+                              {categoryFilterMode === "selected" ? (
+                                <>Row {filteredRowNumber} <span className="text-gray-400">(orig: {error.row})</span></>
+                              ) : (
+                                <>Row {error.row}</>
+                              )} · Column "{error.column}"
+                            </p>
+                            {error.value && (
+                              <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+                                Value: "{error.value}"
+                              </p>
+                            )}
+                          </div>
+                          <ChevronRight className="h-4 w-4 text-gray-300 flex-shrink-0" />
                         </div>
-                        <ChevronRight className="h-4 w-4 text-gray-300 flex-shrink-0" />
-                      </div>
-                    </button>
-                  ))
+                      </button>
+                    );
+                  })
                 )}
               </div>
             </div>
 
-            {/* Right Panel - Data Table with Virtual Scrolling */}
+            {/* Right Panel - Data Table with Virtual Scrolling OR Document Editor */}
             <div className="flex-1 min-w-0 overflow-hidden flex flex-col p-4">
               {isValidating && parseProgress < 100 ? (
                 <div className="flex items-center justify-center h-full">
@@ -3323,21 +4228,161 @@ export default function ReviewDataPage() {
                       {parseProgress > 0 ? `Processing... ${parseProgress}%` : 'Loading file...'}
                     </p>
                     <div className="w-48 h-2 bg-gray-100 rounded-full mt-3 overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-blue-500 rounded-full transition-all duration-300"
                         style={{ width: `${parseProgress}%` }}
                       />
                     </div>
                   </div>
                 </div>
+              ) : parsedData?.isDocument ? (
+                /* Document View with Extracted Fields Table + Rich Content Editor */
+                <div className="border border-gray-200 rounded-xl overflow-hidden flex-1 flex flex-col bg-white">
+                  {/* Document Type Badge & Toolbar */}
+                  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100 bg-gray-50">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-blue-500" />
+                      <span className="text-[13px] font-medium text-gray-700">
+                        {parsedData.headers.length > 1 ? 'Extracted Fields' : 'Document Content'}
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-indigo-100 text-indigo-700 uppercase">
+                        {(parsedData as ParsedData & { documentType?: string }).documentType || 'Document'}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-gray-400">
+                      {parsedData.headers.length} fields extracted
+                    </span>
+                  </div>
+
+                  {/* Extracted Fields Table - if we have more than just "Content" */}
+                  {parsedData.headers.length > 1 || (parsedData.headers.length === 1 && parsedData.headers[0] !== 'Content') ? (
+                    <div className="overflow-auto" style={{ maxHeight: '50%', minHeight: 200 }}>
+                      <table className="w-full text-[13px] border-collapse">
+                        <thead className="bg-gray-50 sticky top-0 z-10">
+                          <tr>
+                            <th className="px-4 py-2.5 text-left font-semibold text-gray-600 border-b border-gray-200 w-[200px]">
+                              Field
+                            </th>
+                            <th className="px-4 py-2.5 text-left font-semibold text-gray-600 border-b border-gray-200">
+                              Value
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {parsedData.headers.map((header, idx) => {
+                            const value = parsedData.rows[0]?.[idx] || '';
+                            const isEditing = editingCell?.row === 0 && editingCell?.col === idx;
+
+                            return (
+                              <tr key={idx} className="hover:bg-blue-50/30 border-b border-gray-100">
+                                <td className="px-4 py-2.5 font-medium text-gray-700 bg-gray-50/50">
+                                  {header}
+                                </td>
+                                <td className="px-4 py-2.5">
+                                  {isEditing ? (
+                                    <div className="flex items-center gap-1">
+                                      <input
+                                        type="text"
+                                        value={editValue}
+                                        onChange={(e) => setEditValue(e.target.value)}
+                                        onKeyDown={(e) => {
+                                          if (e.key === 'Enter') saveEditedCell();
+                                          if (e.key === 'Escape') cancelEdit();
+                                        }}
+                                        className="flex-1 px-2 py-1 text-[13px] border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        autoFocus
+                                      />
+                                      <button
+                                        onClick={saveEditedCell}
+                                        className="p-1 text-emerald-600 hover:bg-emerald-50 rounded"
+                                      >
+                                        <Check className="h-3.5 w-3.5" />
+                                      </button>
+                                      <button
+                                        onClick={cancelEdit}
+                                        className="p-1 text-gray-400 hover:bg-gray-100 rounded"
+                                      >
+                                        <X className="h-3.5 w-3.5" />
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className="flex items-center gap-2 group cursor-pointer min-h-[24px]"
+                                      onClick={() => startEditingCell(0, idx, value)}
+                                    >
+                                      <span className="flex-1 text-gray-700">
+                                        {value || <span className="text-gray-300 italic">Not detected</span>}
+                                      </span>
+                                      <Pencil className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 flex-shrink-0" />
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : null}
+
+                  {/* Separator if we have both table and content */}
+                  {parsedData.headers.length > 1 && parsedData.htmlContent && (
+                    <div className="px-4 py-2 border-t border-b border-gray-100 bg-gray-50 flex items-center gap-2">
+                      <FileText className="h-3.5 w-3.5 text-gray-400" />
+                      <span className="text-[12px] font-medium text-gray-500">Original Document Content</span>
+                    </div>
+                  )}
+
+                  {/* Editable Document Content (collapsible if we have extracted fields) */}
+                  <div
+                    ref={documentEditorRef}
+                    className={`flex-1 overflow-auto p-6 ${parsedData.headers.length > 1 ? 'border-t border-gray-100' : ''}`}
+                    style={{ minHeight: parsedData.headers.length > 1 ? 200 : 400 }}
+                  >
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="prose prose-sm max-w-none focus:outline-none min-h-full document-editor"
+                      style={{
+                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        fontSize: '14px',
+                        lineHeight: '1.7',
+                        color: '#374151',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: parsedData.htmlContent || parsedData.rawText || '' }}
+                      onInput={(e) => {
+                        // Update rawText when content changes
+                        const target = e.target as HTMLDivElement;
+                        setParsedData(prev => prev ? {
+                          ...prev,
+                          rawText: target.innerText,
+                          htmlContent: target.innerHTML
+                        } : null);
+                      }}
+                    />
+                  </div>
+
+                  {/* Document Stats */}
+                  <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
+                    <span className="text-[11px] text-gray-400">
+                      {(parsedData.rawText?.split(/\s+/).filter(Boolean).length || 0).toLocaleString()} words
+                      <span className="mx-2">·</span>
+                      {(parsedData.rawText?.length || 0).toLocaleString()} characters
+                    </span>
+                    <span className="text-[11px] text-emerald-600 flex items-center gap-1">
+                      <Check className="h-3 w-3" />
+                      Auto-saved
+                    </span>
+                  </div>
+                </div>
               ) : parsedData ? (
-                <div 
+                <div
                   ref={tableContainerRef}
                   className="border border-gray-200 rounded-xl overflow-auto flex-1"
                   onScroll={handleTableScroll}
                 >
-                  {/* Virtual scrolling container */}
-                  <div style={{ height: parsedData.rows.length * ROW_HEIGHT + 48, position: 'relative' }}>
+                  {/* Virtual scrolling container - use filtered row count */}
+                  <div style={{ height: (visibleRows.totalFilteredRows || parsedData.rows.length) * ROW_HEIGHT + 48, position: 'relative' }}>
                     <table className="text-left text-[13px] border-collapse" style={{ minWidth: 'max-content' }}>
                       <thead className="bg-gray-50 sticky top-0 z-10">
                         <tr style={{ height: 48 }}>
@@ -3350,7 +4395,7 @@ export default function ReviewDataPage() {
                               className="px-4 py-3 font-semibold text-gray-700 border-b border-r border-gray-200 bg-gray-50 whitespace-nowrap min-w-[120px]"
                             >
                               {header}
-                              {cellErrors.some(e => e.row === 0 && e.columnIndex === idx) && (
+                              {cellErrorMap.has(`0-${idx}`) && (
                                 <AlertTriangle className="inline h-3 w-3 text-amber-500 ml-1" />
                               )}
                             </th>
@@ -3359,28 +4404,31 @@ export default function ReviewDataPage() {
                       </thead>
                       <tbody>
                         {/* Spacer for rows above viewport */}
-                        {getVisibleRows().startIndex > 0 && (
-                          <tr style={{ height: getVisibleRows().startIndex * ROW_HEIGHT }}>
+                        {visibleRows.startIndex > 0 && (
+                          <tr style={{ height: visibleRows.startIndex * ROW_HEIGHT }}>
                             <td colSpan={parsedData.headers.length + 1} />
                           </tr>
                         )}
-                        
+
                         {/* Visible rows only */}
-                        {getVisibleRows().rows.map((row, idx) => {
-                          const actualRowIdx = getVisibleRows().startIndex + idx;
+                        {visibleRows.rows.map((row, idx) => {
+                          // Use original row index for error checking and cell IDs
+                          const originalRowIdx = visibleRows.originalIndices?.[idx] ?? (visibleRows.startIndex + idx);
+                          // Display row number (1-based, using original index)
+                          const displayRowNum = originalRowIdx + 1;
                           return (
-                            <tr key={actualRowIdx} className="hover:bg-blue-50/30" style={{ height: ROW_HEIGHT }}>
+                            <tr key={`row-${originalRowIdx}`} className="hover:bg-blue-50/30" style={{ height: ROW_HEIGHT }}>
                               <td className="px-3 py-2 text-gray-400 font-medium border-r border-b border-gray-100 bg-gray-50 text-center sticky left-0 z-10">
-                                {actualRowIdx + 1}
+                                {displayRowNum}
                               </td>
                               {row.map((cell, colIdx) => {
-                                const error = getCellError(actualRowIdx, colIdx);
-                                const isEditing = editingCell?.row === actualRowIdx && editingCell?.col === colIdx;
-                                
+                                const error = getCellError(originalRowIdx, colIdx);
+                                const isEditing = editingCell?.row === originalRowIdx && editingCell?.col === colIdx;
+
                                 return (
                                   <td
                                     key={colIdx}
-                                    id={`cell-${actualRowIdx + 1}-${colIdx}`}
+                                    id={`cell-${displayRowNum}-${colIdx}`}
                                     className={`px-4 py-2 border-r border-b border-gray-100 whitespace-nowrap max-w-[300px] truncate ${
                                       error
                                         ? error.severity === "error"
@@ -3418,7 +4466,7 @@ export default function ReviewDataPage() {
                                     ) : (
                                       <div
                                         className="flex items-center gap-2 group cursor-pointer"
-                                        onClick={() => startEditingCell(actualRowIdx, colIdx, cell)}
+                                        onClick={() => startEditingCell(originalRowIdx, colIdx, cell)}
                                       >
                                         <span className={`flex-1 truncate ${error ? (error.severity === "error" ? "text-red-700" : "text-amber-700") : "text-gray-700"}`}>
                                           {cell || <span className="text-gray-300 italic">empty</span>}
@@ -3435,13 +4483,16 @@ export default function ReviewDataPage() {
                             </tr>
                           );
                         })}
-                        
+
                         {/* Spacer for rows below viewport */}
-                        {getVisibleRows().endIndex < parsedData.rows.length && (
-                          <tr style={{ height: (parsedData.rows.length - getVisibleRows().endIndex) * ROW_HEIGHT }}>
-                            <td colSpan={parsedData.headers.length + 1} />
-                          </tr>
-                        )}
+                        {(() => {
+                          const totalRows = visibleRows.totalFilteredRows || parsedData.rows.length;
+                          return visibleRows.endIndex < totalRows && (
+                            <tr style={{ height: (totalRows - visibleRows.endIndex) * ROW_HEIGHT }}>
+                              <td colSpan={parsedData.headers.length + 1} />
+                            </tr>
+                          );
+                        })()}
                       </tbody>
                     </table>
                   </div>
@@ -3463,24 +4514,45 @@ export default function ReviewDataPage() {
           <div className="p-3 border-t border-gray-100 flex items-center justify-between bg-white flex-shrink-0">
             <div className="text-[13px] text-gray-500 flex items-center gap-4">
               {parsedData && (
-                <>
-                  <div>
-                    <span className="font-semibold text-gray-700">{parsedData.totalRows.toLocaleString()}</span> total rows
-                    <span className="mx-2">·</span>
-                    <span className="font-semibold text-gray-700">{parsedData.headers.length}</span> columns
+                parsedData.isDocument ? (
+                  /* Document stats */
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center gap-1.5">
+                      <FileText className="h-4 w-4 text-blue-500" />
+                      <span className="font-medium text-gray-700">Document</span>
+                    </span>
+                    <span>
+                      <span className="font-semibold text-gray-700">
+                        {(parsedData.rawText?.split(/\s+/).filter(Boolean).length || 0).toLocaleString()}
+                      </span> words
+                    </span>
+                    <span>
+                      <span className="font-semibold text-gray-700">
+                        {(parsedData.rawText?.length || 0).toLocaleString()}
+                      </span> characters
+                    </span>
                   </div>
-                  {parsedData.totalRows > parsedData.rows.length && (
-                    <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded-lg text-[11px] font-medium">
-                      Showing first {parsedData.rows.length.toLocaleString()} rows
-                    </span>
-                  )}
-                  {isValidating && (
-                    <span className="flex items-center gap-1.5 text-gray-400">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      Validating...
-                    </span>
-                  )}
-                </>
+                ) : (
+                  /* Table stats */
+                  <>
+                    <div>
+                      <span className="font-semibold text-gray-700">{parsedData.totalRows.toLocaleString()}</span> total rows
+                      <span className="mx-2">·</span>
+                      <span className="font-semibold text-gray-700">{parsedData.headers.length}</span> columns
+                    </div>
+                    {parsedData.totalRows > parsedData.rows.length && (
+                      <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded-lg text-[11px] font-medium">
+                        Showing first {parsedData.rows.length.toLocaleString()} rows
+                      </span>
+                    )}
+                    {isValidating && (
+                      <span className="flex items-center gap-1.5 text-gray-400">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        Validating...
+                      </span>
+                    )}
+                  </>
+                )
               )}
             </div>
             <div className="flex items-center gap-3">
@@ -3510,7 +4582,7 @@ export default function ReviewDataPage() {
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Validating...
                   </>
-                ) : cellErrors.filter(e => e.severity === "error").length > 0 ? (
+                ) : (categoryFilterMode === "selected" ? filteredErrorCounts.errors : errorCounts.errors) > 0 ? (
                   <>
                     <AlertCircle className="h-4 w-4 mr-2" />
                     Fix Errors First
@@ -3518,7 +4590,9 @@ export default function ReviewDataPage() {
                 ) : (
                   <>
                     <Check className="h-4 w-4 mr-2" />
-                    Confirm & Save
+                    {categoryFilterMode === "selected"
+                      ? `Save Selected (${visibleRows.totalFilteredRows} rows)`
+                      : "Confirm & Save"}
                   </>
                 )}
               </Button>
@@ -3667,7 +4741,7 @@ export default function ReviewDataPage() {
 
       {/* Summary Modal */}
       <Dialog open={isSummaryModalOpen} onOpenChange={setIsSummaryModalOpen}>
-        <DialogContent className="sm:max-w-[900px] max-h-[90vh] rounded-[32px] p-0 overflow-hidden">
+        <DialogContent className="!max-w-[100vw] !w-[100vw] !h-[100vh] !rounded-none p-0 overflow-hidden flex flex-col border-0">
           {summaryDataPointId && (() => {
             const summaryData = getSummaryData(summaryDataPointId);
             const dataPointName = summaryDataPointId === "spend" ? "Spend Data" :
@@ -3678,54 +4752,61 @@ export default function ReviewDataPage() {
             return (
               <>
                 {/* Header */}
-                <div className="p-6 pb-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-white">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-                        {summaryDataPointId === "spend" && <DollarSign className="h-6 w-6 text-emerald-600" />}
-                        {summaryDataPointId === "supply-master" && <Users className="h-6 w-6 text-emerald-600" />}
-                        {summaryDataPointId === "contracts" && <FileCheck className="h-6 w-6 text-emerald-600" />}
-                        {summaryDataPointId === "playbook" && <BookOpen className="h-6 w-6 text-emerald-600" />}
+                <div className="p-6 pb-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 via-teal-50 to-white flex-shrink-0">
+                  <div className="flex items-center justify-between max-w-7xl mx-auto">
+                    <div className="flex items-center gap-5">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20">
+                        {summaryDataPointId === "spend" && <DollarSign className="h-7 w-7 text-white" />}
+                        {summaryDataPointId === "supply-master" && <Users className="h-7 w-7 text-white" />}
+                        {summaryDataPointId === "contracts" && <FileCheck className="h-7 w-7 text-white" />}
+                        {summaryDataPointId === "playbook" && <BookOpen className="h-7 w-7 text-white" />}
                       </div>
                       <div>
-                        <DialogTitle className="text-xl font-semibold text-[#1A1C1E]">
+                        <DialogTitle className="text-2xl font-semibold text-[#1A1C1E]">
                           {dataPointName} Summary
                         </DialogTitle>
-                        <p className="text-[13px] text-gray-500 mt-0.5">
+                        <p className="text-[14px] text-gray-500 mt-1">
                           {state.setupData.categoryName || "Category"} · Jun '24 - May '25
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       {summaryData.rowCount > 0 && (
-                        <span className="flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2">
-                          <Database className="h-4 w-4 text-blue-600" />
-                          <span className="text-[13px] font-semibold text-blue-700">{summaryData.rowCount} rows</span>
+                        <span className="flex items-center gap-2 rounded-xl bg-blue-100 px-5 py-2.5">
+                          <Database className="h-5 w-5 text-blue-600" />
+                          <span className="text-[14px] font-semibold text-blue-700">{summaryData.rowCount.toLocaleString()} rows</span>
                         </span>
                       )}
-                      <span className="flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        <span className="text-[13px] font-semibold text-emerald-700">Validated</span>
+                      <span className="flex items-center gap-2 rounded-xl bg-emerald-100 px-5 py-2.5">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                        <span className="text-[14px] font-semibold text-emerald-700">Validated</span>
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+                <div className="flex-1 p-8 overflow-y-auto bg-gray-50/30">
+                  <div className="max-w-7xl mx-auto">
                   {/* Spend Data Summary */}
                   {summaryDataPointId === "spend" && (
                     <div className="space-y-6">
                       {/* Total Spend Card */}
-                      <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+                      <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-gray-500">Total Spend</span>
-                            <p className="text-3xl font-bold text-[#1A1C1E] mt-1">{formatCurrency(summaryData.totalSpend)}</p>
+                            <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Total Spend</span>
+                            <p className="text-4xl font-bold text-[#1A1C1E] mt-2">{formatCurrency(summaryData.totalSpend)}</p>
                           </div>
-                          <div className="text-right">
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-gray-500">Period</span>
-                            <p className="text-lg font-semibold text-gray-700 mt-1">Jun '24 - May '25</p>
+                          <div className="flex items-center gap-8">
+                            <div className="text-right">
+                              <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Period</span>
+                              <p className="text-xl font-semibold text-gray-700 mt-2">Jun '24 - May '25</p>
+                            </div>
+                            <div className="text-right border-l border-blue-200 pl-8">
+                              <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Last Updated</span>
+                              <p className="text-xl font-semibold text-gray-700 mt-2">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3740,16 +4821,16 @@ export default function ReviewDataPage() {
                             </div>
                             <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Location</h4>
                           </div>
-                          <div className="space-y-4">
+                          <div className="space-y-3">
                             {summaryData.locations.map((loc, idx) => (
-                              <div key={idx} className="flex items-center justify-between">
+                              <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-2 h-2 rounded-full bg-blue-500" style={{ opacity: 1 - (idx * 0.15) }} />
-                                  <span className="text-[14px] text-gray-700">{loc.name}</span>
+                                  <div className="w-3 h-3 rounded-full bg-blue-500" style={{ opacity: 1 - (idx * 0.12) }} />
+                                  <span className="text-[15px] font-medium text-gray-800">{loc.name}</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[14px] font-semibold text-gray-900">{formatCurrency(loc.spend)}</span>
-                                  <span className="text-[12px] text-gray-400 w-10 text-right">{loc.percentage}%</span>
+                                <div className="flex items-center gap-4">
+                                  <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(loc.spend)}</span>
+                                  <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{loc.percentage}%</span>
                                 </div>
                               </div>
                             ))}
@@ -3764,16 +4845,16 @@ export default function ReviewDataPage() {
                             </div>
                             <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Supplier</h4>
                           </div>
-                          <div className="space-y-4">
+                          <div className="space-y-3">
                             {summaryData.suppliers.map((supplier, idx) => (
-                              <div key={idx} className="flex items-center justify-between">
+                              <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-2 h-2 rounded-full bg-purple-500" style={{ opacity: 1 - (idx * 0.15) }} />
-                                  <span className="text-[14px] text-gray-700">{supplier.name}</span>
+                                  <div className="w-3 h-3 rounded-full bg-purple-500" style={{ opacity: 1 - (idx * 0.12) }} />
+                                  <span className="text-[15px] font-medium text-gray-800">{supplier.name}</span>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[14px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
-                                  <span className="text-[12px] text-gray-400 w-10 text-right">{supplier.percentage}%</span>
+                                <div className="flex items-center gap-4">
+                                  <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
+                                  <span className="text-[15px] font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
                                 </div>
                               </div>
                             ))}
@@ -3816,22 +4897,22 @@ export default function ReviewDataPage() {
                         </div>
                         <div className="space-y-3">
                           {summaryData.suppliers.map((supplier, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                              <div className="flex items-center gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[12px] font-bold text-gray-500">
+                            <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                              <div className="flex items-center gap-4">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[14px] font-bold text-gray-600 shadow-sm">
                                   {idx + 1}
                                 </div>
-                                <span className="text-[14px] font-medium text-gray-900">{supplier.name}</span>
+                                <span className="text-[15px] font-medium text-gray-900">{supplier.name}</span>
                               </div>
-                              <div className="flex items-center gap-4">
-                                <span className="text-[14px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
-                                <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                              <div className="flex items-center gap-5">
+                                <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
+                                <div className="w-32 h-2.5 bg-gray-200 rounded-full overflow-hidden">
                                   <div
                                     className="h-full bg-blue-500 rounded-full"
                                     style={{ width: `${supplier.percentage}%` }}
                                   />
                                 </div>
-                                <span className="text-[12px] text-gray-500 w-10 text-right">{supplier.percentage}%</span>
+                                <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
                               </div>
                             </div>
                           ))}
@@ -4007,18 +5088,19 @@ export default function ReviewDataPage() {
                       </div>
                     </div>
                   )}
+                  </div>
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-gray-100 flex items-center justify-between bg-white">
-                  <p className="text-[13px] text-gray-500">
+                <div className="p-4 border-t border-gray-100 flex items-center justify-between bg-white flex-shrink-0">
+                  <p className="text-[14px] text-gray-500">
                     Data validated and ready for analysis
                   </p>
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
                       onClick={() => setIsSummaryModalOpen(false)}
-                      className="h-10 px-5 rounded-xl"
+                      className="h-11 px-6 rounded-xl"
                     >
                       Close
                     </Button>
@@ -4027,7 +5109,7 @@ export default function ReviewDataPage() {
                         setIsSummaryModalOpen(false);
                         handleContinue();
                       }}
-                      className="h-10 px-6 rounded-xl bg-[#1A1C1E] text-white hover:bg-black"
+                      className="h-11 px-8 rounded-xl bg-[#1A1C1E] text-white hover:bg-black"
                     >
                       Run Analysis
                       <ArrowRight className="ml-2 h-4 w-4" />

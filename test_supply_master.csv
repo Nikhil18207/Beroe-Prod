@@ -1,9 +1,0 @@
-supplier_id,supplier_name,contact_person,email,phone,country,region,city,category,status,annual_spend,contract_count,risk_rating
-SUP001,Asia Pacific Grains,John Chen,john.chen@apgrains.com,+1-555-0101,United States,North America,Chicago,Edible Oils,Active,122371,3,Low
-SUP002,Pacific Rim Cereals,Sarah Wong,sarah.wong@prcereals.com,+1-555-0102,Canada,North America,Vancouver,Edible Oils,Active,126696,4,Low
-SUP003,EuroGrain Trading,Hans Mueller,hans.mueller@eurograin.de,+49-555-0103,Germany,Europe,Hamburg,Edible Oils,Active,69140,2,Medium
-SUP004,Orient Food Supply,Wei Zhang,wei.zhang@orientfood.cn,+86-555-0104,China,Asia Pacific,Shanghai,Edible Oils,Active,85950,3,Medium
-SUP005,Brazilian Grain Consortium,Carlos Silva,carlos.silva@bgc.br,+55-555-0105,Brazil,South America,Sao Paulo,Edible Oils,Active,45080,2,High
-SUP006,Nordic Cereals Ltd,Erik Larsson,erik.larsson@nordiccereals.se,+46-555-0106,Sweden,Europe,Stockholm,Edible Oils,Active,26816,1,Low
-SUP007,Mediterranean Oils Co,Maria Rossi,maria.rossi@medoils.it,+39-555-0107,Italy,Europe,Milan,Edible Oils,Inactive,0,0,Low
-SUP008,African Grains Ltd,Kwame Asante,kwame.asante@africangrains.gh,+233-555-0108,Ghana,Africa,Accra,Edible Oils,Pending,0,0,High

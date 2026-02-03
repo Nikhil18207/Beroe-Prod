@@ -46,13 +46,13 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o"
     openai_embedding_model: str = "text-embedding-3-small"
 
-    # Local LLM
-    local_llm_enabled: bool = False
-    local_llm_model: str = "mistral"
+    # Local LLM (Ollama + Qwen 2.5)
+    local_llm_enabled: bool = True
+    local_llm_model: str = "qwen2.5:7b"
     local_llm_base_url: str = "http://localhost:11434"
 
-    # LLM Provider
-    llm_provider: Literal["openai", "local", "hybrid"] = "hybrid"
+    # LLM Provider: "local" for Ollama only, "openai" for OpenAI only, "hybrid" for both
+    llm_provider: Literal["openai", "local", "hybrid"] = "local"
 
     # File Upload
     max_upload_size_mb: int = 50
@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     allowed_extensions: str = ".csv,.xlsx,.xls,.pdf,.docx"
 
     # CORS
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3004"]
+    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3004", "http://localhost:3014"]
 
     # Logging
     log_level: str = "INFO"

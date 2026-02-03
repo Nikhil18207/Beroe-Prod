@@ -14,32 +14,41 @@ import {
   CheckCircle2,
   ArrowUpRight,
   Users,
-  Send
+  Send,
+  X
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useApp } from "@/context/AppContext";
+import { useApp, type ActivityItem } from "@/context/AppContext";
+import { AnimatePresence } from "framer-motion";
 
-// Recent conversations data
-const recentConversations = [
+// Helper function to format relative time
+const formatRelativeTime = (timestamp: number): string => {
+  const now = Date.now();
+  const diff = now - timestamp;
+
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+
+  if (seconds < 60) return "JUST NOW";
+  if (minutes < 60) return `${minutes} MIN${minutes > 1 ? 'S' : ''} AGO`;
+  if (hours < 24) return `${hours} HOUR${hours > 1 ? 'S' : ''} AGO`;
+  if (days < 7) return `${days} DAY${days > 1 ? 'S' : ''} AGO`;
+  if (weeks < 4) return `${weeks} WEEK${weeks > 1 ? 'S' : ''} AGO`;
+  return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+};
+
+// Fallback conversations when no activity exists
+const fallbackConversations = [
   {
-    id: "1",
-    title: "Freight Consolidation Savings in Asia Ro...",
-    description: "Max identified fragmented shipments between...",
-    time: "2 HOURS AGO"
-  },
-  {
-    id: "2",
-    title: "Expiring Supplier ESG Certification",
-    description: "One of your tier-1 suppliers, AgroPure Ltd., has a...",
-    time: "2 DAYS AGO"
-  },
-  {
-    id: "3",
-    title: "Contract Performance Drift – Packaging...",
-    description: "Max flagged declining performance trends in a k...",
-    time: "LAST WEEK"
+    id: "fallback-1",
+    title: "Get started with your analysis",
+    description: "Upload your spend data and run an analysis to see savings opportunities.",
+    time: "START NOW"
   }
 ];
 
@@ -47,8 +56,103 @@ export default function DashboardPage() {
   const { state } = useApp();
   const router = useRouter();
   const [chatInput, setChatInput] = useState("");
+  const [selectedActivityGroup, setSelectedActivityGroup] = useState<string | null>(null);
 
   const userName = state.user?.name || "User";
+
+  // Group activities by analysis session (each "analysis" type activity starts a new group)
+  // Only show the most recent activity of each type (deduplicate)
+  const groupedActivities = React.useMemo(() => {
+    const groups: { main: ActivityItem; related: ActivityItem[] }[] = [];
+    let currentGroup: { main: ActivityItem; related: ActivityItem[] } | null = null;
+
+    // Sort by timestamp descending (newest first)
+    const sortedActivities = [...state.activityHistory].sort((a, b) => b.timestamp - a.timestamp);
+
+    // Track seen activity titles to deduplicate (only keep most recent of each)
+    const seenTitles = new Set<string>();
+
+    for (const activity of sortedActivities) {
+      // Skip if we've already seen this exact title (duplicate)
+      if (seenTitles.has(activity.title)) {
+        continue;
+      }
+      seenTitles.add(activity.title);
+
+      if (activity.type === "analysis") {
+        // Start a new group with this analysis as the main card
+        if (currentGroup) {
+          groups.push(currentGroup);
+        }
+        currentGroup = { main: activity, related: [] };
+      } else if (currentGroup) {
+        // Add to current group's related activities
+        currentGroup.related.push(activity);
+      } else {
+        // No analysis yet, create a standalone group
+        currentGroup = { main: activity, related: [] };
+      }
+    }
+
+    // Push the last group
+    if (currentGroup) {
+      groups.push(currentGroup);
+    }
+
+    return groups;
+  }, [state.activityHistory]);
+
+  // Get up to 3 groups for display (show more in "View all" page)
+  const displayedGroups = groupedActivities.slice(0, 3);
+
+  // Helper to get activity icon
+  const getActivityIcon = (type: ActivityItem["type"], isSmall = false) => {
+    const size = isSmall ? "h-4 w-4" : "h-6 w-6";
+    const colorClass = isSmall ? "" : "group-hover:text-emerald-300 transition-colors duration-300";
+
+    switch (type) {
+      case "analysis":
+        return <Activity className={`${size} text-emerald-400 ${colorClass}`} />;
+      case "upload":
+        return (
+          <svg className={`${size} text-purple-400 ${isSmall ? "" : "group-hover:text-purple-300 transition-colors duration-300"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17,8 12,3 7,8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+        );
+      case "goals":
+        return (
+          <svg className={`${size} text-amber-400 ${isSmall ? "" : "group-hover:text-amber-300 transition-colors duration-300"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+        );
+      default:
+        return (
+          <svg className={`${size} text-blue-400 ${isSmall ? "" : "group-hover:text-blue-300 transition-colors duration-300"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+        );
+    }
+  };
+
+  // Helper to get icon container classes
+  const getIconContainerClasses = (type: ActivityItem["type"]) => {
+    switch (type) {
+      case "analysis":
+        return "bg-gradient-to-br from-emerald-500/20 to-blue-500/20 border-emerald-400/30 group-hover:shadow-emerald-500/30";
+      case "upload":
+        return "bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30 group-hover:shadow-purple-500/30";
+      case "goals":
+        return "bg-gradient-to-br from-amber-500/20 to-orange-500/20 border-amber-400/30 group-hover:shadow-amber-500/30";
+      default:
+        return "bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30 group-hover:shadow-blue-500/30";
+    }
+  };
 
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -495,57 +599,190 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Recent Conversations Section */}
-            <div>
+            {/* Recent Activity Section */}
+            <div className="relative">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Conversations</h2>
-                <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                  View all
-                  <ArrowRight className="h-4 w-4 rotate-[-45deg]" />
-                </button>
+                <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+                {groupedActivities.length > 3 && (
+                  <Link
+                    href="/activity"
+                    className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    View all
+                    <ArrowRight className="h-4 w-4 rotate-[-45deg]" />
+                  </Link>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recentConversations.map((conversation, index) => (
-                  <motion.div
-                    key={conversation.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{
-                      scale: 1.02,
-                      y: -8,
-                      transition: { type: "spring", stiffness: 300, damping: 20 }
-                    }}
-                    className="group rounded-3xl glass-card p-6 ring-1 ring-white/20 hover:shadow-2xl hover:shadow-blue-500/10 hover:ring-white/40 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/30"
-                  >
-                    <div className="flex items-center justify-between mb-5">
-                      {/* Enhanced Layers Icon */}
-                      <motion.div
-                        whileHover={{ rotate: 15, scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-blue-400/30 group-hover:shadow-glow group-hover:shadow-blue-500/30"
-                      >
-                        <svg className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                          <path d="M2 17l10 5 10-5" />
-                          <path d="M2 12l10 5 10-5" />
-                        </svg>
-                      </motion.div>
-                      <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
-                        <Clock className="h-3 w-3" />
-                        {conversation.time}
+              {/* Grid of bento cards - each group gets a card */}
+              {displayedGroups.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {displayedGroups.map((group, index) => (
+                    <motion.div
+                      key={group.main.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      whileHover={{
+                        scale: 1.02,
+                        y: -8,
+                        transition: { type: "spring", stiffness: 300, damping: 20 }
+                      }}
+                      onClick={() => group.related.length > 0 && setSelectedActivityGroup(group.main.id)}
+                      className="group rounded-3xl glass-card p-6 ring-1 ring-white/20 hover:shadow-2xl hover:shadow-blue-500/10 hover:ring-white/40 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/30"
+                    >
+                      <div className="flex items-center justify-between mb-5">
+                        <motion.div
+                          whileHover={{ rotate: 15, scale: 1.1 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                          className={`flex h-12 w-12 items-center justify-center rounded-2xl backdrop-blur-sm border group-hover:shadow-glow ${getIconContainerClasses(group.main.type)}`}
+                        >
+                          {getActivityIcon(group.main.type)}
+                        </motion.div>
+                        <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
+                          <Clock className="h-3 w-3" />
+                          {formatRelativeTime(group.main.timestamp)}
+                        </div>
                       </div>
+                      <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-1">
+                        {group.main.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 line-clamp-2">
+                        {group.main.description}
+                      </p>
+                      {/* Indicator for related activities */}
+                      {group.related.length > 0 && (
+                        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200/30">
+                          <div className="flex -space-x-1.5">
+                            {group.related.slice(0, 3).map((activity, idx) => (
+                              <div
+                                key={activity.id}
+                                className={`h-5 w-5 rounded-full border-2 border-white flex items-center justify-center ${
+                                  activity.type === "upload" ? "bg-purple-100" : activity.type === "goals" ? "bg-amber-100" : activity.type === "analysis" ? "bg-emerald-100" : "bg-blue-100"
+                                }`}
+                                style={{ zIndex: 3 - idx }}
+                              >
+                                {getActivityIcon(activity.type, true)}
+                              </div>
+                            ))}
+                          </div>
+                          <span className="text-[10px] text-gray-500">+{group.related.length} more</span>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                // Fallback when no activities
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{
+                    scale: 1.02,
+                    y: -8,
+                    transition: { type: "spring", stiffness: 300, damping: 20 }
+                  }}
+                  className="group rounded-3xl glass-card p-6 ring-1 ring-white/20 hover:shadow-2xl hover:shadow-blue-500/10 hover:ring-white/40 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/30 max-w-sm"
+                  onClick={() => router.push("/setup")}
+                >
+                  <div className="flex items-center justify-between mb-5">
+                    <motion.div
+                      whileHover={{ rotate: 15, scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl backdrop-blur-sm border bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30 group-hover:shadow-glow group-hover:shadow-blue-500/30"
+                    >
+                      <Plus className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
+                    </motion.div>
+                    <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
+                      START NOW
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-1">
-                      {conversation.title}
-                    </h3>
-                    <p className="text-xs text-gray-500 line-clamp-2">
-                      {conversation.description}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
+                  </div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                    Get started with your analysis
+                  </h3>
+                  <p className="text-xs text-gray-500">
+                    Upload your spend data and run an analysis to see savings opportunities.
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Popup Modal for related activities */}
+              <AnimatePresence>
+                {selectedActivityGroup && (
+                  <>
+                    {/* Backdrop */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+                      onClick={() => setSelectedActivityGroup(null)}
+                    />
+                    {/* Popup */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4"
+                    >
+                      <div className="glass-card rounded-3xl p-6 shadow-2xl border border-white/30 bg-white/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto">
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-5">
+                          <h3 className="text-sm font-semibold text-gray-900">Related Activity</h3>
+                          <button
+                            onClick={() => setSelectedActivityGroup(null)}
+                            className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                          >
+                            <X className="h-4 w-4 text-gray-500" />
+                          </button>
+                        </div>
+
+                        {/* Activity cards */}
+                        <div className="space-y-3">
+                          {groupedActivities
+                            .find(g => g.main.id === selectedActivityGroup)
+                            ?.related.map((activity, index) => (
+                            <motion.div
+                              key={activity.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.2, delay: index * 0.1 }}
+                              className="group rounded-2xl p-4 ring-1 ring-gray-200/50 hover:ring-gray-300/50 hover:shadow-lg transition-all duration-200 bg-white/50"
+                            >
+                              <div className="flex items-center justify-between mb-3">
+                                <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${
+                                  activity.type === "upload"
+                                    ? "bg-purple-500/10 border-purple-400/30"
+                                    : activity.type === "goals"
+                                    ? "bg-amber-500/10 border-amber-400/30"
+                                    : activity.type === "analysis"
+                                    ? "bg-emerald-500/10 border-emerald-400/30"
+                                    : "bg-blue-500/10 border-blue-400/30"
+                                }`}>
+                                  {getActivityIcon(activity.type, false)}
+                                </div>
+                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
+                                  <Clock className="h-3 w-3" />
+                                  {formatRelativeTime(activity.timestamp)}
+                                </div>
+                              </div>
+                              <h4 className="text-sm font-medium text-gray-800 mb-1">
+                                {activity.title}
+                              </h4>
+                              <p className="text-xs text-gray-500">
+                                {activity.description}
+                              </p>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
             </div>
 
           </main>
