@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useReducer, useCallback } from "react";
+import React, { createContext, useContext, useReducer, useCallback, useRef, useEffect } from "react";
 import type {
   AnalysisResponse,
   Category,
@@ -8,6 +8,7 @@ import type {
   SavingsSummary,
   User,
 } from "@/types/api";
+import { demoSessionHelpers, getDemoSessionId } from "@/lib/supabase";
 
 // ============================================================================
 // Portfolio Types
@@ -670,13 +671,17 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Provider
 // ============================================================================
 
-// Local storage keys for persistence
+// Local storage keys for persistence (used as fallback and for immediate UI updates)
 const ACTIVITY_STORAGE_KEY = "beroe_activity_history";
 const REVIEW_DATA_STORAGE_KEY = "beroe_review_data";
 const SETUP_DATA_STORAGE_KEY = "beroe_setup_data";
 const SPEND_ANALYSIS_STORAGE_KEY = "beroe_spend_analysis";
 const OPPORTUNITY_METRICS_STORAGE_KEY = "beroe_opportunity_metrics";
 const SAVINGS_SUMMARY_STORAGE_KEY = "beroe_savings_summary";
+const SETUP_OPPORTUNITIES_STORAGE_KEY = "beroe_setup_opportunities";
+
+// Track if Supabase sync is enabled
+const SUPABASE_SYNC_ENABLED = true;
 
 // Load activity history from localStorage
 const loadActivityHistory = (): ActivityItem[] => {
@@ -864,79 +869,255 @@ const saveSavingsSummary = (data: SavingsSummary | null) => {
   }
 };
 
+// Load setup opportunities from localStorage
+const loadSetupOpportunities = (): SetupOpportunity[] | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading setup opportunities:", error);
+  }
+  return null;
+};
+
+// Save setup opportunities to localStorage
+const saveSetupOpportunities = (data: SetupOpportunity[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SETUP_OPPORTUNITIES_STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving setup opportunities:", error);
+  }
+};
+
+// ============================================================================
+// Supabase Sync Functions (debounced to avoid excessive API calls)
+// ============================================================================
+
+let supabaseSyncTimeout: NodeJS.Timeout | null = null;
+
+const syncToSupabase = async (data: {
+  activity_history?: any[];
+  setup_opportunities?: any[];
+  savings_summary?: any;
+  opportunity_metrics?: any[];
+  category_name?: string;
+  spend?: number;
+  goals?: any;
+  computed_metrics?: any;
+}) => {
+  if (!SUPABASE_SYNC_ENABLED) return;
+
+  // Debounce Supabase sync to avoid excessive API calls
+  if (supabaseSyncTimeout) {
+    clearTimeout(supabaseSyncTimeout);
+  }
+
+  supabaseSyncTimeout = setTimeout(async () => {
+    try {
+      await demoSessionHelpers.saveFullDemoState(data);
+      console.log("[Supabase] State synced successfully");
+    } catch (error) {
+      console.error("[Supabase] Failed to sync state:", error);
+    }
+  }, 1000); // 1 second debounce
+};
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const isInitialLoadRef = useRef(true);
+  const supabaseLoadedRef = useRef(false);
 
-  // Load activity history, review data, and setup data from localStorage on mount
+  // Load data from localStorage first (for immediate UI), then sync from Supabase
   React.useEffect(() => {
-    const savedActivities = loadActivityHistory();
-    if (savedActivities.length > 0) {
-      dispatch({ type: "SET_ACTIVITY_HISTORY", payload: savedActivities });
-    }
+    const loadLocalAndRemoteData = async () => {
+      // ======================================================================
+      // Step 1: Load from localStorage first (instant UI updates)
+      // ======================================================================
+      const savedActivities = loadActivityHistory();
+      if (savedActivities.length > 0) {
+        dispatch({ type: "SET_ACTIVITY_HISTORY", payload: savedActivities });
+      }
 
-    const savedReviewData = loadPersistedReviewData();
-    const hasDataPointFiles = savedReviewData.dataPointFiles && Object.keys(savedReviewData.dataPointFiles).length > 0;
-    if (savedReviewData.spendFile || hasDataPointFiles) {
-      dispatch({ type: "SET_PERSISTED_REVIEW_DATA", payload: savedReviewData });
-    }
+      const savedReviewData = loadPersistedReviewData();
+      const hasDataPointFiles = savedReviewData.dataPointFiles && Object.keys(savedReviewData.dataPointFiles).length > 0;
+      if (savedReviewData.spendFile || hasDataPointFiles) {
+        dispatch({ type: "SET_PERSISTED_REVIEW_DATA", payload: savedReviewData });
+      }
 
-    // Load setup data (category name, spend, goals, etc.)
-    const savedSetupData = loadPersistedSetupData();
-    if (savedSetupData && savedSetupData.categoryName) {
-      dispatch({ type: "UPDATE_SETUP_DATA", payload: savedSetupData });
-    }
+      // Load setup data (category name, spend, goals, etc.)
+      const savedSetupData = loadPersistedSetupData();
+      if (savedSetupData && savedSetupData.categoryName) {
+        dispatch({ type: "UPDATE_SETUP_DATA", payload: savedSetupData });
+      }
 
-    // Load spend analysis
-    const savedSpendAnalysis = loadSpendAnalysis();
-    if (savedSpendAnalysis) {
-      dispatch({ type: "SET_SPEND_ANALYSIS", payload: savedSpendAnalysis });
-    }
+      // Load setup opportunities (proof points validation status)
+      const savedSetupOpportunities = loadSetupOpportunities();
+      if (savedSetupOpportunities && savedSetupOpportunities.length > 0) {
+        dispatch({ type: "SET_SETUP_OPPORTUNITIES", payload: savedSetupOpportunities });
+      }
 
-    // Load opportunity metrics (7-step calculation results)
-    const savedOpportunityMetrics = loadOpportunityMetrics();
-    if (savedOpportunityMetrics && savedOpportunityMetrics.length > 0) {
-      dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: savedOpportunityMetrics });
-    }
+      // Load spend analysis
+      const savedSpendAnalysis = loadSpendAnalysis();
+      if (savedSpendAnalysis) {
+        dispatch({ type: "SET_SPEND_ANALYSIS", payload: savedSpendAnalysis });
+      }
 
-    // Load savings summary
-    const savedSavingsSummary = loadSavingsSummary();
-    if (savedSavingsSummary) {
-      dispatch({ type: "SET_SAVINGS_SUMMARY", payload: savedSavingsSummary });
-    }
+      // Load opportunity metrics (7-step calculation results)
+      const savedOpportunityMetrics = loadOpportunityMetrics();
+      if (savedOpportunityMetrics && savedOpportunityMetrics.length > 0) {
+        dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: savedOpportunityMetrics });
+      }
+
+      // Load savings summary
+      const savedSavingsSummary = loadSavingsSummary();
+      if (savedSavingsSummary) {
+        dispatch({ type: "SET_SAVINGS_SUMMARY", payload: savedSavingsSummary });
+      }
+
+      // ======================================================================
+      // Step 2: Load from Supabase (remote persistence)
+      // ======================================================================
+      if (SUPABASE_SYNC_ENABLED) {
+        try {
+          console.log("[Supabase] Loading state from remote...");
+          const remoteState = await demoSessionHelpers.loadFullDemoState();
+
+          if (remoteState.session) {
+            console.log("[Supabase] Remote session found, syncing data...");
+
+            // Sync activity history (prefer remote if exists and has more data)
+            if (remoteState.activityHistory && remoteState.activityHistory.length > 0) {
+              // Merge: use remote if it has newer/more data, else keep local
+              const localLen = savedActivities.length;
+              const remoteLen = remoteState.activityHistory.length;
+              if (remoteLen >= localLen) {
+                dispatch({ type: "SET_ACTIVITY_HISTORY", payload: remoteState.activityHistory });
+                saveActivityHistory(remoteState.activityHistory);
+              }
+            }
+
+            // Sync setup opportunities (proof points)
+            if (remoteState.setupOpportunities && remoteState.setupOpportunities.length > 0) {
+              dispatch({ type: "SET_SETUP_OPPORTUNITIES", payload: remoteState.setupOpportunities });
+              saveSetupOpportunities(remoteState.setupOpportunities);
+            }
+
+            // Sync savings summary
+            if (remoteState.savingsSummary) {
+              dispatch({ type: "SET_SAVINGS_SUMMARY", payload: remoteState.savingsSummary });
+              saveSavingsSummary(remoteState.savingsSummary);
+            }
+
+            // Sync opportunity metrics
+            if (remoteState.opportunityMetrics && remoteState.opportunityMetrics.length > 0) {
+              dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: remoteState.opportunityMetrics });
+              saveOpportunityMetrics(remoteState.opportunityMetrics);
+            }
+
+            // Sync setup data from session
+            const session = remoteState.session;
+            if (session.category_name) {
+              dispatch({
+                type: "UPDATE_SETUP_DATA",
+                payload: {
+                  categoryName: session.category_name,
+                  spend: session.spend || 0,
+                  goals: session.goals || { cost: 34, risk: 33, esg: 33 },
+                }
+              });
+            }
+
+            // Sync computed metrics
+            if (session.computed_metrics) {
+              dispatch({ type: "SET_COMPUTED_METRICS", payload: session.computed_metrics });
+            }
+
+            console.log("[Supabase] State sync complete");
+          } else {
+            console.log("[Supabase] No remote session found, will create on first save");
+          }
+
+          supabaseLoadedRef.current = true;
+        } catch (error) {
+          console.error("[Supabase] Failed to load remote state:", error);
+        }
+      }
+
+      isInitialLoadRef.current = false;
+    };
+
+    loadLocalAndRemoteData();
   }, []);
 
-  // Save activity history to localStorage whenever it changes
+  // Save activity history to localStorage and Supabase whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     saveActivityHistory(state.activityHistory);
+    syncToSupabase({ activity_history: state.activityHistory });
   }, [state.activityHistory]);
 
   // Save review data to localStorage whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     savePersistedReviewData(state.persistedReviewData);
   }, [state.persistedReviewData]);
 
-  // Save setup data to localStorage whenever it changes
+  // Save setup data to localStorage and Supabase whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     // Only save if there's meaningful data (category name set)
     if (state.setupData.categoryName && state.setupData.categoryName !== "") {
       savePersistedSetupData(state.setupData);
+      syncToSupabase({
+        category_name: state.setupData.categoryName,
+        spend: state.setupData.spend,
+        goals: state.setupData.goals,
+      });
     }
   }, [state.setupData]);
 
   // Save spend analysis to localStorage whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     saveSpendAnalysis(state.spendAnalysis);
   }, [state.spendAnalysis]);
 
-  // Save opportunity metrics to localStorage whenever it changes
+  // Save opportunity metrics to localStorage and Supabase whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     saveOpportunityMetrics(state.opportunityMetrics);
+    if (state.opportunityMetrics && state.opportunityMetrics.length > 0) {
+      syncToSupabase({ opportunity_metrics: state.opportunityMetrics });
+    }
   }, [state.opportunityMetrics]);
 
-  // Save savings summary to localStorage whenever it changes
+  // Save savings summary to localStorage and Supabase whenever it changes
   React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
     saveSavingsSummary(state.savingsSummary);
+    if (state.savingsSummary) {
+      syncToSupabase({ savings_summary: state.savingsSummary });
+    }
   }, [state.savingsSummary]);
+
+  // Save setup opportunities (proof points) to localStorage and Supabase whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    saveSetupOpportunities(state.setupOpportunities);
+    syncToSupabase({ setup_opportunities: state.setupOpportunities });
+  }, [state.setupOpportunities]);
+
+  // Save computed metrics to Supabase whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    if (state.computedMetrics) {
+      syncToSupabase({ computed_metrics: state.computedMetrics });
+    }
+  }, [state.computedMetrics]);
 
   const actions = {
     setUser: useCallback(

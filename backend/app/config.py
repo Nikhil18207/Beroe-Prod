@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     allowed_extensions: str = ".csv,.xlsx,.xls,.pdf,.docx"
 
     # CORS
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3004", "http://localhost:3014"]
+    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3092"]
 
     # Logging
     log_level: str = "INFO"

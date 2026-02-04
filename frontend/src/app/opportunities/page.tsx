@@ -23,6 +23,14 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import {
+  calculateOpportunityRiskImpact,
+  calculateOpportunityESGImpact,
+  calculateWeightedPriorityScore,
+  type ProofPointResult,
+  type RiskImpact,
+  type ESGImpact
+} from "@/lib/calculations/procurement-metrics";
 
 // Opportunity type configuration
 const OPPORTUNITY_TYPE_CONFIG: Record<string, {
@@ -33,29 +41,29 @@ const OPPORTUNITY_TYPE_CONFIG: Record<string, {
   description: string;
 }> = {
   "volume-bundling": {
-    name: "Volume Bundling",
+    name: "Bundle volumes across oil types for economies of scale",
     type: "Savings",
     effort: "3-6 months",
-    description: "Aggregate demand across regions, consolidate tail spend, and leverage volume to achieve better pricing"
+    description: "Consolidate purchasing across different vegetable oil categories to maximize volume discounts"
   },
   "target-pricing": {
-    name: "Target Pricing",
+    name: "Use cost model driven pricing mechanisms",
     type: "Savings",
     effort: "3-6 months",
-    description: "Analyze price variances, tariff impacts, and cost structures to achieve optimal pricing"
+    description: "Leverage cost modeling to negotiate better pricing and identify overcharges"
   },
   "risk-management": {
-    name: "Risk Management",
+    name: "Use financial instruments to manage procurement risks",
     type: "Resilience",
     impactLabel: "Risk Reduction",
     effort: "6-12 months",
     description: "Identify and mitigate supply chain risks including single sourcing, concentration, and external factors"
   },
   "respec-pack": {
-    name: "Re-specification Pack",
+    name: "Optimize pack sizes and bulk delivery options",
     type: "Savings",
     effort: "6-12 months",
-    description: "Identify opportunities to optimize specifications for cost savings without compromising quality"
+    description: "Review pack sizes and explore flexi tanks or bulk delivery to streamline supply chain and reduce costs"
   },
 };
 
@@ -81,6 +89,8 @@ export default function OpportunitiesPage() {
     (state.portfolioItems.length > 0
       ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
       : state.setupData.spend || 0);
+  const goals = state.setupData.goals || { cost: 60, risk: 25, esg: 15 };
+  const computedMetrics = state.computedMetrics;
 
   // Generate exactly 4 bento cards - one for each opportunity type
   // Each card shows proof points as initiatives inside
@@ -108,6 +118,10 @@ export default function OpportunitiesPage() {
         description: string;
         isValidated: boolean;
       }>;
+      // New Risk/ESG fields
+      riskImpact: RiskImpact;
+      esgImpact: ESGImpact;
+      priorityScore: number;
     }> = [];
 
     // Process each of the 4 main opportunities from setupOpportunities
@@ -157,6 +171,34 @@ export default function OpportunitiesPage() {
         savings_high = Math.round(addressableSpend * highPct * validationRatio);
       }
 
+      // Convert proof points to ProofPointResult format for calculations
+      // ProofPoint from context only has: id, name, description, isValidated
+      const proofPointResults: ProofPointResult[] = opp.proofPoints.map(pp => ({
+        id: pp.id,
+        name: pp.name,
+        value: 0, // Default value since ProofPoint doesn't have this
+        impact: 'Not Tested' as const, // Default - will be evaluated based on data
+        insight: pp.description || '', // Use description as fallback
+        isTested: pp.isValidated,
+        threshold: { high: '', medium: '', low: '' }
+      }));
+
+      // Calculate Risk and ESG impacts
+      const riskImpact = calculateOpportunityRiskImpact(opp.id, proofPointResults, computedMetrics || undefined);
+      const esgImpact = calculateOpportunityESGImpact(opp.id, proofPointResults, computedMetrics || undefined);
+
+      // Calculate savings estimate for priority scoring
+      const savingsEstimate = (savings_low + savings_high) / 2;
+
+      // Calculate weighted priority score based on user goals
+      const priorityResult = calculateWeightedPriorityScore(
+        goals,
+        savingsEstimate,
+        totalSpend,
+        riskImpact,
+        esgImpact
+      );
+
       opportunities.push({
         id: opp.id,
         category: categoryName,
@@ -175,11 +217,18 @@ export default function OpportunitiesPage() {
         savings_low,
         savings_high,
         proofPoints: opp.proofPoints, // Include all proof points as initiatives
+        // Risk/ESG fields
+        riskImpact,
+        esgImpact,
+        priorityScore: priorityResult.priorityScore,
       });
     });
 
+    // Sort opportunities by priority score (higher = more aligned with user goals)
+    opportunities.sort((a, b) => b.priorityScore - a.priorityScore);
+
     return opportunities;
-  }, [setupOpportunities, categoryName, totalSpend, opportunityMetrics]);
+  }, [setupOpportunities, categoryName, totalSpend, opportunityMetrics, goals, computedMetrics]);
 
   // Calculate totals
   const totalSavingsLow = savingsSummary?.total_savings_low ||
@@ -592,16 +641,24 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
         </div>
         <div>
           <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-            {isResilience ? "Risk Reduction" : "Savings Impact"}
+            Risk Impact
           </span>
-          <span className="text-sm font-bold text-gray-900">{opp.impact}</span>
+          <span className={`text-sm font-bold ${
+            opp.riskImpact?.score < 0 ? 'text-emerald-600' :
+            opp.riskImpact?.score > 0 ? 'text-red-600' : 'text-gray-900'
+          }`}>
+            {opp.riskImpact?.label || '0'}
+          </span>
         </div>
         <div>
           <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-            Proof Points
+            ESG Impact
           </span>
-          <span className="text-sm font-bold text-gray-900">
-            {validatedCount}/{totalPoints}
+          <span className={`text-sm font-bold ${
+            opp.esgImpact?.score > 0 ? 'text-emerald-600' :
+            opp.esgImpact?.score < 0 ? 'text-red-600' : 'text-gray-900'
+          }`}>
+            {opp.esgImpact?.label || '0'}
           </span>
         </div>
       </div>
@@ -639,25 +696,53 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
         </div>
       </div>
 
-      {/* Confidence Score */}
-      <div className="mb-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
-            Confidence Score:
-          </span>
-          <span className={`text-sm font-bold ${opp.confidence >= 70 ? 'text-emerald-600' : opp.confidence >= 40 ? 'text-amber-600' : 'text-gray-600'}`}>
-            {opp.confidence}%
-          </span>
+      {/* Priority & Confidence Scores */}
+      <div className="mb-3 space-y-2">
+        {/* Priority Score - based on goals alignment */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
+              Priority Score:
+            </span>
+            <span className={`text-sm font-bold ${
+              opp.priorityScore >= 60 ? 'text-blue-600' :
+              opp.priorityScore >= 40 ? 'text-indigo-600' : 'text-gray-600'
+            }`}>
+              {Math.round(opp.priorityScore || 0)}
+            </span>
+          </div>
+          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: `${Math.min(opp.priorityScore || 0, 100)}%` }}
+              viewport={{ once: true }}
+              className={`h-full rounded-full ${
+                opp.priorityScore >= 60 ? 'bg-blue-400' :
+                opp.priorityScore >= 40 ? 'bg-indigo-400' : 'bg-gray-300'
+              }`}
+            />
+          </div>
         </div>
-        <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: `${opp.confidence}%` }}
-            viewport={{ once: true }}
-            className={`h-full rounded-full ${
-              opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
-            }`}
-          />
+        {/* Confidence Score */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
+              Confidence:
+            </span>
+            <span className={`text-sm font-bold ${opp.confidence >= 70 ? 'text-emerald-600' : opp.confidence >= 40 ? 'text-amber-600' : 'text-gray-600'}`}>
+              {opp.confidence}%
+            </span>
+          </div>
+          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: `${opp.confidence}%` }}
+              viewport={{ once: true }}
+              className={`h-full rounded-full ${
+                opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
+              }`}
+            />
+          </div>
         </div>
       </div>
 

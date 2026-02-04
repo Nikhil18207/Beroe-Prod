@@ -71,6 +71,7 @@ import {
 } from "@/lib/calculations";
 import { parseFile, getFileCategory, SUPPORTED_FORMATS_STRING } from "@/lib/fileParser";
 import { detectAllColumns, parseNumericValue, calculateRowSpend, getRowLocation, getRowSupplier } from "@/lib/columnMatcher";
+import { useSupabaseStorage } from "@/lib/hooks/useSupabaseStorage";
 
 // Extended DataPoint with icon for UI
 interface DataPointWithIcon extends DataPoint {
@@ -513,6 +514,21 @@ export default function ReviewDataPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dataPointFileInputRef = useRef<HTMLInputElement>(null);
 
+  // Supabase storage hook for persistent file storage
+  const {
+    isLoading: isSupabaseLoading,
+    error: supabaseError,
+    session: supabaseSession,
+    uploadedFiles: supabaseFiles,
+    isInitialized: isSupabaseInitialized,
+    uploadFile: uploadToSupabase,
+    deleteFile: deleteFromSupabase,
+    getFilesByType: getSupabaseFilesByType,
+    getLatestFile: getLatestSupabaseFile,
+    updateSessionData: updateSupabaseSession,
+    saveAnalysisResults: saveToSupabase,
+  } = useSupabaseStorage();
+
   const [uploadedFile, setUploadedFile] = useState<File | null>(state.setupData.uploadedFile);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -593,17 +609,165 @@ export default function ReviewDataPage() {
 
   // ============================================================================
   // PERSISTENCE - Keep uploaded data after page refresh and navigation
-  // Uses AppContext which persists to localStorage automatically
+  // Uses AppContext (localStorage) + Supabase for robust persistence
   // ============================================================================
 
   // Track if we've already restored persisted data to avoid duplicate restorations
   const [hasRestoredPersisted, setHasRestoredPersisted] = useState(false);
+  const [hasRestoredFromSupabase, setHasRestoredFromSupabase] = useState(false);
 
-  // Load persisted data from context when it becomes available
+  // Load persisted data from Supabase when initialized (takes priority over localStorage)
+  useEffect(() => {
+    if (!isSupabaseInitialized || hasRestoredFromSupabase) return;
+
+    const restoreFromSupabase = async () => {
+      try {
+        // Check if we have files in Supabase
+        if (supabaseFiles.length === 0 && !supabaseSession?.spend_data) {
+          // No Supabase data, fall back to localStorage restoration
+          setHasRestoredFromSupabase(true);
+          return;
+        }
+
+        console.log('[Review] Restoring data from Supabase...', {
+          files: supabaseFiles.length,
+          hasSpendData: !!supabaseSession?.spend_data
+        });
+
+        // Restore spend file data from Supabase
+        const spendFile = supabaseFiles.find(f => f.file_type === 'spend');
+        if (spendFile && spendFile.parsed_data) {
+          const { headers, rows, htmlContent, rawText } = spendFile.parsed_data;
+          setCsvColumns(headers || []);
+          setParsedCsvDataStore(prev => ({
+            ...prev,
+            spend: { headers, rows, htmlContent, rawText }
+          }));
+
+          // Update persisted data in AppContext too (for consistency)
+          actions.updatePersistedSpendFile({
+            fileName: spendFile.file_name,
+            fileSize: spendFile.file_size,
+            uploadedAt: new Date(spendFile.created_at).getTime(),
+            columns: headers || [],
+            parsedData: { headers, rows, htmlContent, rawText },
+          });
+        }
+
+        // Restore other data point files from Supabase
+        const fileTypeMap: Record<string, string> = {
+          'playbook': 'playbook',
+          'contracts': 'contracts',
+          'supply-master': 'supply-master',
+        };
+
+        for (const [fileType, dataPointId] of Object.entries(fileTypeMap)) {
+          const file = supabaseFiles.find(f => f.file_type === fileType);
+          if (file && file.parsed_data) {
+            const { headers, rows, htmlContent, rawText, isDocument, documentType } = file.parsed_data;
+
+            setDataPointColumns(prev => ({ ...prev, [dataPointId]: headers || [] }));
+            setParsedCsvDataStore(prev => ({
+              ...prev,
+              [dataPointId]: { headers, rows, htmlContent, rawText }
+            }));
+
+            // Update persisted data in AppContext
+            actions.updatePersistedDataPointFile(dataPointId, {
+              fileName: file.file_name,
+              fileSize: file.file_size,
+              uploadedAt: new Date(file.created_at).getTime(),
+              columns: headers || [],
+              parsedData: { headers, rows, htmlContent, rawText, isDocument, documentType },
+            });
+
+            // Update data point items in context
+            const targetDataPoint = state.dataPoints.find(dp => dp.id === dataPointId);
+            if (targetDataPoint && targetDataPoint.items.length === 0) {
+              actions.updateDataPoint({
+                ...targetDataPoint,
+                items: [{
+                  id: `supabase-${file.id}`,
+                  name: file.file_name.replace(/\.[^/.]+$/, ""),
+                  fileName: file.file_name,
+                  uploadedAt: new Date(file.created_at),
+                }]
+              });
+            }
+          }
+        }
+
+        // Restore session data (category, spend, opportunities, etc.)
+        if (supabaseSession) {
+          if (supabaseSession.category_name) {
+            actions.updateSetupData({ categoryName: supabaseSession.category_name });
+          }
+          if (supabaseSession.spend && supabaseSession.spend > 0) {
+            actions.updateSetupData({ spend: Number(supabaseSession.spend) });
+          }
+          if (supabaseSession.computed_metrics) {
+            // Extract opportunityMetrics if saved, then set the rest as computed metrics
+            const { opportunityMetrics, ...restMetrics } = supabaseSession.computed_metrics;
+            actions.setComputedMetrics(restMetrics);
+            if (opportunityMetrics) {
+              actions.setOpportunityMetrics(opportunityMetrics);
+            }
+          }
+          if (supabaseSession.opportunities && supabaseSession.opportunities.length > 0) {
+            // Merge validation status from Supabase into existing opportunities
+            // Don't replace opportunities entirely - just update isValidated status
+            const supabaseOpps = supabaseSession.opportunities;
+
+            // Create a map of proof point validation status from Supabase
+            const validationMap = new Map<string, boolean>();
+            supabaseOpps.forEach((opp: any) => {
+              if (opp.proofPoints) {
+                opp.proofPoints.forEach((pp: any) => {
+                  validationMap.set(`${opp.id}-${pp.id}`, pp.isValidated || false);
+                });
+              }
+            });
+
+            // Update existing opportunities with validation status from Supabase
+            state.setupOpportunities.forEach(opp => {
+              const updatedProofPoints = opp.proofPoints.map(pp => ({
+                ...pp,
+                isValidated: validationMap.get(`${opp.id}-${pp.id}`) || pp.isValidated,
+              }));
+
+              // Only update if there are actual validation changes
+              const hasChanges = updatedProofPoints.some(
+                (pp, idx) => pp.isValidated !== opp.proofPoints[idx].isValidated
+              );
+
+              if (hasChanges) {
+                actions.updateSetupOpportunity({
+                  ...opp,
+                  proofPoints: updatedProofPoints,
+                });
+              }
+            });
+          }
+        }
+
+        setHasRestoredFromSupabase(true);
+        setHasRestoredPersisted(true); // Skip localStorage restoration
+        console.log('[Review] Restored data from Supabase successfully');
+      } catch (err) {
+        console.error('[Review] Failed to restore from Supabase:', err);
+        setHasRestoredFromSupabase(true); // Continue with localStorage fallback
+      }
+    };
+
+    restoreFromSupabase();
+  }, [isSupabaseInitialized, supabaseFiles, supabaseSession, hasRestoredFromSupabase, actions, state.dataPoints]);
+
+  // Load persisted data from localStorage (fallback if Supabase has no data)
   useEffect(() => {
     const persistedData = state.persistedReviewData;
 
     // Only restore once, and only if there's data to restore
+    // Skip if we already restored from Supabase
     if (hasRestoredPersisted) return;
     if (!persistedData.spendFile && (!persistedData.dataPointFiles || Object.keys(persistedData.dataPointFiles).length === 0)) return;
 
@@ -720,7 +884,7 @@ export default function ReviewDataPage() {
       setIsParsingCsv(true);
 
       // Use universal file parser for all file types
-      parseFile(uploadedFile).then((result) => {
+      parseFile(uploadedFile).then(async (result) => {
         if (result.success && result.data) {
           const { headers, rows } = result.data;
 
@@ -732,14 +896,25 @@ export default function ReviewDataPage() {
             spend: { headers, rows }
           }));
 
-          // Persist spend file data for navigation/refresh survival
+          const parsedDataForStorage = { headers, rows };
+
+          // Persist spend file data for navigation/refresh survival (localStorage)
           actions.updatePersistedSpendFile({
             fileName: uploadedFile.name,
             fileSize: uploadedFile.size,
             uploadedAt: Date.now(),
             columns: headers,
-            parsedData: { headers, rows },
+            parsedData: parsedDataForStorage,
           });
+
+          // Also upload to Supabase for cross-browser/device persistence
+          try {
+            await uploadToSupabase('spend', uploadedFile, parsedDataForStorage);
+            console.log('[Review] Spend file uploaded to Supabase');
+          } catch (err) {
+            console.error('[Review] Failed to upload spend file to Supabase:', err);
+            // Don't block - localStorage still works as fallback
+          }
 
           // Extract category name from the first row ONLY if not already set from portfolio
           // Portfolio selection takes priority over CSV-extracted category
@@ -1083,6 +1258,19 @@ export default function ReviewDataPage() {
 
     // Savings summary calculated
 
+    // Save analysis results to Supabase for persistence across page refreshes
+    // Save both the calculated metrics (oppMetrics) and the raw opportunities with validation status
+    saveToSupabase({
+      opportunities: opportunities, // Save the actual opportunities with isValidated proof points
+      computed_metrics: {
+        ...metrics as unknown as Record<string, number>,
+        opportunityMetrics: oppMetrics, // Include the calculated metrics as well
+      },
+      spend_data: spendData,
+    }).catch(err => {
+      console.error('[Review] Failed to save analysis results to Supabase:', err);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend, categoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
 
@@ -1335,8 +1523,17 @@ export default function ReviewDataPage() {
       // Parse all file types using universal file parser
       setParsingDataPoints(prev => new Set([...prev, currentUploadTarget]));
 
+      // Map data point ID to Supabase file type
+      const dataPointToFileType: Record<string, 'spend' | 'playbook' | 'contracts' | 'supply-master' | 'other'> = {
+        'playbook': 'playbook',
+        'contracts': 'contracts',
+        'supply-master': 'supply-master',
+        'other': 'other',
+      };
+      const supabaseFileType = dataPointToFileType[currentUploadTarget!] || 'other';
+
       // Use the universal file parser
-      parseFile(file).then((result) => {
+      parseFile(file).then(async (result) => {
         if (result.success && result.data) {
           const { headers, rows, htmlContent, rawText, metadata } = result.data;
 
@@ -1349,22 +1546,32 @@ export default function ReviewDataPage() {
             [currentUploadTarget!]: { headers, rows, htmlContent, rawText }
           }));
 
-          // Persist data point file for navigation/refresh survival
-          // Include htmlContent and rawText for document files
+          const parsedDataForStorage = {
+            headers,
+            rows,
+            htmlContent,
+            rawText,
+            isDocument: metadata?.isDocument,
+            documentType: metadata?.documentType,
+          };
+
+          // Persist data point file for navigation/refresh survival (localStorage)
           actions.updatePersistedDataPointFile(currentUploadTarget!, {
             fileName: file.name,
             fileSize: file.size,
             uploadedAt: Date.now(),
             columns: headers,
-            parsedData: {
-              headers,
-              rows,
-              htmlContent,
-              rawText,
-              isDocument: metadata?.isDocument,
-              documentType: metadata?.documentType,
-            },
+            parsedData: parsedDataForStorage,
           });
+
+          // Also upload to Supabase for cross-browser/device persistence
+          try {
+            await uploadToSupabase(supabaseFileType, file, parsedDataForStorage);
+            console.log(`[Review] ${currentUploadTarget} file uploaded to Supabase`);
+          } catch (err) {
+            console.error(`[Review] Failed to upload ${currentUploadTarget} file to Supabase:`, err);
+            // Don't block - localStorage still works as fallback
+          }
         } else {
           // Parsing failed, show error info
           setDataPointColumns(prev => ({
@@ -4508,7 +4715,7 @@ export default function ReviewDataPage() {
                     let filteredRowIndex = originalRowIndex; // Default to original for scrolling
                     let filteredRowNumber = error.row; // Row number to display in error list
 
-                    if (categoryFilterMode === "selected") {
+                    if (categoryFilterMode === "selected" && filteredData.originalIndices) {
                       // Find the position of this row in the filtered data
                       const filteredPosition = filteredData.originalIndices.indexOf(originalRowIndex);
                       if (filteredPosition !== -1) {

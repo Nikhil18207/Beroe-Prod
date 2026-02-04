@@ -613,19 +613,67 @@ export const procurementApi = {
     opportunityType: string,
     categoryName: string,
     totalSpend: number,
-    proofPoints: Array<{ name: string; isValidated: boolean }>,
+    proofPoints: Array<{ name: string; isValidated: boolean; id?: string; description?: string }>,
     question?: string
   ) => {
     const validatedPoints = proofPoints.filter(pp => pp.isValidated);
+    const missingPoints = proofPoints.filter(pp => !pp.isValidated);
     const confidence = proofPoints.length > 0
       ? Math.round((validatedPoints.length / proofPoints.length) * 100)
       : 0;
 
-    const contextMessage = question
-      ? `Context: Category "${categoryName}", Opportunity: ${opportunityType}, Total Spend: $${totalSpend.toLocaleString()}, Confidence: ${confidence}%, Validated Proof Points: ${validatedPoints.map(p => p.name).join(", ") || "None"}.
+    // Build detailed proof point status
+    const proofPointStatus = proofPoints.map((pp, idx) =>
+      `${idx + 1}. ${pp.name}: ${pp.isValidated ? '✓ VALIDATED' : '✗ NOT VALIDATED'}`
+    ).join('\n');
 
-User Question: ${question}`
-      : `Provide strategic recommendations for a ${opportunityType} opportunity in the ${categoryName} category with $${totalSpend.toLocaleString()} spend. Current confidence is ${confidence}% with ${validatedPoints.length}/${proofPoints.length} proof points validated: ${validatedPoints.map(p => p.name).join(", ") || "None validated yet"}.`;
+    // Opportunity type descriptions for context
+    const opportunityDescriptions: Record<string, string> = {
+      'volume-bundling': 'Volume Bundling focuses on consolidating spend across regions/sites and leveraging aggregated volume for better pricing and discounts.',
+      'target-pricing': 'Target Pricing uses cost models, market indices, and should-cost analysis to optimize pricing and negotiate better rates.',
+      'risk-management': 'Risk Management focuses on supplier diversification, reducing concentration risk, and building supply chain resilience.',
+      'respec-pack': 'Re-spec Pack involves standardizing specifications across regions and rationalizing SKUs to reduce complexity and costs.'
+    };
+
+    const oppDescription = opportunityDescriptions[opportunityType] || 'Procurement optimization opportunity.';
+
+    const contextMessage = question
+      ? `=== OPPORTUNITY CONTEXT ===
+Category: ${categoryName}
+Opportunity Type: ${opportunityType}
+Description: ${oppDescription}
+Total Spend: $${totalSpend.toLocaleString()}
+Confidence Level: ${confidence}%
+Total Proof Points: ${proofPoints.length}
+Validated: ${validatedPoints.length}
+Missing/Not Validated: ${missingPoints.length}
+
+=== PROOF POINT STATUS ===
+${proofPointStatus}
+
+=== MISSING PROOF POINTS (Need Validation) ===
+${missingPoints.length > 0 ? missingPoints.map(pp => `- ${pp.name}`).join('\n') : 'All proof points validated!'}
+
+=== USER QUESTION ===
+${question}`
+      : `=== INITIAL ANALYSIS REQUEST ===
+Category: ${categoryName}
+Opportunity Type: ${opportunityType}
+Description: ${oppDescription}
+Total Spend: $${totalSpend.toLocaleString()}
+Confidence Level: ${confidence}%
+
+=== PROOF POINT STATUS ===
+${proofPointStatus}
+
+=== MISSING PROOF POINTS (Need Validation) ===
+${missingPoints.length > 0 ? missingPoints.map(pp => `- ${pp.name}`).join('\n') : 'All proof points validated!'}
+
+Please provide:
+1. A brief summary of this ${opportunityType} opportunity for ${categoryName}
+2. What the missing proof points mean and why they're important
+3. Specific questions I should ask or data I should gather to validate the missing proof points
+4. Priority recommendations based on the current validation status`;
 
     return apiClient.post<{
       status: string;

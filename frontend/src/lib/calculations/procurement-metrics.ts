@@ -1047,6 +1047,367 @@ export function computeAllMetrics(
   return metrics;
 }
 
+// =============================================================================
+// RISK & ESG IMPACT CALCULATION
+// =============================================================================
+
+/**
+ * Risk Impact Configuration per Opportunity Type
+ * Based on Overall methodology_Dec25.xlsx Risk Profile Sheet
+ *
+ * Risk themes and their weightages:
+ * - Supplier Concentration Risk: 15%
+ * - Supplier Financial Risk: 35%
+ * - Supplier Geopolitical Risk: 25%
+ * - Price Volatility Risk: 25%
+ */
+export interface RiskImpact {
+  score: number;           // -5 to +5 scale (negative = reduces risk)
+  label: string;           // Display label like "-2", "+1"
+  description: string;     // Explanation of risk impact
+  breakdown: {
+    concentrationRisk: number;
+    financialRisk: number;
+    geopoliticalRisk: number;
+    priceVolatilityRisk: number;
+  };
+}
+
+export interface ESGImpact {
+  score: number;           // -5 to +5 scale (positive = improves ESG)
+  label: string;           // Display label like "0", "+1"
+  description: string;     // Explanation of ESG impact
+  breakdown: {
+    environmental: number;
+    social: number;
+    governance: number;
+  };
+}
+
+/**
+ * Risk weightages from methodology
+ */
+const RISK_WEIGHTAGES = {
+  concentrationRisk: 0.15,
+  financialRisk: 0.35,
+  geopoliticalRisk: 0.25,
+  priceVolatilityRisk: 0.25,
+};
+
+/**
+ * Calculate Risk Impact for an opportunity
+ * Returns a score from -5 to +5 where negative means the opportunity REDUCES risk
+ */
+export function calculateOpportunityRiskImpact(
+  opportunityId: string,
+  proofPoints: ProofPointResult[],
+  metrics?: Partial<ComputedMetrics>
+): RiskImpact {
+  // Base risk impact per opportunity type (implementing reduces risk = negative)
+  const baseRiskImpact: Record<string, {
+    concentrationRisk: number;
+    financialRisk: number;
+    geopoliticalRisk: number;
+    priceVolatilityRisk: number;
+  }> = {
+    'volume-bundling': {
+      // Consolidating suppliers can increase concentration risk slightly
+      // but reduces price volatility through better contracts
+      concentrationRisk: 0.5,      // Slight increase in concentration
+      financialRisk: -0.5,         // Better supplier relationships
+      geopoliticalRisk: 0,         // Neutral
+      priceVolatilityRisk: -1.5,   // Better price stability through volume
+    },
+    'target-pricing': {
+      // Index-based pricing reduces price volatility risk significantly
+      concentrationRisk: 0,        // Neutral
+      financialRisk: -0.5,         // More predictable costs
+      geopoliticalRisk: 0,         // Neutral
+      priceVolatilityRisk: -2.0,   // Major reduction in price risk
+    },
+    'risk-management': {
+      // Primary purpose is risk reduction
+      concentrationRisk: -1.5,     // Diversification reduces concentration
+      financialRisk: -1.0,         // Better supplier vetting
+      geopoliticalRisk: -1.5,      // Geographic diversification
+      priceVolatilityRisk: -0.5,   // Some price stability from diversification
+    },
+    'respec-pack': {
+      // Specification changes can affect supply base
+      concentrationRisk: -0.5,     // More supplier options with standard specs
+      financialRisk: 0,            // Neutral
+      geopoliticalRisk: -0.5,      // More sourcing flexibility
+      priceVolatilityRisk: -0.5,   // Slight reduction from standardization
+    },
+  };
+
+  const base = baseRiskImpact[opportunityId] || {
+    concentrationRisk: 0,
+    financialRisk: 0,
+    geopoliticalRisk: 0,
+    priceVolatilityRisk: 0,
+  };
+
+  // Adjust based on proof points validation and metrics
+  let adjustedBreakdown = { ...base };
+
+  // Get validated proof points count for confidence adjustment
+  const validatedCount = proofPoints.filter(pp => pp.isTested).length;
+  const totalCount = proofPoints.length;
+  const validationRatio = totalCount > 0 ? validatedCount / totalCount : 0.5;
+
+  // Scale the impact by validation confidence (more validated = more confident in impact)
+  const confidenceMultiplier = 0.5 + (validationRatio * 0.5); // 0.5 to 1.0
+
+  // Adjust based on specific metrics if available
+  if (metrics) {
+    // If high concentration already exists, volume bundling has less additional concentration risk
+    if (opportunityId === 'volume-bundling' && metrics.top3Concentration) {
+      if (metrics.top3Concentration > 70) {
+        adjustedBreakdown.concentrationRisk = 0; // Already concentrated
+      }
+    }
+
+    // If high risk suppliers exist, risk management has bigger impact
+    if (opportunityId === 'risk-management' && metrics.highRiskSupplierSpend) {
+      if (metrics.highRiskSupplierSpend > 30) {
+        adjustedBreakdown.financialRisk *= 1.5; // Bigger impact
+      }
+    }
+
+    // If high price variance, target pricing has bigger impact
+    if (opportunityId === 'target-pricing' && metrics.priceVariance) {
+      if (metrics.priceVariance > 25) {
+        adjustedBreakdown.priceVolatilityRisk *= 1.3;
+      }
+    }
+  }
+
+  // Apply confidence multiplier
+  Object.keys(adjustedBreakdown).forEach(key => {
+    adjustedBreakdown[key as keyof typeof adjustedBreakdown] *= confidenceMultiplier;
+  });
+
+  // Calculate weighted total score
+  const totalScore =
+    (adjustedBreakdown.concentrationRisk * RISK_WEIGHTAGES.concentrationRisk) +
+    (adjustedBreakdown.financialRisk * RISK_WEIGHTAGES.financialRisk) +
+    (adjustedBreakdown.geopoliticalRisk * RISK_WEIGHTAGES.geopoliticalRisk) +
+    (adjustedBreakdown.priceVolatilityRisk * RISK_WEIGHTAGES.priceVolatilityRisk);
+
+  // Round to nearest integer for display
+  const roundedScore = Math.round(totalScore);
+
+  // Generate description
+  const descriptions: Record<string, string> = {
+    'volume-bundling': roundedScore < 0
+      ? 'Consolidating volume improves price stability and supplier relationships'
+      : 'Volume consolidation may slightly increase supplier dependency',
+    'target-pricing': 'Index-based pricing significantly reduces exposure to price volatility',
+    'risk-management': 'Diversification and risk monitoring substantially reduces supply chain vulnerabilities',
+    'respec-pack': 'Standardized specifications enable broader supplier base and reduce concentration',
+  };
+
+  return {
+    score: roundedScore,
+    label: roundedScore >= 0 ? `+${roundedScore}` : `${roundedScore}`,
+    description: descriptions[opportunityId] || 'Risk impact varies based on implementation',
+    breakdown: {
+      concentrationRisk: Math.round(adjustedBreakdown.concentrationRisk * 10) / 10,
+      financialRisk: Math.round(adjustedBreakdown.financialRisk * 10) / 10,
+      geopoliticalRisk: Math.round(adjustedBreakdown.geopoliticalRisk * 10) / 10,
+      priceVolatilityRisk: Math.round(adjustedBreakdown.priceVolatilityRisk * 10) / 10,
+    },
+  };
+}
+
+/**
+ * Calculate ESG Impact for an opportunity
+ * Returns a score from -5 to +5 where positive means IMPROVES ESG
+ */
+export function calculateOpportunityESGImpact(
+  opportunityId: string,
+  proofPoints: ProofPointResult[],
+  metrics?: Partial<ComputedMetrics>
+): ESGImpact {
+  // Base ESG impact per opportunity type
+  const baseESGImpact: Record<string, {
+    environmental: number;
+    social: number;
+    governance: number;
+  }> = {
+    'volume-bundling': {
+      // Consolidation can improve efficiency (less transport, better utilization)
+      environmental: 0.3,    // Slight improvement from logistics optimization
+      social: 0,             // Neutral
+      governance: 0.2,       // Better supplier oversight with fewer suppliers
+    },
+    'target-pricing': {
+      // Transparent pricing supports governance
+      environmental: 0,      // Neutral
+      social: 0,             // Neutral
+      governance: 0.3,       // Better cost transparency and accountability
+    },
+    'risk-management': {
+      // Risk management often includes ESG risk assessment
+      environmental: 0.3,    // ESG risk monitoring included
+      social: 0.3,           // Social risk monitoring included
+      governance: 0.5,       // Strong governance improvement
+    },
+    'respec-pack': {
+      // Specification changes can include sustainability improvements
+      environmental: 1.0,    // Opportunity for sustainable materials/packaging
+      social: 0.2,           // Better labor standards with spec compliance
+      governance: 0.3,       // Clearer specifications improve compliance
+    },
+  };
+
+  const base = baseESGImpact[opportunityId] || {
+    environmental: 0,
+    social: 0,
+    governance: 0,
+  };
+
+  // Get validation ratio for confidence
+  const validatedCount = proofPoints.filter(pp => pp.isTested).length;
+  const totalCount = proofPoints.length;
+  const validationRatio = totalCount > 0 ? validatedCount / totalCount : 0.5;
+  const confidenceMultiplier = 0.5 + (validationRatio * 0.5);
+
+  // Apply confidence
+  const adjustedBreakdown = {
+    environmental: base.environmental * confidenceMultiplier,
+    social: base.social * confidenceMultiplier,
+    governance: base.governance * confidenceMultiplier,
+  };
+
+  // Calculate total (equal weights for E, S, G)
+  const totalScore = (adjustedBreakdown.environmental + adjustedBreakdown.social + adjustedBreakdown.governance) / 3;
+  const roundedScore = Math.round(totalScore);
+
+  // Generate description
+  const descriptions: Record<string, string> = {
+    'volume-bundling': 'Consolidation improves logistics efficiency with minimal ESG impact',
+    'target-pricing': 'Transparent pricing mechanisms support governance objectives',
+    'risk-management': 'Includes ESG risk monitoring as part of supplier assessment',
+    'respec-pack': 'Specification changes enable sustainable materials and improved compliance',
+  };
+
+  return {
+    score: roundedScore,
+    label: roundedScore > 0 ? `+${roundedScore}` : `${roundedScore}`,
+    description: descriptions[opportunityId] || 'ESG impact varies based on implementation',
+    breakdown: {
+      environmental: Math.round(adjustedBreakdown.environmental * 10) / 10,
+      social: Math.round(adjustedBreakdown.social * 10) / 10,
+      governance: Math.round(adjustedBreakdown.governance * 10) / 10,
+    },
+  };
+}
+
+/**
+ * Calculate weighted priority score for an opportunity based on user goals
+ * @param goals - User's priority settings { cost: %, risk: %, esg: % }
+ * @param savingsEstimate - Estimated savings amount
+ * @param totalSpend - Total spend for normalization
+ * @param riskImpact - Calculated risk impact
+ * @param esgImpact - Calculated ESG impact
+ */
+export function calculateWeightedPriorityScore(
+  goals: { cost: number; risk: number; esg: number },
+  savingsEstimate: number,
+  totalSpend: number,
+  riskImpact: RiskImpact,
+  esgImpact: ESGImpact
+): {
+  priorityScore: number;
+  costContribution: number;
+  riskContribution: number;
+  esgContribution: number;
+} {
+  // Normalize goals to sum to 100
+  const totalGoals = goals.cost + goals.risk + goals.esg;
+  const normCost = goals.cost / totalGoals;
+  const normRisk = goals.risk / totalGoals;
+  const normESG = goals.esg / totalGoals;
+
+  // Cost score: savings as percentage of spend (0-100 scale)
+  const savingsPct = totalSpend > 0 ? (savingsEstimate / totalSpend) * 100 : 0;
+  const costScore = Math.min(savingsPct * 10, 100); // Scale up, cap at 100
+
+  // Risk score: negative risk impact is good (0-100 scale)
+  // -5 = 100 (best), 0 = 50, +5 = 0 (worst)
+  const riskScore = Math.max(0, Math.min(100, 50 - (riskImpact.score * 10)));
+
+  // ESG score: positive ESG impact is good (0-100 scale)
+  // -5 = 0 (worst), 0 = 50, +5 = 100 (best)
+  const esgScore = Math.max(0, Math.min(100, 50 + (esgImpact.score * 10)));
+
+  // Calculate weighted contributions
+  const costContribution = costScore * normCost;
+  const riskContribution = riskScore * normRisk;
+  const esgContribution = esgScore * normESG;
+
+  // Total priority score (0-100)
+  const priorityScore = costContribution + riskContribution + esgContribution;
+
+  return {
+    priorityScore: Math.round(priorityScore * 10) / 10,
+    costContribution: Math.round(costContribution * 10) / 10,
+    riskContribution: Math.round(riskContribution * 10) / 10,
+    esgContribution: Math.round(esgContribution * 10) / 10,
+  };
+}
+
+/**
+ * Get all opportunity impacts and priority scores
+ */
+export function calculateAllOpportunityImpacts(
+  opportunities: Array<{
+    id: string;
+    proofPoints: ProofPointResult[];
+    savingsEstimate: number;
+  }>,
+  totalSpend: number,
+  goals: { cost: number; risk: number; esg: number },
+  metrics?: Partial<ComputedMetrics>
+): Array<{
+  opportunityId: string;
+  riskImpact: RiskImpact;
+  esgImpact: ESGImpact;
+  priorityScore: number;
+  ranking: number;
+}> {
+  // Calculate impacts for each opportunity
+  const results = opportunities.map(opp => {
+    const riskImpact = calculateOpportunityRiskImpact(opp.id, opp.proofPoints, metrics);
+    const esgImpact = calculateOpportunityESGImpact(opp.id, opp.proofPoints, metrics);
+    const priority = calculateWeightedPriorityScore(
+      goals,
+      opp.savingsEstimate,
+      totalSpend,
+      riskImpact,
+      esgImpact
+    );
+
+    return {
+      opportunityId: opp.id,
+      riskImpact,
+      esgImpact,
+      priorityScore: priority.priorityScore,
+      ranking: 0, // Will be set after sorting
+    };
+  });
+
+  // Sort by priority score (highest first) and assign rankings
+  results.sort((a, b) => b.priorityScore - a.priorityScore);
+  results.forEach((r, idx) => {
+    r.ranking = idx + 1;
+  });
+
+  return results;
+}
+
 export default {
   calculateHHI,
   calculateTop3Concentration,
@@ -1063,4 +1424,9 @@ export default {
   calculateOpportunitySavings,
   calculateSavingsSummary,
   computeAllMetrics,
+  // New Risk & ESG functions
+  calculateOpportunityRiskImpact,
+  calculateOpportunityESGImpact,
+  calculateWeightedPriorityScore,
+  calculateAllOpportunityImpacts,
 };

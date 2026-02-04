@@ -39,19 +39,21 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting Beroe AI Procurement Platform", version=settings.app_version)
 
-    # Initialize database
+    # Initialize database (optional - allows running without DB for demo endpoints)
     try:
         await init_db()
         logger.info("Database initialized successfully")
+        app.state.db_available = True
     except Exception as e:
-        logger.error("Failed to initialize database", error=str(e))
-        raise
+        logger.warning("Database not available - running in demo mode", error=str(e))
+        app.state.db_available = False
 
     yield
 
     # Shutdown
     logger.info("Shutting down Beroe AI Procurement Platform")
-    await close_db()
+    if getattr(app.state, 'db_available', False):
+        await close_db()
 
 
 # Create FastAPI app
