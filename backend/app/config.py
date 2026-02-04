@@ -59,8 +59,8 @@ class Settings(BaseSettings):
     upload_dir: str = "./uploads"
     allowed_extensions: str = ".csv,.xlsx,.xls,.pdf,.docx"
 
-    # CORS
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3092"]
+    # CORS - Allow all localhost ports for development
+    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3092", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002", "http://127.0.0.1:3003", "http://127.0.0.1:3004"]
 
     # Logging
     log_level: str = "INFO"

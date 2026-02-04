@@ -472,3 +472,463 @@ RESPONSE GUIDELINES:
             "thinking_time": f"{response.latency_ms/1000:.1f}s"
         }
     }
+
+
+# ============================================================================
+# OPPORTUNITY RECOMMENDATIONS ENDPOINT
+# ============================================================================
+
+class OpportunityRecommendationsRequest(BaseModel):
+    """Request for generating opportunity-specific recommendations."""
+    opportunity_type: str = Field(..., description="Type: volume-bundling, target-pricing, risk-management, respec-pack")
+    category_name: str = Field(..., description="Category name e.g. 'Edible Oils'")
+    locations: Optional[List[str]] = Field(default=None, description="Geographic locations/regions e.g. ['Europe', 'India', 'Asia Pacific']")
+    spend_data: dict = Field(default={}, description="Spend data including totalSpend and breakdown")
+    supplier_data: List[dict] = Field(default=[], description="List of suppliers with name and spend")
+    metrics: dict = Field(default={}, description="Computed metrics like priceVariance, top3Concentration")
+    proof_points: List[dict] = Field(default=[], description="List of proof points with id, name, isValidated")
+    playbook_data: Optional[dict] = Field(default=None, description="Optional playbook insights")
+
+
+@router.options("/recommendations")
+async def recommendations_options():
+    """Handle CORS preflight for recommendations endpoint."""
+    from fastapi.responses import Response
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        }
+    )
+
+
+@router.post("/recommendations")
+async def generate_recommendations(
+    request: OpportunityRecommendationsRequest
+):
+    """
+    Generate specific, data-driven recommendations for a procurement opportunity.
+
+    This endpoint takes all the context (spend data, suppliers, metrics, proof points)
+    and asks the LLM to generate very specific recommendations using actual names and numbers.
+    """
+    from app.services.llm_service import LLMService
+    import json as json_module
+
+    llm = LLMService()
+
+    try:
+        response = await llm.generate_opportunity_recommendations(
+            opportunity_type=request.opportunity_type,
+            category_name=request.category_name,
+            locations=request.locations,
+            spend_data=request.spend_data,
+            supplier_data=request.supplier_data,
+            metrics=request.metrics,
+            proof_points=request.proof_points,
+            playbook_data=request.playbook_data
+        )
+
+        # Parse the LLM response - could be JSON array or JSON object with Recommendations key
+        try:
+            parsed = json_module.loads(response.content)
+            if isinstance(parsed, list):
+                # Direct array format: ["rec1", "rec2", ...]
+                recommendations = parsed
+            elif isinstance(parsed, dict):
+                # Object format: {"Recommendations": [...]} or {"recommendations": [...]}
+                recommendations = (
+                    parsed.get("Recommendations") or
+                    parsed.get("recommendations") or
+                    [response.content]
+                )
+            else:
+                recommendations = [response.content]
+        except json_module.JSONDecodeError:
+            # If not valid JSON, split by newlines or use as single recommendation
+            recommendations = [r.strip() for r in response.content.split('\n') if r.strip()]
+            if not recommendations:
+                recommendations = [response.content]
+
+        return {
+            "status": "success",
+            "recommendations": recommendations,
+            "model_used": response.model_used,
+            "thinking_time": f"{response.latency_ms/1000:.1f}s"
+        }
+
+    except Exception as e:
+        logger.error("Failed to generate recommendations", error=str(e))
+        # Return fallback recommendations based on opportunity type
+        fallback = {
+            "volume-bundling": [
+                f"Consolidate demands across sites for {request.category_name} to leverage economies of scale",
+                "Negotiate volume-based discounts with your top suppliers",
+                "Bundle similar sub-categories to increase negotiating leverage",
+                "Set up quarterly demand aggregation reviews",
+                "I will monitor market conditions and alert you on significant changes (±5% threshold)."
+            ],
+            "target-pricing": [
+                f"Implement should-cost analysis for {request.category_name} key items",
+                "Switch to index-based pricing with your top suppliers",
+                "Re-negotiate pricing terms based on market benchmarks",
+                "Set up automated price monitoring with ±5% threshold alerts",
+                "I will monitor market conditions and alert you on significant changes."
+            ],
+            "risk-management": [
+                f"Qualify backup suppliers for {request.category_name} to reduce concentration risk",
+                "Standardize payment terms across all suppliers",
+                "Develop contingency sourcing plan for high-risk regions",
+                "Implement supplier risk monitoring dashboard",
+                "I will monitor market conditions and alert you on significant changes (±5% threshold)."
+            ],
+            "respec-pack": [
+                f"Analyze specification variations in {request.category_name} for standardization opportunities",
+                "Review pack sizes to identify cost reduction potential",
+                "Explore flexi tanks or bulk delivery options where applicable",
+                "Conduct value engineering workshop with key suppliers",
+                "I will monitor market conditions and alert you on significant changes (±5% threshold)."
+            ]
+        }
+        return {
+            "status": "fallback",
+            "recommendations": fallback.get(request.opportunity_type, fallback["volume-bundling"]),
+            "error": str(e)
+        }
+
+
+# ============================================================================
+# LEADERSHIP BRIEF DOCX GENERATION ENDPOINT
+# ============================================================================
+
+class LeadershipBriefRequest(BaseModel):
+    """Request for generating a Leadership Brief docx."""
+    opportunity_id: str = Field(..., description="Opportunity type ID")
+    opportunity_name: str = Field(..., description="Opportunity display name")
+    category_name: str = Field(..., description="Category name e.g. 'Edible Oils'")
+    locations: List[str] = Field(default=[], description="Geographic locations")
+    total_spend: float = Field(default=0, description="Total spend amount")
+    recommendations: List[str] = Field(default=[], description="Accepted recommendations")
+    proof_points: List[dict] = Field(default=[], description="Proof points with validation status")
+    suppliers: List[dict] = Field(default=[], description="Suppliers with spend data")
+    metrics: dict = Field(default={}, description="Computed metrics")
+    savings_estimate: str = Field(default="3-5%", description="Estimated savings percentage")
+
+
+@router.options("/generate-brief")
+async def generate_brief_options():
+    """Handle CORS preflight for brief generation."""
+    from fastapi.responses import Response
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        }
+    )
+
+
+@router.post("/generate-brief")
+async def generate_leadership_brief(request: LeadershipBriefRequest):
+    """
+    Generate a Leadership Brief Word document (.docx) for an accepted opportunity.
+    Returns the docx file as a downloadable response.
+    """
+    from fastapi.responses import Response
+    from docx import Document
+    from docx.shared import Inches, Pt, RGBColor
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.style import WD_STYLE_TYPE
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
+    import io
+
+    logger.info(f"Generating leadership brief for {request.opportunity_id}: {request.category_name}")
+
+    # Create document
+    doc = Document()
+
+    # Helper function to format currency
+    def format_currency(amount: float) -> str:
+        if amount >= 1_000_000:
+            return f"${amount / 1_000_000:.1f}M"
+        elif amount >= 1_000:
+            return f"${amount / 1_000:.0f}K"
+        return f"${amount:.0f}"
+
+    # Helper to set cell shading
+    def set_cell_shading(cell, color: str):
+        shading = OxmlElement('w:shd')
+        shading.set(qn('w:fill'), color)
+        cell._tc.get_or_add_tcPr().append(shading)
+
+    # Opportunity type titles
+    opp_titles = {
+        "volume-bundling": "Volume Bundling",
+        "target-pricing": "Target Pricing",
+        "risk-management": "Risk Management",
+        "respec-pack": "Re-specification Pack"
+    }
+    opp_title = opp_titles.get(request.opportunity_id, request.opportunity_name)
+
+    # =========================================================================
+    # TITLE SECTION
+    # =========================================================================
+    title = doc.add_heading(f"LEADERSHIP BRIEF", level=0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for run in title.runs:
+        run.font.size = Pt(24)
+        run.font.bold = True
+
+    # Subtitle
+    subtitle = doc.add_paragraph()
+    subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = subtitle.add_run(f"{request.category_name}: {opp_title}")
+    run.font.size = Pt(16)
+    run.font.color.rgb = RGBColor(0x33, 0x33, 0x33)
+
+    # Date
+    date_para = doc.add_paragraph()
+    date_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    from datetime import datetime
+    run = date_para.add_run(f"Strategic Summary for Leadership Review | {datetime.now().strftime('%B %Y')}")
+    run.font.size = Pt(11)
+    run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # TOTAL SPEND SECTION
+    # =========================================================================
+    doc.add_heading("TOTAL SPEND", level=1)
+    spend_para = doc.add_paragraph()
+    run = spend_para.add_run(format_currency(request.total_spend))
+    run.font.size = Pt(28)
+    run.font.bold = True
+    run.font.color.rgb = RGBColor(0x10, 0xB9, 0x81)  # Emerald color
+
+    if request.locations:
+        loc_para = doc.add_paragraph()
+        run = loc_para.add_run(f"Focus Regions: {', '.join(request.locations)}")
+        run.font.size = Pt(11)
+        run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # CURRENT STATE / METRICS SECTION
+    # =========================================================================
+    doc.add_heading("CURRENT STATE", level=1)
+
+    # Metrics table
+    metrics_table = doc.add_table(rows=2, cols=4)
+    metrics_table.style = 'Table Grid'
+    metrics_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+    # Header row
+    headers = ["Metric", "Value", "Status", "Insight"]
+    for idx, header in enumerate(headers):
+        cell = metrics_table.rows[0].cells[idx]
+        cell.text = header
+        set_cell_shading(cell, "F3F4F6")
+        for para in cell.paragraphs:
+            para.runs[0].font.bold = True
+            para.runs[0].font.size = Pt(10)
+
+    # Data row
+    validated_count = len([pp for pp in request.proof_points if pp.get('isValidated', False)])
+    total_pps = len(request.proof_points)
+    confidence = (validated_count / total_pps * 100) if total_pps > 0 else 0
+
+    metric_data = [
+        ("Top 3 Concentration", f"{request.metrics.get('top3Concentration', 65):.0f}%", "High" if request.metrics.get('top3Concentration', 65) > 60 else "Medium", "Opportunity for diversification"),
+        ("Price Variance", f"{request.metrics.get('priceVariance', 15):.0f}%", "Medium", "Room for standardization"),
+        ("Supplier Count", f"{request.metrics.get('supplierCount', len(request.suppliers))}", "-", "Active suppliers analyzed"),
+        ("Confidence", f"{confidence:.0f}%", "High" if confidence >= 70 else "Medium", f"{validated_count}/{total_pps} proof points validated")
+    ]
+
+    # Add more rows for metrics
+    for metric_row in metric_data[1:]:
+        metrics_table.add_row()
+
+    for row_idx, (metric, value, stat, insight) in enumerate(metric_data):
+        row = metrics_table.rows[row_idx + 1]
+        row.cells[0].text = metric
+        row.cells[1].text = value
+        row.cells[2].text = stat
+        row.cells[3].text = insight
+        for cell in row.cells:
+            for para in cell.paragraphs:
+                for run in para.runs:
+                    run.font.size = Pt(10)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # SUPPLIER ANALYSIS SECTION
+    # =========================================================================
+    doc.add_heading("SUPPLIER ANALYSIS", level=1)
+
+    if request.suppliers:
+        supplier_table = doc.add_table(rows=1, cols=3)
+        supplier_table.style = 'Table Grid'
+
+        # Header
+        headers = ["Supplier", "Spend", "% of Total"]
+        for idx, header in enumerate(headers):
+            cell = supplier_table.rows[0].cells[idx]
+            cell.text = header
+            set_cell_shading(cell, "F3F4F6")
+            for para in cell.paragraphs:
+                para.runs[0].font.bold = True
+                para.runs[0].font.size = Pt(10)
+
+        # Data rows (top 5 suppliers)
+        for supplier in request.suppliers[:5]:
+            row = supplier_table.add_row()
+            row.cells[0].text = supplier.get('name', 'Unknown')
+            row.cells[1].text = format_currency(supplier.get('spend', 0))
+            pct = (supplier.get('spend', 0) / request.total_spend * 100) if request.total_spend > 0 else 0
+            row.cells[2].text = f"{pct:.1f}%"
+            for cell in row.cells:
+                for para in cell.paragraphs:
+                    for run in para.runs:
+                        run.font.size = Pt(10)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # PROOF POINTS SECTION
+    # =========================================================================
+    doc.add_heading("PROOF POINTS VALIDATION", level=1)
+
+    pp_table = doc.add_table(rows=1, cols=3)
+    pp_table.style = 'Table Grid'
+
+    # Header
+    headers = ["Proof Point", "Status", "Impact"]
+    for idx, header in enumerate(headers):
+        cell = pp_table.rows[0].cells[idx]
+        cell.text = header
+        set_cell_shading(cell, "F3F4F6")
+        for para in cell.paragraphs:
+            para.runs[0].font.bold = True
+            para.runs[0].font.size = Pt(10)
+
+    # Data rows
+    for pp in request.proof_points:
+        row = pp_table.add_row()
+        row.cells[0].text = pp.get('name', 'Unknown')
+        is_validated = pp.get('isValidated', False)
+        row.cells[1].text = "Validated" if is_validated else "Pending"
+        row.cells[2].text = "High" if is_validated else "To be assessed"
+
+        # Color the status cell
+        if is_validated:
+            set_cell_shading(row.cells[1], "D1FAE5")  # Light green
+        else:
+            set_cell_shading(row.cells[1], "FEF3C7")  # Light yellow
+
+        for cell in row.cells:
+            for para in cell.paragraphs:
+                for run in para.runs:
+                    run.font.size = Pt(10)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # RECOMMENDATIONS SECTION
+    # =========================================================================
+    doc.add_heading("ACCEPTED RECOMMENDATIONS", level=1)
+
+    for idx, rec in enumerate(request.recommendations, 1):
+        para = doc.add_paragraph()
+        run = para.add_run(f"{idx}. ")
+        run.font.bold = True
+        run.font.size = Pt(11)
+        run = para.add_run(rec)
+        run.font.size = Pt(11)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # SAVINGS POTENTIAL SECTION
+    # =========================================================================
+    doc.add_heading("SAVINGS POTENTIAL", level=1)
+
+    savings_para = doc.add_paragraph()
+    run = savings_para.add_run(f"Estimated Savings: {request.savings_estimate}")
+    run.font.size = Pt(14)
+    run.font.bold = True
+    run.font.color.rgb = RGBColor(0x10, 0xB9, 0x81)
+
+    if request.total_spend > 0:
+        # Calculate estimated dollar savings (using midpoint of percentage range)
+        try:
+            savings_pct = request.savings_estimate.replace('%', '').strip()
+            if '-' in savings_pct:
+                low, high = savings_pct.split('-')
+                avg_pct = (float(low) + float(high)) / 2 / 100
+            else:
+                avg_pct = float(savings_pct) / 100
+            estimated_savings = request.total_spend * avg_pct
+            savings_dollar_para = doc.add_paragraph()
+            run = savings_dollar_para.add_run(f"Estimated Dollar Savings: {format_currency(estimated_savings)}")
+            run.font.size = Pt(12)
+            run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
+        except:
+            pass
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # NEXT STEPS SECTION
+    # =========================================================================
+    doc.add_heading("NEXT STEPS", level=1)
+
+    next_steps = [
+        "Schedule kickoff meeting with procurement team",
+        "Identify key stakeholders for implementation",
+        "Develop detailed implementation timeline",
+        "Set up monitoring dashboard for tracking progress",
+        f"Review and update recommendations quarterly based on market conditions in {', '.join(request.locations) if request.locations else 'target regions'}"
+    ]
+
+    for step in next_steps:
+        para = doc.add_paragraph()
+        para.style = 'List Bullet'
+        para.add_run(step).font.size = Pt(11)
+
+    doc.add_paragraph()
+
+    # =========================================================================
+    # FOOTER
+    # =========================================================================
+    footer_para = doc.add_paragraph()
+    footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = footer_para.add_run("Generated by Beroe Procurement Intelligence Platform")
+    run.font.size = Pt(9)
+    run.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
+    run.font.italic = True
+
+    # Save to bytes
+    file_stream = io.BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    # Return as downloadable file
+    filename = f"{request.category_name.replace(' ', '_')}_{opp_title.replace(' ', '_')}_Leadership_Brief.docx"
+
+    return Response(
+        content=file_stream.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "Content-Disposition"
+        }
+    )

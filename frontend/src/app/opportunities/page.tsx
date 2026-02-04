@@ -23,6 +23,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   calculateOpportunityRiskImpact,
   calculateOpportunityESGImpact,
@@ -67,7 +68,7 @@ const OPPORTUNITY_TYPE_CONFIG: Record<string, {
   },
 };
 
-export default function OpportunitiesPage() {
+function OpportunitiesContent() {
   const { state } = useApp();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
@@ -534,6 +535,14 @@ export default function OpportunitiesPage() {
   );
 }
 
+export default function OpportunitiesPage() {
+  return (
+    <ProtectedRoute>
+      <OpportunitiesContent />
+    </ProtectedRoute>
+  );
+}
+
 function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; variant: "qualified" | "potential" }) {
   const router = useRouter();
   const isPotential = variant === "potential";
@@ -663,86 +672,25 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
         </div>
       </div>
 
-      {/* Proof Points / Initiatives List */}
+      {/* Confidence Score */}
       <div className="mb-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">
-            Proof Points ({validatedCount} validated)
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
+            Confidence:
+          </span>
+          <span className={`text-sm font-bold ${opp.confidence >= 70 ? 'text-emerald-600' : opp.confidence >= 40 ? 'text-amber-600' : 'text-gray-600'}`}>
+            {opp.confidence}%
           </span>
         </div>
-        <div className="space-y-1.5 max-h-32 overflow-y-auto">
-          {proofPoints.slice(0, 5).map((pp: any) => (
-            <div
-              key={pp.id}
-              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] ${
-                pp.isValidated
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'bg-gray-50 text-gray-500'
-              }`}
-            >
-              {pp.isValidated ? (
-                <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
-              ) : (
-                <div className="h-3 w-3 rounded-full border border-gray-300 shrink-0" />
-              )}
-              <span className="truncate">{pp.name}</span>
-            </div>
-          ))}
-          {proofPoints.length > 5 && (
-            <div className="text-[10px] text-gray-400 pl-2">
-              +{proofPoints.length - 5} more proof points
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Priority & Confidence Scores */}
-      <div className="mb-3 space-y-2">
-        {/* Priority Score - based on goals alignment */}
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
-              Priority Score:
-            </span>
-            <span className={`text-sm font-bold ${
-              opp.priorityScore >= 60 ? 'text-blue-600' :
-              opp.priorityScore >= 40 ? 'text-indigo-600' : 'text-gray-600'
-            }`}>
-              {Math.round(opp.priorityScore || 0)}
-            </span>
-          </div>
-          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${Math.min(opp.priorityScore || 0, 100)}%` }}
-              viewport={{ once: true }}
-              className={`h-full rounded-full ${
-                opp.priorityScore >= 60 ? 'bg-blue-400' :
-                opp.priorityScore >= 40 ? 'bg-indigo-400' : 'bg-gray-300'
-              }`}
-            />
-          </div>
-        </div>
-        {/* Confidence Score */}
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">
-              Confidence:
-            </span>
-            <span className={`text-sm font-bold ${opp.confidence >= 70 ? 'text-emerald-600' : opp.confidence >= 40 ? 'text-amber-600' : 'text-gray-600'}`}>
-              {opp.confidence}%
-            </span>
-          </div>
-          <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: `${opp.confidence}%` }}
-              viewport={{ once: true }}
-              className={`h-full rounded-full ${
-                opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
-              }`}
-            />
-          </div>
+        <div className="h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: `${opp.confidence}%` }}
+            viewport={{ once: true }}
+            className={`h-full rounded-full ${
+              opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
+            }`}
+          />
         </div>
       </div>
 

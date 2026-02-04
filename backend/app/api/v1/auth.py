@@ -5,7 +5,7 @@ User registration, login, and session management.
 
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
@@ -31,8 +31,11 @@ router = APIRouter()
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# OAuth2 scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+# OAuth2 scheme - auto_error=False allows optional auth
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
+
+# Demo user ID for unauthenticated requests
+DEMO_USER_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -41,8 +44,10 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password."""
-    return pwd_context.hash(password)
+    """Hash a password. Truncate to 72 bytes for bcrypt compatibility."""
+    # bcrypt has a 72 byte limit
+    password_bytes = password.encode('utf-8')[:72]
+    return pwd_context.hash(password_bytes.decode('utf-8', errors='ignore'))
 
 
 def create_access_token(user: User) -> tuple[str, int]:
@@ -100,10 +105,42 @@ async def get_user_from_token(
 
 
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    token: Optional[str] = Depends(oauth2_scheme),
     db: AsyncSession = Depends(get_db)
 ) -> User:
-    """Get the current authenticated user from JWT token."""
+    """
+    Get the current authenticated user from JWT token.
+    In demo mode (no token), returns or creates a demo user.
+    """
+    # If no token provided, use demo user
+    if not token:
+        # Get or create demo user
+        result = await db.execute(
+            select(User).where(User.id == DEMO_USER_ID)
+        )
+        user = result.scalar_one_or_none()
+
+        if not user:
+            # Create demo user
+            user = User(
+                id=DEMO_USER_ID,
+                email="demo@beroe.com",
+                username="demo",
+                name="Demo User",
+                company="Demo Company",
+                hashed_password="",
+                goals={"cost": 40, "risk": 35, "esg": 25},
+                setup_step=0,
+                setup_completed=False,
+                is_active=True,
+            )
+            db.add(user)
+            await db.commit()
+            await db.refresh(user)
+
+        return user
+
+    # Validate token
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -256,12 +293,17 @@ async def login_json(
             detail="Email or username is required"
         )
 
-    # Find user
+    # Find user - try email first, then username if provided
     result = await db.execute(
-        select(User).where(
-            or_(User.email == identifier, User.username == identifier)
-        )
+        select(User).where(User.email == identifier)
     )
+    user = result.scalar_one_or_none()
+
+    # If not found by email, try username
+    if not user and login_data.username:
+        result = await db.execute(
+            select(User).where(User.username == identifier)
+        )
     user = result.scalar_one_or_none()
 
     if not user or not verify_password(login_data.password, user.hashed_password):

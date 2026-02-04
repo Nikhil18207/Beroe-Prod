@@ -854,6 +854,95 @@ Return JSON: {{"category": "selected_category", "confidence": 0.0-1.0, "reasonin
             response_format="json"
         )
 
+    async def generate_opportunity_recommendations(
+        self,
+        opportunity_type: str,
+        category_name: str,
+        spend_data: Dict[str, Any],
+        supplier_data: List[Dict[str, Any]],
+        metrics: Dict[str, Any],
+        proof_points: List[Dict[str, Any]],
+        playbook_data: Optional[Dict[str, Any]] = None,
+        locations: Optional[List[str]] = None
+    ) -> LLMResponse:
+        """
+        Generate specific, data-driven recommendations for a procurement opportunity.
+
+        This method takes ALL the context data and generates very specific recommendations
+        based on actual supplier names, spend amounts, metrics, and geographic locations.
+        """
+        # Build a rich context for the LLM
+        validated_pps = [pp for pp in proof_points if pp.get('isValidated', False)]
+        unvalidated_pps = [pp for pp in proof_points if not pp.get('isValidated', False)]
+
+        context = {
+            "opportunity_type": opportunity_type,
+            "category": category_name,
+            "locations": locations or [],  # Geographic regions for this category
+            "total_spend": spend_data.get("totalSpend", 0),
+            "spend_breakdown": spend_data.get("breakdown", [])[:10],  # Top 10
+            "top_suppliers": supplier_data[:10] if supplier_data else [],
+            "metrics": metrics,
+            "validated_proof_points": len(validated_pps),
+            "total_proof_points": len(proof_points),
+            "unvalidated_items": [pp.get("name") for pp in unvalidated_pps],
+            "playbook_insights": playbook_data.get("recommendations", [])[:5] if playbook_data else []
+        }
+
+        opportunity_context = {
+            "volume-bundling": "consolidating purchase volumes across sites/categories for better pricing",
+            "target-pricing": "using should-cost models and market indices to negotiate better prices",
+            "risk-management": "reducing supply chain risks through diversification and financial instruments",
+            "respec-pack": "optimizing specifications and pack sizes to reduce costs"
+        }.get(opportunity_type, opportunity_type)
+
+        # Build location context string for the prompt
+        location_context = ""
+        if locations and len(locations) > 0:
+            location_context = f"""
+GEOGRAPHIC CONTEXT:
+- Locations/Regions: {', '.join(locations)}
+- Consider regional factors when making recommendations (local suppliers, tariffs, logistics, etc.)
+"""
+
+        system_prompt = """You are an expert procurement strategist at Beroe, a leading procurement intelligence company.
+Your task is to generate SPECIFIC, ACTIONABLE recommendations based on the actual data provided.
+
+CRITICAL RULES:
+1. USE ACTUAL SUPPLIER NAMES from the data - never use generic placeholders like "Supplier A"
+2. USE ACTUAL SPEND AMOUNTS - cite specific dollar figures
+3. USE ACTUAL METRICS - reference specific percentages and numbers
+4. USE ACTUAL GEOGRAPHIC LOCATIONS - reference the regions/countries when relevant
+5. Each recommendation must be directly tied to the data provided
+6. Be concise but specific - each recommendation should be 1-2 sentences max
+7. Generate exactly 4-5 recommendations
+8. Include a monitoring note at the end about price/market changes
+9. Make recommendations region-specific when location data is available
+
+Return ONLY a JSON array of recommendation strings. No explanation, no markdown."""
+
+        user_prompt = f"""Generate specific recommendations for this {opportunity_context} opportunity.
+{location_context}
+OPPORTUNITY DATA:
+{json.dumps(context, indent=2, default=str)}
+
+Based on this data, generate 4-5 SPECIFIC recommendations that:
+- Reference actual supplier names (e.g., "{supplier_data[0].get('name', 'Top Supplier') if supplier_data else 'Top Supplier'}")
+- Cite actual spend figures (e.g., "${context['total_spend']:,.0f}")
+- Reference actual metrics (e.g., "{metrics.get('top3Concentration', 65)}% concentration")
+- Reference actual locations (e.g., "{locations[0] if locations and len(locations) > 0 else 'your regions'}")
+- Are actionable and specific to this category: {category_name}
+
+Return as JSON array:
+["Recommendation 1 with specific data and location...", "Recommendation 2...", "Recommendation 3...", "Recommendation 4...", "I will monitor market conditions in {', '.join(locations) if locations else 'your regions'} and alert you on significant changes (±5% threshold)."]"""
+
+        return await self._call_llm(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            complexity=TaskComplexity.HIGH,
+            response_format="json"
+        )
+
     def _estimate_complexity(self, text: str) -> TaskComplexity:
         """Estimate task complexity from text."""
         complex_indicators = [

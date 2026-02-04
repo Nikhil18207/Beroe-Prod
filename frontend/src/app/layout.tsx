@@ -4,6 +4,7 @@ import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { AppProvider } from "@/context/AppContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
@@ -36,11 +37,13 @@ export default function RootLayout({
           data-debug="true"
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
-        <AppProvider>
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </AppProvider>
+        </AuthProvider>
         <VisualEditsMessenger />
       </body>
     </html>

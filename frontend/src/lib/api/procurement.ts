@@ -13,6 +13,8 @@ import type {
   LeverTheme,
 } from "@/types/api";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+
 export const procurementApi = {
   // ============================================================================
   // Health & Status
@@ -683,6 +685,95 @@ Please provide:
         thinking_time: string;
       };
     }>("/chat/demo-message", { content: contextMessage });
+  },
+
+  /**
+   * Generate specific LLM-powered recommendations for an opportunity
+   * This sends all context data and gets back specific recommendations using actual data
+   */
+  getOpportunityRecommendations: async (params: {
+    opportunityType: string;
+    categoryName: string;
+    locations?: string[];  // Geographic locations/regions for this category
+    spendData: {
+      totalSpend: number;
+      breakdown?: Array<{ supplier: string; spend: number; category?: string }>;
+    };
+    supplierData: Array<{ name: string; spend: number; category?: string; location?: string }>;
+    metrics: {
+      priceVariance?: number;
+      top3Concentration?: number;
+      tailSpendPercentage?: number;
+      supplierCount?: number;
+      avgSpendPerSupplier?: number;
+      [key: string]: number | string | undefined;
+    };
+    proofPoints: Array<{ id: string; name: string; isValidated: boolean; description?: string }>;
+    playbookData?: Record<string, unknown>;
+  }) => {
+    return apiClient.post<{
+      status: string;
+      recommendations: string[];
+      model_used?: string;
+      thinking_time?: string;
+      error?: string;
+    }>("/chat/recommendations", {
+      opportunity_type: params.opportunityType,
+      category_name: params.categoryName,
+      locations: params.locations,
+      spend_data: params.spendData,
+      supplier_data: params.supplierData,
+      metrics: params.metrics,
+      proof_points: params.proofPoints,
+      playbook_data: params.playbookData,
+    });
+  },
+
+  /**
+   * Generate Leadership Brief docx for an accepted opportunity
+   * Returns the docx file as a blob
+   */
+  generateLeadershipBrief: async (params: {
+    opportunityId: string;
+    opportunityName: string;
+    categoryName: string;
+    locations: string[];
+    totalSpend: number;
+    recommendations: string[];
+    proofPoints: Array<{ id: string; name: string; isValidated: boolean }>;
+    suppliers: Array<{ name: string; spend: number }>;
+    metrics: {
+      priceVariance?: number;
+      top3Concentration?: number;
+      tailSpendPercentage?: number;
+      supplierCount?: number;
+    };
+    savingsEstimate: string;
+  }): Promise<ArrayBuffer> => {
+    const response = await fetch(`${API_BASE_URL}/chat/generate-brief`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        opportunity_id: params.opportunityId,
+        opportunity_name: params.opportunityName,
+        category_name: params.categoryName,
+        locations: params.locations,
+        total_spend: params.totalSpend,
+        recommendations: params.recommendations,
+        proof_points: params.proofPoints,
+        suppliers: params.suppliers,
+        metrics: params.metrics,
+        savings_estimate: params.savingsEstimate,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to generate brief: ${response.statusText}`);
+    }
+
+    return response.arrayBuffer();
   },
 };
 

@@ -163,6 +163,36 @@ interface AppState {
 
   // Opportunity metrics from 7-step calculation (per-opportunity savings)
   opportunityMetrics: OpportunityMetricsData[] | null;
+
+  // Accepted recommendations data (for leadership brief generation)
+  acceptedRecommendations: AcceptedRecommendationsData | null;
+}
+
+// Accepted recommendations data structure for leadership brief
+export interface AcceptedRecommendationsData {
+  opportunityId: string;
+  opportunityName: string;
+  categoryName: string;
+  locations: string[];
+  totalSpend: number;
+  recommendations: string[];
+  proofPoints: Array<{
+    id: string;
+    name: string;
+    isValidated: boolean;
+  }>;
+  suppliers: Array<{
+    name: string;
+    spend: number;
+  }>;
+  metrics: {
+    priceVariance?: number;
+    top3Concentration?: number;
+    tailSpendPercentage?: number;
+    supplierCount?: number;
+  };
+  savingsEstimate: string;
+  acceptedAt: number;
 }
 
 // Opportunity metrics data (simplified from procurement-metrics.ts)
@@ -247,6 +277,7 @@ type AppAction =
   | { type: "SET_PLAYBOOK_DATA"; payload: PlaybookData | null }
   | { type: "SET_SPEND_ANALYSIS"; payload: SpendAnalysis | null }
   | { type: "SET_OPPORTUNITY_METRICS"; payload: OpportunityMetricsData[] | null }
+  | { type: "SET_ACCEPTED_RECOMMENDATIONS"; payload: AcceptedRecommendationsData | null }
   | { type: "RESET_STATE" }
   | { type: "LOGOUT" };
 
@@ -351,6 +382,7 @@ const initialState: AppState = {
   playbookData: null,
   spendAnalysis: null,
   opportunityMetrics: null,
+  acceptedRecommendations: null,
   setupData: {
     categoryName: "",
     spend: 0,
@@ -606,6 +638,12 @@ function appReducer(state: AppState, action: AppAction): AppState {
         opportunityMetrics: action.payload,
       };
 
+    case "SET_ACCEPTED_RECOMMENDATIONS":
+      return {
+        ...state,
+        acceptedRecommendations: action.payload,
+      };
+
     case "RESET_STATE":
       return {
         ...initialState,
@@ -660,6 +698,7 @@ interface AppContextType {
     setPlaybookData: (data: PlaybookData | null) => void;
     setSpendAnalysis: (data: SpendAnalysis | null) => void;
     setOpportunityMetrics: (metrics: OpportunityMetricsData[] | null) => void;
+    setAcceptedRecommendations: (data: AcceptedRecommendationsData | null) => void;
     resetState: () => void;
     logout: () => void;
   };
@@ -1285,6 +1324,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setOpportunityMetrics: useCallback(
       (metrics: OpportunityMetricsData[] | null) =>
         dispatch({ type: "SET_OPPORTUNITY_METRICS", payload: metrics }),
+      []
+    ),
+    setAcceptedRecommendations: useCallback(
+      (data: AcceptedRecommendationsData | null) =>
+        dispatch({ type: "SET_ACCEPTED_RECOMMENDATIONS", payload: data }),
       []
     ),
     resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),

@@ -3,9 +3,11 @@
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const TOKEN_KEY = "beroe_auth_token";
 
 interface RequestOptions extends RequestInit {
   timeout?: number;
+  skipAuth?: boolean; // Skip adding auth header for public endpoints
 }
 
 class ApiError extends Error {
@@ -20,11 +22,35 @@ class ApiError extends Error {
   }
 }
 
+// Get auth token from localStorage
+function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+// Build headers with optional auth
+function buildHeaders(options: RequestOptions): HeadersInit {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
+
+  // Add auth token if available and not skipped
+  if (!options.skipAuth) {
+    const token = getAuthToken();
+    if (token) {
+      (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
+  return headers;
+}
+
 async function request<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 30000, ...fetchOptions } = options;
+  const { timeout = 30000, skipAuth, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -33,10 +59,7 @@ async function request<T>(
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...fetchOptions,
       signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        ...fetchOptions.headers,
-      },
+      headers: buildHeaders({ ...options, skipAuth }),
     });
 
     clearTimeout(timeoutId);
@@ -69,10 +92,19 @@ async function uploadFile<T>(
   formData: FormData,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 60000, ...fetchOptions } = options;
+  const { timeout = 60000, skipAuth, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  // Build headers for file upload (no Content-Type, browser sets it)
+  const uploadHeaders: HeadersInit = { ...fetchOptions.headers };
+  if (!skipAuth) {
+    const token = getAuthToken();
+    if (token) {
+      (uploadHeaders as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    }
+  }
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -81,9 +113,7 @@ async function uploadFile<T>(
       signal: controller.signal,
       ...fetchOptions,
       // Don't set Content-Type - browser will set it with boundary for FormData
-      headers: {
-        ...fetchOptions.headers,
-      },
+      headers: uploadHeaders,
     });
 
     clearTimeout(timeoutId);

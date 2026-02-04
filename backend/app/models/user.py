@@ -24,11 +24,11 @@ class User(Base):
         default=uuid.uuid4
     )
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
-    username: Mapped[str] = mapped_column(String(100), unique=True, index=True, nullable=False)
-    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    username: Mapped[Optional[str]] = mapped_column(String(100), unique=True, index=True, nullable=True)
+    hashed_password: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     # Profile
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     company: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     role: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     avatar_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)

@@ -43,6 +43,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type PortfolioItem } from "@/context/AppContext";
 import { procurementApi } from "@/lib/api";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Comprehensive list of global locations (regions and countries)
 const AVAILABLE_LOCATIONS = [
@@ -138,7 +139,7 @@ const AVAILABLE_LOCATIONS = [
   "Worldwide",
 ];
 
-export default function PortfolioSetupPage() {
+function PortfolioSetupContent() {
   const router = useRouter();
   const { state, actions } = useApp();
   const locationDropdownRef = useRef<HTMLDivElement>(null);
@@ -867,5 +868,13 @@ export default function PortfolioSetupPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+  );
+}
+
+export default function PortfolioSetupPage() {
+  return (
+    <ProtectedRoute>
+      <PortfolioSetupContent />
+    </ProtectedRoute>
   );
 }

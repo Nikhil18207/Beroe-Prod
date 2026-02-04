@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type ActivityItem } from "@/context/AppContext";
 import { AnimatePresence } from "framer-motion";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Helper function to format relative time
 const formatRelativeTime = (timestamp: number): string => {
@@ -52,7 +53,7 @@ const fallbackConversations = [
   }
 ];
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { state } = useApp();
   const router = useRouter();
   const [chatInput, setChatInput] = useState("");
@@ -789,5 +790,13 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
   );
 }

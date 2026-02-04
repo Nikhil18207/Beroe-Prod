@@ -23,7 +23,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 import { procurementApi } from "@/lib/api/procurement";
-import type { ProofPoint } from "@/context/AppContext";
+import type { ProofPoint, AcceptedRecommendationsData } from "@/context/AppContext";
 import {
   calculateOpportunityRiskImpact,
   calculateOpportunityESGImpact,
@@ -409,12 +409,54 @@ export default function OpportunityDetailPage() {
   const [validatingProofPointId, setValidatingProofPointId] = useState<string | null>(null);
   const [pendingValidation, setPendingValidation] = useState(false);
 
+  // LLM Recommendations state
+  const [llmRecommendations, setLlmRecommendations] = useState<string[]>([]);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(true);
+  const [recommendationsError, setRecommendationsError] = useState<string | null>(null);
+  const [selectedRecommendations, setSelectedRecommendations] = useState<Set<number>>(new Set());
+
+
   // Get data from context
   const categoryName = state.setupData.categoryName || "Edible Oils";
   const setupOpportunities = state.setupOpportunities;
   const computedMetrics = state.computedMetrics;
   const totalSpend = state.setupData.spend || 0;
   const goals = state.setupData.goals || { cost: 60, risk: 25, esg: 15 };
+
+  // Get locations from portfolio items (selected categories)
+  const portfolioItems = state.portfolioItems || [];
+  const selectedCategories = state.selectedCategories || [];
+  const categoryLocations = useMemo(() => {
+    // Method 1: Try matching by selected category names
+    const categoryNames = selectedCategories.length > 0
+      ? selectedCategories.map(n => n.trim().toLowerCase())
+      : categoryName.split(',').map(n => n.trim().toLowerCase());
+
+    const matchingItems = portfolioItems.filter(item =>
+      categoryNames.some(name =>
+        item.name.toLowerCase() === name ||
+        item.name.toLowerCase().includes(name) ||
+        name.includes(item.name.toLowerCase())
+      )
+    );
+
+    // Combine all locations from matching portfolio items
+    const allLocations = matchingItems.flatMap(item => item.locations || []);
+
+    // Remove duplicates and return
+    const uniqueLocations = [...new Set(allLocations)];
+
+    // Debug log to see what's happening
+    console.log('[Locations Debug]', {
+      categoryName,
+      selectedCategories,
+      portfolioItems: portfolioItems.map(p => ({ name: p.name, locations: p.locations })),
+      matchingItems: matchingItems.map(m => m.name),
+      foundLocations: uniqueLocations
+    });
+
+    return uniqueLocations;
+  }, [categoryName, selectedCategories, portfolioItems]);
 
   // Find the opportunity data
   const opportunity = setupOpportunities.find(o => o.id === oppId);
@@ -439,18 +481,140 @@ export default function OpportunityDetailPage() {
   // Get tests for this opportunity type
   const tests = OPPORTUNITY_TESTS[oppId] || [];
 
-  // Extract top suppliers from context (parsed CSV data or computed metrics)
+  // Extract top suppliers from context (spendAnalysis or parsed CSV data)
   const topSuppliers = useMemo(() => {
-    // Try to get from computed metrics or use defaults
-    if (computedMetrics && typeof computedMetrics === 'object') {
-      // If we have supplier data in metrics
-      return ["Asia Pacific Grains", "Pacific Rim Cereals", "EuroGrain Trading"];
+    // Priority 1: Use pre-computed spendAnalysis if available
+    if (state.spendAnalysis?.topSuppliers && state.spendAnalysis.topSuppliers.length > 0) {
+      return state.spendAnalysis.topSuppliers.slice(0, 5).map(s => ({
+        name: s.name,
+        spend: s.spend
+      }));
     }
-    return ["Top Supplier 1", "Top Supplier 2", "Top Supplier 3"];
-  }, [computedMetrics]);
 
-  // Get recommendations
-  const recommendations = getRecommendations(oppId, categoryName, topSuppliers);
+    // Priority 2: Try to parse from persisted spend file data
+    const spendFile = state.persistedReviewData?.spendFile;
+    if (spendFile?.parsedData?.rows && Array.isArray(spendFile.parsedData.rows)) {
+      const supplierSpend: Record<string, number> = {};
+      spendFile.parsedData.rows.forEach((row: Record<string, string>) => {
+        // Try various column name variations
+        const supplier = row.supplier_name || row.Supplier || row.supplier || row.SUPPLIER ||
+                        row.vendor_name || row.Vendor || row.vendor || row.VENDOR ||
+                        row['Supplier Name'] || row['SUPPLIER NAME'];
+        const spendStr = row.spend || row.Spend || row.SPEND || row.amount || row.Amount ||
+                        row.value || row.Value || row['Spend Amount'] || row['Total Spend'];
+        const spend = parseFloat(String(spendStr || 0));
+        if (supplier && !isNaN(spend) && spend > 0) {
+          supplierSpend[supplier] = (supplierSpend[supplier] || 0) + spend;
+        }
+      });
+
+      const sorted = Object.entries(supplierSpend)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([name, spend]) => ({ name, spend }));
+
+      if (sorted.length > 0) {
+        return sorted;
+      }
+    }
+
+    // Fallback to defaults if no data available
+    return [
+      { name: "Top Supplier 1", spend: 0 },
+      { name: "Top Supplier 2", spend: 0 },
+      { name: "Top Supplier 3", spend: 0 }
+    ];
+  }, [state.spendAnalysis, state.persistedReviewData]);
+
+  // Fetch LLM recommendations on page load
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      setIsLoadingRecommendations(true);
+      setRecommendationsError(null);
+
+      try {
+        console.log('[Recommendations] Fetching...');
+        const response = await procurementApi.getOpportunityRecommendations({
+          opportunityType: oppId,
+          categoryName,
+          locations: categoryLocations.length > 0 ? categoryLocations : undefined,
+          spendData: {
+            totalSpend,
+            breakdown: topSuppliers.map(s => ({ supplier: s.name, spend: s.spend }))
+          },
+          supplierData: topSuppliers,
+          metrics: {
+            priceVariance: computedMetrics?.priceVariance || 15,
+            top3Concentration: computedMetrics?.top3Concentration || 65,
+            tailSpendPercentage: computedMetrics?.tailSpendPercentage || 12,
+            supplierCount: computedMetrics?.supplierCount || topSuppliers.length,
+            avgSpendPerSupplier: totalSpend / (topSuppliers.length || 1)
+          },
+          proofPoints: proofPoints.map(pp => ({
+            id: pp.id,
+            name: pp.name,
+            isValidated: pp.isValidated,
+            description: pp.description
+          }))
+        });
+
+        console.log('[Recommendations] Response:', response);
+        console.log('[Recommendations] Type of recommendations:', typeof response.recommendations);
+        console.log('[Recommendations] First item:', response.recommendations?.[0]);
+
+        if (response.recommendations && response.recommendations.length > 0) {
+          // Handle case where recommendations might be JSON strings or nested objects
+          let recs = response.recommendations;
+
+          // If the first item looks like JSON, try to parse it
+          if (recs.length === 1 && typeof recs[0] === 'string') {
+            const firstItem = recs[0].trim();
+            if (firstItem.startsWith('{') || firstItem.startsWith('[')) {
+              try {
+                const parsed = JSON.parse(firstItem);
+                if (Array.isArray(parsed)) {
+                  recs = parsed;
+                } else if (parsed.recommendations || parsed.Recommendations) {
+                  recs = parsed.recommendations || parsed.Recommendations;
+                }
+              } catch {
+                // Keep original if parsing fails
+              }
+            }
+          }
+
+          // Ensure all items are strings (not objects)
+          recs = recs.map((r: unknown) => {
+            if (typeof r === 'string') return r;
+            if (typeof r === 'object' && r !== null) {
+              // If it's an object with a text/recommendation property, extract it
+              const obj = r as Record<string, unknown>;
+              return obj.text || obj.recommendation || obj.content || JSON.stringify(r);
+            }
+            return String(r);
+          });
+
+          console.log('[Recommendations] Final recs:', recs);
+          setLlmRecommendations(recs);
+        } else {
+          // Use fallback recommendations
+          setLlmRecommendations(getRecommendations(oppId, categoryName, topSuppliers.map(s => s.name)).map(r => r.text));
+        }
+      } catch (error) {
+        console.error("Failed to fetch recommendations:", error);
+        setRecommendationsError("Failed to fetch recommendations");
+        // Use fallback recommendations on error
+        setLlmRecommendations(getRecommendations(oppId, categoryName, topSuppliers.map(s => s.name)).map(r => r.text));
+      } finally {
+        setIsLoadingRecommendations(false);
+      }
+    };
+
+    fetchRecommendations();
+  }, [oppId, categoryName, categoryLocations, totalSpend, topSuppliers, proofPoints, computedMetrics]);
+
+  // Fallback static recommendations (used only if LLM fails)
+  const fallbackRecommendations = getRecommendations(oppId, categoryName, topSuppliers.map(s => s.name));
 
   // Convert proof points to ProofPointResult format for calculation
   // ProofPoint from context only has: id, name, description, isValidated
@@ -816,50 +980,69 @@ export default function OpportunityDetailPage() {
             </div>
           </header>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
-            {/* Max AI Header */}
-            <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500">
-                <span className="text-white font-bold text-sm">M</span>
+          {/* Content - Chat Only */}
+          <div className="flex-1 overflow-y-auto flex flex-col">
+            {/* Chat Area */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4">
+              {/* Max AI Header */}
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500">
+                  <span className="text-white font-bold text-sm">M</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[15px] font-semibold text-gray-900">Max AI</h3>
+                  <p className="text-[11px] text-gray-500">Procurement Intelligence Assistant</p>
+                </div>
+                <div className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                  confidence >= 80 ? 'bg-emerald-100 text-emerald-700' :
+                  confidence >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                  'bg-blue-100 text-blue-700'
+                }`}>
+                  {confidence}% Confidence
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="text-[15px] font-semibold text-gray-900">Max AI</h3>
-                <p className="text-[11px] text-gray-500">Procurement Intelligence Assistant</p>
-              </div>
-              <div className={`px-2 py-1 rounded-full text-[10px] font-semibold ${
-                confidence >= 80 ? 'bg-emerald-100 text-emerald-700' :
-                confidence >= 50 ? 'bg-yellow-100 text-yellow-700' :
-                'bg-blue-100 text-blue-700'
-              }`}>
-                {confidence}% Confidence
-              </div>
-            </div>
 
-            {/* Chat Messages - Primary Focus (no inner scroll) */}
-            <div className="space-y-4">
-              {/* Welcome message with first question */}
-              {chatMessages.length === 0 && (
+              {/* Success message when all validated */}
+              {unvalidatedProofPoints.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200"
+                >
+                  <p className="text-[13px] text-emerald-700 font-medium">
+                    🎉 All proof points validated! Confidence is at 100%.
+                  </p>
+                  <p className="text-[11px] text-emerald-600 mt-1">
+                    Feel free to ask me anything else about this opportunity.
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Welcome message - shown when no chat yet */}
+              {chatMessages.length === 0 && unvalidatedProofPoints.length > 0 && (
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500">
-                      <span className="text-white font-bold text-[8px]">M</span>
-                    </div>
-                    <span className="text-[10px] font-semibold uppercase text-gray-400">Max AI</span>
-                  </div>
                   <p className="text-[13px] text-gray-700 leading-relaxed">
                     {getInsightText()}
                   </p>
                 </div>
               )}
 
-              {/* MCQ Question for current unvalidated proof point */}
+              {/* MCQ Question Card - Prominent when there's a question */}
               {currentQuestion && showMCQ && currentProofPointToValidate && (
-                <div className="p-4 rounded-2xl bg-white border border-gray-200 shadow-sm">
-                  <p className="text-[11px] text-blue-600 font-medium mb-2">
-                    Validating: {currentProofPointToValidate.name}
-                  </p>
-                  <p className="text-[13px] font-medium text-gray-800 mb-4 leading-relaxed">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-5 rounded-2xl bg-white border-2 border-blue-200 shadow-lg shadow-blue-100/50"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100">
+                      <AlertCircle className="h-3.5 w-3.5 text-blue-600" />
+                    </div>
+                    <span className="text-[12px] font-semibold text-blue-600">
+                      Validating: {currentProofPointToValidate.name}
+                    </span>
+                  </div>
+                  <p className="text-[14px] font-medium text-gray-800 mb-4 leading-relaxed">
                     {currentQuestion.question}
                   </p>
                   <div className="space-y-2">
@@ -868,28 +1051,26 @@ export default function OpportunityDetailPage() {
                         key={idx}
                         onClick={() => handleMCQAnswer(currentProofPointToValidate.id, idx, option)}
                         disabled={isLoading}
-                        className="w-full text-left p-3 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all text-[12px] text-gray-700 disabled:opacity-50"
+                        className="w-full text-left p-3 rounded-xl border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-[12px] text-gray-700 disabled:opacity-50 group"
                       >
-                        {option}
+                        <span className="inline-flex items-center gap-2">
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-500 group-hover:bg-blue-200 group-hover:text-blue-700 transition-colors">
+                            {String.fromCharCode(65 + idx)}
+                          </span>
+                          {option}
+                        </span>
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              {/* If all proof points validated, show success */}
-              {unvalidatedProofPoints.length === 0 && chatMessages.length > 0 && (
-                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-                  <p className="text-[13px] text-emerald-700 font-medium">
-                    🎉 All proof points validated! Confidence is at 100%.
-                  </p>
-                </div>
-              )}
-
-              {/* Chat Messages - flows naturally with the page */}
+              {/* Chat Messages */}
               {chatMessages.map((msg) => (
-                <div
+                <motion.div
                   key={msg.id}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
                   className={`p-4 rounded-2xl text-[13px] ${
                     msg.role === "user"
                       ? "bg-gray-100 text-gray-900 ml-8"
@@ -907,9 +1088,10 @@ export default function OpportunityDetailPage() {
                     </span>
                   </div>
                   <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
-                </div>
+                </motion.div>
               ))}
 
+              {/* Loading state */}
               {isLoading && (
                 <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100 mr-4">
                   <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500">
@@ -919,60 +1101,13 @@ export default function OpportunityDetailPage() {
                 </div>
               )}
 
-              {/* Hint for unvalidated proof points - show after questions done */}
+              {/* Hint when MCQ is hidden but there are unvalidated points */}
               {!showMCQ && unvalidatedProofPoints.length > 0 && chatMessages.length > 0 && (
                 <div className="p-3 rounded-xl bg-amber-50 border border-amber-200">
                   <p className="text-[11px] text-amber-700">
-                    💡 Ask me about "{unvalidatedProofPoints[0].name}" to validate it and increase confidence further.
+                    💡 Ask me about "{unvalidatedProofPoints[0].name}" to validate it, or click any unvalidated proof point above.
                   </p>
                 </div>
-              )}
-            </div>
-
-            {/* Proof Points Status */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">
-                  Proof Points ({validatedCount}/{proofPoints.length})
-                </h4>
-                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                  confidence >= 80 ? 'bg-emerald-100 text-emerald-700' :
-                  confidence >= 50 ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-red-100 text-red-700'
-                }`}>
-                  {confidence}% Confidence
-                </span>
-              </div>
-              <div className="space-y-2">
-                {proofPoints.map((pp, idx) => (
-                  <div key={idx} className={`flex items-center justify-between p-2 rounded-lg transition-colors ${
-                    !pp.isValidated ? 'bg-amber-50 border border-amber-100' : ''
-                  } ${validatingProofPointId === pp.id ? 'ring-2 ring-blue-300' : ''}`}>
-                    <div className="flex items-center gap-2">
-                      {pp.isValidated ? (
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                      ) : (
-                        <AlertCircle className="h-4 w-4 text-amber-500" />
-                      )}
-                      <span className={`text-[12px] ${pp.isValidated ? 'text-gray-700' : 'text-amber-700 font-medium'}`}>
-                        {pp.name}
-                      </span>
-                    </div>
-                    {!pp.isValidated && (
-                      <button
-                        onClick={() => handleManualValidate(pp.id)}
-                        className="text-[10px] font-semibold text-blue-600 hover:text-blue-800 px-2 py-1 rounded hover:bg-blue-50 transition-colors"
-                      >
-                        Validate
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {unvalidatedProofPoints.length > 0 && (
-                <p className="text-[11px] text-amber-600 bg-amber-50 p-2 rounded-lg">
-                  💡 Ask Max about "{unvalidatedProofPoints[0].name}" to validate it and increase confidence
-                </p>
               )}
             </div>
           </div>
@@ -1172,72 +1307,180 @@ export default function OpportunityDetailPage() {
                 </div>
 
                 <div className="flex gap-6">
-                  {/* Chart Area */}
-                  <div className="flex-1 space-y-3">
+                  {/* Chart Area - Vertical Bar Graph */}
+                  <div className="flex-1 space-y-4">
                     <h4 className="text-[14px] font-semibold text-gray-900">{getChartTitle()}</h4>
-                    <div className="relative h-[220px] w-full">
-                      {/* Y-axis labels */}
-                      <div className="absolute left-0 top-0 bottom-6 w-8 flex flex-col justify-between text-[10px] font-medium text-gray-400">
-                        <span>100%</span>
-                        <span>75%</span>
-                        <span>50%</span>
-                        <span>25%</span>
-                        <span>0%</span>
-                      </div>
 
-                      {/* Chart */}
-                      <div className="absolute left-10 right-0 top-0 bottom-6 border-l border-b border-gray-200">
-                        <svg className="h-full w-full" viewBox="0 0 400 200" preserveAspectRatio="none">
-                          {/* Grid lines */}
-                          {[0, 50, 100, 150].map((y, i) => (
-                            <line key={i} x1="0" y1={y} x2="400" y2={y} stroke="#f0f0f0" strokeWidth="1" />
-                          ))}
+                    {/* Vertical Bar Chart */}
+                    <div className="relative">
+                      {(() => {
+                        const maxSpend = Math.max(...topSuppliers.map(s => s.spend), 1);
+                        const colors = [
+                          { bar: 'from-blue-400 to-blue-600', glow: 'shadow-blue-200', text: 'text-blue-600' },
+                          { bar: 'from-purple-400 to-purple-600', glow: 'shadow-purple-200', text: 'text-purple-600' },
+                          { bar: 'from-emerald-400 to-emerald-600', glow: 'shadow-emerald-200', text: 'text-emerald-600' },
+                          { bar: 'from-amber-400 to-amber-600', glow: 'shadow-amber-200', text: 'text-amber-600' },
+                          { bar: 'from-rose-400 to-rose-600', glow: 'shadow-rose-200', text: 'text-rose-600' },
+                        ];
 
-                          {/* Chart line */}
-                          <motion.path
-                            d="M 0 180 L 80 160 L 160 120 L 240 80 L 320 50 L 400 30"
-                            fill="none"
-                            stroke="#3B82F6"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 1.5, ease: "easeInOut" }}
-                          />
-                        </svg>
-                      </div>
+                        return (
+                          <div className="relative h-[200px] flex items-end justify-between gap-3 px-2 pt-8 pb-2">
+                            {/* Y-axis labels */}
+                            <div className="absolute left-0 top-8 bottom-8 w-12 flex flex-col justify-between text-[10px] font-medium text-gray-400">
+                              <span>{formatCurrency(maxSpend)}</span>
+                              <span>{formatCurrency(maxSpend * 0.5)}</span>
+                              <span>$0</span>
+                            </div>
 
-                      {/* X-axis labels */}
-                      <div className="absolute bottom-0 left-10 right-0 flex justify-between text-[11px] font-medium text-gray-400">
-                        <span>Jan 24</span>
-                        <span>Jun 24</span>
-                        <span>Jan 25</span>
-                      </div>
-                    </div>
+                            {/* Grid lines */}
+                            <div className="absolute left-14 right-0 top-8 bottom-8">
+                              {[0, 1, 2].map((i) => (
+                                <div
+                                  key={i}
+                                  className="absolute left-0 right-0 border-t border-dashed border-gray-200"
+                                  style={{ top: `${i * 50}%` }}
+                                />
+                              ))}
+                            </div>
 
-                    {/* Legend */}
-                    <div className="flex gap-2 pt-2 pl-10 flex-wrap">
-                      {topSuppliers.slice(0, 3).map((supplier, idx) => (
-                        <span key={idx} className="text-[9px] font-medium text-gray-400 bg-gray-100 px-2 py-1 rounded truncate max-w-[120px]">
-                          {supplier}
-                        </span>
-                      ))}
+                            {/* Bars */}
+                            <div className="flex-1 flex items-end justify-around gap-2 ml-14 h-[160px]">
+                              {topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                const percentage = maxSpend > 0 ? (supplier.spend / maxSpend) * 100 : 0;
+                                const spendPercentOfTotal = totalSpend > 0 ? ((supplier.spend / totalSpend) * 100).toFixed(0) : '0';
+                                const color = colors[idx % colors.length];
+
+                                return (
+                                  <div key={idx} className="flex flex-col items-center gap-2 flex-1 max-w-[80px] group">
+                                    {/* Value label on top */}
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      transition={{ delay: idx * 0.1 + 0.5, duration: 0.3 }}
+                                      className="text-center"
+                                    >
+                                      <span className={`text-[11px] font-bold ${color.text}`}>
+                                        {formatCurrency(supplier.spend)}
+                                      </span>
+                                    </motion.div>
+
+                                    {/* Bar */}
+                                    <div className="relative w-full flex justify-center" style={{ height: '140px' }}>
+                                      <motion.div
+                                        className={`w-10 rounded-t-lg bg-gradient-to-t ${color.bar} shadow-lg ${color.glow} relative overflow-hidden cursor-pointer`}
+                                        initial={{ height: 0 }}
+                                        animate={{ height: `${percentage}%` }}
+                                        transition={{ delay: idx * 0.1, duration: 0.8, ease: "easeOut" }}
+                                        whileHover={{ scale: 1.05 }}
+                                      >
+                                        {/* Shine effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0" />
+                                        {/* Percentage badge */}
+                                        <div className="absolute inset-x-0 top-2 flex justify-center">
+                                          <span className="text-[9px] font-bold text-white/90">{spendPercentOfTotal}%</span>
+                                        </div>
+                                      </motion.div>
+                                    </div>
+
+                                    {/* Supplier name */}
+                                    <div className="w-full text-center">
+                                      <span className="text-[10px] font-medium text-gray-600 truncate block max-w-[70px] mx-auto" title={supplier.name}>
+                                        {supplier.name.length > 10 ? supplier.name.substring(0, 10) + '...' : supplier.name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Summary Stats */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6, duration: 0.4 }}
+                        className="mt-4 flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-50 via-purple-50 to-emerald-50 border border-gray-100"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="text-center">
+                            <span className="text-[10px] font-medium text-gray-500 block">Top 3 Share</span>
+                            <span className="text-[14px] font-bold text-gray-900">
+                              {totalSpend > 0
+                                ? ((topSuppliers.slice(0, 3).reduce((sum, s) => sum + s.spend, 0) / totalSpend) * 100).toFixed(0)
+                                : computedMetrics?.top3Concentration?.toFixed(0) || '65'}%
+                            </span>
+                          </div>
+                          <div className="h-8 w-px bg-gray-200" />
+                          <div className="text-center">
+                            <span className="text-[10px] font-medium text-gray-500 block">Suppliers</span>
+                            <span className="text-[14px] font-bold text-gray-900">{topSuppliers.length}</span>
+                          </div>
+                          <div className="h-8 w-px bg-gray-200" />
+                          <div className="text-center">
+                            <span className="text-[10px] font-medium text-gray-500 block">Total Spend</span>
+                            <span className="text-[14px] font-bold text-gray-900">{formatCurrency(totalSpend)}</span>
+                          </div>
+                        </div>
+                      </motion.div>
                     </div>
                   </div>
 
                   {/* Info Boxes */}
-                  <div className="w-[280px] space-y-4">
-                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
-                      <p className="text-[12px] leading-relaxed text-gray-600">
-                        Based on your spend data analysis, implementing this initiative could generate {savingsPercentage} savings on addressable spend.
+                  <div className="w-[260px] space-y-4">
+                    {/* Savings Potential Card */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-5 text-white shadow-lg shadow-emerald-200"
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <span className="text-[11px] font-semibold uppercase tracking-wider opacity-90">Savings Potential</span>
+                      </div>
+                      <div className="text-3xl font-bold mb-1">{savingsPercentage}</div>
+                      <p className="text-[11px] opacity-80 leading-relaxed">
+                        of addressable spend ({formatCurrency(totalSpend)})
                       </p>
-                    </div>
-                    <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
-                      <p className="text-[12px] leading-relaxed text-gray-600">
-                        {validatedCount} of {proofPoints.length} proof points validated. Answer more questions to increase confidence and narrow savings range.
+                    </motion.div>
+
+                    {/* Confidence Card */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Confidence</span>
+                        <span className={`text-[20px] font-bold ${
+                          confidence >= 80 ? 'text-emerald-600' :
+                          confidence >= 50 ? 'text-amber-600' : 'text-red-500'
+                        }`}>{confidence}%</span>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="h-2 w-full rounded-full bg-gray-100 overflow-hidden mb-3">
+                        <motion.div
+                          className={`h-full rounded-full ${
+                            confidence >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' :
+                            confidence >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' :
+                            'bg-gradient-to-r from-red-400 to-red-500'
+                          }`}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${confidence}%` }}
+                          transition={{ delay: 0.5, duration: 0.8 }}
+                        />
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-relaxed">
+                        {validatedCount}/{proofPoints.length} proof points validated
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
               </motion.section>
@@ -1275,45 +1518,200 @@ export default function OpportunityDetailPage() {
                 transition={{ delay: 0.3 }}
                 className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-gray-100"
               >
-                <h2 className="text-lg font-bold text-gray-900 mb-6">What I Recommend</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-lg font-bold text-gray-900">What I Recommend</h2>
+                    {!isLoadingRecommendations && selectedRecommendations.size > 0 && (
+                      <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                        {selectedRecommendations.size} selected
+                      </span>
+                    )}
+                  </div>
+                  {isLoadingRecommendations && (
+                    <div className="flex items-center gap-2 text-[11px] text-blue-600">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      <span>Analyzing your data...</span>
+                    </div>
+                  )}
+                  {!isLoadingRecommendations && !recommendationsError && (
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => {
+                          // Select all non-monitoring recommendations
+                          const allIndices = new Set<number>();
+                          llmRecommendations.forEach((rec, idx) => {
+                            const isMonitoringMessage = rec.toLowerCase().includes('monitor') && rec.toLowerCase().includes('alert');
+                            if (!(isMonitoringMessage && idx === llmRecommendations.length - 1)) {
+                              allIndices.add(idx);
+                            }
+                          });
+                          setSelectedRecommendations(allIndices);
+                        }}
+                        className="text-[11px] font-semibold text-blue-600 hover:text-blue-800 transition-colors px-2 py-1 rounded hover:bg-blue-50"
+                      >
+                        Select All
+                      </button>
+                      <span className="text-gray-300">|</span>
+                      <button
+                        onClick={() => setSelectedRecommendations(new Set())}
+                        className="text-[11px] font-semibold text-gray-500 hover:text-gray-700 transition-colors px-2 py-1 rounded hover:bg-gray-100"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <div className="space-y-3 mb-6">
-                  {recommendations.map((rec, idx) => (
-                    <div key={idx} className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-4 hover:bg-gray-50/50 transition-colors cursor-pointer">
-                      <div className={`flex h-6 w-6 items-center justify-center rounded-md border-2 transition-colors ${rec.checked ? 'bg-gray-900 border-gray-900' : 'bg-white border-gray-300'}`}>
-                        {rec.checked && <Check className="h-4 w-4 text-white" />}
+                  {isLoadingRecommendations ? (
+                    // Loading skeleton
+                    Array.from({ length: 4 }).map((_, idx) => (
+                      <div key={idx} className="flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 animate-pulse">
+                        <div className="h-6 w-6 rounded-md bg-gray-200" />
+                        <div className="flex-1">
+                          <div className="h-4 bg-gray-200 rounded w-3/4" />
+                        </div>
                       </div>
-                      <span className="text-[13px] font-semibold text-gray-900">{rec.text}</span>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    // LLM-generated recommendations - clickable with numbered format
+                    llmRecommendations.map((rec, idx) => {
+                      // Skip the last one if it's the monitoring message (we show it separately)
+                      const isMonitoringMessage = rec.toLowerCase().includes('monitor') && rec.toLowerCase().includes('alert');
+                      if (isMonitoringMessage && idx === llmRecommendations.length - 1) return null;
+
+                      const isSelected = selectedRecommendations.has(idx);
+                      const displayNumber = idx + 1;
+
+                      return (
+                        <motion.div
+                          key={idx}
+                          onClick={() => {
+                            const newSelected = new Set(selectedRecommendations);
+                            if (isSelected) {
+                              newSelected.delete(idx);
+                            } else {
+                              newSelected.add(idx);
+                            }
+                            setSelectedRecommendations(newSelected);
+                          }}
+                          whileTap={{ scale: 0.98 }}
+                          className={`flex items-start gap-4 rounded-xl border-2 p-4 transition-all cursor-pointer ${
+                            isSelected
+                              ? 'border-blue-500 bg-blue-50/50 shadow-sm'
+                              : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50/50'
+                          }`}
+                        >
+                          {/* Numbered checkbox */}
+                          <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                            isSelected
+                              ? 'bg-blue-600 border-blue-600'
+                              : 'bg-white border-gray-300 hover:border-blue-400'
+                          }`}>
+                            {isSelected ? (
+                              <Check className="h-4 w-4 text-white" />
+                            ) : (
+                              <span className="text-[12px] font-bold text-gray-400">{displayNumber}</span>
+                            )}
+                          </div>
+                          {/* Recommendation text */}
+                          <div className="flex-1">
+                            <p className={`text-[13px] font-medium leading-relaxed transition-colors ${
+                              isSelected ? 'text-gray-900' : 'text-gray-700'
+                            }`}>
+                              {rec}
+                            </p>
+                          </div>
+                        </motion.div>
+                      );
+                    })
+                  )}
                 </div>
 
                 <p className="text-[13px] font-medium text-gray-500 mb-8">
-                  I will monitor market conditions and alert you on significant changes (±5% threshold).
+                  {llmRecommendations.find(r => r.toLowerCase().includes('monitor') && r.toLowerCase().includes('alert')) ||
+                   "I will monitor market conditions and alert you on significant changes (±5% threshold)."}
                 </p>
 
-                <div className="flex items-center justify-end gap-3">
-                  <button
-                    onClick={() => router.push("/opportunities")}
-                    className="h-11 px-6 rounded-xl text-[14px] font-semibold text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors"
-                  >
-                    Ignore
-                  </button>
-                  <button className="h-11 px-6 rounded-xl bg-blue-100 flex items-center gap-2 text-[14px] font-semibold text-blue-700 hover:bg-blue-200 transition-colors">
-                    <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
-                      <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                      <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                      <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                      <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    </svg>
-                    Simulate
-                  </button>
-                  <button
-                    onClick={() => router.push("/opportunities/accepted")}
-                    className="h-11 px-8 rounded-xl bg-gray-900 text-[14px] font-semibold text-white shadow-lg hover:bg-black transition-all"
-                  >
-                    Accept
-                  </button>
+                <div className="flex items-center justify-between">
+                  <div className="text-[12px] text-gray-500">
+                    {selectedRecommendations.size === 0 ? (
+                      <span>Click recommendations to select</span>
+                    ) : (
+                      <span className="text-blue-600 font-medium">
+                        {selectedRecommendations.size} recommendation{selectedRecommendations.size !== 1 ? 's' : ''} selected
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => router.push("/opportunities")}
+                      className="h-11 px-6 rounded-xl text-[14px] font-semibold text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors"
+                    >
+                      Ignore
+                    </button>
+                    <button className="h-11 px-6 rounded-xl bg-blue-100 flex items-center gap-2 text-[14px] font-semibold text-blue-700 hover:bg-blue-200 transition-colors">
+                      <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none">
+                        <rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                        <rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                        <rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                        <rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+                      </svg>
+                      Simulate
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Save the accepted recommendations data to context
+                        const selectedRecs = llmRecommendations.filter((_, idx) => selectedRecommendations.has(idx));
+                        const acceptedData: AcceptedRecommendationsData = {
+                          opportunityId: oppId,
+                          opportunityName: opportunity?.name || initiativeTitle,
+                          categoryName,
+                          locations: categoryLocations,
+                          totalSpend,
+                          recommendations: selectedRecs,
+                          proofPoints: proofPoints.map(pp => ({
+                            id: pp.id,
+                            name: pp.name,
+                            isValidated: pp.isValidated
+                          })),
+                          suppliers: topSuppliers,
+                          metrics: {
+                            priceVariance: computedMetrics?.priceVariance,
+                            top3Concentration: computedMetrics?.top3Concentration,
+                            tailSpendPercentage: computedMetrics?.tailSpendPercentage,
+                            supplierCount: computedMetrics?.supplierCount || topSuppliers.length
+                          },
+                          savingsEstimate: savingsPercentage,
+                          acceptedAt: Date.now()
+                        };
+                        actions.setAcceptedRecommendations(acceptedData);
+
+                        // Add activity
+                        actions.addActivity({
+                          type: "validation",
+                          title: `Accepted: ${opportunity?.name || initiativeTitle}`,
+                          description: `Accepted ${selectedRecs.length} recommendations for ${categoryName}`,
+                          metadata: { categoryName, savings: savingsPercentage }
+                        });
+
+                        router.push("/opportunities/accepted");
+                      }}
+                      disabled={selectedRecommendations.size === 0}
+                      className={`h-11 px-8 rounded-xl text-[14px] font-semibold shadow-lg transition-all flex items-center gap-2 ${
+                        selectedRecommendations.size > 0
+                          ? 'bg-gray-900 text-white hover:bg-black'
+                          : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
+                    >
+                      Accept
+                      {selectedRecommendations.size > 0 && (
+                        <span className="bg-white/20 px-1.5 py-0.5 rounded text-[11px]">
+                          {selectedRecommendations.size}
+                        </span>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </motion.section>
 

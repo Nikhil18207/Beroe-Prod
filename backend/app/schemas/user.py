@@ -73,8 +73,8 @@ class UserResponse(BaseModel):
     """User response schema."""
     id: uuid.UUID
     email: str
-    username: str
-    name: str
+    username: Optional[str] = None
+    name: Optional[str] = None
     company: Optional[str] = None
     role: Optional[str] = None
     avatar_url: Optional[str] = None
