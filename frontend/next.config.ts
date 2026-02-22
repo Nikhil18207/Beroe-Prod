@@ -1,7 +1,4 @@
 import type { NextConfig } from "next";
-import path from "node:path";
-
-const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
 const nextConfig: NextConfig = {
   images: {
@@ -16,21 +13,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  outputFileTracingRoot: path.resolve(__dirname, '../../'),
   typescript: {
+    // Allow production builds even with type errors
     ignoreBuildErrors: true,
   },
   eslint: {
+    // Allow production builds even with lint errors
     ignoreDuringBuilds: true,
   },
-  turbopack: {
-    rules: {
-      "*.{jsx,tsx}": {
-        loaders: [LOADER]
-      }
-    }
-  }
+  // Output configuration for deployment
+  output: 'standalone',
 };
 
 export default nextConfig;
-// Orchids restart: 1769189697867
