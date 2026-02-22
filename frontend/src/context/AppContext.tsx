@@ -767,8 +767,9 @@ const LLM_EVALUATIONS_STORAGE_KEY = "beroe_llm_evaluations";
 const COMPUTED_METRICS_STORAGE_KEY = "beroe_computed_metrics";
 
 // Track if Supabase sync is enabled
-// Disabled to prevent 406 errors - app works fully with localStorage
-const SUPABASE_SYNC_ENABLED = false;
+// Set NEXT_PUBLIC_SUPABASE_SYNC=true in production to enable
+// Disabled by default - app works fully with localStorage
+const SUPABASE_SYNC_ENABLED = process.env.NEXT_PUBLIC_SUPABASE_SYNC === 'true';
 
 // Load activity history from localStorage
 const loadActivityHistory = (): ActivityItem[] => {
