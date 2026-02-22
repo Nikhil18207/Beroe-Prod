@@ -181,11 +181,14 @@ export const detectColumnType = (header: string): ColumnType => {
 export const findColumnByType = (headers: string[], type: ColumnType, excludeColumns: string[] = []): string | null => {
   const patterns = COLUMN_PATTERNS[type];
   if (!patterns || patterns.length === 0) return null;
+  if (!headers || !Array.isArray(headers)) return null;
 
   // Score each header
   const scored: { header: string; score: number }[] = [];
 
   for (const header of headers) {
+    // Skip undefined, null, or non-string headers
+    if (!header || typeof header !== 'string') continue;
     if (excludeColumns.includes(header)) continue;
 
     const normalized = normalize(header);
@@ -288,46 +291,54 @@ export const detectAllColumns = (headers: string[]): DetectedColumns => {
     contract: null,
   };
 
+  // Guard against invalid headers
+  if (!headers || !Array.isArray(headers) || headers.length === 0) {
+    return detected;
+  }
+
+  // Filter out any undefined/null headers
+  const validHeaders = headers.filter(h => h && typeof h === 'string');
+
   const usedColumns: string[] = [];
 
   // Detect in priority order to avoid conflicts
   // e.g., "supplier_country" should match "country" not "supplier"
 
   // First pass: find most specific matches
-  detected.supplier = findColumnByType(headers, 'supplier', usedColumns);
+  detected.supplier = findColumnByType(validHeaders, 'supplier', usedColumns);
   if (detected.supplier) usedColumns.push(detected.supplier);
 
-  detected.spend = findColumnByType(headers, 'spend', usedColumns);
+  detected.spend = findColumnByType(validHeaders, 'spend', usedColumns);
   if (detected.spend) usedColumns.push(detected.spend);
 
-  detected.country = findColumnByType(headers, 'country', usedColumns);
+  detected.country = findColumnByType(validHeaders, 'country', usedColumns);
   if (detected.country) usedColumns.push(detected.country);
 
-  detected.region = findColumnByType(headers, 'region', usedColumns);
+  detected.region = findColumnByType(validHeaders, 'region', usedColumns);
   if (detected.region) usedColumns.push(detected.region);
 
-  detected.price = findColumnByType(headers, 'price', usedColumns);
+  detected.price = findColumnByType(validHeaders, 'price', usedColumns);
   if (detected.price) usedColumns.push(detected.price);
 
-  detected.quantity = findColumnByType(headers, 'quantity', usedColumns);
+  detected.quantity = findColumnByType(validHeaders, 'quantity', usedColumns);
   if (detected.quantity) usedColumns.push(detected.quantity);
 
-  detected.category = findColumnByType(headers, 'category', usedColumns);
+  detected.category = findColumnByType(validHeaders, 'category', usedColumns);
   if (detected.category) usedColumns.push(detected.category);
 
-  detected.date = findColumnByType(headers, 'date', usedColumns);
+  detected.date = findColumnByType(validHeaders, 'date', usedColumns);
   if (detected.date) usedColumns.push(detected.date);
 
-  detected.id = findColumnByType(headers, 'id', usedColumns);
+  detected.id = findColumnByType(validHeaders, 'id', usedColumns);
   if (detected.id) usedColumns.push(detected.id);
 
-  detected.status = findColumnByType(headers, 'status', usedColumns);
+  detected.status = findColumnByType(validHeaders, 'status', usedColumns);
   if (detected.status) usedColumns.push(detected.status);
 
-  detected.risk = findColumnByType(headers, 'risk', usedColumns);
+  detected.risk = findColumnByType(validHeaders, 'risk', usedColumns);
   if (detected.risk) usedColumns.push(detected.risk);
 
-  detected.contract = findColumnByType(headers, 'contract', usedColumns);
+  detected.contract = findColumnByType(validHeaders, 'contract', usedColumns);
   if (detected.contract) usedColumns.push(detected.contract);
 
   return detected;

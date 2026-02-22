@@ -62,6 +62,8 @@ export function useSupabaseStorage() {
       } catch (err) {
         console.error('Failed to initialize Supabase session:', err);
         setError(err instanceof Error ? err.message : 'Failed to initialize session');
+        // Still mark as initialized so app can work offline
+        setIsInitialized(true);
       } finally {
         setIsLoading(false);
       }

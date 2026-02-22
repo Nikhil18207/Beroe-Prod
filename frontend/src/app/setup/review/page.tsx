@@ -43,7 +43,8 @@ import {
   Building2,
   FileCheck,
   Filter,
-  ListFilter
+  ListFilter,
+  ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,9 +56,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo, useDeferredValue, memo } from "react";
 import { useApp, type DataPoint, type DataPointItem, type SetupOpportunity, type ProofPoint } from "@/context/AppContext";
-import { procurementApi } from "@/lib/api";
+import { procurementApi, authApi } from "@/lib/api";
 import {
   computeAllMetrics,
   calculateOpportunitySavings,
@@ -72,6 +73,8 @@ import {
 import { parseFile, getFileCategory, SUPPORTED_FORMATS_STRING } from "@/lib/fileParser";
 import { detectAllColumns, parseNumericValue, calculateRowSpend, getRowLocation, getRowSupplier } from "@/lib/columnMatcher";
 import { useSupabaseStorage } from "@/lib/hooks/useSupabaseStorage";
+import { canEdit, canUpload, isViewer } from "@/types/api";
+import { toast } from "sonner";
 
 // Extended DataPoint with icon for UI
 interface DataPointWithIcon extends DataPoint {
@@ -84,6 +87,109 @@ interface DataField {
   requiredColumns: string[];
   description: string;
 }
+
+// Shared category column patterns - used for filtering spend data by selected categories
+// Order matters: more specific patterns first, generic ones last
+const CATEGORY_COLUMN_PATTERNS = [
+  // Level 3 category (most specific)
+  "category_level_3", "categorylevel3", "category_level3",
+  // Material/Product names (common in spend data)
+  "material_name", "materialname", "material_description",
+  "material_code", "materialcode", "material_type",
+  "product_name", "productname", "product_description",
+  // Commodity types
+  "commodity_type", "commoditytype", "commodity_name",
+  // Sub-category
+  "sub_category", "subcategory", "sub_commodity",
+  // Generic category columns
+  "category", "commodity", "segment", "product_type", "product",
+  "item_category", "item_type", "item_name", "item",
+  // Fallback patterns
+  "material", "type", "description", "name"
+];
+
+// Generic/common words that shouldn't trigger a category match on their own
+const GENERIC_CATEGORY_WORDS = new Set([
+  'oil', 'oils', 'raw', 'refined', 'crude', 'pure', 'organic', 'natural',
+  'grade', 'type', 'class', 'category', 'product', 'material', 'item',
+  'bulk', 'packed', 'liquid', 'solid', 'powder', 'paste',
+  'food', 'industrial', 'technical', 'commercial', 'premium', 'standard',
+  'virgin', 'extra', 'light', 'heavy', 'dark', 'white', 'yellow', 'red',
+  'high', 'low', 'medium', 'fine', 'coarse', 'processed', 'unprocessed',
+  'seed', 'seeds', 'bean', 'beans', 'nut', 'nuts', 'fruit', 'fruits',
+  'extract', 'extracts', 'derivative', 'derivatives', 'based', 'blend'
+]);
+
+// Levenshtein distance for fuzzy matching
+const levenshteinDistance = (a: string, b: string): number => {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix: number[][] = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      const cost = a[j - 1] === b[i - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost);
+    }
+  }
+  return matrix[b.length][a.length];
+};
+
+// Smart category matching - handles variations like "Palm Oil" vs "Palm Oils"
+// but won't match "Palm Oil" with "Soybean Oil" just because they share "Oil"
+const isCategoryMatch = (category1: string, category2: string): boolean => {
+  const norm1 = category1.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const norm2 = category2.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  // Exact match after normalization
+  if (norm1 === norm2) return true;
+
+  // One fully contains the other
+  // For shorter strings (3+ chars), still check contains for cases like "palm" in "palmoil"
+  if (norm1.length >= 3 && norm2.length >= 3) {
+    if (norm1.includes(norm2) || norm2.includes(norm1)) return true;
+  }
+
+  // Word-level matching - require significant word match
+  const words1 = category1.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+  const words2 = category2.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+
+  // Get significant (non-generic) words
+  const significant1 = words1.filter(w => !GENERIC_CATEGORY_WORDS.has(w) && !GENERIC_CATEGORY_WORDS.has(w.replace(/s$/, '')));
+  const significant2 = words2.filter(w => !GENERIC_CATEGORY_WORDS.has(w) && !GENERIC_CATEGORY_WORDS.has(w.replace(/s$/, '')));
+
+  // If both have significant words, at least one must match
+  if (significant1.length > 0 && significant2.length > 0) {
+    for (const w1 of significant1) {
+      for (const w2 of significant2) {
+        const w1NoS = w1.replace(/s$/, '');
+        const w2NoS = w2.replace(/s$/, '');
+        // Exact word match (ignoring trailing 's')
+        if (w1 === w2 || w1NoS === w2NoS) return true;
+        // Substring match (e.g., "soy" matches "soybean")
+        if (w1.length >= 3 && w2.length >= 3) {
+          if (w1.includes(w2) || w2.includes(w1)) return true;
+        }
+        // Fuzzy match for typos
+        const wordMaxLen = Math.max(w1.length, w2.length);
+        const wordMinLen = Math.min(w1.length, w2.length);
+        if (wordMinLen >= 4 && (wordMaxLen - wordMinLen) <= 2) {
+          const dist = levenshteinDistance(w1, w2);
+          if (dist <= Math.max(1, Math.floor(wordMaxLen * 0.25))) return true;
+        }
+      }
+    }
+    return false; // No significant word matched
+  }
+
+  // Fallback: full string fuzzy match (only if very similar)
+  const maxLen = Math.max(norm1.length, norm2.length);
+  const minLen = Math.min(norm1.length, norm2.length);
+  if (maxLen > 0 && (maxLen - minLen) / maxLen > 0.4) return false;
+  const distance = levenshteinDistance(norm1, norm2);
+  return distance <= Math.max(1, Math.floor(maxLen * 0.2));
+};
 
 // Spend Data Fields
 const SPEND_DATA_FIELDS: DataField[] = [
@@ -234,7 +340,7 @@ const getFieldsForDataPoint = (dataPointId: string): DataField[] => {
 
 // Extract only letters from a string (removes numbers, symbols, spaces, underscores, etc.)
 const extractLetters = (str: string): string => {
-  return str.toLowerCase().replace(/[^a-z]/g, '');
+  return (str || '').toLowerCase().replace(/[^a-z]/g, '');
 };
 
 // Check if two strings match flexibly
@@ -315,6 +421,7 @@ const EXCLUDED_PATTERNS: Record<string, string[]> = {
 
 // Check if a column should be excluded based on the required pattern
 const shouldExcludeColumn = (csvColumn: string, requiredColumn: string): boolean => {
+  if (!csvColumn || !requiredColumn) return false;
   const csvLower = csvColumn.toLowerCase();
   const excludePatterns = EXCLUDED_PATTERNS[requiredColumn.toLowerCase()];
   if (!excludePatterns) return false;
@@ -324,9 +431,13 @@ const shouldExcludeColumn = (csvColumn: string, requiredColumn: string): boolean
 
 // Find which CSV column matches a required column (returns the original CSV column name)
 const findMatchingColumn = (csvColumns: string[], requiredColumns: string[]): string | null => {
+  // Filter out any undefined/null values
+  const validCsvColumns = csvColumns.filter(col => col != null);
+  const validRequiredColumns = requiredColumns.filter(col => col != null);
+
   // First pass: look for exact or strong matches, excluding bad patterns
-  for (const required of requiredColumns) {
-    for (const csv of csvColumns) {
+  for (const required of validRequiredColumns) {
+    for (const csv of validCsvColumns) {
       // Skip columns that should be excluded for this required type
       if (shouldExcludeColumn(csv, required)) {
         continue;
@@ -508,11 +619,59 @@ const getThresholdId = (proofPointId: string): string => {
   return PROOF_POINT_ID_TO_THRESHOLD_ID[proofPointId] || proofPointId;
 };
 
+// LocalStorage keys for analysis data (must match AppContext.tsx)
+const ANALYSIS_STORAGE_KEYS = [
+  "beroe_spend_analysis",
+  "beroe_opportunity_metrics",
+  "beroe_savings_summary",
+  "beroe_llm_evaluations",
+];
+
 export default function ReviewDataPage() {
   const router = useRouter();
   const { state, actions } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dataPointFileInputRef = useRef<HTMLInputElement>(null);
+
+  /**
+   * Clear all cached analysis data when uploading new files.
+   * This ensures consistent confidence scores by removing stale calculations.
+   */
+  const clearAnalysisCache = useCallback(() => {
+    console.log('[Review] Clearing analysis cache for fresh calculations...');
+
+    // Clear context state
+    actions.setSpendAnalysis(null);
+    actions.setOpportunityMetrics(null);
+    actions.setSavingsSummary(null);
+    actions.setComputedMetrics(null);
+    actions.setLlmProofPointEvaluations(null);
+
+    // Clear localStorage directly for immediate effect
+    if (typeof window !== "undefined") {
+      ANALYSIS_STORAGE_KEYS.forEach(key => {
+        localStorage.removeItem(key);
+      });
+    }
+
+    // Reset proof point validation status in setup opportunities
+    state.setupOpportunities.forEach(opp => {
+      const resetProofPoints = opp.proofPoints.map(pp => ({
+        ...pp,
+        isValidated: false,
+        impact: "Not Tested" as const,
+        testScore: null,
+      }));
+      actions.updateSetupOpportunity({ ...opp, proofPoints: resetProofPoints });
+    });
+
+    console.log('[Review] Analysis cache cleared successfully');
+  }, [actions, state.setupOpportunities]);
+
+  // Permission checks - VIEWER role is read-only
+  const userIsViewer = isViewer(state.user);
+  const userCanEdit = canEdit(state.user);
+  const userCanUpload = canUpload(state.user);
 
   // Supabase storage hook for persistent file storage
   const {
@@ -851,6 +1010,9 @@ export default function ReviewDataPage() {
   // Use ref to track latest parsedData for revalidation
   const parsedDataRef = useRef<ParsedData | null>(null);
 
+  // Flag to prevent LLM evaluation effect from running multiple times
+  const llmEvaluationCompletedRef = useRef(false);
+
   // Virtual scrolling state
   const [scrollTop, setScrollTop] = useState(0);
   // Virtual scrolling constants - optimized for 1M+ rows
@@ -866,7 +1028,7 @@ export default function ReviewDataPage() {
   // "selected" = show only rows matching selected portfolio categories
   // "original" = show all original data without filtering
   // Default to "selected" if a category is already selected from portfolio page
-  const [categoryFilterMode, setCategoryFilterMode] = useState<"selected" | "original">(() => {
+  const [categoryFilterMode, setCategoryFilterModeRaw] = useState<"selected" | "original">(() => {
     // If user has selected categories or a category name, default to "selected" filter
     if (state.selectedCategories.length > 0 || (state.setupData.categoryName && state.setupData.categoryName !== "Category" && state.setupData.categoryName !== "")) {
       return "selected";
@@ -874,17 +1036,43 @@ export default function ReviewDataPage() {
     return "original";
   });
 
+  // PERFORMANCE: Direct state change for instant UI response
+  // Cache handles expensive computation, deferredValue prevents blocking
+  const setCategoryFilterMode = useCallback((mode: "selected" | "original") => {
+    setCategoryFilterModeRaw(mode);
+  }, []);
+
+  // PERFORMANCE: Defer the categoryFilterMode for expensive computations
+  // This makes filteredData computation non-blocking when switching modes
+  const deferredCategoryFilterMode = useDeferredValue(categoryFilterMode);
+
+  // PERFORMANCE: Cache filtered data results to make switching instant
+  // Key: stringified selectedCategories, Value: { rows, originalIndices, isFiltered }
+  const filteredDataCacheRef = useRef<{
+    key: string;
+    data: { rows: string[][]; originalIndices: number[] | null; isFiltered: boolean };
+  } | null>(null);
+
   // Document editor state for DOCX/document files
   const [documentContent, setDocumentContent] = useState<string>("");
   const documentEditorRef = useRef<HTMLDivElement>(null);
 
   // Parse uploaded file to extract column headers and full data when file changes
   useEffect(() => {
+    // Race condition protection: cancel previous operations if file changes
+    let isCancelled = false;
+
     if (uploadedFile) {
       setIsParsingCsv(true);
 
       // Use universal file parser for all file types
       parseFile(uploadedFile).then(async (result) => {
+        // Check if this operation was cancelled (user uploaded a new file)
+        if (isCancelled) {
+          console.log('[Review] File parsing cancelled - newer file uploaded');
+          return;
+        }
+
         if (result.success && result.data) {
           const { headers, rows } = result.data;
 
@@ -907,21 +1095,31 @@ export default function ReviewDataPage() {
             parsedData: parsedDataForStorage,
           });
 
+          // Check again before async Supabase upload
+          if (isCancelled) return;
+
           // Also upload to Supabase for cross-browser/device persistence
           try {
             await uploadToSupabase('spend', uploadedFile, parsedDataForStorage);
-            console.log('[Review] Spend file uploaded to Supabase');
+            if (!isCancelled) {
+              console.log('[Review] Spend file uploaded to Supabase');
+            }
           } catch (err) {
-            console.error('[Review] Failed to upload spend file to Supabase:', err);
-            // Don't block - localStorage still works as fallback
+            if (!isCancelled) {
+              console.error('[Review] Failed to upload spend file to Supabase:', err);
+              // Show user feedback for Supabase upload failure
+              toast.warning('Cloud sync failed - your data is saved locally', {
+                description: 'Changes will sync when connection is restored.',
+              });
+            }
           }
 
           // Extract category name from the first row ONLY if not already set from portfolio
           // Portfolio selection takes priority over CSV-extracted category
-          if (!state.setupData.categoryName || state.setupData.categoryName === "Category") {
-            const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
+          if (!isCancelled && (!state.setupData.categoryName || state.setupData.categoryName === "Category")) {
+            const normalizedHeaders = headers.map(h => (h || '').toLowerCase().replace(/[\s_-]/g, ''));
             const categoryColIdx = normalizedHeaders.findIndex(h =>
-              h.includes('category') || h.includes('commodity') || h.includes('segment')
+              h && (h.includes('category') || h.includes('commodity') || h.includes('segment'))
             );
             if (categoryColIdx !== -1 && rows.length > 0) {
               const categoryValue = rows[0][headers[categoryColIdx]];
@@ -932,12 +1130,21 @@ export default function ReviewDataPage() {
           }
         } else {
           // Parsing failed, show error
-          setCsvColumns([result.error || 'Failed to parse file']);
+          if (!isCancelled) {
+            setCsvColumns([result.error || 'Failed to parse file']);
+          }
         }
-        setIsParsingCsv(false);
-      }).catch(() => {
-        setIsParsingCsv(false);
-        setCsvColumns(['Failed to parse file']);
+        if (!isCancelled) {
+          setIsParsingCsv(false);
+        }
+      }).catch((err) => {
+        if (!isCancelled) {
+          setIsParsingCsv(false);
+          setCsvColumns(['Failed to parse file']);
+          toast.error('Failed to parse file', {
+            description: err instanceof Error ? err.message : 'Please try a different file format.',
+          });
+        }
       });
     } else {
       setCsvColumns([]);
@@ -949,6 +1156,14 @@ export default function ReviewDataPage() {
         return updated;
       });
     }
+
+    // Cleanup: cancel pending operations when file changes or component unmounts
+    return () => {
+      isCancelled = true;
+    };
+    // Note: Only uploadedFile should trigger re-parsing. actions/uploadToSupabase are used
+    // inside but excluded from deps to prevent infinite loops (they're not memoized)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploadedFile]);
 
   // Keep ref in sync with parsedData state for accurate revalidation
@@ -989,12 +1204,12 @@ export default function ReviewDataPage() {
     console.log('[Review] CSV Headers:', headers);
     console.log('[Review] Detected columns:', columns);
     console.log('[Review] Spend column detected:', columns.spend);
-    console.log('[Review] Category filter mode:', categoryFilterMode);
+    console.log('[Review] Category filter mode:', deferredCategoryFilterMode);
 
-    // Filter rows based on categoryFilterMode
+    // Filter rows based on deferredCategoryFilterMode (deferred for smooth UI)
     let rowsToProcess = spendData.rows;
 
-    if (categoryFilterMode === "selected") {
+    if (deferredCategoryFilterMode === "selected") {
       // Get selected category names
       let selectedCategoryNames: string[] = [];
       if (state.selectedCategories && state.selectedCategories.length > 0) {
@@ -1007,20 +1222,13 @@ export default function ReviewDataPage() {
       }
 
       if (selectedCategoryNames.length > 0) {
-        // Find category column
-        const priorityColumns = [
-          "category_level_3", "categorylevel3", "category_level3",
-          "commodity_type", "commoditytype",
-          "sub_category", "subcategory",
-          "category", "commodity", "segment", "product_type", "product", "type", "item_category"
-        ];
-
+        // Find category column using shared patterns
         let categoryColIdx = -1;
-        const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+        const normalizedHeaders = headers.map(h => (h || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
 
-        for (const priorityCol of priorityColumns) {
+        for (const priorityCol of CATEGORY_COLUMN_PATTERNS) {
           const normalizedPriority = priorityCol.replace(/[^a-z0-9]/g, '');
-          const idx = normalizedHeaders.findIndex(h => h.includes(normalizedPriority));
+          const idx = normalizedHeaders.findIndex(h => h && h.includes(normalizedPriority));
           if (idx !== -1) {
             categoryColIdx = idx;
             break;
@@ -1029,21 +1237,15 @@ export default function ReviewDataPage() {
 
         if (categoryColIdx !== -1) {
           const categoryColName = headers[categoryColIdx];
-          const normalizeCategory = (cat: string) => cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
-          const normalizedSelectedSet = new Set(selectedCategoryNames.map(normalizeCategory));
 
-          // Filter rows to only include selected categories
+          // Filter rows using the smart category matching function
           rowsToProcess = spendData.rows.filter(row => {
             const rowCategory = row[categoryColName];
             if (!rowCategory) return false;
-            const normalizedRowCat = normalizeCategory(rowCategory);
 
-            // Check exact match or partial match
-            if (normalizedSelectedSet.has(normalizedRowCat)) return true;
-
-            // Check if any selected category is contained in or contains the row category
-            for (const selected of normalizedSelectedSet) {
-              if (normalizedRowCat.includes(selected) || selected.includes(normalizedRowCat)) {
+            // Check if row category matches any selected category
+            for (const selectedCat of selectedCategoryNames) {
+              if (isCategoryMatch(rowCategory, selectedCat)) {
                 return true;
               }
             }
@@ -1055,7 +1257,7 @@ export default function ReviewDataPage() {
       }
     }
 
-    console.log('[Review] Processing', rowsToProcess.length, 'rows (filter mode:', categoryFilterMode, ')');
+    console.log('[Review] Processing', rowsToProcess.length, 'rows (filter mode:', deferredCategoryFilterMode, ')');
 
     // Process rows using smart column matcher
     rowsToProcess.forEach(row => {
@@ -1083,10 +1285,27 @@ export default function ReviewDataPage() {
 
     const totalSpend = Array.from(supplierSpend.values()).reduce((sum, s) => sum + s.spend, 0);
 
+    // Calculate ORIGINAL total spend (from all rows, not filtered) for consistency with backend
+    // This ensures dashboard and backend always use the same total spend value
+    let originalTotalSpend = totalSpend;
+    if (deferredCategoryFilterMode === "selected" && spendData.rows.length > rowsToProcess.length) {
+      // Recalculate total spend from ALL rows
+      const allSupplierSpend = new Map<string, number>();
+      spendData.rows.forEach(row => {
+        const supplier = getRowSupplier(row, columns) || 'Unknown';
+        const spend = calculateRowSpend(row, columns);
+        if (supplier && spend > 0) {
+          allSupplierSpend.set(supplier, (allSupplierSpend.get(supplier) || 0) + spend);
+        }
+      });
+      originalTotalSpend = Array.from(allSupplierSpend.values()).reduce((sum, s) => sum + s, 0);
+    }
+
     // Debug: Log total spend calculation
-    console.log('[Review] Total spend calculated from CSV:', totalSpend);
-    console.log('[Review] Number of suppliers:', supplierSpend.size);
-    console.log('[Review] Number of spend records:', spendRecords.length);
+    console.log('[Review] Filtered spend calculated from CSV:', totalSpend);
+    console.log('[Review] Original total spend (all rows):', originalTotalSpend);
+    console.log('[Review] Number of suppliers (filtered):', supplierSpend.size);
+    console.log('[Review] Number of spend records (filtered):', spendRecords.length);
 
     // Convert to supplier profiles
     const suppliers: SupplierProfile[] = Array.from(supplierSpend.entries()).map(([name, data], idx) => ({
@@ -1122,9 +1341,11 @@ export default function ReviewDataPage() {
     // Store metrics in context for dashboard use
     actions.setComputedMetrics(metrics as unknown as Record<string, number>);
 
-    // Also update the total spend in setupData so opportunities page has access
-    if (totalSpend > 0) {
-      actions.updateSetupData({ spend: totalSpend });
+    // IMPORTANT: Always store ORIGINAL total spend (all rows) in setupData
+    // This ensures consistency with backend processing which uses the full uploaded file
+    // Filtered spend is used for metrics/display, but setupData.spend must reflect full data
+    if (originalTotalSpend > 0) {
+      actions.updateSetupData({ spend: originalTotalSpend });
     }
 
     // Evaluate proof points and calculate opportunity savings
@@ -1269,10 +1490,17 @@ export default function ReviewDataPage() {
       spend_data: spendData,
     }).catch(err => {
       console.error('[Review] Failed to save analysis results to Supabase:', err);
+      // Show user feedback for sync failure - data is still saved locally
+      toast.warning('Cloud sync failed', {
+        description: 'Your analysis is saved locally and will sync when connection is restored.',
+      });
     });
 
+    // Note: actions and saveToSupabase are excluded from deps to prevent infinite loops
+    // These are hook/context functions that may not be memoized and can cause re-renders
+    // PERFORMANCE: Uses deferredCategoryFilterMode to avoid blocking UI during filter changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend, categoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
+  }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend, deferredCategoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
 
   // Calculate field availability based on CSV columns (for spend data) - USES FLEXIBLE MATCHING
   const getFieldStatus = (field: DataField): { available: boolean; matchedColumn?: string } => {
@@ -1391,6 +1619,11 @@ export default function ReviewDataPage() {
         setUploadError("Unsupported file format. Please upload CSV, Excel, PDF, Word, or text files.");
         return;
       }
+
+      // Clear all cached analysis data for fresh calculations
+      // This ensures consistent confidence scores when re-uploading data
+      clearAnalysisCache();
+
       setUploadedFile(file);
       setUploadError(null);
       actions.updateSetupData({ uploadedFile: file });
@@ -1571,6 +1804,9 @@ export default function ReviewDataPage() {
           } catch (err) {
             console.error(`[Review] Failed to upload ${currentUploadTarget} file to Supabase:`, err);
             // Don't block - localStorage still works as fallback
+            toast.warning('Cloud sync failed for data file', {
+              description: 'Your data is saved locally and will sync when connection is restored.',
+            });
           }
         } else {
           // Parsing failed, show error info
@@ -1607,12 +1843,14 @@ export default function ReviewDataPage() {
 
   // Trigger file upload for a specific data point
   const triggerDataPointUpload = (dataPointId: string) => {
+    if (!userCanUpload) return; // VIEWER cannot upload
     setCurrentUploadTarget(dataPointId);
     dataPointFileInputRef.current?.click();
   };
 
   // Remove item from data point
   const removeDataPointItem = (dataPointId: string, itemId: string) => {
+    if (!userCanEdit) return; // VIEWER cannot remove
     const targetDataPoint = contextDataPoints.find(dp => dp.id === dataPointId);
     if (targetDataPoint) {
       actions.updateDataPoint({
@@ -2105,6 +2343,7 @@ export default function ReviewDataPage() {
     if (!parsedData) return { rows: [] as string[][], originalIndices: null as number[] | null, isFiltered: false };
 
     // If showing original data, return all rows - use null for originalIndices to signal "use index directly"
+    // PERFORMANCE: Uses categoryFilterMode directly with caching for instant switching
     if (categoryFilterMode === "original") {
       return {
         rows: parsedData.rows,
@@ -2133,20 +2372,19 @@ export default function ReviewDataPage() {
       };
     }
 
-    // Find category column index - use Set for O(1) lookup
-    const priorityColumns = [
-      "category_level_3", "categorylevel3", "category_level3",
-      "commodity_type", "commoditytype",
-      "sub_category", "subcategory",
-      "category", "commodity", "segment", "product_type", "product", "type", "item_category"
-    ];
+    // PERFORMANCE: Check cache first for instant switching
+    const cacheKey = `${parsedData.rows.length}-${selectedCategoryNames.sort().join('|')}`;
+    if (filteredDataCacheRef.current?.key === cacheKey) {
+      return filteredDataCacheRef.current.data;
+    }
 
+    // Find category column index using shared patterns
     let categoryColIdx = -1;
-    const normalizedHeaders = parsedData.headers.map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+    const normalizedHeaders = parsedData.headers.map(h => (h || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
 
-    for (const priorityCol of priorityColumns) {
+    for (const priorityCol of CATEGORY_COLUMN_PATTERNS) {
       const normalizedPriority = priorityCol.replace(/[^a-z0-9]/g, '');
-      const idx = normalizedHeaders.findIndex(h => h.includes(normalizedPriority));
+      const idx = normalizedHeaders.findIndex(h => h && h.includes(normalizedPriority));
       if (idx !== -1) {
         categoryColIdx = idx;
         break;
@@ -2161,44 +2399,30 @@ export default function ReviewDataPage() {
       };
     }
 
-    // Pre-compute normalized selected categories with Set for O(1) exact match lookup
-    const normalizeCategory = (cat: string) => {
-      return cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
-    };
+    // PERFORMANCE: Cache for smart category match results
+    const matchCache = new Map<string, boolean>();
 
-    const normalizedSelectedSet = new Set(selectedCategoryNames.map(normalizeCategory));
-    const normalizedSelectedArray = Array.from(normalizedSelectedSet);
-
-    // Pre-allocate arrays with estimated size for better performance
-    const estimatedSize = Math.min(parsedData.rows.length, 100000);
+    // Filter rows using smart category matching
     const filteredRows: string[][] = [];
     const originalIndices: number[] = [];
 
-    // Reserve capacity hint (doesn't actually pre-allocate in JS, but helps V8 optimize)
-    filteredRows.length = estimatedSize;
-    filteredRows.length = 0;
-    originalIndices.length = estimatedSize;
-    originalIndices.length = 0;
-
-    // Optimized loop with cached values
     const rowCount = parsedData.rows.length;
     for (let idx = 0; idx < rowCount; idx++) {
       const row = parsedData.rows[idx];
       const categoryValue = row[categoryColIdx] || "";
-      const normalizedValue = normalizeCategory(categoryValue);
+      if (!categoryValue) continue;
 
-      // Fast path: exact match using Set (O(1))
-      if (normalizedSelectedSet.has(normalizedValue)) {
-        filteredRows.push(row);
-        originalIndices.push(idx);
-        continue;
-      }
-
-      // Slow path: contains match (only if exact match failed)
+      // Check against each selected category
       let matches = false;
-      for (let i = 0; i < normalizedSelectedArray.length; i++) {
-        const cat = normalizedSelectedArray[i];
-        if (normalizedValue.includes(cat) || cat.includes(normalizedValue)) {
+      for (const selectedCat of selectedCategoryNames) {
+        // Check cache first
+        const cacheKey = `${categoryValue}|${selectedCat}`;
+        let result = matchCache.get(cacheKey);
+        if (result === undefined) {
+          result = isCategoryMatch(categoryValue, selectedCat);
+          matchCache.set(cacheKey, result);
+        }
+        if (result) {
           matches = true;
           break;
         }
@@ -2210,28 +2434,121 @@ export default function ReviewDataPage() {
       }
     }
 
-    return { rows: filteredRows, originalIndices, isFiltered: true };
+    // PERFORMANCE: Cache the result for instant switching
+    const result = { rows: filteredRows, originalIndices, isFiltered: true };
+    filteredDataCacheRef.current = { key: cacheKey, data: result };
+    return result;
   }, [parsedData, categoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
+
+  // PERFORMANCE: Pre-compute filtered data when file is parsed for instant switching
+  // This runs once when parsedData changes and warms the cache in the background
+  useEffect(() => {
+    if (!parsedData || parsedData.rows.length === 0) return;
+
+    // Get selected category names
+    let selectedCategoryNames: string[] = [];
+    if (state.selectedCategories && state.selectedCategories.length > 0) {
+      selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
+    } else if (state.setupData.categoryName) {
+      selectedCategoryNames = state.setupData.categoryName
+        .split(',')
+        .map(name => name.trim().toLowerCase())
+        .filter(name => name.length > 0);
+    }
+
+    if (selectedCategoryNames.length === 0) return;
+
+    const cacheKey = `${parsedData.rows.length}-${[...selectedCategoryNames].sort().join('|')}`;
+
+    // Skip if already cached
+    if (filteredDataCacheRef.current?.key === cacheKey) return;
+
+    // Pre-compute in background using requestIdleCallback for non-blocking operation
+    const preComputeFilter = () => {
+      // Find category column using shared patterns
+      const normalizedHeaders = parsedData.headers.map(h => (h || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
+      let categoryColIdx = -1;
+
+      for (const priorityCol of CATEGORY_COLUMN_PATTERNS) {
+        const normalizedPriority = priorityCol.replace(/[^a-z0-9]/g, '');
+        const idx = normalizedHeaders.findIndex(h => h && h.includes(normalizedPriority));
+        if (idx !== -1) {
+          categoryColIdx = idx;
+          break;
+        }
+      }
+
+      if (categoryColIdx === -1) return;
+
+      // Smart filtering using category matching that handles generic words properly
+      const filteredRows: string[][] = [];
+      const originalIndices: number[] = [];
+
+      for (let idx = 0; idx < parsedData.rows.length; idx++) {
+        const row = parsedData.rows[idx];
+        const categoryValue = row[categoryColIdx] || "";
+        if (!categoryValue) continue;
+
+        // Check if row matches any selected category
+        let matches = false;
+        for (const selectedCat of selectedCategoryNames) {
+          if (isCategoryMatch(categoryValue, selectedCat)) {
+            matches = true;
+            break;
+          }
+        }
+
+        if (matches) {
+          filteredRows.push(row);
+          originalIndices.push(idx);
+        }
+      }
+
+      // Store in cache
+      filteredDataCacheRef.current = {
+        key: cacheKey,
+        data: { rows: filteredRows, originalIndices, isFiltered: true }
+      };
+    };
+
+    // Run in background
+    if ('requestIdleCallback' in window) {
+      (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(preComputeFilter);
+    } else {
+      setTimeout(preComputeFilter, 50);
+    }
+  }, [parsedData, state.selectedCategories, state.setupData.categoryName]);
 
   // MEMOIZED: Virtual scrolling - Calculate which rows to render
   // Optimized for 1M+ rows - avoids slice when possible
+  // Uses filteredData directly for instant updates (cache makes it fast)
   const visibleRows = useMemo(() => {
-    if (!parsedData) return { startIndex: 0, endIndex: 0, rows: [] as string[][], originalIndices: [] as number[], totalFilteredRows: 0 };
+    const emptyResult = { startIndex: 0, endIndex: 0, rows: [] as string[][], originalIndices: [] as number[], totalFilteredRows: 0 };
+
+    if (!parsedData) return emptyResult;
+    if (!filteredData || !filteredData.rows) return emptyResult;
 
     const { rows: filteredRows, originalIndices, isFiltered } = filteredData;
 
-    const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER_ROWS);
+    // Safety check for valid array
+    if (!Array.isArray(filteredRows) || filteredRows.length === 0) return emptyResult;
+
+    const startIndex = Math.max(0, Math.floor((scrollTop || 0) / ROW_HEIGHT) - BUFFER_ROWS);
     const endIndex = Math.min(
       filteredRows.length,
       startIndex + VISIBLE_ROWS + BUFFER_ROWS * 2
     );
 
+    // Safety check for valid range
+    const rangeLength = Math.max(0, endIndex - startIndex);
+    if (rangeLength === 0) return emptyResult;
+
     // Generate indices for visible range - avoid creating full index array
-    const visibleIndices: number[] = new Array(endIndex - startIndex);
+    const visibleIndices: number[] = new Array(rangeLength);
     if (isFiltered && originalIndices) {
       // Use actual original indices for filtered data
       for (let i = 0; i < visibleIndices.length; i++) {
-        visibleIndices[i] = originalIndices[startIndex + i];
+        visibleIndices[i] = originalIndices[startIndex + i] ?? (startIndex + i);
       }
     } else {
       // Direct mapping for original data (no filtering)
@@ -2251,6 +2568,7 @@ export default function ReviewDataPage() {
 
   // MEMOIZED: Filter cell errors based on category filter mode
   // When viewing "Selected Categories", only show errors for rows that are in the filtered view
+  // Uses filteredData for non-blocking updates when switching filter modes
   const filteredCellErrors = useMemo(() => {
     const { originalIndices, isFiltered } = filteredData;
 
@@ -2327,6 +2645,8 @@ export default function ReviewDataPage() {
     setCellErrors([]);
     setEditingCell(null);
     setScrollTop(0);
+    // Clear filter cache when opening new file
+    filteredDataCacheRef.current = null;
     // Keep the user's categoryFilterMode selection - don't reset it
 
     // Get the file to validate
@@ -2417,6 +2737,7 @@ export default function ReviewDataPage() {
 
   // Handle cell edit
   const startEditingCell = (rowIdx: number, colIdx: number, value: string) => {
+    if (!userCanEdit) return; // VIEWER cannot edit cells
     setEditingCell({ row: rowIdx, col: colIdx });
     setEditValue(value);
   };
@@ -2540,7 +2861,11 @@ export default function ReviewDataPage() {
       return;
     }
 
-    // For document files (DOCX, PDF), just save the content and close
+    // PERFORMANCE: Close modal IMMEDIATELY for instant feedback
+    // Then run validation and save in background
+    setIsValidationModalOpen(false);
+
+    // For document files (DOCX, PDF), just save the content
     // No need to create CSV files or re-parse
     if (currentData.isDocument) {
       // Update persisted data with any edits to the document content
@@ -2584,8 +2909,6 @@ export default function ReviewDataPage() {
         }
       }));
 
-      setIsValidationModalOpen(false);
-
       // Auto-validate proof points
       setTimeout(() => {
         autoValidateProofPoints();
@@ -2593,107 +2916,113 @@ export default function ReviewDataPage() {
       return;
     }
 
-    // Determine which rows to validate based on category filter mode
-    const rowsToValidate = categoryFilterMode === "selected"
-      ? filteredData.rows
-      : currentData.rows;
+    // Run validation in background (modal already closed)
+    // Use setTimeout to let the modal close animation complete first
+    setTimeout(async () => {
+      // Validate ALL rows to catch any hidden errors
+      const allErrors = await validateDataAsync(currentData.headers, currentData.rows);
 
-    // Revalidate the data we're about to save
-    setIsValidating(true);
-    setCellErrors([]);
-    const errors = await validateDataAsync(currentData.headers, rowsToValidate);
+      // Check for errors in ALL rows (not just visible ones)
+      const criticalErrors = allErrors.filter(e => e.severity === "error");
+      const hasErrors = criticalErrors.length > 0;
 
-    // Check if errors still exist in the data we're saving
-    const hasErrors = errors.filter(e => e.severity === "error").length > 0;
+      // If errors exist anywhere in the data, show toast notification
+      if (hasErrors) {
+        // If filter was active, check if errors are hidden in non-visible rows
+        if (categoryFilterMode === "selected") {
+          const filteredRowIndices = new Set(filteredData.rows.map((_, idx) => idx));
+          const hiddenErrors = criticalErrors.filter(e => !filteredRowIndices.has(e.row));
 
-    // If errors still exist, don't close - let user continue fixing
-    if (hasErrors) {
-      setIsValidating(false);
-      return;
-    }
-
-    // No errors - create updated file with edits (only if we have original file)
-    const updatedFile = createUpdatedFile();
-
-    // IMPORTANT: Always save ALL rows to preserve original data
-    // The filter toggle is just for display/viewing - we don't permanently filter the data
-    const allRows = currentData.rows;
-
-    // Update parsed data store even if no file (persisted data case)
-    const dataPointId = validationDataPoint.id;
-    const rowsAsObjects = allRows.map(row => {
-      const rowObj: Record<string, string> = {};
-      currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
-      return rowObj;
-    });
-
-    if (dataPointId === "spend") {
-      // Update parsed data store for spend
-      setParsedCsvDataStore(prev => ({
-        ...prev,
-        spend: { headers: currentData.headers, rows: rowsAsObjects }
-      }));
-
-      // Update persisted data
-      const persistedSpend = state.persistedReviewData.spendFile;
-      if (persistedSpend) {
-        actions.updatePersistedSpendFile({
-          ...persistedSpend,
-          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
-        });
-      }
-
-      if (updatedFile) {
-        setUploadedFile(updatedFile);
-        actions.updateSetupData({ uploadedFile: updatedFile });
-        // Re-parse to update columns
-        parseFile(updatedFile).then((result) => {
-          if (result.success && result.data) {
-            setCsvColumns(result.data.headers);
+          if (hiddenErrors.length > 0) {
+            toast.error(`${hiddenErrors.length} error(s) found in data. Re-open to fix.`);
+          } else {
+            toast.error(`${criticalErrors.length} error(s) found. Re-open to fix.`);
           }
-        });
+        } else {
+          toast.error(`${criticalErrors.length} error(s) found. Re-open to fix.`);
+        }
+        return;
+      }
+
+      // No errors - create updated file with edits (only if we have original file)
+      const updatedFile = createUpdatedFile();
+
+      // IMPORTANT: Always save ALL rows to preserve original data
+      // The filter toggle is just for display/viewing - we don't permanently filter the data
+      const allRows = currentData.rows;
+
+      // Update parsed data store even if no file (persisted data case)
+      const dataPointId = validationDataPoint.id;
+      const rowsAsObjects = allRows.map(row => {
+        const rowObj: Record<string, string> = {};
+        currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+        return rowObj;
+      });
+
+      if (dataPointId === "spend") {
+        // Update parsed data store for spend
+        setParsedCsvDataStore(prev => ({
+          ...prev,
+          spend: { headers: currentData.headers, rows: rowsAsObjects }
+        }));
+
+        // Update persisted data
+        const persistedSpend = state.persistedReviewData.spendFile;
+        if (persistedSpend) {
+          actions.updatePersistedSpendFile({
+            ...persistedSpend,
+            parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+          });
+        }
+
+        if (updatedFile) {
+          setUploadedFile(updatedFile);
+          actions.updateSetupData({ uploadedFile: updatedFile });
+          // Re-parse to update columns
+          parseFile(updatedFile).then((result) => {
+            if (result.success && result.data) {
+              setCsvColumns(result.data.headers);
+            }
+          });
+        } else {
+          // No file but update columns from data
+          setCsvColumns(currentData.headers);
+        }
       } else {
-        // No file but update columns from data
-        setCsvColumns(currentData.headers);
+        // For other data points (supply-master, contracts, playbook)
+        setParsedCsvDataStore(prev => ({
+          ...prev,
+          [dataPointId]: { headers: currentData.headers, rows: rowsAsObjects }
+        }));
+
+        // Update persisted data
+        const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+        if (persistedFileData) {
+          actions.updatePersistedDataPointFile(dataPointId, {
+            ...persistedFileData,
+            parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+          });
+        }
+
+        if (updatedFile) {
+          setDataPointFiles(prev => ({ ...prev, [dataPointId]: updatedFile }));
+          // Re-parse to update columns
+          parseFile(updatedFile).then((result) => {
+            if (result.success && result.data) {
+              setDataPointColumns(prev => ({ ...prev, [dataPointId]: result.data!.headers }));
+            }
+          });
+        } else {
+          // No file but update columns from data
+          setDataPointColumns(prev => ({ ...prev, [dataPointId]: currentData.headers }));
+        }
       }
-    } else {
-      // For other data points (supply-master, contracts, playbook)
-      setParsedCsvDataStore(prev => ({
-        ...prev,
-        [dataPointId]: { headers: currentData.headers, rows: rowsAsObjects }
-      }));
 
-      // Update persisted data
-      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
-      if (persistedFileData) {
-        actions.updatePersistedDataPointFile(dataPointId, {
-          ...persistedFileData,
-          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
-        });
-      }
-
-      if (updatedFile) {
-        setDataPointFiles(prev => ({ ...prev, [dataPointId]: updatedFile }));
-        // Re-parse to update columns
-        parseFile(updatedFile).then((result) => {
-          if (result.success && result.data) {
-            setDataPointColumns(prev => ({ ...prev, [dataPointId]: result.data!.headers }));
-          }
-        });
-      } else {
-        // No file but update columns from data
-        setDataPointColumns(prev => ({ ...prev, [dataPointId]: currentData.headers }));
-      }
-    }
-
-    setIsValidating(false);
-    // Close modal - data is validated and saved
-    setIsValidationModalOpen(false);
-
-    // Auto-validate proof points after successful data validation
-    setTimeout(() => {
-      autoValidateProofPoints();
-    }, 100);
+      // Auto-validate proof points after successful data validation
+      setTimeout(() => {
+        autoValidateProofPoints();
+      }, 100);
+    }, 50); // Small delay to let modal close animation complete
   };
 
   // Handle re-upload in validation modal
@@ -2884,10 +3213,10 @@ export default function ReviewDataPage() {
 
   // Helper function to find a column in headers (case-insensitive, flexible matching)
   const findColumn = (headers: string[], possibleNames: string[]): string | null => {
-    const normalizedHeaders = headers.map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
+    const normalizedHeaders = headers.map(h => (h || '').toLowerCase().replace(/[\s_-]/g, ''));
     for (const name of possibleNames) {
       const normalizedName = name.toLowerCase().replace(/[\s_-]/g, '');
-      const idx = normalizedHeaders.findIndex(h => h.includes(normalizedName) || normalizedName.includes(h));
+      const idx = normalizedHeaders.findIndex(h => h && (h.includes(normalizedName) || normalizedName.includes(h)));
       if (idx !== -1) return headers[idx];
     }
     return null;
@@ -2904,10 +3233,10 @@ export default function ReviewDataPage() {
     if (dataPointId === "spend" && csvData && csvData.rows.length > 0) {
       const { headers } = csvData;
 
-      // Filter rows based on categoryFilterMode
+      // Filter rows based on deferredCategoryFilterMode (deferred for smooth UI)
       let rows = csvData.rows;
 
-      if (categoryFilterMode === "selected") {
+      if (deferredCategoryFilterMode === "selected") {
         // Get selected category names from context
         let selectedCategoryNames: string[] = [];
         if (state.selectedCategories && state.selectedCategories.length > 0) {
@@ -2919,19 +3248,20 @@ export default function ReviewDataPage() {
             .filter(name => name.length > 0);
         }
 
-        if (selectedCategoryNames.length > 0) {
-          // Find category column by header name
-          const priorityColumns = [
-            "category_level_3", "categorylevel3", "category_level3",
-            "commodity_type", "commoditytype",
-            "sub_category", "subcategory",
-            "category", "commodity", "segment", "product_type", "product", "type", "item_category"
-          ];
+        console.log('[getSummaryData] Category filtering:', {
+          filterMode: deferredCategoryFilterMode,
+          selectedCategories: state.selectedCategories,
+          categoryName: state.setupData.categoryName,
+          selectedCategoryNames,
+          totalRowsBefore: csvData.rows.length,
+        });
 
+        if (selectedCategoryNames.length > 0) {
+          // Find category column by header name using shared patterns
           let categoryColName: string | null = null;
-          for (const priorityCol of priorityColumns) {
+          for (const priorityCol of CATEGORY_COLUMN_PATTERNS) {
             const foundHeader = headers.find(h =>
-              h.toLowerCase().replace(/[^a-z0-9]/g, '').includes(priorityCol.replace(/[^a-z0-9]/g, ''))
+              h && h.toLowerCase().replace(/[^a-z0-9]/g, '').includes(priorityCol.replace(/[^a-z0-9]/g, ''))
             );
             if (foundHeader) {
               categoryColName = foundHeader;
@@ -2939,43 +3269,36 @@ export default function ReviewDataPage() {
             }
           }
 
-          if (categoryColName) {
-            // Normalize and filter - optimized with Set for O(1) exact match
-            const normalizeCategory = (cat: string) => {
-              return cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
-            };
-            const normalizedSet = new Set(selectedCategoryNames.map(normalizeCategory));
-            const normalizedArray = Array.from(normalizedSet);
+          console.log('[getSummaryData] Found category column:', categoryColName, 'from headers:', headers.slice(0, 5));
 
-            // Pre-allocate for performance
+          if (categoryColName) {
+            // Filter using smart category matching
             const filtered: Record<string, string>[] = [];
             const rowCount = csvData.rows.length;
 
             for (let i = 0; i < rowCount; i++) {
               const row = csvData.rows[i];
               const categoryValue = row[categoryColName!] || "";
-              const normalizedValue = normalizeCategory(categoryValue);
+              if (!categoryValue) continue;
 
-              // Fast path: exact match
-              if (normalizedSet.has(normalizedValue)) {
-                filtered.push(row);
-                continue;
-              }
-
-              // Slow path: contains match
-              let matches = false;
-              for (let j = 0; j < normalizedArray.length; j++) {
-                const cat = normalizedArray[j];
-                if (normalizedValue.includes(cat) || cat.includes(normalizedValue)) {
-                  matches = true;
+              // Check against each selected category using smart matching
+              for (const selectedCat of selectedCategoryNames) {
+                if (isCategoryMatch(categoryValue, selectedCat)) {
+                  filtered.push(row);
                   break;
                 }
               }
-              if (matches) filtered.push(row);
             }
             rows = filtered;
+            console.log('[getSummaryData] Filtered to', filtered.length, 'rows from', rowCount);
+          } else {
+            console.log('[getSummaryData] No category column found - using all rows');
           }
+        } else {
+          console.log('[getSummaryData] No selected categories - using all rows');
         }
+      } else {
+        console.log('[getSummaryData] Filter mode is "original" - using all rows');
       }
 
       // Use smart column detection
@@ -3337,130 +3660,93 @@ export default function ReviewDataPage() {
       }
     }
 
+    // PERFORMANCE: Call getSummaryData ONCE and reuse result
+    const spendSummary = uploadedFile && parsedData ? getSummaryData("spend") : null;
+
     // Store spend analysis data in context
-    if (uploadedFile && parsedData) {
-      const spendSummary = getSummaryData("spend");
-      if (spendSummary && spendSummary.totalSpend > 0) {
-        const spendBySupplier: Record<string, number> = {};
-        const spendByRegion: Record<string, number> = {};
-        const spendByCountry: Record<string, number> = {};
+    if (spendSummary && spendSummary.totalSpend > 0) {
+      const spendBySupplier: Record<string, number> = {};
+      const spendByRegion: Record<string, number> = {};
+      const spendByCountry: Record<string, number> = {};
 
-        spendSummary.suppliers.forEach(s => {
-          spendBySupplier[s.name] = s.spend;
-        });
+      spendSummary.suppliers.forEach(s => {
+        spendBySupplier[s.name] = s.spend;
+      });
 
-        spendSummary.locations.forEach(l => {
-          spendByCountry[l.name] = l.spend;
-          // Try to group by region if available
-          spendByRegion[l.name] = l.spend;
-        });
+      spendSummary.locations.forEach(l => {
+        spendByCountry[l.name] = l.spend;
+        spendByRegion[l.name] = l.spend;
+      });
 
-        // Calculate price data from CSV for proof point testing (respecting filter mode)
-        let priceData: { prices: number[]; avgPrice: number; priceVariance: number } | undefined;
-        const spendCsvData = parsedCsvDataStore["spend"];
-        if (spendCsvData && spendCsvData.rows.length > 0) {
-          const { headers } = spendCsvData;
-          let priceRows = spendCsvData.rows;
+      // PERFORMANCE: Use already-cached filteredData instead of re-filtering
+      // The filteredData useMemo already has the filtered rows cached
+      let priceData: { prices: number[]; avgPrice: number; priceVariance: number } | undefined;
+      const spendCsvData = parsedCsvDataStore["spend"];
+      if (spendCsvData && spendCsvData.rows.length > 0) {
+        const { headers } = spendCsvData;
+        const columns = detectAllColumns(headers);
 
-          // Filter rows based on categoryFilterMode (same logic as getSummaryData)
-          if (categoryFilterMode === "selected") {
-            let selectedCategoryNames: string[] = [];
-            if (state.selectedCategories && state.selectedCategories.length > 0) {
-              selectedCategoryNames = state.selectedCategories.map(name => name.toLowerCase());
-            } else if (state.setupData.categoryName) {
-              selectedCategoryNames = state.setupData.categoryName
-                .split(',')
-                .map(name => name.trim().toLowerCase())
-                .filter(name => name.length > 0);
-            }
+        if (columns.price) {
+          // Use filteredData.rows if in selected mode, otherwise use all rows
+          const rowsToUse = categoryFilterMode === "selected" && filteredData.isFiltered
+            ? filteredData.rows
+            : spendCsvData.rows;
 
-            if (selectedCategoryNames.length > 0) {
-              const priorityColumns = [
-                "category_level_3", "categorylevel3", "category_level3",
-                "commodity_type", "commoditytype",
-                "sub_category", "subcategory",
-                "category", "commodity", "segment", "product_type", "product", "type", "item_category"
-              ];
-
-              let categoryColName: string | null = null;
-              for (const priorityCol of priorityColumns) {
-                const foundHeader = headers.find(h =>
-                  h.toLowerCase().replace(/[^a-z0-9]/g, '').includes(priorityCol.replace(/[^a-z0-9]/g, ''))
-                );
-                if (foundHeader) {
-                  categoryColName = foundHeader;
-                  break;
-                }
-              }
-
-              if (categoryColName) {
-                const normalizeCategory = (cat: string) => cat.toLowerCase().trim().replace(/s$/, '').replace(/[_-]/g, ' ');
-                const normalizedSet = new Set(selectedCategoryNames.map(normalizeCategory));
-                const normalizedArray = Array.from(normalizedSet);
-
-                priceRows = spendCsvData.rows.filter(row => {
-                  const categoryValue = row[categoryColName!] || "";
-                  const normalizedValue = normalizeCategory(categoryValue);
-                  if (normalizedSet.has(normalizedValue)) return true;
-                  return normalizedArray.some(cat => normalizedValue.includes(cat) || cat.includes(normalizedValue));
-                });
-              }
+          const prices: number[] = [];
+          const rowCount = rowsToUse.length;
+          for (let i = 0; i < rowCount; i++) {
+            const row = rowsToUse[i];
+            // Handle both array format (from filteredData) and object format (from spendCsvData)
+            const priceValue = Array.isArray(row)
+              ? row[headers.indexOf(columns.price!)]
+              : row[columns.price!];
+            const price = parseNumericValue(priceValue);
+            if (price > 0) {
+              prices.push(price);
             }
           }
 
-          const columns = detectAllColumns(headers);
+          if (prices.length > 0) {
+            const avgPrice = prices.reduce((sum, p) => sum + p, 0) / prices.length;
+            const variance = prices.reduce((sum, p) => sum + Math.pow(p - avgPrice, 2), 0) / prices.length;
+            const stdDev = Math.sqrt(variance);
+            const priceVariance = avgPrice > 0 ? (stdDev / avgPrice) * 100 : 0;
 
-          if (columns.price) {
-            const prices: number[] = [];
-            priceRows.forEach(row => {
-              const price = parseNumericValue(row[columns.price!]);
-              if (price > 0) {
-                prices.push(price);
-              }
-            });
-
-            if (prices.length > 0) {
-              const avgPrice = prices.reduce((sum, p) => sum + p, 0) / prices.length;
-              // Calculate price variance as coefficient of variation (stddev/mean * 100)
-              const variance = prices.reduce((sum, p) => sum + Math.pow(p - avgPrice, 2), 0) / prices.length;
-              const stdDev = Math.sqrt(variance);
-              const priceVariance = avgPrice > 0 ? (stdDev / avgPrice) * 100 : 0;
-
-              priceData = {
-                prices,
-                avgPrice,
-                priceVariance,
-              };
-              // Price data calculated from filtered rows
-            }
+            priceData = { prices, avgPrice, priceVariance };
           }
         }
-
-        actions.setSpendAnalysis({
-          totalSpend: spendSummary.totalSpend,
-          spendBySupplier,
-          spendByRegion,
-          spendByCountry,
-          supplierCount: spendSummary.suppliers.length,
-          topSuppliers: spendSummary.suppliers.slice(0, 5).map(s => ({
-            name: s.name,
-            spend: s.spend,
-            percentage: s.percentage,
-          })),
-          topRegions: spendSummary.locations.slice(0, 5).map(l => ({
-            name: l.name,
-            spend: l.spend,
-            percentage: l.percentage,
-          })),
-          priceData,
-        });
-        // Spend analysis stored in context
       }
+
+      console.log('[Review] Setting spendAnalysis:', {
+        totalSpend: spendSummary.totalSpend,
+        supplierCount: spendSummary.suppliers.length,
+        rowCount: spendSummary.rowCount,
+        categoryFilterMode: deferredCategoryFilterMode,
+        selectedCategories: state.selectedCategories,
+        categoryName: state.setupData.categoryName,
+      });
+      actions.setSpendAnalysis({
+        totalSpend: spendSummary.totalSpend,
+        spendBySupplier,
+        spendByRegion,
+        spendByCountry,
+        supplierCount: spendSummary.suppliers.length,
+        topSuppliers: spendSummary.suppliers.slice(0, 5).map(s => ({
+          name: s.name,
+          spend: s.spend,
+          percentage: s.percentage,
+        })),
+        topRegions: spendSummary.locations.slice(0, 5).map(l => ({
+          name: l.name,
+          spend: l.spend,
+          percentage: l.percentage,
+        })),
+        priceData,
+      });
     }
 
-    // Calculate total spend - prefer filtered spend summary, then portfolio, then setupData
-    const spendSummaryForTotal = getSummaryData("spend");
-    const filteredSpend = spendSummaryForTotal?.totalSpend || 0;
+    // Calculate total spend - reuse spendSummary (already computed above)
+    const filteredSpend = spendSummary?.totalSpend || 0;
     const totalSpend = filteredSpend > 0
       ? filteredSpend
       : (state.portfolioItems.length > 0
@@ -3559,13 +3845,27 @@ export default function ReviewDataPage() {
     }
   };
 
-  // Handle processing animation and redirect
+  // Handle processing animation and redirect - triggers LLM proof point evaluation
   useEffect(() => {
-    if (!isProcessing) return;
+    // Reset flag when not processing (allows retry if user goes back)
+    if (!isProcessing) {
+      llmEvaluationCompletedRef.current = false;
+      return;
+    }
+
+    // Prevent running multiple times (dependencies can change during execution)
+    if (llmEvaluationCompletedRef.current) {
+      console.log("[Review] LLM evaluation already completed, skipping re-run");
+      return;
+    }
+
+    // Create abort controller for cleanup on unmount
+    const abortController = new AbortController();
+    let isAborted = false;
 
     const statuses = [
       "Analyzing your spend data...",
-      "Evaluating proof points...",
+      "Evaluating proof points with AI...",
       "Calculating savings opportunities...",
       "Preparing your dashboard..."
     ];
@@ -3576,16 +3876,170 @@ export default function ReviewDataPage() {
       setProcessingStatus(statuses[currentIndex]);
     }, 1000);
 
-    const timer = setTimeout(() => {
-      actions.setSetupStep(5);
-      router.push("/dashboard");
-    }, 4000);
+    // Start LLM proof point evaluation in background (non-blocking)
+    const evaluateProofPointsInBackground = async () => {
+      // Check if aborted before starting
+      if (isAborted) return;
+      try {
+        console.log("[Review] Starting LLM proof point evaluation in background...");
+
+        // Get spend data for LLM evaluation
+        const spendSummary = getSummaryData("spend");
+        const spendData = {
+          totalSpend: spendSummary?.totalSpend || state.spendAnalysis?.totalSpend || 0,
+          supplierCount: spendSummary?.suppliers?.length || state.spendAnalysis?.supplierCount || 0,
+          spendBySupplier: state.spendAnalysis?.spendBySupplier || {},
+          spendByRegion: state.spendAnalysis?.spendByRegion || {},
+        };
+
+        // Get supplier data
+        const supplierData = spendSummary?.suppliers?.map(s => ({
+          name: s.name,
+          spend: s.spend,
+          share: s.percentage,
+        })) || state.spendAnalysis?.topSuppliers || [];
+
+        // Get computed metrics
+        const metrics = state.computedMetrics || {};
+
+        // Opportunity types to evaluate
+        const opportunityTypes = ["volume-bundling", "target-pricing", "risk-management", "respec-pack"];
+
+        // Evaluate all opportunities in parallel
+        const evaluationPromises = opportunityTypes.map(async (oppType) => {
+          try {
+            // Find relevant proof points for this opportunity
+            const opp = state.setupOpportunities.find(o => o.id === oppType);
+            const proofPointsData = opp?.proofPoints?.map(pp => ({
+              id: pp.id,
+              name: pp.name,
+              value: pp.score,
+              data: { isValidated: pp.isValidated },
+            })) || [];
+
+            const result = await procurementApi.evaluateProofPoints({
+              opportunityType: oppType,
+              categoryName: state.setupData.categoryName || "Edible Oils",
+              proofPointsData,
+              spendData,
+              supplierData,
+              metrics,
+            });
+
+            return {
+              oppType,
+              evaluations: result.evaluations,
+              summary: result.summary,
+              model_used: result.model_used,
+              thinking_time: result.thinking_time,
+              computed_at: Date.now(),
+            };
+          } catch (error) {
+            console.warn(`[Review] Failed to evaluate ${oppType}:`, error);
+            return null;
+          }
+        });
+
+        const results = await Promise.all(evaluationPromises);
+
+        // Store results in context
+        const llmEvaluations: Record<string, {
+          evaluations: Array<{ id: string; impact: 'High' | 'Medium' | 'Low'; reasoning: string; data_point: string }>;
+          summary: { high_count: number; medium_count: number; low_count: number; confidence_score: number; overall_assessment?: string };
+          model_used: string;
+          thinking_time: string;
+          computed_at: number;
+        }> = {};
+
+        results.forEach(result => {
+          if (result) {
+            llmEvaluations[result.oppType] = {
+              evaluations: result.evaluations,
+              summary: result.summary,
+              model_used: result.model_used,
+              thinking_time: result.thinking_time,
+              computed_at: result.computed_at,
+            };
+          }
+        });
+
+        // Check if aborted before storing results
+        if (isAborted) return;
+
+        if (Object.keys(llmEvaluations).length > 0) {
+          actions.setLlmProofPointEvaluations(llmEvaluations);
+          console.log("[Review] LLM evaluations stored:", Object.keys(llmEvaluations));
+        }
+      } catch (error) {
+        if (isAborted) return;
+        console.error("[Review] Background LLM evaluation failed:", error);
+        // Non-blocking - continue with navigation even if LLM fails
+      }
+    };
+
+    // Run evaluations and wait for completion before navigating
+    const runEvaluationsAndNavigate = async () => {
+      try {
+        // Check if aborted before starting
+        if (isAborted) return;
+
+        // Update status to show LLM evaluation
+        setProcessingStatus("Evaluating proof points with AI...");
+
+        // Await all LLM evaluations (this takes 20-60 seconds)
+        await evaluateProofPointsInBackground();
+
+        // Check if aborted after evaluations complete
+        if (isAborted) {
+          console.log("[Review] Navigation aborted - component unmounted");
+          return;
+        }
+
+        console.log("[Review] All LLM evaluations complete!");
+        setProcessingStatus("Preparing your dashboard...");
+
+        // Mark as completed to prevent re-runs
+        llmEvaluationCompletedRef.current = true;
+
+        // Mark setup as complete in backend
+        try {
+          await authApi.updateSetup({
+            setup_step: 4,
+            setup_completed: true,
+          });
+          console.log("[Setup] Marked setup as complete in backend");
+        } catch (error) {
+          console.warn("[Setup] Failed to update backend, continuing anyway:", error);
+        }
+
+        // Final abort check before navigation
+        if (isAborted) return;
+
+        // Navigate only after evaluations complete
+        actions.setSetupStep(5);
+        router.push("/dashboard");
+      } catch (error) {
+        if (isAborted) return;
+        console.error("[Review] Evaluation failed, navigating anyway:", error);
+        // Even on failure, navigate to dashboard
+        actions.setSetupStep(5);
+        router.push("/dashboard");
+      }
+    };
+
+    // Start the evaluation process (this awaits completion before navigation)
+    runEvaluationsAndNavigate();
 
     return () => {
-      clearTimeout(timer);
+      // Signal abort to all async operations
+      isAborted = true;
+      abortController.abort();
       clearInterval(statusInterval);
     };
-  }, [isProcessing, router, actions]);
+    // Note: Only isProcessing should trigger this effect
+    // Other dependencies are used inside but shouldn't re-trigger
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProcessing, router]);
   // Get category name from context or default
   const categoryName = state.setupData.categoryName || "Category";
 
@@ -3708,6 +4162,22 @@ export default function ReviewDataPage() {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-[#F8FBFE]">
+      {/* Viewer Read-Only Banner */}
+      {userIsViewer && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white shadow-md">
+          <Eye className="inline-block h-4 w-4 mr-2" />
+          You are viewing in read-only mode. Contact your administrator for edit access.
+        </div>
+      )}
+
+      {/* Back Button */}
+      <Link
+        href="/setup/goals"
+        className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Link>
+
       {/* Background Decor - matching the goals page style */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-[#E0F2FE]/40 via-[#F8FBFE] to-white" />
@@ -3724,8 +4194,8 @@ export default function ReviewDataPage() {
 
       {/* Left Icon Sidebar */}
       <div className="relative z-20 flex w-16 flex-col items-center border-r border-gray-200/40 bg-white/30 py-8 backdrop-blur-xl">
-        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5">
-          <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500" />
+        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
+          <img src="/beroe cut.jpg" alt="Beroe" className="h-8 w-8 object-contain" />
         </div>
         
         <div className="flex flex-col gap-8 text-gray-400">
@@ -3964,7 +4434,7 @@ export default function ReviewDataPage() {
 
                <button
                   onClick={() => setIsOpportunitiesListOpen(true)}
-                  className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] text-left"
+                  className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all duration-200 ease-out hover:shadow-xl hover:shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] text-left"
                >
                   <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Opportunities</span>
                   <div className="mt-2 flex items-center gap-2">
@@ -4158,7 +4628,7 @@ export default function ReviewDataPage() {
                                  <td className="py-6 pr-4 text-right">
                                     {dataPoint.isSpendData ? (
                                        <div className="flex items-center justify-end gap-2">
-                                          {hasSpendData && (
+                                          {hasSpendData && userCanEdit && (
                                              <button
                                                 onClick={handleRemoveFile}
                                                 className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
@@ -4168,7 +4638,13 @@ export default function ReviewDataPage() {
                                           )}
                                           <button
                                              onClick={() => fileInputRef.current?.click()}
-                                             className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-colors hover:text-blue-600"
+                                             disabled={!userCanUpload}
+                                             className={`inline-flex items-center gap-2 text-[14px] font-semibold transition-colors ${
+                                               userCanUpload
+                                                 ? "text-gray-900 hover:text-blue-600"
+                                                 : "text-gray-400 cursor-not-allowed"
+                                             }`}
+                                             title={!userCanUpload ? "Viewers cannot upload files" : undefined}
                                           >
                                              {hasSpendData ? "Change" : "Upload"}
                                              <Upload className="h-4 w-4" />
@@ -4210,7 +4686,7 @@ export default function ReviewDataPage() {
                                           {dataPoint.canUpload && (
                                              <button
                                                 onClick={() => triggerDataPointUpload(dataPoint.id)}
-                                                className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-colors hover:text-blue-600"
+                                                className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-all duration-150 ease-out hover:text-blue-600 hover:scale-105 active:scale-95"
                                              >
                                                 {dataPoint.items.length > 0 ? "Change" : "Upload"}
                                                 <Upload className="h-4 w-4" />
@@ -4220,17 +4696,17 @@ export default function ReviewDataPage() {
                                           {dataPoint.items.length > 0 && getFieldsForDataPoint(dataPoint.id).length > 0 && (
                                              <button
                                                 onClick={() => openValidationModal(dataPoint.id, dataPoint.name)}
-                                                className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
+                                                className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-blue-600 hover:scale-[1.02] hover:shadow-md hover:shadow-blue-500/30 active:scale-[0.98]"
                                              >
                                                 Validate
-                                                <ArrowRight className="h-4 w-4" />
+                                                <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
                                              </button>
                                           )}
                                           {/* Summary button for validated data points */}
                                           {dataPoint.items.length > 0 && dataPoint.id !== "other" && isDataPointFullyValidated(dataPoint.id) && (
                                              <button
                                                 onClick={() => openSummaryModal(dataPoint.id)}
-                                                className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-emerald-600"
+                                                className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-emerald-600 hover:scale-[1.02] hover:shadow-md hover:shadow-emerald-500/30 active:scale-[0.98]"
                                              >
                                                 Summary
                                                 <BarChart3 className="h-4 w-4" />
@@ -4583,33 +5059,32 @@ export default function ReviewDataPage() {
 
               {/* Category Filter Toggle - only show for Spend Data, not for other data points */}
               {parsedData && validationDataPoint?.id === "spend" && !parsedData.isDocument && (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200">
-                  <ListFilter className="h-4 w-4 text-gray-500" />
-                  <div className="flex items-center gap-1 bg-white rounded-lg p-0.5 border border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1 p-1 rounded-full bg-gray-100">
                     <button
                       onClick={() => setCategoryFilterMode("selected")}
-                      className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-all ${
+                      className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 ease-out ${
                         categoryFilterMode === "selected"
                           ? "bg-indigo-500 text-white shadow-sm"
-                          : "text-gray-600 hover:bg-gray-100"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
                       }`}
                     >
                       Selected Categories
                     </button>
                     <button
                       onClick={() => setCategoryFilterMode("original")}
-                      className={`px-3 py-1.5 rounded-md text-[12px] font-medium transition-all ${
+                      className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 ease-out ${
                         categoryFilterMode === "original"
                           ? "bg-indigo-500 text-white shadow-sm"
-                          : "text-gray-600 hover:bg-gray-100"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
                       }`}
                     >
-                      Original Data
+                      All Data
                     </button>
                   </div>
                   {categoryFilterMode === "selected" && parsedData && (
                     <span className="text-[11px] text-gray-500">
-                      ({visibleRows.totalFilteredRows || 0} of {parsedData.rows.length} rows)
+                      {visibleRows.totalFilteredRows || 0} of {parsedData.rows.length} rows
                     </span>
                   )}
                 </div>
@@ -4759,7 +5234,12 @@ export default function ReviewDataPage() {
                                     cell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                                   }
                                 }
-                                cell.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
+                                // Add highlight with smooth animation
+                                cell.style.transition = 'box-shadow 200ms ease-out, transform 200ms ease-out';
+                                cell.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative', 'scale-[1.02]');
+                                setTimeout(() => {
+                                  cell.classList.remove('scale-[1.02]');
+                                }, 300);
                                 setTimeout(() => {
                                   cell.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-1', 'z-20', 'relative');
                                 }, 2500);
@@ -4767,7 +5247,7 @@ export default function ReviewDataPage() {
                             }, 350);
                           }
                         }}
-                        className="w-full text-left p-3 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all"
+                        className="w-full text-left p-3 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-150 ease-out"
                       >
                         <div className="flex items-start gap-3">
                           {error.severity === "error" ? (
@@ -4883,11 +5363,14 @@ export default function ReviewDataPage() {
               ) : parsedData ? (
                 <div
                   ref={tableContainerRef}
-                  className="border border-gray-200 rounded-xl overflow-auto flex-1"
+                  className="border border-gray-200 rounded-xl overflow-auto flex-1 relative smooth-scroll"
                   onScroll={handleTableScroll}
+                  style={{ willChange: 'scroll-position' }}
                 >
                   {/* Virtual scrolling container - use filtered row count */}
-                  <div style={{ height: (visibleRows.totalFilteredRows || parsedData.rows.length) * ROW_HEIGHT + 48, position: 'relative' }}>
+                  <div
+                    style={{ height: (visibleRows.totalFilteredRows || parsedData.rows.length) * ROW_HEIGHT + 48, position: 'relative' }}
+                  >
                     <table className="text-left text-[13px] border-collapse" style={{ minWidth: 'max-content' }}>
                       <thead className="bg-gray-50 sticky top-0 z-10">
                         <tr style={{ height: 48 }}>
@@ -4922,7 +5405,7 @@ export default function ReviewDataPage() {
                           // Display row number (1-based, using original index)
                           const displayRowNum = originalRowIdx + 1;
                           return (
-                            <tr key={`row-${originalRowIdx}`} className="hover:bg-blue-50/30" style={{ height: ROW_HEIGHT }}>
+                            <tr key={`row-${originalRowIdx}`} className="hover:bg-blue-50/40" style={{ height: ROW_HEIGHT, contain: 'layout style paint' }}>
                               <td className="px-3 py-2 text-gray-400 font-medium border-r border-b border-gray-100 bg-gray-50 text-center sticky left-0 z-10">
                                 {displayRowNum}
                               </td>
@@ -4941,6 +5424,7 @@ export default function ReviewDataPage() {
                                           : "bg-amber-50"
                                         : ""
                                     }`}
+                                    style={{ contain: 'layout style paint' }}
                                   >
                                     {isEditing ? (
                                       <div className="flex items-center gap-1">
@@ -4970,8 +5454,9 @@ export default function ReviewDataPage() {
                                       </div>
                                     ) : (
                                       <div
-                                        className="flex items-center gap-2 group cursor-pointer"
+                                        className={`flex items-center gap-2 group ${userCanEdit ? "cursor-pointer" : "cursor-default"}`}
                                         onClick={() => startEditingCell(originalRowIdx, colIdx, cell)}
+                                        title={!userCanEdit ? "Read-only mode" : "Click to edit"}
                                       >
                                         <span className={`flex-1 truncate ${error ? (error.severity === "error" ? "text-red-700" : "text-amber-700") : "text-gray-700"}`}>
                                           {cell || <span className="text-gray-300 italic">empty</span>}
@@ -4979,7 +5464,9 @@ export default function ReviewDataPage() {
                                         {error && (
                                           <AlertCircle className={`h-3.5 w-3.5 flex-shrink-0 ${error.severity === "error" ? "text-red-500" : "text-amber-500"}`} />
                                         )}
-                                        <Pencil className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 flex-shrink-0" />
+                                        {userCanEdit && (
+                                          <Pencil className="h-3 w-3 text-gray-300 opacity-0 group-hover:opacity-100 flex-shrink-0" />
+                                        )}
                                       </div>
                                     )}
                                   </td>
@@ -5064,42 +5551,44 @@ export default function ReviewDataPage() {
               <Button
                 variant="outline"
                 onClick={() => setIsValidationModalOpen(false)}
-                className="h-9 px-5 rounded-xl"
+                className="h-9 px-5 rounded-xl transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
               >
                 Cancel
               </Button>
               <Button
                 variant="outline"
                 onClick={revalidateEntireFile}
-                className="h-9 px-5 rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                className="h-9 px-5 rounded-xl border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
                 disabled={isValidating || !parsedData}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isValidating ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 mr-2 transition-transform duration-300 ${isValidating ? 'animate-spin' : ''}`} />
                 Revalidate
               </Button>
               <Button
                 onClick={confirmAndSaveData}
-                className="h-9 px-5 rounded-xl bg-[#1A1C1E] text-white hover:bg-black"
+                className="h-9 px-5 rounded-xl bg-[#1A1C1E] text-white hover:bg-black transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100"
                 disabled={isValidating}
               >
-                {isValidating ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Validating...
-                  </>
-                ) : (categoryFilterMode === "selected" ? filteredErrorCounts.errors : errorCounts.errors) > 0 ? (
-                  <>
-                    <AlertCircle className="h-4 w-4 mr-2" />
-                    Fix Errors First
-                  </>
-                ) : (
-                  <>
-                    <Check className="h-4 w-4 mr-2" />
-                    {categoryFilterMode === "selected"
-                      ? `Save Selected (${visibleRows.totalFilteredRows} rows)`
-                      : "Confirm & Save"}
-                  </>
-                )}
+                <span className="flex items-center transition-all duration-200">
+                  {isValidating ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Validating...
+                    </>
+                  ) : (categoryFilterMode === "selected" ? filteredErrorCounts.errors : errorCounts.errors) > 0 ? (
+                    <>
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      Fix Errors First
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      {categoryFilterMode === "selected"
+                        ? `Confirm & Save All Data`
+                        : "Confirm & Save"}
+                    </>
+                  )}
+                </span>
               </Button>
             </div>
           </div>
@@ -5152,10 +5641,10 @@ export default function ReviewDataPage() {
                       key={opportunity.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`rounded-3xl border-2 bg-white shadow-sm hover:shadow-lg transition-all overflow-hidden ${
+                      className={`rounded-3xl border-2 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out overflow-hidden ${
                         isQualified
-                          ? 'border-emerald-200'
-                          : 'border-amber-200'
+                          ? 'border-emerald-200 hover:shadow-emerald-100'
+                          : 'border-amber-200 hover:shadow-amber-100'
                       }`}
                     >
                       {/* Card Header */}

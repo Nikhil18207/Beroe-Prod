@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, User, Building2 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, User, Building2, CheckCircle2 } from "lucide-react";
+import { useApp } from "@/context/AppContext";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, isAuthenticated, isLoading: authLoading, error, clearError } = useAuth();
+  const { actions } = useApp();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,23 +17,23 @@ export default function RegisterPage() {
     username: "",
     password: "",
     confirmPassword: "",
-    company: "",
+    organizationName: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [localError, setLocalError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  // Redirect if already authenticated
+  // Clear session on mount (fresh start)
   useEffect(() => {
-    if (isAuthenticated && !authLoading) {
-      router.push("/dashboard");
-    }
-  }, [isAuthenticated, authLoading, router]);
+    actions.logout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Clear errors when inputs change
   useEffect(() => {
-    if (error) clearError();
-    if (localError) setLocalError(null);
+    if (error) setError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,62 +45,95 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLocalError(null);
+    setError(null);
 
     // Validation
     if (!formData.name.trim()) {
-      setLocalError("Full name is required");
+      setError("Full name is required");
       return;
     }
     if (!formData.email.trim()) {
-      setLocalError("Email is required");
+      setError("Email is required");
       return;
     }
     if (!formData.username.trim()) {
-      setLocalError("Username is required");
+      setError("Username is required");
       return;
     }
     if (formData.username.length < 3) {
-      setLocalError("Username must be at least 3 characters");
+      setError("Username must be at least 3 characters");
+      return;
+    }
+    if (!formData.organizationName.trim()) {
+      setError("Organization name is required");
       return;
     }
     if (!formData.password) {
-      setLocalError("Password is required");
+      setError("Password is required");
       return;
     }
-    if (formData.password.length < 6) {
-      setLocalError("Password must be at least 6 characters");
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters");
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      setLocalError("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     setIsSubmitting(true);
 
-    const success = await register({
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      username: formData.username.trim(),
-      password: formData.password,
-      company: formData.company.trim() || undefined,
-    });
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            username: formData.username.trim(),
+            password: formData.password,
+            organization_name: formData.organizationName.trim(),
+          }),
+        }
+      );
 
-    if (success) {
-      router.push("/setup/portfolio");
+      if (response.ok) {
+        // Show success and redirect to sign in
+        setSuccess(true);
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Registration failed");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError(err instanceof Error ? err.message : "Registration failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
-  const displayError = localError || error;
-
-  // Show loading while checking auth
-  if (authLoading) {
+  // Show success screen
+  if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full mx-4 text-center"
+        >
+          <CheckCircle2 className="h-16 w-16 text-emerald-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created!</h2>
+          <p className="text-gray-600 mb-4">Your organization has been set up successfully.</p>
+          <p className="text-sm text-gray-500">Redirecting to sign in...</p>
+          <div className="mt-4">
+            <Loader2 className="h-5 w-5 animate-spin text-blue-500 mx-auto" />
+          </div>
+        </motion.div>
       </div>
     );
   }
@@ -109,7 +142,6 @@ export default function RegisterPage() {
     <div className="min-h-screen flex bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white">
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        {/* Background Decor */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute bottom-[-20%] left-[-10%] h-[70%] w-[55%] rotate-[-12deg] overflow-hidden bg-[#E5B800] shadow-2xl opacity-60">
             <div className="absolute inset-0 flex flex-col space-y-6 pt-12">
@@ -120,19 +152,14 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col justify-center px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-12">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                <div className="h-6 w-6 rounded-full bg-white/30 backdrop-blur-sm" />
-              </div>
-              <span className="text-2xl font-bold text-gray-900">Beroe</span>
+            <div className="mb-12">
+              <img src="/53700-beroe-logo.webp" alt="Beroe" className="h-16" />
             </div>
 
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -144,12 +171,11 @@ export default function RegisterPage() {
               Join thousands of procurement professionals using AI to optimize their sourcing strategies.
             </p>
 
-            {/* Benefits */}
             <div className="mt-12 space-y-4">
               {[
-                "Free 14-day trial, no credit card required",
-                "Set up in minutes with guided onboarding",
-                "Instant insights from your spend data",
+                "Turn your spend data into actionable insights",
+                "Identify cost-saving opportunities instantly",
+                "Make smarter, faster procurement decisions",
               ].map((benefit, idx) => (
                 <motion.div
                   key={idx}
@@ -168,46 +194,37 @@ export default function RegisterPage() {
       </div>
 
       {/* Right Side - Register Form */}
-      <div className="flex-1 flex items-center justify-center px-8 py-12">
+      <div className="flex-1 flex items-center justify-center px-6 py-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="w-full max-w-md"
         >
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-              <div className="h-5 w-5 rounded-full bg-white/30 backdrop-blur-sm" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">Beroe</span>
+          <div className="lg:hidden flex justify-center mb-4">
+            <img src="/53700-beroe-logo.webp" alt="Beroe" className="h-12" />
           </div>
 
-          {/* Form Card */}
           <div className="bg-white rounded-3xl shadow-xl p-8 ring-1 ring-gray-100">
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Create account</h2>
-              <p className="text-gray-500 mt-2">Get started with your free trial</p>
+              <p className="text-gray-500 mt-2">Get started with your organization</p>
             </div>
 
-            {/* Error Message */}
-            {displayError && (
+            {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3"
+                className="mb-5 p-3 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2"
               >
                 <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700">{displayError}</p>
+                <p className="text-sm text-red-700">{error}</p>
               </motion.div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
@@ -216,17 +233,14 @@ export default function RegisterPage() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
                   />
                 </div>
               </div>
 
-              {/* Email Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Work Email
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Work Email</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
@@ -235,17 +249,14 @@ export default function RegisterPage() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="you@company.com"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
                   />
                 </div>
               </div>
 
-              {/* Username Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Username
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">@</span>
                   <input
@@ -254,36 +265,31 @@ export default function RegisterPage() {
                     value={formData.username}
                     onChange={handleChange}
                     placeholder="johndoe"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
                   />
                 </div>
               </div>
 
-              {/* Company Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Company <span className="text-gray-400">(Optional)</span>
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Organization Name</label>
                 <div className="relative">
                   <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    name="company"
-                    value={formData.company}
+                    name="organizationName"
+                    value={formData.organizationName}
                     onChange={handleChange}
-                    placeholder="Acme Inc."
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    placeholder="Unilever, Nestle, etc."
+                    className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
                   />
                 </div>
+                <p className="text-xs text-gray-500 mt-1">This will create a new organization. You&apos;ll be the admin.</p>
               </div>
 
-              {/* Password Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
@@ -291,29 +297,23 @@ export default function RegisterPage() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Min. 6 characters"
-                    className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    placeholder="Min. 8 characters"
+                    className="w-full pl-12 pr-12 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
+                    autoComplete="new-password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
 
-              {/* Confirm Password Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
@@ -322,17 +322,17 @@ export default function RegisterPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm your password"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     disabled={isSubmitting}
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3 px-4 rounded-xl bg-gray-900 text-white font-semibold hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+                className="w-full py-3 px-4 rounded-xl bg-gray-900 text-white font-semibold hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-5"
               >
                 {isSubmitting ? (
                   <>
@@ -345,35 +345,25 @@ export default function RegisterPage() {
               </button>
             </form>
 
-            {/* Divider */}
-            <div className="my-6 flex items-center gap-4">
+            <div className="my-5 flex items-center gap-4">
               <div className="flex-1 h-px bg-gray-200" />
               <span className="text-sm text-gray-400">or</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
-            {/* Login Link */}
             <p className="text-center text-gray-600">
               Already have an account?{" "}
-              <Link
-                href="/login"
-                className="text-blue-600 hover:text-blue-700 font-semibold"
-              >
+              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
                 Sign in
               </Link>
             </p>
           </div>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-gray-400 mt-8">
+          <p className="text-center text-xs text-gray-400 mt-4">
             By creating an account, you agree to our{" "}
-            <Link href="/terms" className="text-gray-600 hover:text-gray-800">
-              Terms of Service
-            </Link>{" "}
+            <Link href="/terms" className="text-gray-600 hover:text-gray-800">Terms of Service</Link>{" "}
             and{" "}
-            <Link href="/privacy" className="text-gray-600 hover:text-gray-800">
-              Privacy Policy
-            </Link>
+            <Link href="/privacy" className="text-gray-600 hover:text-gray-800">Privacy Policy</Link>
           </p>
         </motion.div>
       </div>

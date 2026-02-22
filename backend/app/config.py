@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file="../.env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore"
@@ -46,13 +46,32 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o"
     openai_embedding_model: str = "text-embedding-3-small"
 
-    # Local LLM (Ollama + Qwen 2.5)
-    local_llm_enabled: bool = True
+    # Together.ai (open source models - Llama, Mistral, Qwen)
+    together_api_key: str = ""
+    together_model: str = "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+
+    # Groq (ultra-fast inference)
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
+
+    # Local LLM (Ollama + Qwen 2.5) - For local development only
+    local_llm_enabled: bool = False
     local_llm_model: str = "qwen2.5:7b"
     local_llm_base_url: str = "http://localhost:11434"
 
-    # LLM Provider: "local" for Ollama only, "openai" for OpenAI only, "hybrid" for both
-    llm_provider: Literal["openai", "local", "hybrid"] = "local"
+    # LLM Provider Selection
+    # - openai: Use OpenAI API (paid, high quality)
+    # - together: Use Together.ai (open source models)
+    # - groq: Use Groq (ultra-fast, free tier)
+    # - local: Use local Ollama/Qwen (development only)
+    # - hybrid: Try OpenAI first, fallback to local
+    llm_provider: Literal["openai", "together", "groq", "local", "hybrid"] = "openai"
+
+    # Supplier Intelligence (PP8) - Uses OpenAI for real-time analysis
+    supplier_intel_model: str = "gpt-4o-mini"
+
+    # Serper API for real-time web search in supplier intelligence
+    serper_api_key: str = ""
 
     # File Upload
     max_upload_size_mb: int = 50
@@ -60,11 +79,14 @@ class Settings(BaseSettings):
     allowed_extensions: str = ".csv,.xlsx,.xls,.pdf,.docx"
 
     # CORS - Allow all localhost ports for development
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3092", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002", "http://127.0.0.1:3003", "http://127.0.0.1:3004"]
+    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3077", "http://localhost:3078", "http://localhost:3080", "http://localhost:3092", "http://localhost:3098", "http://localhost:3099", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002", "http://127.0.0.1:3003", "http://127.0.0.1:3004", "http://127.0.0.1:3077", "http://127.0.0.1:3078", "http://127.0.0.1:3080", "http://127.0.0.1:3098", "http://127.0.0.1:3099"]
 
     # Logging
     log_level: str = "INFO"
     log_format: str = "json"
+
+    # Super Admin Secret (for promoting users to Super Admin role)
+    super_admin_secret: str = "beroe-super-admin-2024"
 
     @property
     def allowed_extensions_list(self) -> List[str]:

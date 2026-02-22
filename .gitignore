@@ -147,3 +147,17 @@ tmp/
 # ============ PROJECT SPECIFIC ============
 nul
 scripts/*.sql
+
+# Backend test files (development only)
+backend/test_*.py
+backend/test_*.json
+backend/*_output.json
+
+# Temporary hierarchy structure docs
+hirerachyStruture/
+
+# Test data files (sample uploads)
+test files/
+
+# Generated documents
+output format/

@@ -2,27 +2,26 @@
 
 import { motion } from "framer-motion";
 import {
-  Home,
-  Activity,
-  ShieldCheck,
-  Search,
   Plus,
   Mic,
   Menu,
   ArrowRight,
+  ArrowLeft,
   Clock,
   CheckCircle2,
   ArrowUpRight,
-  Users,
+  Activity,
   Send,
   X
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type ActivityItem } from "@/context/AppContext";
 import { AnimatePresence } from "framer-motion";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import Sidebar from "@/components/Sidebar";
+import { calculateDeterministicConfidence } from "@/lib/calculations/procurement-metrics";
 
 // Helper function to format relative time
 const formatRelativeTime = (timestamp: number): string => {
@@ -174,40 +173,56 @@ function DashboardContent() {
   const backendOpportunities = state.opportunities || [];
   const hasBackendData = backendOpportunities.length > 0;
 
-  // Calculate qualified vs potential based on backend data OR validated proof points
-  let qualifiedCount: number;
-  let potentialCount: number;
-  let totalOpportunities: number;
-
-  if (hasBackendData) {
-    // Use backend impact buckets to determine qualified vs potential
-    qualifiedCount = backendOpportunities.filter(opp =>
-      opp.impact_bucket === "High" || opp.impact_bucket === "Medium"
-    ).length;
-    potentialCount = backendOpportunities.filter(opp =>
-      opp.impact_bucket === "Low"
-    ).length;
-    totalOpportunities = backendOpportunities.length;
-  } else {
-    // Fallback to frontend validation: Qualified = 3+ proof points validated
-    const qualifiedOpportunities = setupOpportunities.filter(opp =>
-      opp.proofPoints.filter(pp => pp.isValidated).length >= 3
-    );
-    const potentialOpportunities = setupOpportunities.filter(opp =>
-      opp.proofPoints.filter(pp => pp.isValidated).length < 3
-    );
-    qualifiedCount = qualifiedOpportunities.length;
-    potentialCount = potentialOpportunities.length;
-    totalOpportunities = setupOpportunities.length;
-  }
-
-  // Get total spend from portfolio items or setupData
-  const totalSpend = state.portfolioItems.length > 0
-    ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
-    : state.setupData.spend || 0;
-
-  // Get computed metrics from frontend calculations
+  // Get computed metrics for deterministic confidence calculation
   const computedMetrics = state.computedMetrics;
+
+  // Calculate qualified vs potential using SAME logic as opportunities page
+  // Qualified = confidence >= 50%, Potential = confidence < 50%
+  const opportunityStatuses = useMemo(() => {
+    return setupOpportunities.map(opp => {
+      const proofPointIds = opp.proofPoints.map(pp => pp.id);
+      const validatedCount = opp.proofPoints.filter(pp => pp.isValidated).length;
+      const totalPoints = opp.proofPoints.length;
+      const validationRatio = totalPoints > 0 ? validatedCount / totalPoints : 0;
+
+      // Use deterministic confidence calculation (same as opportunities page)
+      const deterministicResult = computedMetrics
+        ? calculateDeterministicConfidence(opp.id, proofPointIds, computedMetrics)
+        : null;
+
+      // Priority: Deterministic > backend data > validation ratio fallback
+      let confidence: number;
+      if (deterministicResult) {
+        confidence = deterministicResult.confidenceScore;
+      } else if (hasBackendData) {
+        const backendOpp = backendOpportunities.find(bo => bo.opportunity_id === opp.id);
+        confidence = backendOpp
+          ? (backendOpp.impact_bucket === "High" ? 80 : backendOpp.impact_bucket === "Medium" ? 60 : 30)
+          : Math.round(validationRatio * 100);
+      } else {
+        confidence = Math.round(validationRatio * 100);
+      }
+
+      // Qualified = confidence >= 50% (same threshold as opportunities page)
+      const status: "Qualified" | "Potential" = confidence >= 50 ? "Qualified" : "Potential";
+
+      return { id: opp.id, confidence, status };
+    });
+  }, [setupOpportunities, computedMetrics, hasBackendData, backendOpportunities]);
+
+  const qualifiedCount = opportunityStatuses.filter(o => o.status === "Qualified").length;
+  const potentialCount = opportunityStatuses.filter(o => o.status === "Potential").length;
+  const totalOpportunities = setupOpportunities.length;
+
+  // Get total spend - use spendAnalysis (filtered by category) first
+  // setupData.spend contains ORIGINAL total (all categories)
+  // spendAnalysis.totalSpend contains FILTERED spend for selected category
+  const totalSpend = state.spendAnalysis?.totalSpend ||
+    (state.portfolioItems.length > 0
+      ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
+      : state.setupData.spend || 0);
+
+  // Check if computed metrics are available (already declared above)
   const hasComputedMetrics = computedMetrics !== null && Object.keys(computedMetrics).length > 0;
 
   // Format savings for display
@@ -296,14 +311,15 @@ function DashboardContent() {
     0
   );
 
-  // Get confidence score from savings summary or calculate from validation
+  // Get confidence score from savings summary or calculate using deterministic method
+  // Uses same calculation as opportunities page for consistency
   const confidenceScore = state.savingsSummary?.confidence_score
     ? Math.round(state.savingsSummary.confidence_score * 100)
-    : hasBackendData
+    : opportunityStatuses.length > 0
       ? Math.round(
-          // Calculate confidence based on impact scores (scale 0-10 normalized to 0-100)
-          backendOpportunities.reduce((sum, opp) => sum + (opp.impact_score || 5), 0) /
-          backendOpportunities.length * 10
+          // Average confidence across all opportunities (same as opportunities page)
+          opportunityStatuses.reduce((sum, opp) => sum + opp.confidence, 0) /
+          opportunityStatuses.length
         )
       : Math.round((totalValidatedProofPoints / Math.max(totalProofPoints, 1)) * 100);
 
@@ -370,98 +386,22 @@ function DashboardContent() {
         </div>
       </div>
 
-      {/* Enhanced Left Icon Sidebar */}
-      <div className="relative z-20 flex w-20 flex-col items-center glass-card border-r-0 border-l-0 py-8 backdrop-blur-2xl shrink-0 shadow-2xl bg-gradient-to-b from-white/20 via-white/10 to-white/5">
-        {/* Enhanced Logo */}
-        <motion.div
-          whileHover={{ scale: 1.05, rotate: 5 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          className="mb-10"
-        >
-          <Link href="/dashboard" className="flex h-14 w-14 items-center justify-center rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/30 border border-white/20 hover:shadow-glow hover:shadow-purple-500/50 transition-all duration-300 group">
-            <div className="h-full w-full bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 flex items-center justify-center relative">
-              <div className="h-6 w-6 rounded-full bg-white/40 backdrop-blur-sm group-hover:bg-white/60 transition-colors duration-300" />
-              <div className="absolute inset-1 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 opacity-60 blur-sm animate-pulse" />
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* Enhanced Main Navigation */}
-        <div className="flex flex-col gap-6 text-gray-400">
-          {/* Home - Active */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
-            className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-xl border border-blue-400/30 shadow-lg shadow-blue-500/20 text-blue-400 ring-2 ring-blue-400/20 hover:ring-blue-400/40 transition-all duration-300 cursor-pointer group"
-          >
-            <Home className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" strokeWidth={2} />
-          </motion.div>
-          {/* Activity/Today */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 300 }}
-          >
-            <Link href="/today" className="p-3 rounded-2xl hover:bg-white/20 backdrop-blur-sm hover:border hover:border-white/30 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-white/10">
-              <Activity className="h-6 w-6 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-200" strokeWidth={2} />
-            </Link>
-          </motion.div>
-          {/* Shield/Opportunities */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.4, type: "spring", stiffness: 300 }}
-          >
-            <Link href="/opportunities" className="p-3 rounded-2xl hover:bg-white/20 backdrop-blur-sm hover:border hover:border-white/30 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-white/10">
-              <ShieldCheck className="h-6 w-6 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-200" strokeWidth={2} />
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Enhanced Bottom Navigation */}
-        <div className="mt-auto flex flex-col gap-6 text-gray-400">
-          {/* Search */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
-          >
-            <div className="p-3 rounded-2xl hover:bg-white/20 backdrop-blur-sm hover:border hover:border-white/30 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-white/10">
-              <Search className="h-6 w-6 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-200" strokeWidth={2} />
-            </div>
-          </motion.div>
-          {/* Users/Team */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 300 }}
-          >
-            <div className="p-3 rounded-2xl hover:bg-white/20 backdrop-blur-sm hover:border hover:border-white/30 transition-all duration-300 cursor-pointer group hover:shadow-lg hover:shadow-white/10">
-              <Users className="h-6 w-6 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-200" strokeWidth={2} />
-            </div>
-          </motion.div>
-          {/* Enhanced User Avatar */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.7, type: "spring", stiffness: 300 }}
-            whileHover={{ scale: 1.1 }}
-            className="mt-2"
-          >
-            <Link href="/" className="flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white text-sm font-semibold cursor-pointer hover:shadow-2xl hover:shadow-gray-900/50 transition-all duration-300 border border-white/10 hover:border-white/20 group">
-              <span className="group-hover:scale-110 transition-transform duration-200">N</span>
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Link>
-          </motion.div>
-        </div>
-      </div>
+      {/* Left Icon Sidebar */}
+      <Sidebar user={state.user} />
 
       {/* Main Content Area */}
       <div className="relative z-30 flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white">
 
         {/* Top Header Bar */}
         <header className="flex h-16 items-center justify-between px-6 bg-transparent">
+          {/* Back Button */}
+          <Link
+            href="/setup/review"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100 mr-3 shrink-0"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+
           <form onSubmit={handleChatSubmit} className="flex items-center gap-3 flex-1">
             {/* Gradient Orb */}
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px] shadow-md shrink-0">

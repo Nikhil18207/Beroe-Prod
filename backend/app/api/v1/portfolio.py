@@ -17,7 +17,7 @@ from app.models.user import User
 from app.models.portfolio import PortfolioCategory, PortfolioLocation
 from app.models.spend_data import SpendData
 from app.models.session import AnalysisSession
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.schemas.portfolio import (
     PortfolioCategoryCreate,
     PortfolioCategoryUpdate,
@@ -72,15 +72,16 @@ AVAILABLE_LOCATIONS = [
 
 @router.get("", response_model=PortfolioResponse)
 async def get_portfolio(
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get user's full portfolio with all categories.
     """
+    tenant.require_permission("categories", "read")
     result = await db.execute(
         select(PortfolioCategory)
-        .where(PortfolioCategory.user_id == current_user.id)
+        .where(PortfolioCategory.user_id == tenant.user_id)
         .options(selectinload(PortfolioCategory.locations))
         .order_by(PortfolioCategory.sort_order, PortfolioCategory.created_at)
     )
@@ -92,17 +93,18 @@ async def get_portfolio(
 @router.post("/category", response_model=CategoryCreateResponse, status_code=status.HTTP_201_CREATED)
 async def create_category(
     category_data: PortfolioCategoryCreate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Add a new category to the portfolio.
     Returns format: {success: true, data: {id, name, spend, locations}}
     """
+    tenant.require_permission("categories", "create")
     # Get max sort order
     result = await db.execute(
         select(PortfolioCategory.sort_order)
-        .where(PortfolioCategory.user_id == current_user.id)
+        .where(PortfolioCategory.user_id == tenant.user_id)
         .order_by(PortfolioCategory.sort_order.desc())
         .limit(1)
     )
@@ -110,7 +112,7 @@ async def create_category(
 
     # Create category
     category = PortfolioCategory(
-        user_id=current_user.id,
+        user_id=tenant.user_id,
         name=category_data.name,
         spend=category_data.spend,
         currency=category_data.currency,
@@ -150,17 +152,18 @@ async def create_category(
 @router.get("/category/{category_id}", response_model=PortfolioCategoryResponse)
 async def get_category(
     category_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get a specific category by ID.
     """
+    tenant.require_permission("categories", "read")
     result = await db.execute(
         select(PortfolioCategory)
         .where(
             PortfolioCategory.id == category_id,
-            PortfolioCategory.user_id == current_user.id
+            PortfolioCategory.user_id == tenant.user_id
         )
         .options(selectinload(PortfolioCategory.locations))
     )
@@ -179,18 +182,19 @@ async def get_category(
 async def update_category(
     category_id: uuid.UUID,
     category_data: PortfolioCategoryUpdate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Update a category.
     Returns format: {success: true, data: {id, name, spend, locations}}
     """
+    tenant.require_permission("categories", "update")
     result = await db.execute(
         select(PortfolioCategory)
         .where(
             PortfolioCategory.id == category_id,
-            PortfolioCategory.user_id == current_user.id
+            PortfolioCategory.user_id == tenant.user_id
         )
         .options(selectinload(PortfolioCategory.locations))
     )
@@ -241,18 +245,19 @@ async def update_category(
 @router.delete("/category/{category_id}", response_model=CategoryDeleteResponse)
 async def delete_category(
     category_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Delete a category from the portfolio.
     Returns format: {success: true, deleted: {id, name, spend, locations}}
     """
+    tenant.require_permission("categories", "delete")
     result = await db.execute(
         select(PortfolioCategory)
         .where(
             PortfolioCategory.id == category_id,
-            PortfolioCategory.user_id == current_user.id
+            PortfolioCategory.user_id == tenant.user_id
         )
         .options(selectinload(PortfolioCategory.locations))
     )
@@ -280,7 +285,7 @@ async def delete_category(
 async def add_location(
     category_id: uuid.UUID,
     location: str = Form(..., min_length=1, max_length=255),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -288,11 +293,12 @@ async def add_location(
     Accepts FormData with 'location' field.
     Returns format: {success: true, data: {id, name, spend, locations}}
     """
+    tenant.require_permission("categories", "update")
     result = await db.execute(
         select(PortfolioCategory)
         .where(
             PortfolioCategory.id == category_id,
-            PortfolioCategory.user_id == current_user.id
+            PortfolioCategory.user_id == tenant.user_id
         )
         .options(selectinload(PortfolioCategory.locations))
     )
@@ -343,18 +349,19 @@ async def add_location(
 async def remove_location(
     category_id: uuid.UUID,
     location_name: str,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Remove a location from a category.
     Returns format: {success: true, data: {id, name, spend, locations}}
     """
+    tenant.require_permission("categories", "update")
     result = await db.execute(
         select(PortfolioCategory)
         .where(
             PortfolioCategory.id == category_id,
-            PortfolioCategory.user_id == current_user.id
+            PortfolioCategory.user_id == tenant.user_id
         )
     )
     category = result.scalar_one_or_none()
@@ -425,7 +432,7 @@ async def get_available_locations(
 @router.post("/upload", response_model=SpendUploadResponse)
 async def upload_spend_data(
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -433,6 +440,7 @@ async def upload_spend_data(
     Parses the file and creates categories based on spend data.
     Returns format: {success: true, message: str, data: {categories, total_spend, total_categories, total_rows}}
     """
+    tenant.require_permission("categories", "create")
     # Validate file type
     filename = file.filename or ""
     if not filename.lower().endswith(('.csv', '.xlsx', '.xls')):
@@ -504,7 +512,7 @@ async def upload_spend_data(
             result = await db.execute(
                 select(PortfolioCategory)
                 .where(
-                    PortfolioCategory.user_id == current_user.id,
+                    PortfolioCategory.user_id == tenant.user_id,
                     PortfolioCategory.name == cat_name
                 )
             )
@@ -517,7 +525,7 @@ async def upload_spend_data(
             else:
                 # Create new
                 category = PortfolioCategory(
-                    user_id=current_user.id,
+                    user_id=tenant.user_id,
                     name=cat_name,
                     spend=cat_spend,
                 )
@@ -540,7 +548,7 @@ async def upload_spend_data(
         # Reload all categories
         result = await db.execute(
             select(PortfolioCategory)
-            .where(PortfolioCategory.user_id == current_user.id)
+            .where(PortfolioCategory.user_id == tenant.user_id)
             .options(selectinload(PortfolioCategory.locations))
             .order_by(PortfolioCategory.sort_order)
         )
@@ -572,17 +580,18 @@ async def upload_spend_data(
 
 @router.get("/spend-data", response_model=SpendDataResponse)
 async def get_spend_data(
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get raw spend data for the user's active session.
     Returns format: {success: true, data: {columns, rows, sample} | null, message?: str}
     """
+    tenant.require_permission("categories", "read")
     # Get most recent session with spend data
     result = await db.execute(
         select(AnalysisSession)
-        .where(AnalysisSession.user_id == current_user.id)
+        .where(AnalysisSession.user_id == tenant.user_id)
         .order_by(AnalysisSession.created_at.desc())
         .limit(1)
     )

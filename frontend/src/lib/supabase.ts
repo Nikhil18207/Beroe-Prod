@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zgxsphfzxvipxgwddtpz.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_k-0dr-dGCsvNNIjfpcHo1Q_WaeDefkv';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpneHNwaGZ6eHZpcHhnd2RkdHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxNDI0MzAsImV4cCI6MjA4NTcxODQzMH0.rllOpccOBlT5WDNwlel_ukqduBWZsbVRlVAmwm9Onqw';
 
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -242,8 +242,9 @@ export const demoSessionHelpers = {
       .single();
 
     if (createError) {
-      console.error('Error creating demo session:', createError);
-      throw createError;
+      console.error('Error creating demo session:', JSON.stringify(createError, null, 2));
+      console.error('Session ID was:', sessionId);
+      throw new Error(`Failed to create session: ${createError.message || createError.code || 'Unknown error'}`);
     }
 
     return newSession;
@@ -252,6 +253,19 @@ export const demoSessionHelpers = {
   // Update demo session data
   async updateDemoSession(data: Partial<DbSession>) {
     const sessionId = getDemoSessionId();
+
+    // First ensure session exists
+    const { data: existing } = await supabase
+      .from('sessions')
+      .select('id')
+      .eq('id', sessionId)
+      .single();
+
+    if (!existing) {
+      // Session doesn't exist, create it first
+      console.log('Session not found, creating new one...');
+      await this.getOrCreateDemoSession();
+    }
 
     const { data: session, error } = await supabase
       .from('sessions')
@@ -264,8 +278,10 @@ export const demoSessionHelpers = {
       .single();
 
     if (error) {
-      console.error('Error updating demo session:', error);
-      throw error;
+      console.error('Error updating demo session:', JSON.stringify(error, null, 2));
+      console.error('Session ID was:', sessionId);
+      console.error('Update data was:', Object.keys(data));
+      throw new Error(`Failed to update session: ${error.message || error.code || 'Unknown error'}`);
     }
 
     return session;

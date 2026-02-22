@@ -15,7 +15,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.session import AnalysisSession, SessionStatus
 from app.models.opportunity import Opportunity
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.schemas.session import (
     SessionCreate,
     SessionUpdate,
@@ -27,7 +27,7 @@ router = APIRouter()
 
 @router.get("", response_model=List[SessionResponse])
 async def list_sessions(
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db),
     status_filter: Optional[SessionStatus] = None,
     limit: int = Query(20, ge=1, le=100),
@@ -36,9 +36,10 @@ async def list_sessions(
     """
     List user's analysis sessions.
     """
+    tenant.require_permission("analyses", "read")
     query = (
         select(AnalysisSession)
-        .where(AnalysisSession.user_id == current_user.id)
+        .where(AnalysisSession.user_id == tenant.user_id)
         .order_by(AnalysisSession.created_at.desc())
         .offset(offset)
         .limit(limit)
@@ -56,20 +57,21 @@ async def list_sessions(
 @router.post("", response_model=SessionResponse, status_code=status.HTTP_201_CREATED)
 async def create_session(
     session_data: SessionCreate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Create a new analysis session.
     """
+    tenant.require_permission("analyses", "create")
     # Calculate addressable spend
     addressable_spend = session_data.category_spend * session_data.addressable_spend_pct
 
     # Use user's goals if not provided
-    goals = session_data.goals or current_user.goals or {"cost": 40, "risk": 35, "esg": 25}
+    goals = session_data.goals or tenant.user.goals or {"cost": 40, "risk": 35, "esg": 25}
 
     session = AnalysisSession(
-        user_id=current_user.id,
+        user_id=tenant.user_id,
         name=f"{session_data.category_name} Analysis",
         category_name=session_data.category_name,
         category_spend=session_data.category_spend,
@@ -92,17 +94,18 @@ async def create_session(
 @router.get("/{session_id}", response_model=SessionResponse)
 async def get_session(
     session_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get a specific session by ID.
     """
+    tenant.require_permission("analyses", "read")
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
         .options(selectinload(AnalysisSession.opportunities))
     )
@@ -121,17 +124,18 @@ async def get_session(
 async def update_session(
     session_id: uuid.UUID,
     session_data: SessionUpdate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Update session parameters.
     """
+    tenant.require_permission("analyses", "update")
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -161,17 +165,18 @@ async def update_session(
 @router.delete("/{session_id}")
 async def delete_session(
     session_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Delete an analysis session.
     """
+    tenant.require_permission("analyses", "delete")
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -191,18 +196,19 @@ async def delete_session(
 @router.post("/{session_id}/recalculate", response_model=SessionResponse)
 async def recalculate_session(
     session_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Trigger recalculation of savings for a session.
     This will be implemented with the Dual Orchestrator.
     """
+    tenant.require_permission("analyses", "update")
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
         .options(selectinload(AnalysisSession.opportunities))
     )

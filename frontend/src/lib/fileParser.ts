@@ -131,6 +131,104 @@ const parseCSV = (text: string): { headers: string[]; rows: Record<string, strin
   return { headers, rows };
 };
 
+// Smart sheet selection for multi-sheet Excel files
+const selectBestSheet = (workbook: XLSX.WorkBook): { sheetName: string; worksheet: XLSX.WorkSheet; reason: string } => {
+  const sheetNames = workbook.SheetNames;
+
+  // If only one sheet, use it
+  if (sheetNames.length === 1) {
+    return {
+      sheetName: sheetNames[0],
+      worksheet: workbook.Sheets[sheetNames[0]],
+      reason: 'only sheet'
+    };
+  }
+
+  // Priority 1: Look for sheets with data-related names (case-insensitive, flexible matching)
+  const dataSheetPatterns = [
+    // Exact/primary matches (highest priority)
+    /^data$/i,
+    /^spend[_\s]?data$/i,
+    /^transactions?$/i,
+    /^spend$/i,
+    /^raw[_\s]?data$/i,
+    // Contains patterns (medium priority)
+    /spend/i,
+    /transaction/i,
+    /invoice/i,
+    /purchase/i,
+    /order/i,
+    /detail/i,
+    /record/i,
+    /master/i,
+    // Exclude patterns - sheets we should skip
+  ];
+
+  const excludePatterns = [
+    /^summary$/i,
+    /^overview$/i,
+    /^dashboard$/i,
+    /^chart/i,
+    /^pivot/i,
+    /^analysis$/i,
+    /^result/i,
+    /^output$/i,
+    /^report$/i,
+    /^template$/i,
+    /^instruction/i,
+    /^readme/i,
+    /^config/i,
+    /^setting/i,
+  ];
+
+  // Check each pattern in priority order
+  for (const pattern of dataSheetPatterns) {
+    for (const name of sheetNames) {
+      // Skip if it matches an exclude pattern
+      const shouldExclude = excludePatterns.some(exclude => exclude.test(name));
+      if (shouldExclude) continue;
+
+      if (pattern.test(name)) {
+        return {
+          sheetName: name,
+          worksheet: workbook.Sheets[name],
+          reason: `matched pattern "${pattern.source}"`
+        };
+      }
+    }
+  }
+
+  // Priority 2: Find sheet with most data rows (likely the main data sheet)
+  let bestSheet = sheetNames[0];
+  let maxRows = 0;
+  let bestReason = 'first sheet (fallback)';
+
+  for (const name of sheetNames) {
+    const worksheet = workbook.Sheets[name];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as unknown[][];
+    const rowCount = jsonData.length;
+
+    // Skip sheets with very few rows (likely summary/config sheets)
+    if (rowCount <= 5) continue;
+
+    // Check if sheet has exclude pattern - deprioritize but don't skip entirely
+    const isExcluded = excludePatterns.some(exclude => exclude.test(name));
+    const effectiveRowCount = isExcluded ? rowCount * 0.5 : rowCount;
+
+    if (effectiveRowCount > maxRows) {
+      maxRows = effectiveRowCount;
+      bestSheet = name;
+      bestReason = `most data rows (${rowCount} rows)`;
+    }
+  }
+
+  return {
+    sheetName: bestSheet,
+    worksheet: workbook.Sheets[bestSheet],
+    reason: bestReason
+  };
+};
+
 // Parse Excel file (xlsx, xls)
 const parseExcel = async (file: File): Promise<ParsedFileData> => {
   return new Promise((resolve, reject) => {
@@ -141,15 +239,18 @@ const parseExcel = async (file: File): Promise<ParsedFileData> => {
         const data = e.target?.result;
         const workbook = XLSX.read(data, { type: 'array' });
 
-        // Get first sheet
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
+        // Smart sheet selection - finds the best data sheet
+        const { sheetName: selectedSheetName, worksheet, reason } = selectBestSheet(workbook);
+
+        // Log sheet selection for debugging
+        console.log(`[FileParser] Excel has ${workbook.SheetNames.length} sheets: [${workbook.SheetNames.join(', ')}]`);
+        console.log(`[FileParser] Selected sheet: "${selectedSheetName}" (${reason})`);
 
         // Convert to JSON
         const jsonData = XLSX.utils.sheet_to_json<Record<string, unknown>>(worksheet, { header: 1 });
 
         if (jsonData.length === 0) {
-          resolve({ headers: [], rows: [], metadata: { fileName: file.name, fileType: 'excel', fileSize: file.size, sheetName: firstSheetName } });
+          resolve({ headers: [], rows: [], metadata: { fileName: file.name, fileType: 'excel', fileSize: file.size, sheetName: selectedSheetName } });
           return;
         }
 
@@ -179,7 +280,7 @@ const parseExcel = async (file: File): Promise<ParsedFileData> => {
             fileName: file.name,
             fileType: 'excel',
             fileSize: file.size,
-            sheetName: firstSheetName
+            sheetName: selectedSheetName
           }
         });
       } catch (err) {

@@ -9,6 +9,10 @@ import type {
   User,
 } from "@/types/api";
 import { demoSessionHelpers, getDemoSessionId } from "@/lib/supabase";
+import { authApi } from "@/lib/api/procurement";
+
+// Auth token key - must match client.ts
+const AUTH_TOKEN_KEY = "beroe_auth_token";
 
 // ============================================================================
 // Portfolio Types
@@ -44,6 +48,9 @@ export interface ProofPoint {
   name: string;
   description: string;
   isValidated: boolean;
+  impact?: 'High' | 'Medium' | 'Low' | 'Not Tested';  // LLM-evaluated impact rating
+  reasoning?: string;  // LLM reasoning for the rating
+  dataPoint?: string;  // Data point used for evaluation
 }
 
 export interface SetupOpportunity {
@@ -166,6 +173,9 @@ interface AppState {
 
   // Accepted recommendations data (for leadership brief generation)
   acceptedRecommendations: AcceptedRecommendationsData | null;
+
+  // Pre-computed LLM proof point evaluations (computed during review page processing)
+  llmProofPointEvaluations: LlmProofPointEvaluations | null;
 }
 
 // Accepted recommendations data structure for leadership brief
@@ -175,7 +185,7 @@ export interface AcceptedRecommendationsData {
   categoryName: string;
   locations: string[];
   totalSpend: number;
-  recommendations: string[];
+  recommendations: Array<{ text: string; reason: string }>;
   proofPoints: Array<{
     id: string;
     name: string;
@@ -206,6 +216,31 @@ export interface OpportunityMetricsData {
   savingsEstimate: number;
   confidenceScore: number;
   confidenceBucket: 'High' | 'Medium' | 'Low';
+}
+
+// LLM-evaluated proof point data (pre-computed during setup review)
+export interface LlmProofPointEvaluation {
+  id: string;
+  impact: 'High' | 'Medium' | 'Low';
+  reasoning: string;
+  data_point: string;
+}
+
+export interface LlmProofPointEvaluations {
+  // Key is opportunity type (volume-bundling, target-pricing, etc.)
+  [opportunityType: string]: {
+    evaluations: LlmProofPointEvaluation[];
+    summary: {
+      high_count: number;
+      medium_count: number;
+      low_count: number;
+      confidence_score: number;
+      overall_assessment?: string;
+    };
+    model_used: string;
+    thinking_time: string;
+    computed_at: number;
+  };
 }
 
 // Playbook data structure
@@ -278,6 +313,7 @@ type AppAction =
   | { type: "SET_SPEND_ANALYSIS"; payload: SpendAnalysis | null }
   | { type: "SET_OPPORTUNITY_METRICS"; payload: OpportunityMetricsData[] | null }
   | { type: "SET_ACCEPTED_RECOMMENDATIONS"; payload: AcceptedRecommendationsData | null }
+  | { type: "SET_LLM_PROOF_POINT_EVALUATIONS"; payload: LlmProofPointEvaluations | null }
   | { type: "RESET_STATE" }
   | { type: "LOGOUT" };
 
@@ -383,6 +419,7 @@ const initialState: AppState = {
   spendAnalysis: null,
   opportunityMetrics: null,
   acceptedRecommendations: null,
+  llmProofPointEvaluations: null,
   setupData: {
     categoryName: "",
     spend: 0,
@@ -644,6 +681,12 @@ function appReducer(state: AppState, action: AppAction): AppState {
         acceptedRecommendations: action.payload,
       };
 
+    case "SET_LLM_PROOF_POINT_EVALUATIONS":
+      return {
+        ...state,
+        llmProofPointEvaluations: action.payload,
+      };
+
     case "RESET_STATE":
       return {
         ...initialState,
@@ -699,6 +742,7 @@ interface AppContextType {
     setSpendAnalysis: (data: SpendAnalysis | null) => void;
     setOpportunityMetrics: (metrics: OpportunityMetricsData[] | null) => void;
     setAcceptedRecommendations: (data: AcceptedRecommendationsData | null) => void;
+    setLlmProofPointEvaluations: (data: LlmProofPointEvaluations | null) => void;
     resetState: () => void;
     logout: () => void;
   };
@@ -718,9 +762,13 @@ const SPEND_ANALYSIS_STORAGE_KEY = "beroe_spend_analysis";
 const OPPORTUNITY_METRICS_STORAGE_KEY = "beroe_opportunity_metrics";
 const SAVINGS_SUMMARY_STORAGE_KEY = "beroe_savings_summary";
 const SETUP_OPPORTUNITIES_STORAGE_KEY = "beroe_setup_opportunities";
+const ACCEPTED_RECOMMENDATIONS_STORAGE_KEY = "beroe_accepted_recommendations";
+const LLM_EVALUATIONS_STORAGE_KEY = "beroe_llm_evaluations";
+const COMPUTED_METRICS_STORAGE_KEY = "beroe_computed_metrics";
 
 // Track if Supabase sync is enabled
-const SUPABASE_SYNC_ENABLED = true;
+// Disabled to prevent 406 errors - app works fully with localStorage
+const SUPABASE_SYNC_ENABLED = false;
 
 // Load activity history from localStorage
 const loadActivityHistory = (): ActivityItem[] => {
@@ -932,6 +980,90 @@ const saveSetupOpportunities = (data: SetupOpportunity[]) => {
   }
 };
 
+// Load accepted recommendations from localStorage
+const loadAcceptedRecommendations = (): AcceptedRecommendationsData | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading accepted recommendations:", error);
+  }
+  return null;
+};
+
+// Save accepted recommendations to localStorage
+const saveAcceptedRecommendations = (data: AcceptedRecommendationsData | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data) {
+      localStorage.setItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving accepted recommendations:", error);
+  }
+};
+
+// Load LLM proof point evaluations from localStorage
+const loadLlmEvaluations = (): LlmProofPointEvaluations | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(LLM_EVALUATIONS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading LLM evaluations:", error);
+  }
+  return null;
+};
+
+// Save LLM proof point evaluations to localStorage
+const saveLlmEvaluations = (data: LlmProofPointEvaluations | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data) {
+      localStorage.setItem(LLM_EVALUATIONS_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving LLM evaluations:", error);
+  }
+};
+
+// Load computed metrics from localStorage
+const loadComputedMetrics = (): Record<string, number> | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = localStorage.getItem(COMPUTED_METRICS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading computed metrics:", error);
+  }
+  return null;
+};
+
+// Save computed metrics to localStorage
+const saveComputedMetrics = (data: Record<string, number> | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (data) {
+      localStorage.setItem(COMPUTED_METRICS_STORAGE_KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error("Error saving computed metrics:", error);
+  }
+};
+
 // ============================================================================
 // Supabase Sync Functions (debounced to avoid excessive API calls)
 // ============================================================================
@@ -958,9 +1090,10 @@ const syncToSupabase = async (data: {
   supabaseSyncTimeout = setTimeout(async () => {
     try {
       await demoSessionHelpers.saveFullDemoState(data);
-      console.log("[Supabase] State synced successfully");
-    } catch (error) {
-      console.error("[Supabase] Failed to sync state:", error);
+      // Silent success - only log in development if needed
+    } catch {
+      // Silent fail - Supabase sync is optional, localStorage is primary
+      // App works fully offline without Supabase
     }
   }, 1000); // 1 second debounce
 };
@@ -973,6 +1106,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Load data from localStorage first (for immediate UI), then sync from Supabase
   React.useEffect(() => {
     const loadLocalAndRemoteData = async () => {
+      // ======================================================================
+      // Step 0: Restore user session from JWT token
+      // ======================================================================
+      const token = typeof window !== "undefined" ? localStorage.getItem(AUTH_TOKEN_KEY) : null;
+      if (token) {
+        try {
+          console.log("[Auth] Token found, restoring session...");
+          const user = await authApi.getMe();
+          if (user) {
+            console.log("[Auth] Session restored for:", user.email);
+            dispatch({ type: "SET_USER", payload: user });
+          }
+        } catch (error) {
+          console.warn("[Auth] Failed to restore session, token may be expired:", error);
+          // Clear invalid token
+          localStorage.removeItem(AUTH_TOKEN_KEY);
+        }
+      }
+
       // ======================================================================
       // Step 1: Load from localStorage first (instant UI updates)
       // ======================================================================
@@ -1017,13 +1169,38 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "SET_SAVINGS_SUMMARY", payload: savedSavingsSummary });
       }
 
+      // Load accepted recommendations (for accepted page navigation)
+      const savedAcceptedRecommendations = loadAcceptedRecommendations();
+      if (savedAcceptedRecommendations) {
+        dispatch({ type: "SET_ACCEPTED_RECOMMENDATIONS", payload: savedAcceptedRecommendations });
+      }
+
+      // Load LLM proof point evaluations (pre-computed during setup review)
+      const savedLlmEvaluations = loadLlmEvaluations();
+      if (savedLlmEvaluations) {
+        dispatch({ type: "SET_LLM_PROOF_POINT_EVALUATIONS", payload: savedLlmEvaluations });
+      }
+
+      // Load computed metrics (for deterministic confidence calculation)
+      const savedComputedMetrics = loadComputedMetrics();
+      if (savedComputedMetrics) {
+        dispatch({ type: "SET_COMPUTED_METRICS", payload: savedComputedMetrics });
+      }
+
       // ======================================================================
       // Step 2: Load from Supabase (remote persistence)
+      // This is optional - app works fully offline with localStorage
       // ======================================================================
       if (SUPABASE_SYNC_ENABLED) {
         try {
           console.log("[Supabase] Loading state from remote...");
-          const remoteState = await demoSessionHelpers.loadFullDemoState();
+          const remoteState = await demoSessionHelpers.loadFullDemoState().catch(() => ({
+            session: null,
+            activityHistory: [],
+            setupOpportunities: [],
+            savingsSummary: null,
+            opportunityMetrics: [],
+          }));
 
           if (remoteState.session) {
             console.log("[Supabase] Remote session found, syncing data...");
@@ -1081,8 +1258,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           }
 
           supabaseLoadedRef.current = true;
-        } catch (error) {
-          console.error("[Supabase] Failed to load remote state:", error);
+        } catch {
+          // Silent fail - Supabase sync is optional
+          // App works fully offline with localStorage as primary storage
         }
       }
 
@@ -1150,13 +1328,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     syncToSupabase({ setup_opportunities: state.setupOpportunities });
   }, [state.setupOpportunities]);
 
-  // Save computed metrics to Supabase whenever it changes
+  // Save computed metrics to localStorage and Supabase whenever it changes
   React.useEffect(() => {
     if (isInitialLoadRef.current) return;
+    saveComputedMetrics(state.computedMetrics);
     if (state.computedMetrics) {
       syncToSupabase({ computed_metrics: state.computedMetrics });
     }
   }, [state.computedMetrics]);
+
+  // Save accepted recommendations to localStorage whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    saveAcceptedRecommendations(state.acceptedRecommendations);
+  }, [state.acceptedRecommendations]);
+
+  // Save LLM proof point evaluations to localStorage whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    saveLlmEvaluations(state.llmProofPointEvaluations);
+  }, [state.llmProofPointEvaluations]);
 
   const actions = {
     setUser: useCallback(
@@ -1331,8 +1522,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "SET_ACCEPTED_RECOMMENDATIONS", payload: data }),
       []
     ),
+    setLlmProofPointEvaluations: useCallback(
+      (data: LlmProofPointEvaluations | null) =>
+        dispatch({ type: "SET_LLM_PROOF_POINT_EVALUATIONS", payload: data }),
+      []
+    ),
     resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),
-    logout: useCallback(() => dispatch({ type: "LOGOUT" }), []),
+    logout: useCallback(() => {
+      // Clear all persisted data from localStorage
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        localStorage.removeItem(REVIEW_DATA_STORAGE_KEY);
+        localStorage.removeItem(SETUP_DATA_STORAGE_KEY);
+        localStorage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
+        localStorage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+        localStorage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
+        localStorage.removeItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
+        localStorage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+        localStorage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
+        localStorage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
+        localStorage.removeItem("beroe_auth_token");
+        // Also clear the Supabase demo session ID to start fresh
+        localStorage.removeItem("beroe_demo_session_id");
+      }
+      dispatch({ type: "LOGOUT" });
+    }, []),
   };
 
   return (

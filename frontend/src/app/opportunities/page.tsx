@@ -2,10 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  Home,
-  Activity,
-  ShieldCheck,
-  Search,
   Plus,
   ChevronDown,
   Settings2,
@@ -15,22 +11,22 @@ import {
   Menu,
   Pencil,
   AlertTriangle,
-  Users,
   Send,
-  Mic
+  Mic,
+  ArrowLeft
 } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import Sidebar from "@/components/Sidebar";
 import {
   calculateOpportunityRiskImpact,
-  calculateOpportunityESGImpact,
   calculateWeightedPriorityScore,
+  calculateDeterministicConfidence,
   type ProofPointResult,
-  type RiskImpact,
-  type ESGImpact
+  type RiskImpact
 } from "@/lib/calculations/procurement-metrics";
 
 // Opportunity type configuration
@@ -85,6 +81,7 @@ function OpportunitiesContent() {
   const savingsSummary = state.savingsSummary;
   const setupOpportunities = state.setupOpportunities;
   const opportunityMetrics = state.opportunityMetrics; // Real 7-step calculated metrics
+  const llmProofPointEvaluations = state.llmProofPointEvaluations; // Pre-computed LLM evaluations from setup
   const categoryName = state.setupData.categoryName?.toUpperCase() || "CATEGORY";
   const totalSpend = state.spendAnalysis?.totalSpend ||
     (state.portfolioItems.length > 0
@@ -119,9 +116,8 @@ function OpportunitiesContent() {
         description: string;
         isValidated: boolean;
       }>;
-      // New Risk/ESG fields
+      // Risk field
       riskImpact: RiskImpact;
-      esgImpact: ESGImpact;
       priorityScore: number;
     }> = [];
 
@@ -137,15 +133,24 @@ function OpportunitiesContent() {
       // Get real metrics from 7-step calculation if available
       const realMetrics = opportunityMetrics?.find(m => m.opportunityId === opp.id);
 
-      // Use real confidence from 7-step calculation, or fallback to validation ratio
-      const confidence = realMetrics
-        ? Math.round(realMetrics.confidenceScore * 100)
-        : Math.round(validationRatio * 100);
+      // DETERMINISTIC confidence calculation using computed metrics
+      // This replaces LLM-based confidence which was non-deterministic
+      const proofPointIds = opp.proofPoints.map(pp => pp.id);
+      const deterministicResult = computedMetrics
+        ? calculateDeterministicConfidence(opp.id, proofPointIds, computedMetrics)
+        : null;
 
-      // Potential = exactly 1 proof point validated (shows opportunity exists)
-      // Qualified = 2 or more proof points validated (enough evidence)
+      // Priority: Deterministic (from metrics) > 7-step calculation > validation ratio fallback
+      const confidence = deterministicResult
+        ? deterministicResult.confidenceScore
+        : realMetrics
+          ? Math.round(realMetrics.confidenceScore * 100)
+          : Math.round(validationRatio * 100);
+
+      // Qualified = confidence score >= 50% (enough evidence)
+      // Potential = confidence score < 50% (needs more validation)
       const status: "Qualified" | "Potential" =
-        validatedCount >= 2 ? "Qualified" : "Potential";
+        confidence >= 50 ? "Qualified" : "Potential";
 
       // Use impact from 7-step calculation, or fallback to validation ratio
       const impact: "High" | "Medium" | "Low" = realMetrics?.impactBucket ||
@@ -184,20 +189,21 @@ function OpportunitiesContent() {
         threshold: { high: '', medium: '', low: '' }
       }));
 
-      // Calculate Risk and ESG impacts
+      // Calculate Risk impact
       const riskImpact = calculateOpportunityRiskImpact(opp.id, proofPointResults, computedMetrics || undefined);
-      const esgImpact = calculateOpportunityESGImpact(opp.id, proofPointResults, computedMetrics || undefined);
 
       // Calculate savings estimate for priority scoring
       const savingsEstimate = (savings_low + savings_high) / 2;
 
       // Calculate weighted priority score based on user goals
+      // Pass neutral ESG impact since we're only showing Risk
+      const neutralEsgImpact = { score: 0, normalizedScore: 50, esgLevel: 'Medium' as const, label: '0', description: '', breakdown: { environmental: { score: 0, weighted: 0, proofPoints: [] }, social: { score: 0, weighted: 0, proofPoints: [] }, governance: { score: 0, weighted: 0, proofPoints: [] } } };
       const priorityResult = calculateWeightedPriorityScore(
         goals,
         savingsEstimate,
         totalSpend,
         riskImpact,
-        esgImpact
+        neutralEsgImpact
       );
 
       opportunities.push({
@@ -218,9 +224,8 @@ function OpportunitiesContent() {
         savings_low,
         savings_high,
         proofPoints: opp.proofPoints, // Include all proof points as initiatives
-        // Risk/ESG fields
+        // Risk field
         riskImpact,
-        esgImpact,
         priorityScore: priorityResult.priorityScore,
       });
     });
@@ -297,52 +302,21 @@ function OpportunitiesContent() {
       </div>
 
       {/* Left Icon Sidebar */}
-      <div className="relative z-20 flex w-16 flex-col items-center border-r border-white/20 bg-white/40 py-6 backdrop-blur-xl shrink-0">
-        {/* Logo */}
-        <Link href="/dashboard" className="mb-8 flex h-11 w-11 items-center justify-center rounded-2xl overflow-hidden shadow-lg">
-          <div className="h-full w-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
-            <div className="h-5 w-5 rounded-full bg-white/30 backdrop-blur-sm" />
-          </div>
-        </Link>
-
-        {/* Main Navigation */}
-        <div className="flex flex-col gap-5 text-gray-400">
-          {/* Home */}
-          <Link href="/dashboard" className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Home className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          {/* Activity/Today */}
-          <Link href="/today" className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Activity className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          {/* Shield/Opportunities - Active */}
-          <div className="p-2.5 rounded-xl bg-white shadow-sm text-blue-600 ring-1 ring-black/5 transition-colors cursor-pointer">
-            <ShieldCheck className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        {/* Bottom Navigation */}
-        <div className="mt-auto flex flex-col gap-5 text-gray-400">
-          {/* Search */}
-          <div className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Search className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          {/* Users/Team */}
-          <div className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Users className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          {/* User Avatar */}
-          <Link href="/" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white text-sm font-semibold cursor-pointer hover:bg-gray-800 transition-colors">
-            N
-          </Link>
-        </div>
-      </div>
+      <Sidebar user={state.user} />
 
       {/* Main Content Area */}
       <div className="relative z-30 flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white">
 
         {/* Top Header Bar */}
         <header className="flex h-16 items-center justify-between px-6 bg-transparent">
+          {/* Back Button */}
+          <Link
+            href="/dashboard"
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100 mr-3 shrink-0"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+
           <form onSubmit={handleChatSubmit} className="flex items-center gap-3 flex-1">
             {/* Gradient Orb */}
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px] shadow-md shrink-0">
@@ -647,28 +621,6 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
             Effort
           </span>
           <span className="text-sm font-bold text-gray-900">{opp.effort}</span>
-        </div>
-        <div>
-          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-            Risk Impact
-          </span>
-          <span className={`text-sm font-bold ${
-            opp.riskImpact?.score < 0 ? 'text-emerald-600' :
-            opp.riskImpact?.score > 0 ? 'text-red-600' : 'text-gray-900'
-          }`}>
-            {opp.riskImpact?.label || '0'}
-          </span>
-        </div>
-        <div>
-          <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide block mb-0.5">
-            ESG Impact
-          </span>
-          <span className={`text-sm font-bold ${
-            opp.esgImpact?.score > 0 ? 'text-emerald-600' :
-            opp.esgImpact?.score < 0 ? 'text-red-600' : 'text-gray-900'
-          }`}>
-            {opp.esgImpact?.label || '0'}
-          </span>
         </div>
       </div>
 

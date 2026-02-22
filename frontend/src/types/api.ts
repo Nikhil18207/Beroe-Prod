@@ -195,6 +195,45 @@ export interface HealthResponse {
 }
 
 // ============================================================================
+// Multi-Tenant Types
+// ============================================================================
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  industry?: string;
+  size?: string;
+  country?: string;
+  plan?: string;
+  max_users?: number;
+  max_categories?: number;
+  is_active?: boolean;
+  created_at?: string;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  code?: string;
+  description?: string;
+  organization_id: string;
+  is_active?: boolean;
+  created_at?: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  display_name: string;
+  description?: string;
+  permissions: Record<string, Record<string, boolean>>;
+  level: number;
+  is_system_role?: boolean;
+  is_active?: boolean;
+}
+
+// ============================================================================
 // User/Auth Types
 // ============================================================================
 
@@ -202,13 +241,36 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  company?: string;
-  role?: string;
+  company?: string;  // Legacy
+  role?: string;  // Legacy
+  phone?: string;
+  job_title?: string;
+  avatar_url?: string;
+  // Multi-tenant fields
+  organization_id?: string;
+  department_id?: string;
+  role_id?: string;
+  org_name?: string;
+  dept_name?: string;
+  role_name?: string;  // "SUPER_ADMIN" | "ORG_ADMIN" | "MANAGER" | "ANALYST" | "VIEWER"
+  // Settings
+  goals?: {
+    cost: number;
+    risk: number;
+    esg: number;
+  };
+  setup_step?: number;
+  setup_completed?: boolean;
+  is_active?: boolean;
+  created_at?: string;
+  last_login?: string;
 }
 
 export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
   user: User;
-  token: string;
 }
 
 // ============================================================================
@@ -278,4 +340,104 @@ export interface SpendUploadResponse {
   success: boolean;
   message: string;
   data: PortfolioData & { total_rows?: number };
+}
+
+// ============================================================================
+// Permission Helpers
+// ============================================================================
+
+/**
+ * Role hierarchy levels (higher = more permissions)
+ */
+export const ROLE_LEVELS: Record<string, number> = {
+  SUPER_ADMIN: 100,
+  ORG_ADMIN: 80,
+  MANAGER: 60,
+  ANALYST: 40,
+  VIEWER: 20,
+};
+
+/**
+ * Check if user can edit/create content
+ * VIEWER role cannot edit anything
+ */
+export function canEdit(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  return roleName !== 'VIEWER';
+}
+
+/**
+ * Check if user can upload files
+ * VIEWER role cannot upload
+ */
+export function canUpload(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  return roleName !== 'VIEWER';
+}
+
+/**
+ * Check if user can delete content
+ * Only MANAGER and above can delete
+ */
+export function canDelete(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  const level = ROLE_LEVELS[roleName] || 40;
+  return level >= ROLE_LEVELS.MANAGER;
+}
+
+/**
+ * Check if user can manage users
+ * Only ORG_ADMIN and above can manage users
+ */
+export function canManageUsers(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  const level = ROLE_LEVELS[roleName] || 40;
+  return level >= ROLE_LEVELS.ORG_ADMIN;
+}
+
+/**
+ * Check if user can export reports
+ * VIEWER cannot export
+ */
+export function canExport(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  return roleName !== 'VIEWER';
+}
+
+/**
+ * Check if user is a viewer (read-only)
+ */
+export function isViewer(user: User | null): boolean {
+  if (!user) return true; // No user = read-only
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  return roleName === 'VIEWER';
+}
+
+/**
+ * Check if user is a Super Admin (platform-level admin)
+ */
+export function isSuperAdmin(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  // Handle both "SUPER_ADMIN" and "SUPER ADMINISTRATOR" formats
+  return roleName === 'SUPER_ADMIN' || roleName === 'SUPER ADMINISTRATOR';
+}
+
+/**
+ * Check if user is an Org Admin or higher (can manage users)
+ */
+export function isOrgAdmin(user: User | null): boolean {
+  if (!user) return false;
+  const roleName = user.role_name?.toUpperCase() || 'ANALYST';
+  return (
+    roleName === 'SUPER_ADMIN' ||
+    roleName === 'SUPER ADMINISTRATOR' ||
+    roleName === 'ORG_ADMIN' ||
+    roleName === 'ORGANIZATION ADMIN'
+  );
 }

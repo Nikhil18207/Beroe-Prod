@@ -2,10 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home,
-  Activity,
-  ShieldCheck,
-  Search,
   ChevronRight,
   AlertCircle,
   CheckCircle2,
@@ -19,13 +15,13 @@ import {
   Menu,
   Plus,
   Mic,
-  Users,
   Send
 } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import Sidebar from "@/components/Sidebar";
 
 // Sample notification data
 const todayInsights = {
@@ -185,46 +181,7 @@ export default function TodayPage() {
       </div>
 
       {/* Left Icon Sidebar */}
-      <div className="relative z-20 flex w-16 flex-col items-center border-r border-white/20 bg-white/40 py-6 backdrop-blur-xl shrink-0">
-        {/* Logo */}
-        <Link href="/dashboard" className="mb-8 flex h-11 w-11 items-center justify-center rounded-2xl overflow-hidden shadow-lg">
-          <div className="h-full w-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
-            <div className="h-5 w-5 rounded-full bg-white/30 backdrop-blur-sm" />
-          </div>
-        </Link>
-
-        {/* Main Navigation */}
-        <div className="flex flex-col gap-5 text-gray-400">
-          {/* Home */}
-          <Link href="/dashboard" className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Home className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          {/* Activity/Today - Active */}
-          <div className="p-2.5 rounded-xl bg-white shadow-sm text-blue-600 ring-1 ring-black/5 transition-colors cursor-pointer">
-            <Activity className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          {/* Shield/Opportunities */}
-          <Link href="/opportunities" className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <ShieldCheck className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-        </div>
-
-        {/* Bottom Navigation */}
-        <div className="mt-auto flex flex-col gap-5 text-gray-400">
-          {/* Search */}
-          <div className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Search className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          {/* Users/Team */}
-          <div className="p-2.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer">
-            <Users className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          {/* User Avatar */}
-          <Link href="/" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white text-sm font-semibold cursor-pointer hover:bg-gray-800 transition-colors">
-            N
-          </Link>
-        </div>
-      </div>
+      <Sidebar user={state.user} />
 
       {/* Main Content Area */}
       <div className="relative z-30 flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white">

@@ -20,7 +20,7 @@ from app.models.session import AnalysisSession, SessionStatus
 from app.models.portfolio import PortfolioCategory
 from app.models.opportunity import Opportunity, OpportunityStatus, ImpactBucket, LeverTheme, OpportunityProofPoint
 from app.models.spend_data import SpendData
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.agents.master_orchestrator import MasterOrchestrator, CategoryAnalysis, PortfolioAnalysis
 from app.agents.proof_points import OpportunityType, ImpactFlag
 
@@ -75,7 +75,7 @@ class QuickAnalysisRequest(BaseModel):
 @router.post("/run", response_model=PortfolioAnalysisResponse)
 async def run_analysis(
     request: AnalysisRequest,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -88,12 +88,13 @@ async def run_analysis(
     4. Stores results as opportunities in the database
     5. Returns the full analysis
     """
+    tenant.require_permission("analyses", "create")
     # Get session
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == request.session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -189,12 +190,13 @@ async def run_analysis(
 @router.post("/quick", response_model=CategoryAnalysisResponse)
 async def quick_analysis(
     request: QuickAnalysisRequest,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
 ):
     """
     Run quick analysis on provided data without creating a session.
     Useful for testing and preview purposes.
     """
+    tenant.require_permission("analyses", "create")
     try:
         # Convert to DataFrame
         df = pd.DataFrame(request.data)
@@ -239,19 +241,20 @@ async def quick_analysis(
 async def upload_and_analyze(
     file: UploadFile = File(...),
     session_id: uuid.UUID = Form(...),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Upload spend data file and immediately run analysis.
     Combines file upload and analysis in one step.
     """
+    tenant.require_permission("analyses", "create")
     # Verify session
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -297,19 +300,20 @@ async def upload_and_analyze(
 @router.get("/results/{session_id}", response_model=PortfolioAnalysisResponse)
 async def get_analysis_results(
     session_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get previously run analysis results for a session.
     Reconstructs the analysis response from stored opportunities.
     """
+    tenant.require_permission("analyses", "read")
     # Verify session access
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()

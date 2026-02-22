@@ -1,13 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 
 export default function SetupPage() {
   const { state } = useApp();
+  const router = useRouter();
   const completedSteps = state.setupStep;
 
   const tasks = [
@@ -18,6 +20,14 @@ export default function SetupPage() {
 
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#F0F9FF]">
+      {/* Back Button */}
+      <Link
+        href="/login"
+        className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Link>
+
       {/* Background Decor */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-[#87CEEB]/40 via-white to-white" />
@@ -41,16 +51,17 @@ export default function SetupPage() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-10 flex w-full max-w-[800px] flex-col items-center px-6 text-center"
       >
-        {/* Logo Orb */}
-        <div className="mb-10 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 via-purple-500 to-pink-500 p-[2px] shadow-xl shadow-blue-200/50">
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-white/10 backdrop-blur-md">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 blur-[2px]" />
-          </div>
+        {/* Logo */}
+        <div className="mb-10 flex justify-center w-full">
+          <img src="/53700-beroe-logo.webp" alt="Beroe" className="h-16 object-contain" />
         </div>
 
         <div className="mb-12 space-y-4">
           <h2 className="text-3xl font-semibold text-[#2D3344]">
             Hi {state.user?.name || "there"}
+            {state.user?.org_name && (
+              <span className="text-blue-600"> from {state.user.org_name}</span>
+            )}
           </h2>
           <p className="text-xl font-medium text-[#4A4D55]">First, let's get me up to speed</p>
           <h1 className="text-4xl font-semibold tracking-tight text-[#2D3344]">

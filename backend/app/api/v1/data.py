@@ -87,23 +87,27 @@ async def ingest_spend_data(
     - category, subcategory, region, date (optional)
     """
     try:
-        # Determine file type
+        # Determine file type - accept all common formats
         file_type = file.filename.split(".")[-1].lower()
-        if file_type not in ["csv", "xlsx", "xls"]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Unsupported file type: {file_type}. Use CSV or XLSX."
-            )
-        
+        supported_types = ["csv", "xlsx", "xls", "docx", "doc", "pdf", "txt", "json"]
+
         # Read file content
         content = await file.read()
-        content_str = content.decode("utf-8") if file_type == "csv" else None
-        
+
+        # For tabular formats, pass directly
+        if file_type in ["csv", "xlsx", "xls"]:
+            content_str = content.decode("utf-8") if file_type == "csv" else None
+        else:
+            # For document formats, we'll extract text and try to parse tabular data
+            content_str = None
+            # Convert file_type to xlsx for processing (will be handled in service)
+            file_type = "xlsx" if file_type not in supported_types else file_type
+
         # Process
         service = DataIngestionService(db)
         result = await service.ingest_spend_data(
             session_id=session_id,
-            file_content=content_str,
+            file_content=content_str if content_str else content,
             file_type=file_type
         )
         
@@ -140,19 +144,20 @@ async def ingest_supplier_data(
     """
     try:
         file_type = file.filename.split(".")[-1].lower()
-        if file_type not in ["csv", "xlsx", "xls"]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Unsupported file type: {file_type}. Use CSV or XLSX."
-            )
-        
+        supported_types = ["csv", "xlsx", "xls", "docx", "doc", "pdf", "txt", "json"]
+
         content = await file.read()
-        content_str = content.decode("utf-8") if file_type == "csv" else None
-        
+
+        if file_type in ["csv", "xlsx", "xls"]:
+            content_str = content.decode("utf-8") if file_type == "csv" else None
+        else:
+            content_str = None
+            file_type = "xlsx" if file_type not in supported_types else file_type
+
         service = DataIngestionService(db)
         result = await service.ingest_supplier_data(
             session_id=session_id,
-            file_content=content_str,
+            file_content=content_str if content_str else content,
             file_type=file_type
         )
         
@@ -189,19 +194,20 @@ async def ingest_contract_data(
     """
     try:
         file_type = file.filename.split(".")[-1].lower()
-        if file_type not in ["csv", "xlsx", "xls"]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Unsupported file type: {file_type}. Use CSV or XLSX."
-            )
-        
+        supported_types = ["csv", "xlsx", "xls", "docx", "doc", "pdf", "txt", "json"]
+
         content = await file.read()
-        content_str = content.decode("utf-8") if file_type == "csv" else None
-        
+
+        if file_type in ["csv", "xlsx", "xls"]:
+            content_str = content.decode("utf-8") if file_type == "csv" else None
+        else:
+            content_str = None
+            file_type = "xlsx" if file_type not in supported_types else file_type
+
         service = DataIngestionService(db)
         result = await service.ingest_contract_data(
             session_id=session_id,
-            file_content=content_str,
+            file_content=content_str if content_str else content,
             file_type=file_type
         )
         
@@ -239,15 +245,17 @@ async def ingest_playbook_data(
     """
     try:
         file_type = file.filename.split(".")[-1].lower()
-        if file_type not in ["csv", "md", "markdown"]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Unsupported file type: {file_type}. Use CSV or Markdown."
-            )
-        
+        supported_types = ["csv", "md", "markdown", "docx", "doc", "pdf", "txt", "xlsx", "xls", "json"]
+
         content = await file.read()
-        content_str = content.decode("utf-8")
-        
+
+        # Try to decode as text for supported text formats
+        if file_type in ["csv", "md", "markdown", "txt", "json"]:
+            content_str = content.decode("utf-8")
+        else:
+            # For binary formats (docx, pdf, xlsx), pass the bytes
+            content_str = content
+
         service = DataIngestionService(db)
         result = await service.ingest_playbook_data(
             session_id=session_id,

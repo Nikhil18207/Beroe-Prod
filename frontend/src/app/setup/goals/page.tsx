@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   ArrowRight,
+  ArrowLeft,
   Folder,
   Plus,
   Home,
@@ -30,6 +31,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useApp } from "@/context/AppContext";
+import { authApi } from "@/lib/api";
 
 // Category icon mapping
 const categoryIcons: Record<string, React.ElementType> = {
@@ -102,9 +104,10 @@ export default function GoalsSetupPage() {
           name: catName,
           spend,
           goals: {
-            cost: [34],
-            risk: [33],
-            esg: [33]
+            // Default priority: Cost Savings = High, Risk = Medium, ESG = Low
+            cost: [100],
+            risk: [50],
+            esg: [0]
           }
         };
       });
@@ -121,12 +124,9 @@ export default function GoalsSetupPage() {
       spend: formatSpend(item.spend)
     }));
 
-  // Total must always equal 100% - these represent percentage allocation of priorities
-  // In procurement, you allocate focus across Cost Savings, Risk Management, and ESG
-  const TOTAL_PERCENTAGE = 100;
-
-  // Handle category-specific goal slider change - maintains exactly 100% total across all 3 goals
-  // When one slider increases, the other two decrease proportionally
+  // Handle category-specific goal slider change
+  // Priority-based: Always maintain exactly one High (100), one Medium (50), one Low (0)
+  // When user changes one slider, automatically redistribute the others
   const handleCategorySliderChange = (
     categoryId: string,
     changedGoal: 'cost' | 'risk' | 'esg',
@@ -135,48 +135,72 @@ export default function GoalsSetupPage() {
     setCategoryGoals(prev => prev.map(cat => {
       if (cat.id !== categoryId) return cat;
 
-      const newVal = Math.max(0, Math.min(newValue[0], TOTAL_PERCENTAGE));
-      const goalOrder: ('cost' | 'risk' | 'esg')[] = ['cost', 'risk', 'esg'];
-      const otherGoals = goalOrder.filter(g => g !== changedGoal);
+      const newVal = newValue[0];
+      const goals = ['cost', 'risk', 'esg'] as const;
+      const otherGoals = goals.filter(g => g !== changedGoal);
 
-      const remaining = TOTAL_PERCENTAGE - newVal;
-      const other1Current = cat.goals[otherGoals[0]][0];
-      const other2Current = cat.goals[otherGoals[1]][0];
-      const otherTotal = other1Current + other2Current;
+      // Get current values of other goals
+      const otherValues = otherGoals.map(g => ({
+        goal: g,
+        value: cat.goals[g][0]
+      }));
 
-      let newVal1: number;
-      let newVal2: number;
+      // Sort other goals by their current value (higher first) to maintain relative priority
+      otherValues.sort((a, b) => b.value - a.value);
 
-      if (otherTotal === 0 || remaining === 0) {
-        newVal1 = Math.floor(remaining / 2);
-        newVal2 = remaining - newVal1;
-      } else {
-        const ratio1 = other1Current / otherTotal;
-        newVal1 = Math.round(remaining * ratio1);
-        newVal2 = remaining - newVal1;
+      let newGoals = { ...cat.goals, [changedGoal]: newValue };
+
+      if (newVal === 100) {
+        // User set this to High -> others become Medium and Low
+        // The one that was higher becomes Medium, the lower one becomes Low
+        newGoals[otherValues[0].goal] = [50];  // Higher one → Medium
+        newGoals[otherValues[1].goal] = [0];   // Lower one → Low
+      } else if (newVal === 50) {
+        // User set this to Medium -> need one High and one Low among others
+        // If one of others is already High, the remaining becomes Low
+        // If neither is High, make the higher one High and lower one Low
+        const hasHigh = otherValues.some(o => o.value === 100);
+        const hasLow = otherValues.some(o => o.value === 0);
+
+        if (hasHigh && hasLow) {
+          // Already have High and Low, keep them
+        } else if (hasHigh) {
+          // Has High, need Low - make the non-High one Low
+          const nonHigh = otherValues.find(o => o.value !== 100);
+          if (nonHigh) newGoals[nonHigh.goal] = [0];
+        } else if (hasLow) {
+          // Has Low, need High - make the non-Low one High
+          const nonLow = otherValues.find(o => o.value !== 0);
+          if (nonLow) newGoals[nonLow.goal] = [100];
+        } else {
+          // Neither High nor Low - make higher one High, lower one Low
+          newGoals[otherValues[0].goal] = [100];
+          newGoals[otherValues[1].goal] = [0];
+        }
+      } else if (newVal === 0) {
+        // User set this to Low -> others become High and Medium
+        // The one that was higher becomes High, lower one becomes Medium
+        newGoals[otherValues[0].goal] = [100]; // Higher one → High
+        newGoals[otherValues[1].goal] = [50];  // Lower one → Medium
       }
 
       return {
         ...cat,
-        goals: {
-          cost: [changedGoal === 'cost' ? newVal : (otherGoals[0] === 'cost' ? newVal1 : newVal2)],
-          risk: [changedGoal === 'risk' ? newVal : (otherGoals[0] === 'risk' ? newVal1 : newVal2)],
-          esg: [changedGoal === 'esg' ? newVal : (otherGoals[0] === 'esg' ? newVal1 : newVal2)]
-        }
+        goals: newGoals
       };
     }));
   };
 
-  // Add a new category-specific goal - starts with balanced 34/33/33 = 100%
+  // Add a new category-specific goal - starts with default priority: Cost=High, Risk=Medium, ESG=Low
   const addCategoryGoal = (categoryName: string, spend: string) => {
     const newGoal: CategoryGoal = {
       id: `cat-${Date.now()}`,
       name: categoryName,
       spend,
       goals: {
-        cost: [34],
-        risk: [33],
-        esg: [33]
+        cost: [100],
+        risk: [50],
+        esg: [0]
       }
     };
     setCategoryGoals(prev => [...prev, newGoal]);
@@ -220,7 +244,7 @@ export default function GoalsSetupPage() {
   const categoryName = state.setupData.categoryName || "All Categories";
   const categoryCount = state.portfolioItems.length || 3;
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     // Calculate current goals from categoryGoals
     let finalCost = 34, finalRisk = 33, finalEsg = 33;
 
@@ -239,6 +263,21 @@ export default function GoalsSetupPage() {
       }
     });
 
+    // Save goals to backend
+    try {
+      await authApi.updateSetup({
+        setup_step: 2,
+        goals: {
+          cost: finalCost,
+          risk: finalRisk,
+          esg: finalEsg
+        }
+      });
+      console.log("[Goals] Saved goals to backend");
+    } catch (error) {
+      console.warn("[Goals] Failed to save goals to backend:", error);
+    }
+
     // Record activity for setting goals
     const costLabel = finalCost >= 50 ? 'High' : finalCost >= 25 ? 'Medium' : 'Low';
     const riskLabel = finalRisk >= 50 ? 'High' : finalRisk >= 25 ? 'Medium' : 'Low';
@@ -254,9 +293,10 @@ export default function GoalsSetupPage() {
     router.push("/setup/review");
   };
 
+  // 3-point slider: 0 = Low, 50 = Medium, 100 = High
   const getLabel = (val: number) => {
-    if (val < 33) return { text: "Low", color: "text-amber-600" };
-    if (val < 66) return { text: "Medium", color: "text-blue-600" };
+    if (val === 0) return { text: "Low", color: "text-amber-600" };
+    if (val === 50) return { text: "Medium", color: "text-blue-600" };
     return { text: "High", color: "text-emerald-600" };
   };
 
@@ -268,6 +308,14 @@ export default function GoalsSetupPage() {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-[#F0F9FF]">
+      {/* Back Button */}
+      <Link
+        href="/setup/portfolio"
+        className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Link>
+
       {/* Background Decor */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-[#B3D9FF]/40 via-[#F0F9FF] to-white" />
@@ -289,8 +337,8 @@ export default function GoalsSetupPage() {
 
       {/* Left Icon Sidebar */}
       <div className="relative z-20 flex w-16 flex-col items-center border-r border-gray-200/50 bg-white/20 py-8 backdrop-blur-md">
-        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5">
-          <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500" />
+        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
+          <img src="/beroe cut.jpg" alt="Beroe" className="h-8 w-8 object-contain" />
         </div>
         
         <div className="flex flex-col gap-8 text-gray-400">
@@ -417,13 +465,17 @@ export default function GoalsSetupPage() {
                             {getLabel(catGoal.goals.cost[0]).text}
                           </span>
                         </div>
-                        <Slider
-                          value={catGoal.goals.cost}
-                          onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'cost', val)}
-                          max={100}
-                          step={1}
-                          className="[&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
-                        />
+                        <div className="relative">
+                          {/* Tick mark at medium (50%) position */}
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[2px] h-3 bg-gray-300 rounded-full pointer-events-none z-0" />
+                          <Slider
+                            value={catGoal.goals.cost}
+                            onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'cost', val)}
+                            max={100}
+                            step={50}
+                            className="relative z-10 [&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
+                          />
+                        </div>
                         <div className="flex items-center justify-between text-[12px] text-gray-400">
                           <span>Low</span>
                           <span>Medium</span>
@@ -442,13 +494,17 @@ export default function GoalsSetupPage() {
                             {getLabel(catGoal.goals.risk[0]).text}
                           </span>
                         </div>
-                        <Slider
-                          value={catGoal.goals.risk}
-                          onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'risk', val)}
-                          max={100}
-                          step={1}
-                          className="[&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
-                        />
+                        <div className="relative">
+                          {/* Tick mark at medium (50%) position */}
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[2px] h-3 bg-gray-300 rounded-full pointer-events-none z-0" />
+                          <Slider
+                            value={catGoal.goals.risk}
+                            onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'risk', val)}
+                            max={100}
+                            step={50}
+                            className="relative z-10 [&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
+                          />
+                        </div>
                         <div className="flex items-center justify-between text-[12px] text-gray-400">
                           <span>Low</span>
                           <span>Medium</span>
@@ -467,13 +523,17 @@ export default function GoalsSetupPage() {
                             {getLabel(catGoal.goals.esg[0]).text}
                           </span>
                         </div>
-                        <Slider
-                          value={catGoal.goals.esg}
-                          onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'esg', val)}
-                          max={100}
-                          step={1}
-                          className="[&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
-                        />
+                        <div className="relative">
+                          {/* Tick mark at medium (50%) position */}
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[2px] h-3 bg-gray-300 rounded-full pointer-events-none z-0" />
+                          <Slider
+                            value={catGoal.goals.esg}
+                            onValueChange={(val) => handleCategorySliderChange(catGoal.id, 'esg', val)}
+                            max={100}
+                            step={50}
+                            className="relative z-10 [&_[data-slot=slider-range]]:bg-indigo-500 [&_[data-slot=slider-track]]:h-1 [&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-6 [&_[data-slot=slider-thumb]]:border-[3px] [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:shadow-md"
+                          />
+                        </div>
                         <div className="flex items-center justify-between text-[12px] text-gray-400">
                           <span>Low</span>
                           <span>Medium</span>

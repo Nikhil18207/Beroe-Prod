@@ -68,7 +68,7 @@ class CategoryAnalysis:
     opportunities: List[Dict[str, Any]]
     proof_points: Dict[str, Any]
     key_insights: List[str]
-    recommendations: List[str]
+    recommendations: List[Dict[str, str]]  # Changed: now contains {text, reason} dicts
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -175,9 +175,18 @@ class MasterOrchestrator:
         key_insights = key_insights[:10]  # Limit to 10
 
         # Extract recommendations across all opportunities
+        # Convert RecommendationItem objects to dicts with {text, reason}
         recommendations = []
         for opp in result.ranked_opportunities:
-            recommendations.extend(opp.recommended_actions[:2])  # Top 2 from each
+            for rec in opp.recommended_actions[:2]:  # Top 2 from each
+                # Handle both RecommendationItem objects and legacy strings
+                if hasattr(rec, 'text') and hasattr(rec, 'reason'):
+                    recommendations.append({"text": rec.text, "reason": rec.reason})
+                elif isinstance(rec, dict):
+                    recommendations.append(rec)
+                else:
+                    # Legacy string format - split into text/reason if possible
+                    recommendations.append({"text": str(rec), "reason": ""})
         recommendations = recommendations[:8]  # Limit to 8
 
         return CategoryAnalysis(
@@ -381,7 +390,11 @@ class MasterOrchestrator:
                 for pp in opp.proof_point_results
             ],
             "key_insights": opp.key_insights,
-            "recommended_actions": opp.recommended_actions
+            "recommended_actions": [
+                {"text": rec.text, "reason": rec.reason} if hasattr(rec, 'text') else
+                rec if isinstance(rec, dict) else {"text": str(rec), "reason": ""}
+                for rec in opp.recommended_actions
+            ]
         }
 
     def _generate_portfolio_summary(

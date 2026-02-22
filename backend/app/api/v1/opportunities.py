@@ -15,7 +15,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.session import AnalysisSession
 from app.models.opportunity import Opportunity, OpportunityStatus, ImpactBucket, LeverTheme, OpportunityProofPoint
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.schemas.opportunity import (
     OpportunityCreate,
     OpportunityUpdate,
@@ -62,7 +62,7 @@ async def get_opportunity_themes():
 
 @router.get("", response_model=OpportunityListResponse)
 async def list_opportunities(
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db),
     session_id: Optional[uuid.UUID] = None,
     status_filter: Optional[OpportunityStatus] = None,
@@ -72,11 +72,12 @@ async def list_opportunities(
     List opportunities for the user.
     Can filter by session, status, or impact bucket.
     """
+    tenant.require_permission("analyses", "read")
     # Build query
     query = (
         select(Opportunity)
         .join(AnalysisSession)
-        .where(AnalysisSession.user_id == current_user.id)
+        .where(AnalysisSession.user_id == tenant.user_id)
         .order_by(Opportunity.impact_score.desc())
     )
 
@@ -118,18 +119,19 @@ async def list_opportunities(
 @router.get("/{opportunity_id}", response_model=OpportunityDetailResponse)
 async def get_opportunity(
     opportunity_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get detailed opportunity information including proof points.
     """
+    tenant.require_permission("analyses", "read")
     result = await db.execute(
         select(Opportunity)
         .join(AnalysisSession)
         .where(
             Opportunity.id == opportunity_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
         .options(selectinload(Opportunity.proof_points))
     )
@@ -148,18 +150,19 @@ async def get_opportunity(
 async def add_opportunity(
     session_id: uuid.UUID,
     opportunity_data: OpportunityCreate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Manually add an opportunity to a session.
     """
+    tenant.require_permission("analyses", "create")
     # Verify session belongs to user
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -205,18 +208,19 @@ async def add_opportunity(
 async def update_opportunity(
     opportunity_id: uuid.UUID,
     opportunity_data: OpportunityUpdate,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Update an opportunity.
     """
+    tenant.require_permission("analyses", "update")
     result = await db.execute(
         select(Opportunity)
         .join(AnalysisSession)
         .where(
             Opportunity.id == opportunity_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     opportunity = result.scalar_one_or_none()
@@ -247,18 +251,19 @@ async def update_opportunity(
 @router.post("/{opportunity_id}/accept", response_model=OpportunityResponse)
 async def accept_opportunity(
     opportunity_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Accept an opportunity (move to accepted status).
     """
+    tenant.require_permission("analyses", "update")
     result = await db.execute(
         select(Opportunity)
         .join(AnalysisSession)
         .where(
             Opportunity.id == opportunity_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     opportunity = result.scalar_one_or_none()
@@ -283,18 +288,19 @@ async def accept_opportunity(
 @router.post("/{opportunity_id}/reject", response_model=OpportunityResponse)
 async def reject_opportunity(
     opportunity_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Reject an opportunity.
     """
+    tenant.require_permission("analyses", "update")
     result = await db.execute(
         select(Opportunity)
         .join(AnalysisSession)
         .where(
             Opportunity.id == opportunity_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     opportunity = result.scalar_one_or_none()
@@ -320,19 +326,20 @@ async def validate_proof_point(
     opportunity_id: uuid.UUID,
     proof_point_id: uuid.UUID,
     is_validated: bool = True,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Validate or invalidate a proof point for an opportunity.
     """
+    tenant.require_permission("analyses", "update")
     # Verify opportunity belongs to user
     result = await db.execute(
         select(Opportunity)
         .join(AnalysisSession)
         .where(
             Opportunity.id == opportunity_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
         .options(selectinload(Opportunity.proof_points))
     )

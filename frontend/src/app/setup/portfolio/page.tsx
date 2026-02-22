@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {
   ChevronLeft,
   ArrowRight,
+  ArrowLeft,
   Folder,
   Trash2,
   Plus,
@@ -42,7 +43,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type PortfolioItem } from "@/context/AppContext";
-import { procurementApi } from "@/lib/api";
+import { procurementApi, authApi } from "@/lib/api";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Comprehensive list of global locations (regions and countries)
@@ -153,6 +154,9 @@ function PortfolioSetupContent() {
   // Track which categories are selected for analysis (multi-select)
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set());
 
+  // Sub-category selection (stores the specific types user wants to analyze - now supports multiple)
+  const [subCategories, setSubCategories] = useState<Record<string, string[]>>({});
+
   // Add/Edit Category Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<PortfolioItem | null>(null);
@@ -165,7 +169,9 @@ function PortfolioSetupContent() {
     name: "",
     spend: "",
     locations: [] as string[],
+    subCategories: [] as string[],
   });
+  const [newSubCategory, setNewSubCategory] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [locationSearchResults, setLocationSearchResults] = useState<string[]>([]);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
@@ -182,6 +188,12 @@ function PortfolioSetupContent() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Helper to check if a string is a valid UUID (for API calls - demo data uses simple IDs like "1", "2")
+  const isValidUUID = (id: string) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(id);
+  };
+
   // Fetch portfolio data on mount (only if not already loaded)
   useEffect(() => {
     const fetchPortfolio = async () => {
@@ -195,16 +207,23 @@ function PortfolioSetupContent() {
         setIsLoading(true);
         setError(null);
         const response = await procurementApi.getPortfolio();
-        if (response.success && response.data) {
+        if (response.success && response.data && response.data.categories.length > 0) {
           actions.setPortfolioItems(response.data.categories);
+        } else {
+          // API returned empty - use default data for demo
+          const defaultItems: PortfolioItem[] = [
+            { id: "1", name: "Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
+            { id: "2", name: "Grains", locations: ["Europe", "North America"], spend: 25000000 },
+          ];
+          actions.setPortfolioItems(defaultItems);
         }
       } catch (err) {
         console.error("Failed to fetch portfolio:", err);
         setError("Failed to load portfolio. Using default data.");
         // Fallback to default data if API fails
         const defaultItems: PortfolioItem[] = [
-          { id: "1", name: "Edible Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
-          { id: "2", name: "Packaging", locations: ["Europe", "North America"], spend: 25000000 },
+          { id: "1", name: "Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
+          { id: "2", name: "Grains", locations: ["Europe", "North America"], spend: 25000000 },
         ];
         actions.setPortfolioItems(defaultItems);
       } finally {
@@ -215,42 +234,93 @@ function PortfolioSetupContent() {
     fetchPortfolio();
   }, [state.portfolioLoaded, state.portfolioItems.length, actions]);
 
-  const handleContinue = () => {
-    // Get all selected categories
+  const handleContinue = async () => {
+    // Get all selected categories with their sub-categories
     const selectedCategories = portfolioItems.filter(item => selectedCategoryIds.has(item.id));
 
     if (selectedCategories.length > 0) {
       // Calculate total spend across selected categories
       const totalSpend = selectedCategories.reduce((sum, cat) => sum + cat.spend, 0);
 
-      // Store selected category names (comma-separated if multiple)
-      const categoryNames = selectedCategories.map(c => c.name).join(", ");
+      // Flatten all sub-category names from all selected parent categories
+      // These are what the user actually typed (e.g., ["Edible Oil", "Palm Oil", "Wheat"])
+      const allSubCategoryNames: string[] = [];
+      selectedCategories.forEach(c => {
+        const subs = subCategories[c.id];
+        if (subs && subs.length > 0) {
+          allSubCategoryNames.push(...subs);
+        } else {
+          allSubCategoryNames.push(c.name); // fallback to parent name
+        }
+      });
+
+      const categoryNames = allSubCategoryNames.join(", ");
 
       actions.updateSetupData({
         categoryName: categoryNames,
         spend: totalSpend,
       });
 
-      // Also store the individual selected items in portfolioItems context
-      // Filter to only keep selected ones for the analysis flow
-      actions.setSelectedCategories(selectedCategories.map(c => c.name));
+      // Store all sub-category names (specific types) for the analysis flow
+      actions.setSelectedCategories(allSubCategoryNames);
+
+      // Save portfolio/preferences to backend
+      try {
+        await authApi.updateSetup({
+          setup_step: 1,
+          preferences: {
+            selectedCategories: allSubCategoryNames,
+            parentCategories: selectedCategories.map(c => c.name),
+            subCategories: subCategories,
+            portfolioItems: selectedCategories,
+            totalSpend: totalSpend,
+          }
+        });
+        console.log("[Portfolio] Saved portfolio to backend");
+      } catch (error) {
+        console.warn("[Portfolio] Failed to save to backend:", error);
+      }
     }
     actions.setSetupStep(1);
     router.push("/setup/goals");
   };
 
-  // Handle category selection (multi-select with toggle)
+  // Handle category selection - toggle selection
   const handleSelectCategory = (categoryId: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Don't trigger card click (edit)
-    setSelectedCategoryIds(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(categoryId)) {
+
+    if (selectedCategoryIds.has(categoryId)) {
+      // Deselect - but keep sub-categories (they persist like locations)
+      setSelectedCategoryIds(prev => {
+        const newSet = new Set(prev);
         newSet.delete(categoryId);
-      } else {
-        newSet.add(categoryId);
-      }
-      return newSet;
-    });
+        return newSet;
+      });
+      // Don't clear sub-categories - they should persist like locations
+    } else {
+      // Select - use existing sub-categories if any
+      setSelectedCategoryIds(prev => new Set([...prev, categoryId]));
+    }
+  };
+
+  // Add a sub-category in the edit form
+  const handleAddSubCategoryToForm = () => {
+    const trimmed = newSubCategory.trim();
+    if (trimmed && !categoryForm.subCategories.includes(trimmed)) {
+      setCategoryForm(prev => ({
+        ...prev,
+        subCategories: [...prev.subCategories, trimmed]
+      }));
+      setNewSubCategory("");
+    }
+  };
+
+  // Remove a sub-category from the edit form
+  const handleRemoveSubCategoryFromForm = (subCat: string) => {
+    setCategoryForm(prev => ({
+      ...prev,
+      subCategories: prev.subCategories.filter(s => s !== subCat)
+    }));
   };
 
   // Open delete confirmation dialog
@@ -271,10 +341,12 @@ function PortfolioSetupContent() {
     setCategoryToDelete(null);
     setDeleteConfirmOpen(false);
 
-    // Fire and forget API call in background
-    procurementApi.deleteCategory(idToDelete).catch(err => {
-      console.error("Failed to delete category from API:", err);
-    });
+    // Only call API if it's a valid UUID (demo data uses simple IDs like "1", "2")
+    if (isValidUUID(idToDelete)) {
+      procurementApi.deleteCategory(idToDelete).catch(err => {
+        console.error("Failed to delete category from API:", err);
+      });
+    }
   };
 
   // Cancel delete
@@ -284,10 +356,13 @@ function PortfolioSetupContent() {
   };
 
   const removeLocation = async (categoryId: string, location: string) => {
-    try {
-      await procurementApi.removeLocationFromCategory(categoryId, location);
-    } catch (err) {
-      console.error("Failed to remove location:", err);
+    // Only call API if it's a valid UUID
+    if (isValidUUID(categoryId)) {
+      try {
+        await procurementApi.removeLocationFromCategory(categoryId, location);
+      } catch (err) {
+        console.error("Failed to remove location:", err);
+      }
     }
     // Update global state
     const item = portfolioItems.find(i => i.id === categoryId);
@@ -302,8 +377,9 @@ function PortfolioSetupContent() {
   // Open modal for adding new category
   const openAddModal = () => {
     setEditingCategory(null);
-    setCategoryForm({ name: "", spend: "", locations: [] });
+    setCategoryForm({ name: "", spend: "", locations: [], subCategories: [] });
     setNewLocation("");
+    setNewSubCategory("");
     setIsModalOpen(true);
   };
 
@@ -314,8 +390,10 @@ function PortfolioSetupContent() {
       name: item.name,
       spend: (item.spend / 1000000).toString(), // Convert to millions for display
       locations: [...item.locations],
+      subCategories: subCategories[item.id] || [], // Load existing sub-categories
     });
     setNewLocation("");
+    setNewSubCategory("");
     setIsModalOpen(true);
   };
 
@@ -384,6 +462,13 @@ function PortfolioSetupContent() {
     if (!categoryForm.name.trim()) return;
 
     setIsSaving(true);
+
+    // Auto-add any pending sub-category text before saving
+    let finalSubCategories = [...categoryForm.subCategories];
+    if (newSubCategory.trim() && !finalSubCategories.includes(newSubCategory.trim())) {
+      finalSubCategories.push(newSubCategory.trim());
+    }
+
     // Use existing spend if editing, otherwise default to 0 (will be calculated from CSV later)
     const spendValue = categoryForm.spend ? parseFloat(categoryForm.spend) * 1000000 : (editingCategory?.spend || 0);
 
@@ -397,20 +482,40 @@ function PortfolioSetupContent() {
           locations: categoryForm.locations,
         };
 
-        try {
-          await procurementApi.updateCategory(editingCategory.id, {
-            name: updatedItem.name,
-            spend: updatedItem.spend,
-            locations: updatedItem.locations,
-          });
-        } catch (err) {
-          console.error("Failed to update category in API:", err);
+        // Only call API if it's a valid UUID (from backend, not local demo data)
+        if (isValidUUID(editingCategory.id)) {
+          try {
+            await procurementApi.updateCategory(editingCategory.id, {
+              name: updatedItem.name,
+              spend: updatedItem.spend,
+              locations: updatedItem.locations,
+            });
+          } catch (err) {
+            console.error("Failed to update category in API:", err);
+          }
         }
 
         // Update global state
         actions.updatePortfolioItem(updatedItem);
+
+        // Save sub-categories
+        if (finalSubCategories.length > 0) {
+          setSubCategories(prev => ({
+            ...prev,
+            [editingCategory.id]: finalSubCategories
+          }));
+          // Auto-select if sub-categories were added
+          setSelectedCategoryIds(prev => new Set([...prev, editingCategory.id]));
+        } else {
+          // Clear sub-categories if none specified
+          setSubCategories(prev => {
+            const newSubs = { ...prev };
+            delete newSubs[editingCategory.id];
+            return newSubs;
+          });
+        }
       } else {
-        // Add new category
+        // Add new category with a local ID
         const newItem: PortfolioItem = {
           id: Date.now().toString(),
           name: categoryForm.name.trim(),
@@ -419,13 +524,27 @@ function PortfolioSetupContent() {
         };
 
         try {
-          await procurementApi.addCategory(newItem);
+          const response = await procurementApi.addCategory(newItem);
+          // Update with real ID from backend if successful
+          if (response?.data?.id) {
+            newItem.id = response.data.id;
+          }
         } catch (err) {
           console.error("Failed to add category to API:", err);
         }
 
         // Add to global state
         actions.addPortfolioItem(newItem);
+
+        // Save sub-categories for new item
+        if (finalSubCategories.length > 0) {
+          setSubCategories(prev => ({
+            ...prev,
+            [newItem.id]: finalSubCategories
+          }));
+          // Auto-select the new category if sub-categories were added
+          setSelectedCategoryIds(prev => new Set([...prev, newItem.id]));
+        }
       }
 
       // Reset and close
@@ -437,8 +556,9 @@ function PortfolioSetupContent() {
 
   const handleCloseModal = () => {
     setEditingCategory(null);
-    setCategoryForm({ name: "", spend: "", locations: [] });
+    setCategoryForm({ name: "", spend: "", locations: [], subCategories: [] });
     setNewLocation("");
+    setNewSubCategory("");
     setLocationSearchResults([]);
     setIsLocationDropdownOpen(false);
     setIsModalOpen(false);
@@ -452,6 +572,14 @@ function PortfolioSetupContent() {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-[#F0F9FF]">
+      {/* Back Button */}
+      <Link
+        href="/setup"
+        className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Link>
+
       {/* Background Decor */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-[#B3D9FF]/40 via-[#F0F9FF] to-white" />
@@ -474,8 +602,8 @@ function PortfolioSetupContent() {
 
       {/* Left Icon Sidebar */}
       <div className="relative z-20 flex w-16 flex-col items-center border-r border-gray-200/50 bg-white/20 py-8 backdrop-blur-md">
-        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5">
-          <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500" />
+        <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
+          <img src="/beroe cut.jpg" alt="Beroe" className="h-8 w-8 object-contain" />
         </div>
 
         <div className="flex flex-col gap-8 text-gray-400">
@@ -508,7 +636,7 @@ function PortfolioSetupContent() {
              {selectedCategoryIds.size > 0 && (
                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold">
                  <Check className="h-3 w-3" />
-                 {selectedCategoryIds.size} selected
+                 {Object.values(subCategories).flat().filter(Boolean).join(", ") || `${selectedCategoryIds.size} selected`}
                </span>
              )}
           </div>
@@ -533,11 +661,9 @@ function PortfolioSetupContent() {
               <h1 className="max-w-[320px] text-3xl font-medium leading-tight tracking-tight text-[#1A1C1E]">
                 First, let's confirm what categories & geographies your portfolio includes.
               </h1>
-              {/* Logo Orb Small */}
-              <div className="mt-4 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 via-purple-500 to-pink-500 p-[1px] shadow-sm">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                  <div className="h-4 w-4 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 blur-[1px]" />
-                </div>
+              {/* Logo Small */}
+              <div className="mt-4">
+                <img src="/beroe cut.jpg" alt="Beroe" className="h-8 w-8 object-contain" />
               </div>
             </div>
 
@@ -633,7 +759,18 @@ function PortfolioSetupContent() {
                          </button>
                       </div>
 
-                      <h3 className="mb-6 text-3xl font-semibold text-[#1A1C1E]">{item.name}</h3>
+                      <h3 className={`text-3xl font-semibold text-[#1A1C1E] ${subCategories[item.id]?.length > 0 ? 'mb-1' : 'mb-6'}`}>{item.name}</h3>
+                      {/* Show sub-categories (always visible like locations) */}
+                      {subCategories[item.id]?.length > 0 && (
+                        <div className="mb-5 flex flex-wrap gap-2">
+                          {subCategories[item.id].map((subCat) => (
+                            <span key={subCat} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${isSelected ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>
+                              {isSelected && <Check className="h-3 w-3" />}
+                              {subCat}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       <div className="flex flex-wrap gap-3 mb-8">
                         {item.locations.map((loc) => (
@@ -647,14 +784,8 @@ function PortfolioSetupContent() {
                         ))}
                       </div>
 
-                      <div className="mt-auto flex items-center justify-between">
-                        {/* Selected indicator */}
-                        {isSelected && (
-                          <span className="text-[12px] font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
-                            Selected for analysis
-                          </span>
-                        )}
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500 ${!isSelected ? 'ml-auto' : ''}`}>
+                      <div className="mt-auto flex items-center justify-end">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500">
                           <Pencil className="h-5 w-5" />
                         </div>
                       </div>
@@ -696,11 +827,63 @@ function PortfolioSetupContent() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Category Name</label>
               <Input
-                placeholder="e.g., Edible Oils"
+                placeholder="e.g., Oils, Grains"
                 value={categoryForm.name}
                 onChange={(e) => setCategoryForm(prev => ({ ...prev, name: e.target.value }))}
                 className="h-12 rounded-xl border-gray-200 focus:border-blue-400 focus:ring-blue-400"
               />
+            </div>
+
+            {/* Sub-Categories / Types */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-gray-700">
+                Category Types <span className="text-gray-400 font-normal">(specific types for analysis)</span>
+              </label>
+
+              {/* Add Sub-category Input */}
+              <div className="flex gap-2">
+                <Input
+                  placeholder="e.g., Edible Oil, Palm Oil, Wheat..."
+                  value={newSubCategory}
+                  onChange={(e) => setNewSubCategory(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && newSubCategory.trim()) {
+                      e.preventDefault();
+                      handleAddSubCategoryToForm();
+                    }
+                  }}
+                  className="h-11 flex-1 rounded-xl border-gray-200 focus:border-emerald-400 focus:ring-emerald-400"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAddSubCategoryToForm}
+                  disabled={!newSubCategory.trim()}
+                  className="h-11 px-4 rounded-xl border-gray-200"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-[11px] text-gray-400">
+                Type the specific category type and press Enter to add.
+              </p>
+
+              {/* Sub-category Tags - Below the input */}
+              {categoryForm.subCategories.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {categoryForm.subCategories.map((subCat) => (
+                    <Badge
+                      key={subCat}
+                      variant="secondary"
+                      className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-[13px] font-medium text-emerald-700 border-none hover:bg-emerald-100 cursor-pointer"
+                      onClick={() => handleRemoveSubCategoryFromForm(subCat)}
+                    >
+                      {subCat}
+                      <X className="h-3 w-3 text-emerald-500" />
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Locations */}
@@ -709,9 +892,82 @@ function PortfolioSetupContent() {
                 Locations
               </label>
 
-              {/* Location Badges */}
+              {/* Add Location Input with Search */}
+              <div className="relative" ref={locationDropdownRef}>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search locations (e.g., Europe, India, USA)"
+                      value={newLocation}
+                      onChange={(e) => handleLocationSearch(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (locationSearchResults.length > 0) {
+                            handleSelectLocation(locationSearchResults[0]);
+                          } else {
+                            handleAddLocationToForm();
+                          }
+                        }
+                        if (e.key === "Escape") {
+                          setIsLocationDropdownOpen(false);
+                        }
+                      }}
+                      onFocus={() => {
+                        if (newLocation.trim() && locationSearchResults.length > 0) {
+                          setIsLocationDropdownOpen(true);
+                        }
+                      }}
+                      className="h-11 rounded-xl border-gray-200 pl-10 focus:border-blue-400 focus:ring-blue-400"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddLocationToForm}
+                    disabled={!newLocation.trim()}
+                    className="h-11 px-4 rounded-xl border-gray-200"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Location Search Dropdown */}
+                {isLocationDropdownOpen && locationSearchResults.length > 0 && (
+                  <div className="absolute z-50 mt-1 w-full rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
+                    {locationSearchResults.map((location, idx) => (
+                      <button
+                        key={location}
+                        type="button"
+                        onClick={() => handleSelectLocation(location)}
+                        className={`w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-blue-50 flex items-center gap-3 ${
+                          idx === 0 ? 'bg-blue-50/50' : ''
+                        }`}
+                      >
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
+                          <span className="text-[10px] font-semibold text-gray-500">
+                            {location.slice(0, 2).toUpperCase()}
+                          </span>
+                        </div>
+                        <span className="text-gray-700">{location}</span>
+                        {idx === 0 && (
+                          <span className="ml-auto text-[11px] text-gray-400">Press Enter</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Helper text */}
+                <p className="mt-2 text-[11px] text-gray-400">
+                  Search for regions or countries.
+                </p>
+              </div>
+
+              {/* Location Badges - Below the input */}
               {categoryForm.locations.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 pt-1">
                   {categoryForm.locations.map((loc) => (
                     <Badge
                       key={loc}
@@ -723,81 +979,6 @@ function PortfolioSetupContent() {
                       <X className="h-3 w-3 text-gray-400" />
                     </Badge>
                   ))}
-                </div>
-              )}
-
-              {/* Add Location Input with Search */}
-              {(
-                <div className="relative" ref={locationDropdownRef}>
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        placeholder="Search locations (e.g., Europe, India, USA)"
-                        value={newLocation}
-                        onChange={(e) => handleLocationSearch(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            if (locationSearchResults.length > 0) {
-                              handleSelectLocation(locationSearchResults[0]);
-                            } else {
-                              handleAddLocationToForm();
-                            }
-                          }
-                          if (e.key === "Escape") {
-                            setIsLocationDropdownOpen(false);
-                          }
-                        }}
-                        onFocus={() => {
-                          if (newLocation.trim() && locationSearchResults.length > 0) {
-                            setIsLocationDropdownOpen(true);
-                          }
-                        }}
-                        className="h-11 rounded-xl border-gray-200 pl-10 focus:border-blue-400 focus:ring-blue-400"
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleAddLocationToForm}
-                      disabled={!newLocation.trim()}
-                      className="h-11 px-4 rounded-xl border-gray-200"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {/* Location Search Dropdown */}
-                  {isLocationDropdownOpen && locationSearchResults.length > 0 && (
-                    <div className="absolute z-50 mt-1 w-full rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden">
-                      {locationSearchResults.map((location, idx) => (
-                        <button
-                          key={location}
-                          type="button"
-                          onClick={() => handleSelectLocation(location)}
-                          className={`w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-blue-50 flex items-center gap-3 ${
-                            idx === 0 ? 'bg-blue-50/50' : ''
-                          }`}
-                        >
-                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
-                            <span className="text-[10px] font-semibold text-gray-500">
-                              {location.slice(0, 2).toUpperCase()}
-                            </span>
-                          </div>
-                          <span className="text-gray-700">{location}</span>
-                          {idx === 0 && (
-                            <span className="ml-auto text-[11px] text-gray-400">Press Enter</span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Helper text */}
-                  <p className="mt-2 text-[11px] text-gray-400">
-                    Search for regions or countries.
-                  </p>
                 </div>
               )}
             </div>
@@ -867,6 +1048,7 @@ function PortfolioSetupContent() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
     </div>
   );
 }

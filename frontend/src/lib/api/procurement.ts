@@ -11,9 +11,74 @@ import type {
   ThemeResponse,
   HealthResponse,
   LeverTheme,
+  User,
+  AuthResponse,
 } from "@/types/api";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+
+// ============================================================================
+// Auth API (separate from procurementApi for clarity)
+// ============================================================================
+
+export interface SetupUpdateData {
+  setup_step?: number;
+  setup_completed?: boolean;
+  preferences?: Record<string, unknown>;
+  goals?: { cost: number; risk: number; esg: number };
+}
+
+export interface GoalsUpdateData {
+  cost: number;
+  risk: number;
+  esg: number;
+}
+
+export const authApi = {
+  /**
+   * Get current user from token
+   */
+  getMe: () => apiClient.get<User>("/auth/me"),
+
+  /**
+   * Update user profile
+   */
+  updateProfile: (data: Partial<User>) => apiClient.put<User>("/auth/me", data),
+
+  /**
+   * Update setup wizard progress
+   */
+  updateSetup: (data: SetupUpdateData) => apiClient.put<User>("/auth/me/setup", data),
+
+  /**
+   * Update user goals (cost/risk/esg)
+   */
+  updateGoals: (data: GoalsUpdateData) => apiClient.put<User>("/auth/me/goals", data),
+
+  /**
+   * Update setup step
+   */
+  updateSetupStep: (step: number) =>
+    apiClient.put<User>(`/auth/me/setup-step?step=${step}`),
+
+  /**
+   * Login with JSON body
+   */
+  login: (email: string, password: string) =>
+    apiClient.post<AuthResponse>("/auth/login/json", { email, password }, { skipAuth: true }),
+
+  /**
+   * Register new user
+   */
+  register: (data: {
+    name: string;
+    email: string;
+    username: string;
+    password: string;
+    organization_name?: string;
+    organization_id?: string;
+  }) => apiClient.post<AuthResponse>("/auth/register", data, { skipAuth: true }),
+};
 
 export const procurementApi = {
   // ============================================================================
@@ -604,79 +669,42 @@ export const procurementApi = {
         content: string;
         thinking_time: string;
       };
-    }>("/chat/demo-message", { content: message });
+    }>("/chat/demo-message", { content: message }, { timeout: 90000 });
   },
 
   /**
    * Generate opportunity insights using LLM
-   * Sends context about the opportunity and gets AI recommendations
+   * Sends COMPREHENSIVE context about the opportunity for truly conversational AI
    */
   getOpportunityInsights: async (
     opportunityType: string,
     categoryName: string,
     totalSpend: number,
     proofPoints: Array<{ name: string; isValidated: boolean; id?: string; description?: string }>,
-    question?: string
+    question?: string,
+    // NEW: Additional context for conversational AI
+    additionalContext?: {
+      suppliers?: Array<{ name: string; spend: number; country?: string; riskRating?: string }>;
+      recommendations?: Array<{ text: string; reason: string }>;
+      metrics?: {
+        priceVariance?: number;
+        top3Concentration?: number;
+        tailSpendPercentage?: number;
+        supplierCount?: number;
+      };
+      locations?: string[];
+      goals?: { cost: number; risk: number; esg: number };
+      savingsPercentage?: string;
+      // Chat history for memory
+      chatHistory?: Array<{ role: 'user' | 'assistant'; content: string }>;
+      // Rich file data for deep knowledge
+      spendDataSample?: Array<Record<string, string | number>>; // First 10 rows of spend CSV
+      contractSummary?: string; // Parsed contract text/key terms
+      supplierMasterSummary?: string; // Supplier master key info
+    }
   ) => {
-    const validatedPoints = proofPoints.filter(pp => pp.isValidated);
-    const missingPoints = proofPoints.filter(pp => !pp.isValidated);
-    const confidence = proofPoints.length > 0
-      ? Math.round((validatedPoints.length / proofPoints.length) * 100)
-      : 0;
-
-    // Build detailed proof point status
-    const proofPointStatus = proofPoints.map((pp, idx) =>
-      `${idx + 1}. ${pp.name}: ${pp.isValidated ? '✓ VALIDATED' : '✗ NOT VALIDATED'}`
-    ).join('\n');
-
-    // Opportunity type descriptions for context
-    const opportunityDescriptions: Record<string, string> = {
-      'volume-bundling': 'Volume Bundling focuses on consolidating spend across regions/sites and leveraging aggregated volume for better pricing and discounts.',
-      'target-pricing': 'Target Pricing uses cost models, market indices, and should-cost analysis to optimize pricing and negotiate better rates.',
-      'risk-management': 'Risk Management focuses on supplier diversification, reducing concentration risk, and building supply chain resilience.',
-      'respec-pack': 'Re-spec Pack involves standardizing specifications across regions and rationalizing SKUs to reduce complexity and costs.'
-    };
-
-    const oppDescription = opportunityDescriptions[opportunityType] || 'Procurement optimization opportunity.';
-
-    const contextMessage = question
-      ? `=== OPPORTUNITY CONTEXT ===
-Category: ${categoryName}
-Opportunity Type: ${opportunityType}
-Description: ${oppDescription}
-Total Spend: $${totalSpend.toLocaleString()}
-Confidence Level: ${confidence}%
-Total Proof Points: ${proofPoints.length}
-Validated: ${validatedPoints.length}
-Missing/Not Validated: ${missingPoints.length}
-
-=== PROOF POINT STATUS ===
-${proofPointStatus}
-
-=== MISSING PROOF POINTS (Need Validation) ===
-${missingPoints.length > 0 ? missingPoints.map(pp => `- ${pp.name}`).join('\n') : 'All proof points validated!'}
-
-=== USER QUESTION ===
-${question}`
-      : `=== INITIAL ANALYSIS REQUEST ===
-Category: ${categoryName}
-Opportunity Type: ${opportunityType}
-Description: ${oppDescription}
-Total Spend: $${totalSpend.toLocaleString()}
-Confidence Level: ${confidence}%
-
-=== PROOF POINT STATUS ===
-${proofPointStatus}
-
-=== MISSING PROOF POINTS (Need Validation) ===
-${missingPoints.length > 0 ? missingPoints.map(pp => `- ${pp.name}`).join('\n') : 'All proof points validated!'}
-
-Please provide:
-1. A brief summary of this ${opportunityType} opportunity for ${categoryName}
-2. What the missing proof points mean and why they're important
-3. Specific questions I should ask or data I should gather to validate the missing proof points
-4. Priority recommendations based on the current validation status`;
-
+    // Use the new structured opportunity-chat endpoint
+    // Backend has full knowledge of opportunities, proof points, and builds comprehensive context
     return apiClient.post<{
       status: string;
       user_message: { content: string };
@@ -684,7 +712,27 @@ Please provide:
         content: string;
         thinking_time: string;
       };
-    }>("/chat/demo-message", { content: contextMessage });
+    }>("/chat/opportunity-chat", {
+      question: question || "Give me a summary of this opportunity.",
+      opportunity_type: opportunityType,
+      category_name: categoryName,
+      total_spend: totalSpend,
+      suppliers: additionalContext?.suppliers || [],
+      metrics: additionalContext?.metrics || {},
+      proof_points: proofPoints.map(pp => ({
+        id: pp.id,
+        name: pp.name,
+        isValidated: pp.isValidated,
+        description: pp.description
+      })),
+      recommendations: additionalContext?.recommendations || [],
+      goals: additionalContext?.goals || {},
+      savings_percentage: additionalContext?.savingsPercentage,
+      spend_data_sample: additionalContext?.spendDataSample || [],
+      contract_summary: additionalContext?.contractSummary,
+      supplier_master_summary: additionalContext?.supplierMasterSummary,
+      history: additionalContext?.chatHistory?.slice(-6) || []
+    }, { timeout: 90000 }); // 90 second timeout for LLM calls
   },
 
   /**
@@ -710,10 +758,12 @@ Please provide:
     };
     proofPoints: Array<{ id: string; name: string; isValidated: boolean; description?: string }>;
     playbookData?: Record<string, unknown>;
+    contractData?: Record<string, unknown>;  // ✅ NEW: Contract data
+    supplierMasterData?: Record<string, unknown>;  // ✅ NEW: Supplier master data
   }) => {
     return apiClient.post<{
       status: string;
-      recommendations: string[];
+      recommendations: Array<{ text: string; reason: string }>;
       model_used?: string;
       thinking_time?: string;
       error?: string;
@@ -726,12 +776,59 @@ Please provide:
       metrics: params.metrics,
       proof_points: params.proofPoints,
       playbook_data: params.playbookData,
-    });
+      contract_data: params.contractData,  // ✅ NEW: Pass contract data
+      supplier_master_data: params.supplierMasterData,  // ✅ NEW: Pass supplier master data
+    }, { timeout: 90000 });  // 90s timeout for LLM processing
+  },
+
+  /**
+   * Evaluate proof points using LLM (Mistral/Llama)
+   * Returns L/M/H ratings for each proof point and weighted confidence score
+   * Formula: Score = (0.25 × L_count) + (0.625 × M_count) + (0.875 × H_count)
+   */
+  evaluateProofPoints: async (params: {
+    opportunityType: string;
+    categoryName: string;
+    proofPointsData: Array<{
+      id: string;
+      name: string;
+      value?: number;
+      data?: Record<string, unknown>;
+    }>;
+    spendData: Record<string, unknown>;
+    supplierData: Array<Record<string, unknown>>;
+    metrics: Record<string, unknown>;
+  }) => {
+    return apiClient.post<{
+      status: string;
+      evaluations: Array<{
+        id: string;
+        impact: 'High' | 'Medium' | 'Low';
+        reasoning: string;
+        data_point: string;
+      }>;
+      summary: {
+        high_count: number;
+        medium_count: number;
+        low_count: number;
+        confidence_score: number;
+      };
+      confidence_score: number;
+      model_used: string;
+      thinking_time: string;
+    }>("/chat/evaluate-proof-points", {
+      opportunity_type: params.opportunityType,
+      category_name: params.categoryName,
+      proof_points_data: params.proofPointsData,
+      spend_data: params.spendData,
+      supplier_data: params.supplierData,
+      metrics: params.metrics,
+    }, { timeout: 90000 });  // 90s timeout for LLM processing
   },
 
   /**
    * Generate Leadership Brief docx for an accepted opportunity
-   * Returns the docx file as a blob
+   * Returns the docx file as a blob with comprehensive formatting
    */
   generateLeadershipBrief: async (params: {
     opportunityId: string;
@@ -739,7 +836,7 @@ Please provide:
     categoryName: string;
     locations: string[];
     totalSpend: number;
-    recommendations: string[];
+    recommendations: Array<{ text: string; reason: string }>;
     proofPoints: Array<{ id: string; name: string; isValidated: boolean }>;
     suppliers: Array<{ name: string; spend: number }>;
     metrics: {
@@ -748,32 +845,162 @@ Please provide:
       tailSpendPercentage?: number;
       supplierCount?: number;
     };
-    savingsEstimate: string;
+    savingsLow?: number;
+    savingsHigh?: number;
+    confidenceScore?: number;
+    spendByRegion?: Array<{ name: string; spend: number }>;
   }): Promise<ArrayBuffer> => {
+    // Build spend by region - handle empty locations array
+    let spendByRegion = params.spendByRegion;
+    if (!spendByRegion || spendByRegion.length === 0) {
+      if (params.locations && params.locations.length > 0) {
+        spendByRegion = params.locations.map((loc) => ({
+          name: loc,
+          spend: params.totalSpend / params.locations.length
+        }));
+      } else {
+        spendByRegion = [{ name: 'All Regions', spend: params.totalSpend }];
+      }
+    }
+
+    const requestBody = {
+      opportunity_id: params.opportunityId || 'unknown',
+      opportunity_name: params.opportunityName || 'Opportunity',
+      category_name: params.categoryName || 'Category',
+      locations: params.locations || [],
+      total_spend: params.totalSpend || 0,
+      recommendations: params.recommendations || [],
+      proof_points: params.proofPoints || [],
+      suppliers: params.suppliers || [],
+      metrics: params.metrics || {},
+      savings_low: params.savingsLow || params.totalSpend * 0.03,
+      savings_high: params.savingsHigh || params.totalSpend * 0.08,
+      confidence_score: params.confidenceScore || 0,
+      spend_by_region: spendByRegion,
+    };
+
+    // Log request for debugging
+    console.log('[Leadership Brief] Request body:', JSON.stringify(requestBody, null, 2));
+
+    // Use AbortController for 120s timeout (brief generation takes longer)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
     const response = await fetch(`${API_BASE_URL}/chat/generate-brief`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        opportunity_id: params.opportunityId,
-        opportunity_name: params.opportunityName,
-        category_name: params.categoryName,
-        locations: params.locations,
-        total_spend: params.totalSpend,
-        recommendations: params.recommendations,
-        proof_points: params.proofPoints,
-        suppliers: params.suppliers,
-        metrics: params.metrics,
-        savings_estimate: params.savingsEstimate,
-      }),
+      body: JSON.stringify(requestBody),
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error(`Failed to generate brief: ${response.statusText}`);
+      // Try to get more error details
+      let errorDetails = response.statusText;
+      try {
+        const errorJson = await response.json();
+        errorDetails = JSON.stringify(errorJson);
+      } catch {
+        // If response is not JSON, try to get text
+        try {
+          errorDetails = await response.text();
+        } catch {
+          // Keep original statusText
+        }
+      }
+      console.error('[Leadership Brief] Error:', errorDetails);
+      throw new Error(`Failed to generate brief: ${errorDetails}`);
     }
 
     return response.arrayBuffer();
+  },
+
+  // ==========================================================================
+  // SUPPLIER INTELLIGENCE (PP8 - Real-time Supplier Risk Rating)
+  // ==========================================================================
+
+  /**
+   * Evaluate a single supplier's risk profile using real-time web data.
+   * Uses Tavily for web search + Llama 3.2 for analysis.
+   */
+  evaluateSupplier: async (params: {
+    supplierName: string;
+    category?: string;
+    country?: string;
+  }) => {
+    return apiClient.post<{
+      status: string;
+      evaluation: {
+        supplier: string;
+        parameters: {
+          financial_strength: { rating: string; score: number; reason: string };
+          supply_reliability: { rating: string; score: number; reason: string };
+          compliance_governance: { rating: string; score: number; reason: string };
+          pricing_competitiveness: { rating: string; score: number; reason: string };
+          volume_scalability: { rating: string; score: number; reason: string };
+          geographic_diversification: { rating: string; score: number; reason: string };
+        };
+        overall_rating: 'GOOD' | 'MEDIUM' | 'HIGH_RISK';
+        overall_score: number;
+        procurement_role: 'ANCHOR' | 'CHALLENGER' | 'TAIL';
+        max_allocation: string;
+        key_risks: string[];
+        recommendation: string;
+        data_freshness: string;
+        analysis_timestamp: string;
+        model_used: string;
+      };
+    }>("/chat/supplier-intelligence/evaluate", {
+      supplier_name: params.supplierName,
+      category: params.category,
+      country: params.country,
+    }, { timeout: 90000 }); // 90s for web search + LLM
+  },
+
+  /**
+   * Evaluate multiple suppliers for PP8 (Supplier Risk Rating) proof point.
+   * Returns aggregated risk assessment with PP8 impact rating.
+   */
+  evaluateSuppliersForPP8: async (params: {
+    suppliers: Array<{ name: string; spend: number; country?: string }>;
+    category?: string;
+    country?: string;
+  }) => {
+    return apiClient.post<{
+      status: string;
+      proof_point_id: string;
+      impact: 'High' | 'Medium' | 'Low';
+      reasoning: string;
+      summary: {
+        total_evaluated: number;
+        good_count: number;
+        medium_count: number;
+        high_risk_count: number;
+        good_percentage: number;
+        high_risk_percentage: number;
+      };
+      recommendations: {
+        anchor_candidates: string[];
+        challenger_candidates: string[];
+        tail_only: string[];
+      };
+      supplier_evaluations: Array<{
+        supplier: string;
+        overall_rating: string;
+        overall_score: number;
+        procurement_role: string;
+        recommendation: string;
+      }>;
+      evaluated_at: string;
+      model_used: string;
+    }>("/chat/supplier-intelligence/evaluate-pp8", {
+      suppliers: params.suppliers,
+      category: params.category,
+      country: params.country,
+    }, { timeout: 180000 }); // 3 min for multiple suppliers
   },
 };
 

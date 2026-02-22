@@ -2,11 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  Home,
-  Activity,
-  ShieldCheck,
-  Search,
-  Users,
   ChevronDown,
   ArrowLeft,
   CheckCircle2,
@@ -19,13 +14,16 @@ import {
   Target,
   TrendingUp,
   Shield,
-  Package
+  Package,
+  AlertCircle
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 import { procurementApi } from "@/lib/api/procurement";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import Sidebar from "@/components/Sidebar";
 
 // Opportunity type display names and icons
 const OPPORTUNITY_CONFIG: Record<string, {
@@ -147,17 +145,47 @@ export default function AcceptedOpportunityPage() {
     setDownloadError(null);
 
     try {
+      // Calculate confidence score
+      const validatedCount = acceptedData.proofPoints.filter(pp => pp.isValidated).length;
+      const totalPPs = acceptedData.proofPoints.length;
+      const confidenceScore = totalPPs > 0 ? (validatedCount / totalPPs) * 100 : 0;
+
+      // Parse savings estimate to get low/high values
+      let savingsLow = acceptedData.totalSpend * 0.03;
+      let savingsHigh = acceptedData.totalSpend * 0.08;
+      if (acceptedData.savingsEstimate) {
+        const match = acceptedData.savingsEstimate.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
+        if (match) {
+          savingsLow = acceptedData.totalSpend * (parseFloat(match[1]) / 100);
+          savingsHigh = acceptedData.totalSpend * (parseFloat(match[2]) / 100);
+        }
+      }
+
+      // Build spend by region data
+      const spendByRegion = acceptedData.locations.length > 0
+        ? acceptedData.locations.map((loc) => ({
+            name: loc,
+            spend: acceptedData.totalSpend / acceptedData.locations.length
+          }))
+        : [{ name: 'All Regions', spend: acceptedData.totalSpend }];
+
+      // Ensure opportunity name has a fallback
+      const opportunityName = acceptedData.opportunityName || oppConfig?.title || 'Opportunity';
+
       const response = await procurementApi.generateLeadershipBrief({
         opportunityId: acceptedData.opportunityId,
-        opportunityName: acceptedData.opportunityName,
-        categoryName: acceptedData.categoryName,
-        locations: acceptedData.locations,
-        totalSpend: acceptedData.totalSpend,
-        recommendations: acceptedData.recommendations,
-        proofPoints: acceptedData.proofPoints,
-        suppliers: acceptedData.suppliers,
-        metrics: acceptedData.metrics,
-        savingsEstimate: acceptedData.savingsEstimate
+        opportunityName: opportunityName,
+        categoryName: acceptedData.categoryName || 'Category',
+        locations: acceptedData.locations || [],
+        totalSpend: acceptedData.totalSpend || 0,
+        recommendations: acceptedData.recommendations || [],
+        proofPoints: acceptedData.proofPoints || [],
+        suppliers: acceptedData.suppliers || [],
+        metrics: acceptedData.metrics || {},
+        savingsLow,
+        savingsHigh,
+        confidenceScore,
+        spendByRegion
       });
 
       // Create download link
@@ -165,7 +193,10 @@ export default function AcceptedOpportunityPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${acceptedData.categoryName.replace(/\s+/g, '_')}_${oppConfig?.title.replace(/\s+/g, '_') || 'Leadership'}_Brief.docx`;
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+      const timeStr = now.toTimeString().slice(0, 5).replace(':', ''); // HHMM format
+      a.download = `${acceptedData.categoryName.replace(/\s+/g, '_')}_${oppConfig?.title.replace(/\s+/g, '_') || 'Leadership'}_Brief_${dateStr}_${timeStr}.docx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -195,6 +226,7 @@ export default function AcceptedOpportunityPage() {
   }
 
   return (
+    <ProtectedRoute>
     <div className="relative flex h-screen w-full overflow-hidden bg-[#F0F7FF]">
       {/* Background Decor */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -209,35 +241,7 @@ export default function AcceptedOpportunityPage() {
       </div>
 
       {/* Left Icon Sidebar */}
-      <div className="relative z-20 flex w-16 flex-col items-center border-r border-gray-200/40 bg-white/30 py-8 backdrop-blur-xl shrink-0">
-        <Link href="/dashboard" className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
-          <div className="h-full w-full bg-gradient-to-tr from-blue-500 via-purple-500 to-indigo-500 opacity-80" />
-        </Link>
-
-        <div className="flex flex-col gap-8 text-gray-400">
-          <Link href="/dashboard" className="p-2 rounded-lg hover:bg-black/5 transition-colors cursor-pointer">
-            <Home className="h-6 w-6" />
-          </Link>
-          <Link href="/activity" className="p-2 rounded-lg hover:bg-black/5 transition-colors cursor-pointer">
-            <Activity className="h-6 w-6" />
-          </Link>
-          <Link href="/opportunities" className="p-2 rounded-lg bg-white shadow-sm text-blue-600 ring-1 ring-black/5 transition-colors cursor-pointer">
-            <ShieldCheck className="h-6 w-6" />
-          </Link>
-        </div>
-
-        <div className="mt-auto flex flex-col gap-8 text-gray-400">
-          <div className="p-2 rounded-lg hover:bg-black/5 transition-colors cursor-pointer">
-            <Search className="h-6 w-6" />
-          </div>
-          <div className="p-2 rounded-lg hover:bg-black/5 transition-colors cursor-pointer">
-            <Users className="h-6 w-6" />
-          </div>
-          <Link href="/" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white text-sm font-semibold cursor-pointer hover:bg-gray-800 transition-colors">
-            N
-          </Link>
-        </div>
-      </div>
+      <Sidebar user={state.user} />
 
       {/* Main Container */}
       <div className="flex flex-1 overflow-hidden relative z-10">
@@ -559,7 +563,24 @@ export default function AcceptedOpportunityPage() {
                           <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${oppConfig?.bgColor || 'bg-blue-100'} mt-0.5`}>
                             <span className={`text-[11px] font-bold ${oppConfig?.color || 'text-blue-600'}`}>{idx + 1}</span>
                           </div>
-                          <p className="text-[14px] text-gray-700 leading-relaxed">{rec}</p>
+                          <p className="text-[14px] text-gray-700 leading-relaxed flex-1">{rec.text}</p>
+                          {/* Info icon that shows reason on hover */}
+                          {rec.reason && (
+                            <div className="group/tooltip relative shrink-0">
+                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-blue-100 hover:text-blue-600 transition-colors cursor-help">
+                                <AlertCircle className="h-3.5 w-3.5" />
+                              </div>
+                              {/* Tooltip */}
+                              <div className="absolute right-0 bottom-full mb-2 w-80 z-[100] opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 pointer-events-none">
+                                <div className="p-4 rounded-xl bg-gray-900 text-white shadow-2xl border border-gray-700">
+                                  <p className="text-[11px] font-semibold text-blue-400 uppercase tracking-wider mb-2">Why This Recommendation</p>
+                                  <p className="text-[12px] text-gray-200 leading-relaxed">{rec.reason}</p>
+                                  {/* Arrow pointing down */}
+                                  <div className="absolute -bottom-2 right-4 w-4 h-4 bg-gray-900 rotate-45 border-r border-b border-gray-700" />
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -572,5 +593,6 @@ export default function AcceptedOpportunityPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

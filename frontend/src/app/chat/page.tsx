@@ -2,10 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home,
-  Activity,
-  ShieldCheck,
-  Search,
   ChevronDown,
   ChevronUp,
   ArrowLeft,
@@ -14,9 +10,6 @@ import {
   Plus,
   Mic,
   Send,
-  Users,
-  Star,
-  FolderOpen,
   FileText,
   X,
   Clock,
@@ -24,10 +17,15 @@ import {
   TrendingUp,
   Download
 } from "lucide-react";
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import Sidebar from "@/components/Sidebar";
+
+// Unique ID generator to prevent duplicate React keys
+let messageIdCounter = 0;
+const generateMessageId = () => `msg-${Date.now()}-${++messageIdCounter}`;
 
 // Types for different panel states
 type PanelState =
@@ -106,7 +104,8 @@ function ChatPage() {
 
   // Dynamic cost calculation based on simulation settings
   const calculateDynamicCosts = () => {
-    const totalSpend = state.setupData.spend || 50000000; // Default fallback
+    // Use spendAnalysis (filtered by category) first, then fallback
+    const totalSpend = state.spendAnalysis?.totalSpend || state.setupData.spend || 50000000;
     const malaysiaFactor = malaysiaPercent / 100;
     const indonesiaFactor = indonesiaPercent / 100;
 
@@ -193,7 +192,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "Got it. Before I dive in—can I check your priority? Do you want me to focus more on **risk factors**, **ESG**, or **balance both**?",
             timestamp: "12:30 PM",
@@ -209,7 +208,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "Thanks. I'll save this as your preference for future sessions. I understand **resilience and sustainability** are top priorities for you.\n\nFrom your profile, I see your year-on-year spend is about **$45.2M** on **vegetable oils**.\n\n*Is there anything else you'd like me to factor in—like contracts ending soon, or specific sourcing preferences — so I can get you more targeted actions?*",
             timestamp: "12:35 PM",
@@ -229,7 +228,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "Based on the documents provided.\n\nNew trade, supplier, and market data have been processed. I have recalibrated insights for the Vegetable Oils category, incorporating recent pricing, supplier compliance reports, and import/export updates.\n\n**Here is your category summary for vegetable oils**",
             timestamp: "12:35 PM",
@@ -243,7 +242,7 @@ function ChatPage() {
           // Add follow-up question
           setTimeout(() => {
             setMessages(prev => [...prev, {
-              id: (Date.now() + 1).toString(),
+              id: generateMessageId(),
               role: "assistant",
               content: "*Do you want to view the top Opportunity area*",
               timestamp: "",
@@ -262,7 +261,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "Here is the top Opportunity for **Vegetable Oils**",
             timestamp: "12:35 PM",
@@ -274,7 +273,7 @@ function ChatPage() {
             }
           }]);
           setMessages(prev => [...prev, {
-            id: (Date.now() + 1).toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "*Do you want to understand more about this opportunity and explore how to take it further?*",
             timestamp: "",
@@ -292,7 +291,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "Below are the artifacts and sources for **Diversify Vegetable Oil Sourcing**",
             timestamp: "12:36 PM",
@@ -301,7 +300,7 @@ function ChatPage() {
           // Add first artifact card after a short delay
           setTimeout(() => {
             setMessages(prev => [...prev, {
-              id: (Date.now() + 1).toString(),
+              id: generateMessageId(),
               role: "assistant",
               content: "",
               timestamp: "",
@@ -314,7 +313,7 @@ function ChatPage() {
           // Add second artifact card
           setTimeout(() => {
             setMessages(prev => [...prev, {
-              id: (Date.now() + 2).toString(),
+              id: generateMessageId(),
               role: "assistant",
               content: "",
               timestamp: "",
@@ -327,7 +326,7 @@ function ChatPage() {
           // Add follow-up question
           setTimeout(() => {
             setMessages(prev => [...prev, {
-              id: (Date.now() + 3).toString(),
+              id: generateMessageId(),
               role: "assistant",
               content: "*Do you want to understand more about this opportunity and explore how to take it further?*",
               timestamp: "",
@@ -347,7 +346,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "I've modeled a comparative sourcing scenario for Vegetable Oils based on your current contracts, freight data, and the latest trade benchmarks. The simulation compares India (current baseline) with Malaysia and Indonesia across cost, risk, ESG, and logistics dimensions.",
             timestamp: "12:37 PM",
@@ -356,7 +355,7 @@ function ChatPage() {
           // Add sourcing mix card after a short delay
           setTimeout(() => {
             setMessages(prev => [...prev, {
-              id: (Date.now() + 1).toString(),
+              id: generateMessageId(),
               role: "assistant",
               content: "",
               timestamp: "",
@@ -376,7 +375,7 @@ function ChatPage() {
     const query = searchParams.get("q");
     if (query) {
       setMessages([{
-        id: Date.now().toString(),
+        id: generateMessageId(),
         role: "user",
         content: query,
         timestamp: "12:30 PM"
@@ -392,7 +391,7 @@ function ChatPage() {
     if (chatInput.trim() || uploadedFiles.length > 0) {
       const hasFiles = uploadedFiles.length > 0;
       const userMessage = {
-        id: Date.now().toString(),
+        id: generateMessageId(),
         role: "user" as const,
         content: chatInput.trim() || "Here you go",
         timestamp: "12:35 PM",
@@ -424,7 +423,7 @@ function ChatPage() {
         setTimeout(() => {
           setIsTyping(false);
           setMessages(prev => [...prev, {
-            id: Date.now().toString(),
+            id: generateMessageId(),
             role: "assistant",
             content: "I understand. Let me analyze that for you.",
             timestamp: "12:35 PM",
@@ -482,46 +481,7 @@ function ChatPage() {
       </div>
 
       {/* Left Icon Sidebar */}
-      <div className="relative z-20 flex w-16 flex-col items-center border-r border-white/20 bg-white/40 py-6 backdrop-blur-xl shrink-0">
-        <Link href="/dashboard" className="mb-8 flex h-11 w-11 items-center justify-center rounded-2xl overflow-hidden shadow-lg">
-          <div className="h-full w-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center">
-            <div className="h-5 w-5 rounded-full bg-white/30 backdrop-blur-sm" />
-          </div>
-        </Link>
-
-        <div className="flex flex-col gap-5 text-gray-400">
-          <Link href="/dashboard" className="p-2.5 rounded-xl bg-white shadow-sm text-blue-600 ring-1 ring-black/5">
-            <Home className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          <Link href="/opportunities" className="p-2.5 rounded-xl hover:bg-white/50">
-            <ShieldCheck className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          <div className="p-2.5 rounded-xl hover:bg-white/50 cursor-pointer">
-            <Plus className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          <div className="p-2.5 rounded-xl hover:bg-white/50 cursor-pointer">
-            <FolderOpen className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          <Link href="/today" className="p-2.5 rounded-xl hover:bg-white/50">
-            <Activity className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-          <div className="p-2.5 rounded-xl hover:bg-white/50 cursor-pointer">
-            <Star className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        <div className="mt-auto flex flex-col gap-5 text-gray-400">
-          <div className="p-2.5 rounded-xl hover:bg-white/50 cursor-pointer">
-            <Search className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          <div className="p-2.5 rounded-xl hover:bg-white/50 cursor-pointer">
-            <Users className="h-5 w-5" strokeWidth={1.5} />
-          </div>
-          <Link href="/" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white text-sm font-semibold">
-            +
-          </Link>
-        </div>
-      </div>
+      <Sidebar user={state.user} />
 
       {/* Main Content - Split View */}
       <div className="relative z-30 flex flex-1 overflow-hidden">

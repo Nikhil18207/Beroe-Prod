@@ -38,7 +38,9 @@ from app.models import (
 config = context.config
 
 # Override sqlalchemy.url with environment variable
-config.set_main_option("sqlalchemy.url", settings.database_sync_url)
+# Escape % for ConfigParser interpolation
+db_url = settings.database_sync_url.replace("%", "%%")
+config.set_main_option("sqlalchemy.url", db_url)
 
 # Interpret the config file for Python logging.
 if config.config_file_name is not None:

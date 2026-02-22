@@ -17,7 +17,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.session import AnalysisSession
 from app.models.document import Document, DocumentType, ProcessingStatus
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.services.document_service import DocumentService, DocumentAnalysisResult
 
 router = APIRouter()
@@ -71,7 +71,7 @@ async def analyze_document(
     category: Optional[str] = Form(None),
     session_id: Optional[uuid.UUID] = Form(None),
     extraction_focus: Optional[str] = Form(None),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -91,13 +91,14 @@ async def analyze_document(
     - Optimization opportunities
     - Compliance requirements
     """
+    tenant.require_permission("analyses", "create")
     # Validate session if provided
     if session_id:
         result = await db.execute(
             select(AnalysisSession)
             .where(
                 AnalysisSession.id == session_id,
-                AnalysisSession.user_id == current_user.id
+                AnalysisSession.user_id == tenant.user_id
             )
         )
         session = result.scalar_one_or_none()
@@ -173,7 +174,7 @@ async def analyze_multiple_documents(
     document_types: Optional[str] = Form(None),  # comma-separated
     category: Optional[str] = Form(None),
     session_id: Optional[uuid.UUID] = Form(None),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -185,6 +186,7 @@ async def analyze_multiple_documents(
     - Maximum 25MB per file
     - Supported formats: PDF, DOCX, DOC, TXT, MD
     """
+    tenant.require_permission("analyses", "create")
     if len(files) > MAX_DOCUMENTS_PER_REQUEST:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -265,18 +267,19 @@ async def analyze_multiple_documents(
 @router.get("/session/{session_id}", response_model=DocumentListResponse)
 async def list_session_documents(
     session_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     List all analyzed documents for a session.
     """
+    tenant.require_permission("analyses", "read")
     # Verify session access
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -317,19 +320,20 @@ async def list_session_documents(
 @router.get("/{document_id}", response_model=DocumentAnalysisResponse)
 async def get_document_analysis(
     document_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get analysis results for a specific document.
     """
+    tenant.require_permission("analyses", "read")
     # Get document with session verification
     result = await db.execute(
         select(Document)
         .join(AnalysisSession)
         .where(
             Document.id == document_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     document = result.scalar_one_or_none()
@@ -367,19 +371,20 @@ async def get_document_analysis(
 async def get_category_document_insights(
     session_id: uuid.UUID,
     category: str,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get aggregated document insights for a specific category.
     Combines findings from all documents analyzed for the category.
     """
+    tenant.require_permission("analyses", "read")
     # Verify session access
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -403,19 +408,20 @@ async def get_category_document_insights(
 @router.delete("/{document_id}")
 async def delete_document(
     document_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Delete a document and its analysis.
     """
+    tenant.require_permission("analyses", "delete")
     # Get document with session verification
     result = await db.execute(
         select(Document)
         .join(AnalysisSession)
         .where(
             Document.id == document_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     document = result.scalar_one_or_none()

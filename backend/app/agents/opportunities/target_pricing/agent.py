@@ -23,6 +23,7 @@ from app.agents.proof_points import (
     OpportunityType,
     ImpactFlag,
 )
+from app.services.market_price_service import get_market_price_service, PricePosition
 
 
 class TargetPricingAgent(BaseMicroAgent):
@@ -195,19 +196,103 @@ class TargetPricingAgent(BaseMicroAgent):
         context_data: Optional[Dict[str, Any]] = None
     ) -> ProofPointResult:
         """
-        Evaluate Price Variance for Identical Items/SKUs.
-        Target Pricing Context: High variance = use best price as negotiation target.
+        Evaluate Price Variance comparing Supplier Price vs Market Price.
 
-        NOTE: Same data as Volume Bundling but DIFFERENT interpretation!
-        - Volume Bundling: "Variance = consolidate and standardize"
-        - Target Pricing: "Variance = use lowest price as target for all"
+        Target Pricing Context: Use market price as negotiation target.
+
+        NEW FORMULA (Market-Based):
+        1. For each month: deviation = (supplier_price - market_price) / market_price × 100
+        2. Classification:
+           - Below Market: supplier paying less than market (already competitive)
+           - At Market: supplier at market rate (some room for negotiation)
+           - Above Market: supplier paying more than market (HIGH negotiation opportunity)
+        3. Target Pricing Impact:
+           - HIGH: Above Market - clear target to negotiate down to market
+           - MEDIUM: At Market - can aim for below-market through volume
+           - LOW: Below Market - already have competitive pricing
+
+        FALLBACK: If no market data, uses best-in-class price comparison
         """
         price_col = self._get_column(spend_data, "price")
-        supplier_col = self._get_column(spend_data, "supplier")
 
         if not price_col:
             return self._not_tested_result(proof_point, "Missing price column")
 
+        # Get category from context
+        category = context_data.get("category_name", "") if context_data else ""
+
+        # Get market data from context (if uploaded separately)
+        market_data = context_data.get("market_data") if context_data else None
+
+        # Try new market-based price variance
+        try:
+            market_service = get_market_price_service()
+            result = market_service.analyze_price_variance(
+                spend_data=spend_data,
+                category=category,
+                market_data=market_data,
+                context_data=context_data
+            )
+
+            # If we got valid market-based analysis
+            if result.overall_position != PricePosition.UNKNOWN and result.months_analyzed > 0:
+                # For Target Pricing: Above Market = HIGH opportunity
+                # Market price IS the target - if we're above it, negotiate down to it
+                if result.overall_position == PricePosition.ABOVE_MARKET:
+                    impact = ImpactFlag.HIGH
+                    score = 0.90
+                    target_text = f"Target: market price of ${result.avg_market_price:,.2f}"
+                    action_text = "strong negotiation opportunity - use market price as target"
+                elif result.overall_position == PricePosition.AT_MARKET:
+                    impact = ImpactFlag.MEDIUM
+                    score = 0.55
+                    target_text = f"Current pricing is at market (${result.avg_market_price:,.2f})"
+                    action_text = "aim for below-market pricing through volume commitment"
+                else:  # BELOW_MARKET
+                    impact = ImpactFlag.LOW
+                    score = 0.25
+                    target_text = f"Already below market (${result.avg_market_price:,.2f})"
+                    action_text = "maintain relationships - pricing is competitive"
+
+                potential_savings_pct = max(0, result.overall_deviation_pct)
+
+                insight = (
+                    f"Supplier prices are {result.overall_deviation_pct:+.1f}% vs market "
+                    f"({result.months_analyzed} months, {result.confidence} confidence). "
+                    f"{target_text}. {action_text.capitalize()}"
+                )
+
+                return ProofPointResult(
+                    proof_point_code=proof_point.code,
+                    proof_point_name=proof_point.name,
+                    opportunity=self.opportunity_type,
+                    impact_flag=impact,
+                    test_score=score,
+                    insight=insight,
+                    raw_data={
+                        "analysis_type": "market_comparison",
+                        "overall_position": result.overall_position.value,
+                        "overall_deviation_pct": result.overall_deviation_pct,
+                        "potential_savings_pct": potential_savings_pct,
+                        "months_analyzed": result.months_analyzed,
+                        "below_market_months": result.below_market_months,
+                        "at_market_months": result.at_market_months,
+                        "above_market_months": result.above_market_months,
+                        "avg_supplier_price": result.avg_supplier_price,
+                        "avg_market_price": result.avg_market_price,
+                        "target_price": result.avg_market_price,
+                        "market_data_source": result.market_data_source,
+                        "confidence": result.confidence
+                    }
+                )
+
+        except Exception as e:
+            # Log but continue to fallback
+            import structlog
+            logger = structlog.get_logger()
+            logger.warning(f"[PP4-TargetPricing] Market-based analysis failed: {e}")
+
+        # FALLBACK: Best-in-class price comparison
         prices = spend_data[price_col].dropna()
         if len(prices) < 2:
             return self._not_tested_result(proof_point, "Insufficient price data")
@@ -234,7 +319,10 @@ class TargetPricingAgent(BaseMicroAgent):
             impact = ImpactFlag.LOW
             score = 0.3
 
-        insight = f"Best-in-class price is {best_price_savings_pct:.1f}% below average - use ${min_price:,.2f} as target for negotiations"
+        insight = (
+            f"Best-in-class price is {best_price_savings_pct:.1f}% below average. "
+            f"Target: ${min_price:,.2f} (vs avg ${mean_price:,.2f})"
+        )
 
         return ProofPointResult(
             proof_point_code=proof_point.code,
@@ -244,12 +332,15 @@ class TargetPricingAgent(BaseMicroAgent):
             test_score=score,
             insight=insight,
             raw_data={
+                "analysis_type": "best_in_class",
                 "best_price_savings_pct": best_price_savings_pct,
                 "variance_pct": variance_pct,
                 "mean_price": mean_price,
                 "min_price": min_price,
                 "max_price": max_price,
-                "potential_savings": mean_price - min_price
+                "target_price": min_price,
+                "potential_savings": mean_price - min_price,
+                "market_data_available": False
             }
         )
 

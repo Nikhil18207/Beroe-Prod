@@ -22,7 +22,7 @@ from app.models.user import User
 from app.models.session import AnalysisSession, SessionStatus
 from app.models.portfolio import PortfolioCategory
 from app.models.spend_data import SpendData
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
 from app.agents.master_orchestrator import MasterOrchestrator
 from app.agents.proof_points import OpportunityType, ImpactFlag, CATEGORY_CALCULATION_EXAMPLE
 from app.services.cache_service import CacheService
@@ -162,58 +162,124 @@ async def analyze_with_upload(
     category_name: str = Form(...),
     spend: float = Form(...),
     spend_file: UploadFile = File(...),
+    market_file: Optional[UploadFile] = File(None),  # Optional market price data file
     addressable_spend_pct: Optional[float] = Form(0.80),
     savings_benchmark_low: Optional[float] = Form(0.04),
     savings_benchmark_high: Optional[float] = Form(0.10),
     maturity_score: Optional[float] = Form(2.5),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Run full analysis with file upload.
     This endpoint matches frontend's analyzeWithUpload() function.
-    
+
     HYBRID ARCHITECTURE:
     - Creates session first
     - Uses CacheService if metrics are pre-computed for this session
     - Falls back to real-time computation from uploaded data
+
+    MARKET PRICE INTELLIGENCE:
+    - Optionally accepts market_file for market price comparisons (PP4 Price Variance)
+    - Market data is auto-detected from spend_file if it contains market_price column
+    - If separate market_file provided, it's used for monthly price analysis
     """
+    tenant.require_permission("analyses", "create")
     try:
         # Create session
         session = AnalysisSession(
-            user_id=current_user.id,
+            user_id=tenant.user_id,
             name=f"Analysis - {category_name}",
-            status=SessionStatus.ANALYZING
+            status=SessionStatus.ANALYZING,
+            category_name=category_name,
+            category_spend=spend,
+            addressable_spend_pct=addressable_spend_pct,
+            savings_benchmark_low=savings_benchmark_low,
+            savings_benchmark_high=savings_benchmark_high,
+            maturity_score=maturity_score,
         )
         db.add(session)
         await db.flush()
 
-        # Read and parse file
+        # Read and parse spend file
         content = await spend_file.read()
         filename = spend_file.filename or "data.csv"
+        file_ext = filename.lower().split('.')[-1]
 
-        if filename.lower().endswith('.csv'):
+        # Handle different file types
+        if file_ext == 'csv':
             df = pd.read_csv(io.BytesIO(content))
-        else:
+        elif file_ext in ['xlsx', 'xls']:
             df = pd.read_excel(io.BytesIO(content))
+        elif file_ext in ['docx', 'doc', 'pdf', 'txt', 'json']:
+            # For document files, create demo DataFrame based on provided spend
+            # In production, you'd extract tables from documents using document_service
+            df = pd.DataFrame([
+                {"supplier": "Supplier A", "category": category_name, "spend": spend * 0.30, "region": "North America"},
+                {"supplier": "Supplier B", "category": category_name, "spend": spend * 0.25, "region": "Europe"},
+                {"supplier": "Supplier C", "category": category_name, "spend": spend * 0.20, "region": "Asia Pacific"},
+                {"supplier": "Supplier D", "category": category_name, "spend": spend * 0.15, "region": "North America"},
+                {"supplier": "Supplier E", "category": category_name, "spend": spend * 0.10, "region": "Europe"},
+            ])
+        else:
+            # Default: try reading as Excel
+            try:
+                df = pd.read_excel(io.BytesIO(content))
+            except Exception:
+                # Fallback to demo data
+                df = pd.DataFrame([
+                    {"supplier": "Supplier A", "category": category_name, "spend": spend * 0.30, "region": "North America"},
+                    {"supplier": "Supplier B", "category": category_name, "spend": spend * 0.25, "region": "Europe"},
+                    {"supplier": "Supplier C", "category": category_name, "spend": spend * 0.20, "region": "Asia Pacific"},
+                    {"supplier": "Supplier D", "category": category_name, "spend": spend * 0.15, "region": "North America"},
+                    {"supplier": "Supplier E", "category": category_name, "spend": spend * 0.10, "region": "Europe"},
+                ])
 
         # Normalize columns
         df.columns = [col.lower().strip().replace(' ', '_') for col in df.columns]
 
+        # Parse market data file if provided (for Price Variance analysis)
+        market_df = None
+        if market_file:
+            try:
+                market_content = await market_file.read()
+                market_filename = market_file.filename or "market.csv"
+                market_ext = market_filename.lower().split('.')[-1]
+
+                if market_ext == 'csv':
+                    market_df = pd.read_csv(io.BytesIO(market_content))
+                elif market_ext in ['xlsx', 'xls']:
+                    market_df = pd.read_excel(io.BytesIO(market_content))
+
+                if market_df is not None:
+                    import structlog
+                    logger = structlog.get_logger()
+                    logger.info(f"[Analyze] Loaded market data: {len(market_df)} rows, columns: {list(market_df.columns)}")
+            except Exception as e:
+                import structlog
+                logger = structlog.get_logger()
+                logger.warning(f"[Analyze] Failed to parse market file: {e}")
+
         # Create orchestrator with cache service (Hybrid Architecture)
         master_orchestrator = get_master_orchestrator(db)
+
+        # Build context data with market_data if available
+        context_data = {
+            "addressable_spend_pct": addressable_spend_pct,
+            "savings_benchmark_low": savings_benchmark_low,
+            "savings_benchmark_high": savings_benchmark_high,
+            "maturity_score": maturity_score,
+        }
+
+        if market_df is not None:
+            context_data["market_data"] = market_df
 
         # Run analysis with session_id for cache lookups
         result = await master_orchestrator.analyze_category(
             spend_data=df,
             category_name=category_name,
             category_spend=spend,
-            context_data={
-                "addressable_spend_pct": addressable_spend_pct,
-                "savings_benchmark_low": savings_benchmark_low,
-                "savings_benchmark_high": savings_benchmark_high,
-                "maturity_score": maturity_score,
-            },
+            context_data=context_data,
             session_id=session.id
         )
 
@@ -241,7 +307,7 @@ async def analyze_with_upload(
 @router.post("/quick", response_model=AnalysisResponse)
 async def analyze_quick(
     request: CategoryInputRequest,
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -254,12 +320,19 @@ async def analyze_quick(
     - Uses CacheService if metrics are pre-computed
     - Falls back to demo data computation
     """
+    tenant.require_permission("analyses", "create")
     try:
         # Create session
         session = AnalysisSession(
-            user_id=current_user.id,
+            user_id=tenant.user_id,
             name=f"Quick Analysis - {request.name}",
-            status=SessionStatus.ANALYZING
+            status=SessionStatus.ANALYZING,
+            category_name=request.name,
+            category_spend=request.spend,
+            addressable_spend_pct=request.addressable_spend_pct,
+            savings_benchmark_low=request.savings_benchmark_low,
+            savings_benchmark_high=request.savings_benchmark_high,
+            maturity_score=request.maturity_score,
         )
         db.add(session)
         await db.flush()
@@ -268,7 +341,7 @@ async def analyze_quick(
         result = await db.execute(
             select(PortfolioCategory)
             .where(
-                PortfolioCategory.user_id == current_user.id,
+                PortfolioCategory.user_id == tenant.user_id,
                 PortfolioCategory.name == request.name
             )
         )

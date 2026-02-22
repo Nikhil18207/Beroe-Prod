@@ -5,6 +5,7 @@ Evaluates 8 proof points for volume bundling opportunities.
 HYBRID ARCHITECTURE:
 - Uses CacheService for pre-computed metrics when available (fast path)
 - Falls back to real-time computation from spend_data (slow path)
+- PP8 (Supplier Risk Rating) uses REAL-TIME OpenAI intelligence
 
 Proof Points:
 1. Regional Spend Addressability
@@ -14,12 +15,13 @@ Proof Points:
 5. Average Spend per Supplier vs. Industry Benchmarks
 6. Market Consolidation
 7. Supplier Location
-8. Supplier Risk Rating (SHARED with Risk Management)
+8. Supplier Risk Rating (SHARED with Risk Management) - OPENAI POWERED
 """
 
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 import pandas as pd
 import numpy as np
+import asyncio
 
 from app.agents.base_agent import BaseMicroAgent, ProofPointResult, PROOF_POINT_METRIC_MAP
 from app.agents.proof_points import (
@@ -27,6 +29,8 @@ from app.agents.proof_points import (
     OpportunityType,
     ImpactFlag,
 )
+from app.services.supplier_intelligence import get_supplier_intelligence_service
+from app.services.market_price_service import get_market_price_service, PricePosition
 
 
 class VolumeBundlingAgent(BaseMicroAgent):
@@ -347,7 +351,23 @@ class VolumeBundlingAgent(BaseMicroAgent):
     ) -> ProofPointResult:
         """
         Evaluate Volume Leverage from Fragmented Category Spend.
-        Context: Fragmented = HIGH impact (opportunity to leverage).
+
+        NEW LOGIC (Top 3 Based):
+        Uses combined spend % of Top 3 suppliers instead of Top 1 alone.
+        This captures concentration clustering, structural dependency, and real bundling headroom.
+
+        Thresholds (evaluated in this order):
+        1. LOW:    Top 3 > 65% OR supplier count < 5 (already consolidated - checked FIRST)
+        2. HIGH:   Top 3 < 45% AND supplier count > 10 (fragmented, bundling headroom exists)
+        3. MEDIUM: Top 3 between 45-65% (moderate concentration, bundling possible)
+
+        Why LOW is checked first:
+        - The OR condition (supplier_count < 5) must override other classifications
+        - Example: Top 3 = 50%, suppliers = 3 → LOW (not MEDIUM) because <5 suppliers
+
+        Why Top 3 is better than Top 1:
+        - Top 1 alone misses cluster dominance
+        - Example: Top 1 = 15%, Top 3 = 62% → Old logic says HIGH, new logic correctly says MEDIUM
         """
         supplier_col = self._get_column(spend_data, "supplier")
         spend_col = self._get_column(spend_data, "spend")
@@ -362,20 +382,43 @@ class VolumeBundlingAgent(BaseMicroAgent):
         if total_spend == 0:
             return self._not_tested_result(proof_point, "No spend data")
 
-        top_supplier_pct = (supplier_spend.iloc[0] / total_spend) * 100 if len(supplier_spend) > 0 else 0
+        # Calculate Top 3 combined spend percentage
+        top_3_spend = supplier_spend.head(3).sum()
+        top_3_pct = (top_3_spend / total_spend) * 100
 
-        # Determine impact (MORE fragmented = HIGHER opportunity)
-        if supplier_count > 10 and top_supplier_pct < 20:
-            impact = ImpactFlag.HIGH
-            score = 0.9
-        elif supplier_count > 5 and top_supplier_pct < 40:
-            impact = ImpactFlag.MEDIUM
-            score = 0.6
-        else:
+        # Also track individual top suppliers for insight
+        top_1_pct = (supplier_spend.iloc[0] / total_spend) * 100 if len(supplier_spend) > 0 else 0
+        top_3_names = list(supplier_spend.head(3).index) if len(supplier_spend) >= 3 else list(supplier_spend.index)
+
+        # NEW LOGIC: Top 3 based thresholds
+        # Check LOW first (has OR conditions that override others)
+        # Low: Already consolidated (Top 3 > 65%) OR too few suppliers (<5)
+        # High: Fragmented (Top 3 < 45%) AND many suppliers (>10)
+        # Medium: Moderate concentration (Top 3 = 45-65%) - catches the rest
+
+        if top_3_pct > 65 or supplier_count < 5:
+            # LOW: Already consolidated OR too few suppliers
             impact = ImpactFlag.LOW
-            score = 0.3
+            score = 0.25
+            leverage_status = "already consolidated"
+            recommendation = "further bundling may reduce competition and increase risk"
+        elif top_3_pct < 45 and supplier_count > 10:
+            # HIGH: Fragmented AND many suppliers
+            impact = ImpactFlag.HIGH
+            score = 0.90
+            leverage_status = "highly fragmented"
+            recommendation = "significant bundling headroom exists"
+        else:
+            # MEDIUM: 45-65% (implicitly supplier_count >= 5)
+            impact = ImpactFlag.MEDIUM
+            score = 0.55
+            leverage_status = "moderately concentrated"
+            recommendation = "bundling possible but watch consolidation risk"
 
-        insight = f"Spend fragmented across {supplier_count} suppliers - top supplier has only {top_supplier_pct:.1f}%, indicating volume leverage opportunity"
+        insight = (
+            f"Top 3 suppliers control {top_3_pct:.1f}% of spend across {supplier_count} suppliers. "
+            f"Category is {leverage_status} - {recommendation}"
+        )
 
         return ProofPointResult(
             proof_point_code=proof_point.code,
@@ -386,7 +429,11 @@ class VolumeBundlingAgent(BaseMicroAgent):
             insight=insight,
             raw_data={
                 "supplier_count": supplier_count,
-                "top_supplier_pct": top_supplier_pct
+                "top_1_pct": top_1_pct,
+                "top_3_pct": top_3_pct,
+                "top_3_suppliers": top_3_names,
+                "total_spend": total_spend,
+                "leverage_status": leverage_status
             }
         )
 
@@ -398,16 +445,151 @@ class VolumeBundlingAgent(BaseMicroAgent):
         context_data: Optional[Dict[str, Any]] = None
     ) -> ProofPointResult:
         """
-        Evaluate Price Variance for Identical Items/SKUs.
-        Volume Bundling Context: High variance = opportunity to negotiate standardized volume pricing.
+        Evaluate Price Variance comparing Supplier Price vs Market Price.
+
+        FORMULA (Market-Based):
+        Step 1: For each month: deviation = (supplier_price - market_price) / market_price × 100
+                - Negative = Good (below market)
+                - Positive = Risk (above market)
+
+        Step 2: Count months by deviation thresholds:
+                - months_above_5pct: deviation > +5%
+                - months_above_10pct: deviation > +10%
+                - months_above_20pct: deviation > +20%
+                - months_at_or_below_market: deviation <= 0%
+
+        Step 3: Classification (Buyer Lens):
+
+        🔴 HIGH Impact (Sustained Overpricing):
+            - ≥3 months > +10% above market
+            - OR ≥5 months > +5% above market
+            - OR Any single month > +20% above market
+            → Bundling increases cost risk
+
+        🟠 MEDIUM Impact (Pricing Gaps):
+            - 1-2 months > +10% above market
+            - OR 3-4 months between +5% to +10%
+            - OR inconsistent pattern
+            → Bundle with monitoring
+
+        🟢 LOW Impact (Bundling Friendly):
+            - At or below market (≤ 0%) for majority of months
+            - No more than 1 month > +5% above market
+            - No month > +10%
+            → Safe for volume consolidation
+
+        FALLBACK: If no market data, uses coefficient of variation (CoV ≥25% = HIGH)
         """
         price_col = self._get_column(spend_data, "price")
-        supplier_col = self._get_column(spend_data, "supplier")
 
         if not price_col:
             return self._not_tested_result(proof_point, "Missing price column")
 
-        # Calculate price statistics
+        # Get category from context
+        category = context_data.get("category_name", "") if context_data else ""
+
+        # Get market data from context (if uploaded separately)
+        market_data = context_data.get("market_data") if context_data else None
+
+        # Try new market-based price variance
+        try:
+            market_service = get_market_price_service()
+            result = market_service.analyze_price_variance(
+                spend_data=spend_data,
+                category=category,
+                market_data=market_data,
+                context_data=context_data
+            )
+
+            # If we got valid market-based analysis
+            if result.overall_position != PricePosition.UNKNOWN and result.months_analyzed > 0:
+                # Calculate threshold counts for insight and raw_data
+                months_above_5pct = sum(1 for m in result.monthly_breakdown if m.deviation_pct > 5)
+                months_above_10pct = sum(1 for m in result.monthly_breakdown if m.deviation_pct > 10)
+                months_above_20pct = sum(1 for m in result.monthly_breakdown if m.deviation_pct > 20)
+                months_at_or_below = sum(1 for m in result.monthly_breakdown if m.deviation_pct <= 0)
+
+                # Determine impact based on price position
+                # Position already classified by MarketPriceService using count-based thresholds
+                if result.overall_position == PricePosition.ABOVE_MARKET:
+                    impact = ImpactFlag.HIGH
+                    score = 0.85
+                    position_text = "sustained overpricing"
+                    # Build specific reason
+                    reasons = []
+                    if months_above_20pct >= 1:
+                        reasons.append(f"{months_above_20pct} month(s) >20% above market")
+                    if months_above_10pct >= 3:
+                        reasons.append(f"{months_above_10pct} months >10% above market")
+                    if months_above_5pct >= 5:
+                        reasons.append(f"{months_above_5pct} months >5% above market")
+                    reason_text = " | ".join(reasons) if reasons else "sustained above-market pricing"
+                    action_text = f"bundling increases cost risk - {reason_text}"
+
+                elif result.overall_position == PricePosition.AT_MARKET:
+                    impact = ImpactFlag.MEDIUM
+                    score = 0.55
+                    position_text = "some pricing gaps"
+                    action_text = f"{months_above_10pct} month(s) >10%, {months_above_5pct} month(s) >5% - bundle with monitoring"
+
+                else:  # BELOW_MARKET = LOW Impact = Bundling Friendly
+                    impact = ImpactFlag.LOW
+                    score = 0.30
+                    position_text = "competitive pricing"
+                    action_text = f"{months_at_or_below}/{result.months_analyzed} months at/below market - safe for consolidation"
+
+                insight = (
+                    f"Supplier prices avg {result.overall_deviation_pct:+.1f}% vs market "
+                    f"({result.months_analyzed} months, {result.confidence} confidence). "
+                    f"{position_text.capitalize()}: {action_text}"
+                )
+
+                return ProofPointResult(
+                    proof_point_code=proof_point.code,
+                    proof_point_name=proof_point.name,
+                    opportunity=self.opportunity_type,
+                    impact_flag=impact,
+                    test_score=score,
+                    insight=insight,
+                    raw_data={
+                        "analysis_type": "market_comparison",
+                        "overall_position": result.overall_position.value,
+                        "overall_deviation_pct": result.overall_deviation_pct,
+                        "months_analyzed": result.months_analyzed,
+                        # New threshold counts
+                        "months_at_or_below_market": months_at_or_below,
+                        "months_above_5pct": months_above_5pct,
+                        "months_above_10pct": months_above_10pct,
+                        "months_above_20pct": months_above_20pct,
+                        # Legacy counts (backward compatibility)
+                        "below_market_months": result.below_market_months,
+                        "at_market_months": result.at_market_months,
+                        "above_market_months": result.above_market_months,
+                        "avg_supplier_price": result.avg_supplier_price,
+                        "avg_market_price": result.avg_market_price,
+                        "market_data_source": result.market_data_source,
+                        "confidence": result.confidence,
+                        "monthly_breakdown": [
+                            {
+                                "month": m.month,
+                                "supplier_price": m.supplier_price,
+                                "market_price": m.market_price,
+                                "deviation_pct": m.deviation_pct,
+                                "position": m.position.value
+                            }
+                            for m in result.monthly_breakdown
+                        ]
+                    }
+                )
+
+        except Exception as e:
+            # Log but continue to fallback
+            import structlog
+            logger = structlog.get_logger()
+            logger.warning(f"[PP4] Market-based analysis failed, using fallback: {e}")
+
+        # FALLBACK: Original coefficient of variation formula
+        # Used when no market price data available
         prices = spend_data[price_col].dropna()
         if len(prices) < 2:
             return self._not_tested_result(proof_point, "Insufficient price data")
@@ -435,7 +617,11 @@ class VolumeBundlingAgent(BaseMicroAgent):
             impact = ImpactFlag.LOW
             score = 0.25
 
-        insight = f"Price variance of {variance_pct:.1f}% across suppliers enables volume-based price harmonization through bundling"
+        insight = (
+            f"Price variance of {variance_pct:.1f}% across suppliers "
+            f"(range: ${min_price:.2f} - ${max_price:.2f}). "
+            f"Volume bundling can standardize pricing through consolidation"
+        )
 
         return ProofPointResult(
             proof_point_code=proof_point.code,
@@ -445,11 +631,13 @@ class VolumeBundlingAgent(BaseMicroAgent):
             test_score=score,
             insight=insight,
             raw_data={
+                "analysis_type": "coefficient_of_variation",
                 "variance_pct": variance_pct,
                 "price_range_pct": price_range_pct,
                 "mean_price": mean_price,
                 "min_price": min_price,
-                "max_price": max_price
+                "max_price": max_price,
+                "market_data_available": False
             }
         )
 
@@ -461,8 +649,34 @@ class VolumeBundlingAgent(BaseMicroAgent):
         context_data: Optional[Dict[str, Any]] = None
     ) -> ProofPointResult:
         """
-        Evaluate Average Spend per Supplier vs. Industry Benchmarks.
-        Context: Low average = too many suppliers = consolidation opportunity.
+        Evaluate Average Spend per Supplier using Share-Based Logic.
+
+        SCALABLE FORMULA (percentage-based, not absolute dollars):
+
+        Step 1: Calculate Average Share per Supplier
+                avg_share_pct = (1 / number_of_suppliers) × 100 = 100% / N
+
+        Step 2: Classification based on average share:
+
+        🔴 HIGH Impact (High Fragmentation):
+            - Average share < 5% (i.e., > 20 suppliers)
+            - Too many suppliers, none has meaningful share
+            - High consolidation opportunity
+
+        🟠 MEDIUM Impact (Moderate Fragmentation):
+            - Average share 5% - 15% (i.e., 7-20 suppliers)
+            - Moderate supplier base
+            - Some consolidation possible
+
+        🟢 LOW Impact (Low Fragmentation):
+            - Average share > 15% (i.e., < 7 suppliers)
+            - Already consolidated
+            - Limited consolidation opportunity
+
+        Example:
+        - 15 suppliers → avg share = 6.67% → MEDIUM
+        - 25 suppliers → avg share = 4% → HIGH
+        - 5 suppliers → avg share = 20% → LOW
         """
         supplier_col = self._get_column(spend_data, "supplier")
         spend_col = self._get_column(spend_data, "spend")
@@ -471,21 +685,37 @@ class VolumeBundlingAgent(BaseMicroAgent):
             return self._not_tested_result(proof_point, "Missing required columns")
 
         supplier_spend = spend_data.groupby(supplier_col)[spend_col].sum()
+        supplier_count = len(supplier_spend)
+        total_spend = supplier_spend.sum()
         avg_spend = supplier_spend.mean()
 
-        # Benchmarks (industry average is around $500K per supplier)
-        if avg_spend < 100000:
+        if supplier_count == 0:
+            return self._not_tested_result(proof_point, "No suppliers found")
+
+        # Calculate average share per supplier (percentage-based formula)
+        avg_share_pct = (1 / supplier_count) * 100  # = 100% / N
+
+        # Classification based on average share thresholds
+        if avg_share_pct < 5:  # > 20 suppliers
             impact = ImpactFlag.HIGH
-            score = 0.9
-            insight = f"Average spend of ${avg_spend:,.0f} per supplier is significantly below benchmark - high consolidation potential"
-        elif avg_spend < 500000:
+            score = 0.90
+            fragmentation_level = "highly fragmented"
+            action = "significant consolidation opportunity - reduce supplier count by 40-60%"
+        elif avg_share_pct <= 15:  # 7-20 suppliers
             impact = ImpactFlag.MEDIUM
-            score = 0.6
-            insight = f"Average spend of ${avg_spend:,.0f} per supplier indicates moderate consolidation opportunity"
-        else:
+            score = 0.55
+            fragmentation_level = "moderately fragmented"
+            action = "selective consolidation possible - target 5-8 strategic suppliers"
+        else:  # < 7 suppliers
             impact = ImpactFlag.LOW
-            score = 0.3
-            insight = f"Average spend of ${avg_spend:,.0f} per supplier is at or above benchmark - already consolidated"
+            score = 0.25
+            fragmentation_level = "already consolidated"
+            action = "limited consolidation opportunity - focus on relationship optimization"
+
+        insight = (
+            f"Average share of {avg_share_pct:.1f}% per supplier across {supplier_count} suppliers "
+            f"(avg ${avg_spend:,.0f} each). Category is {fragmentation_level} - {action}"
+        )
 
         return ProofPointResult(
             proof_point_code=proof_point.code,
@@ -494,7 +724,13 @@ class VolumeBundlingAgent(BaseMicroAgent):
             impact_flag=impact,
             test_score=score,
             insight=insight,
-            raw_data={"avg_spend": avg_spend, "supplier_count": len(supplier_spend)}
+            raw_data={
+                "avg_share_pct": avg_share_pct,
+                "supplier_count": supplier_count,
+                "avg_spend": avg_spend,
+                "total_spend": total_spend,
+                "fragmentation_level": fragmentation_level
+            }
         )
 
     def _evaluate_market_consolidation(
@@ -616,8 +852,11 @@ class VolumeBundlingAgent(BaseMicroAgent):
         context_data: Optional[Dict[str, Any]] = None
     ) -> ProofPointResult:
         """
-        Evaluate Supplier Risk Rating.
-        Volume Bundling Context: Low risk suppliers = safe to consolidate with.
+        Evaluate Supplier Risk Rating - SYNCHRONOUS FALLBACK VERSION.
+        This is called when async evaluation is not available.
+        Uses basic formula-based assessment.
+
+        For REAL-TIME OpenAI intelligence, use evaluate_pp8_async() instead.
         """
         supplier_col = self._get_column(spend_data, "supplier")
         spend_col = self._get_column(spend_data, "spend")
@@ -625,15 +864,12 @@ class VolumeBundlingAgent(BaseMicroAgent):
         if not supplier_col or not spend_col:
             return self._not_tested_result(proof_point, "Missing required columns")
 
-        # In real implementation, this would cross-reference with supplier risk database
-        # For now, we simulate based on spend concentration
+        # Basic formula-based fallback (real intelligence comes from async version)
         supplier_spend = spend_data.groupby(supplier_col)[spend_col].sum().sort_values(ascending=False)
         total_spend = supplier_spend.sum()
         top_5_suppliers = supplier_spend.head(5)
         top_5_pct = (top_5_suppliers.sum() / total_spend) * 100 if total_spend > 0 else 0
 
-        # Simulate risk assessment (in reality, would use external risk data)
-        # Assume diversified supplier base indicates lower risk
         if len(supplier_spend) > 10 and top_5_pct < 70:
             impact = ImpactFlag.HIGH
             score = 0.8
@@ -656,13 +892,189 @@ class VolumeBundlingAgent(BaseMicroAgent):
             opportunity=self.opportunity_type,
             impact_flag=impact,
             test_score=score,
-            insight=insight,
+            insight=insight + " [Basic Assessment - OpenAI not invoked]",
             raw_data={
                 "risk_profile": risk_profile,
                 "top_5_pct": top_5_pct,
-                "supplier_count": len(supplier_spend)
+                "supplier_count": len(supplier_spend),
+                "assessment_type": "formula_fallback"
             }
         )
+
+    async def evaluate_pp8_async(
+        self,
+        proof_point: ProofPointDefinition,
+        spend_data: pd.DataFrame,
+        category_spend: float,
+        context_data: Optional[Dict[str, Any]] = None
+    ) -> ProofPointResult:
+        """
+        Evaluate PP8 Supplier Risk Rating using REAL-TIME OpenAI Intelligence.
+
+        This async method calls the SupplierIntelligenceService to evaluate
+        each supplier using GPT-4o-mini with 6 weighted parameters:
+        - Financial Strength (25%)
+        - Supply Reliability (25%)
+        - Pricing Competitiveness (20%)
+        - Compliance/Governance (15%)
+        - Volume Scalability (10%)
+        - Geographic Diversification (5%)
+
+        Returns PP8 impact based on supplier risk distribution:
+        - HIGH: 50%+ suppliers rated GOOD, safe to consolidate
+        - MEDIUM: Mixed supplier base
+        - LOW: 40%+ suppliers rated HIGH_RISK, risky to consolidate
+        """
+        supplier_col = self._get_column(spend_data, "supplier")
+        spend_col = self._get_column(spend_data, "spend")
+        country_col = self._get_column(spend_data, "country")
+        category_col = self._get_column(spend_data, "category")
+
+        if not supplier_col or not spend_col:
+            return self._not_tested_result(proof_point, "Missing required columns")
+
+        # Get category from context
+        category = context_data.get("category_name", "") if context_data else ""
+
+        # Smart category matching function
+        def categories_match(user_cat: str, data_cat: str) -> bool:
+            """Smart matching: 'palm' matches 'Palm Oil', 'palm oils', etc."""
+            if not user_cat or not data_cat:
+                return False
+            user_norm = user_cat.lower().strip()
+            data_norm = data_cat.lower().strip()
+            # Remove trailing 's' from 'oils' -> 'oil'
+            if user_norm.endswith('oils'):
+                user_norm = user_norm[:-1]
+            if data_norm.endswith('oils'):
+                data_norm = data_norm[:-1]
+            # Exact match
+            if user_norm == data_norm:
+                return True
+            # Contains match (palm matches palm oil)
+            if user_norm in data_norm or data_norm in user_norm:
+                return True
+            # Word intersection (palm oil -> palm, oil)
+            import re
+            user_words = set(re.split(r'[\s\-_]+', user_norm))
+            data_words = set(re.split(r'[\s\-_]+', data_norm))
+            if user_words & data_words:
+                return True
+            return False
+
+        # Filter spend_data by selected category if category column exists
+        filtered_data = spend_data
+        if category_col and category:
+            # Use smart category matching
+            mask = spend_data[category_col].apply(
+                lambda x: categories_match(category, str(x) if pd.notna(x) else "")
+            )
+            filtered_data = spend_data[mask]
+
+            # If still empty, use all data (user uploaded single-category file)
+            if filtered_data.empty:
+                filtered_data = spend_data
+
+        # Build supplier list with spend from FILTERED data
+        supplier_spend = filtered_data.groupby(supplier_col)[spend_col].sum().sort_values(ascending=False)
+
+        # Get country for each supplier (most common) from FILTERED data
+        supplier_countries = {}
+        if country_col:
+            for supplier in supplier_spend.index:
+                supplier_data = filtered_data[filtered_data[supplier_col] == supplier]
+                if not supplier_data.empty and country_col in supplier_data.columns:
+                    countries = supplier_data[country_col].value_counts()
+                    if len(countries) > 0:
+                        supplier_countries[supplier] = countries.index[0]
+
+        # Build supplier list for evaluation
+        suppliers: List[Dict[str, Any]] = []
+        for supplier_name, spend in supplier_spend.items():
+            suppliers.append({
+                "name": str(supplier_name),
+                "spend": float(spend),
+                "country": supplier_countries.get(supplier_name, "Unknown")
+            })
+
+        if not suppliers:
+            return self._not_tested_result(proof_point, "No suppliers found in data")
+
+        # Get category spend from context (authoritative source)
+        # This ensures we use the user-selected category spend, not sum of all data
+        context_category_spend = context_data.get("category_spend", 0) if context_data else 0
+
+        try:
+            # Call OpenAI-powered supplier intelligence service
+            service = get_supplier_intelligence_service()
+            result = await service.evaluate_multiple_suppliers(
+                suppliers=suppliers,
+                category=category,
+                country=suppliers[0].get("country", ""),  # Default to first supplier's country
+                category_spend=context_category_spend  # Pass authoritative category spend
+            )
+
+            # Extract PP8 impact from result
+            impact_str = result.get("impact", "Medium")
+            if impact_str == "High":
+                impact = ImpactFlag.HIGH
+                score = 0.85
+            elif impact_str == "Low":
+                impact = ImpactFlag.LOW
+                score = 0.3
+            else:
+                impact = ImpactFlag.MEDIUM
+                score = 0.55
+
+            # Build detailed insight
+            summary = result.get("summary", {})
+            recs = result.get("recommendations", {})
+            anchor_candidates = recs.get("anchor_candidates", [])
+            strategy = recs.get("strategy", "")
+
+            insight = result.get("reasoning", "Supplier risk assessment complete")
+            if anchor_candidates:
+                insight += f". ANCHOR candidates: {', '.join(anchor_candidates[:3])}"
+
+            return ProofPointResult(
+                proof_point_code=proof_point.code,
+                proof_point_name=proof_point.name,
+                opportunity=self.opportunity_type,
+                impact_flag=impact,
+                test_score=score,
+                insight=insight,
+                raw_data={
+                    "assessment_type": "openai_realtime",
+                    "model_used": result.get("model_used", "gpt-4o-mini"),
+                    "category_filtered": category,
+                    "suppliers_in_category": len(suppliers),
+                    "total_evaluated": summary.get("total_evaluated", 0),
+                    "good_count": summary.get("good_count", 0),
+                    "medium_count": summary.get("medium_count", 0),
+                    "high_risk_count": summary.get("high_risk_count", 0),
+                    "anchor_candidates": anchor_candidates,
+                    "challenger_candidates": recs.get("challenger_candidates", []),
+                    "tail_only": recs.get("tail_only", []),
+                    "strategy": strategy,
+                    "supplier_evaluations": result.get("supplier_evaluations", [])
+                }
+            )
+
+        except Exception as e:
+            # Fall back to formula-based assessment on error
+            return ProofPointResult(
+                proof_point_code=proof_point.code,
+                proof_point_name=proof_point.name,
+                opportunity=self.opportunity_type,
+                impact_flag=ImpactFlag.MEDIUM,
+                test_score=0.5,
+                insight=f"Supplier intelligence service unavailable: {str(e)[:50]}. Using basic assessment.",
+                raw_data={
+                    "assessment_type": "fallback_error",
+                    "error": str(e)
+                },
+                is_tested=True
+            )
 
     def _not_tested_result(self, proof_point: ProofPointDefinition, reason: str) -> ProofPointResult:
         """Create a NOT_TESTED result."""

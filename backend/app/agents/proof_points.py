@@ -107,44 +107,44 @@ PROOF_POINTS: Dict[str, ProofPointDefinition] = {
         name="Volume Leverage from Fragmented Category Spend",
         code="PP_VOLUME_LEVERAGE",
         category=ProofPointCategory.CLIENT_DATA,
-        description="Identifies fragmented spend that can be leveraged through bundling",
+        description="Identifies fragmented spend that can be leveraged through bundling (Top 3 based)",
         required_data_fields=["supplier", "category", "spend"],
         contexts={
             OpportunityType.VOLUME_BUNDLING: ProofPointContext(
                 opportunity=OpportunityType.VOLUME_BUNDLING,
                 hypothesis="Fragmented spend across many suppliers indicates bundling opportunity",
-                high_threshold="Spend fragmented across >10 suppliers with no single supplier >20%",
-                medium_threshold="Spend across 5-10 suppliers with top supplier 20-40%",
-                low_threshold="Spend concentrated with <5 suppliers (already leveraged)",
-                insight_template="Spend fragmented across {supplier_count} suppliers - top supplier has only {top_supplier_pct}%"
+                high_threshold="Top 3 suppliers < 45% of spend AND supplier count > 10 (highly fragmented)",
+                medium_threshold="Top 3 suppliers 45-65% of spend (moderate concentration)",
+                low_threshold="Top 3 suppliers > 65% OR supplier count < 5 (already consolidated)",
+                insight_template="Top 3 suppliers control {top_3_pct}% of spend across {supplier_count} suppliers"
             )
         }
     ),
 
-    # SHARED: Volume Bundling + Target Pricing
+    # SHARED: Volume Bundling + Target Pricing + Re-spec Pack
     "PP_PRICE_VARIANCE": ProofPointDefinition(
         id="PP_PRICE_VARIANCE",
         name="Price Variance for Identical Items/SKUs",
         code="PP_PRICE_VARIANCE",
         category=ProofPointCategory.CLIENT_DATA,
-        description="Identifies price inconsistencies for same items across suppliers/regions",
+        description="Compares supplier prices to market prices using monthly deviation analysis",
         required_data_fields=["price", "category", "supplier"],
         contexts={
             OpportunityType.VOLUME_BUNDLING: ProofPointContext(
                 opportunity=OpportunityType.VOLUME_BUNDLING,
-                hypothesis="High price variance indicates opportunity to negotiate volume-based pricing standardization",
-                high_threshold="Price variance >25% for identical items",
-                medium_threshold="Price variance 10-25% for identical items",
-                low_threshold="Price variance <10% (prices already standardized)",
-                insight_template="Price variance of {variance_pct}% across suppliers enables volume-based price harmonization"
+                hypothesis="Sustained above-market pricing indicates bundling increases cost risk; competitive pricing is safe for consolidation",
+                high_threshold="≥3 months >+10% OR ≥5 months >+5% OR any month >+20% (sustained overpricing - bundling risky)",
+                medium_threshold="1-2 months >+10% OR 3-4 months +5% to +10% (some pricing gaps - bundle with monitoring)",
+                low_threshold="Majority at/below market AND ≤1 month >+5% AND 0 months >+10% (competitive - safe for bundling)",
+                insight_template="Supplier prices avg {deviation_pct}% vs market ({months} months). {classification}: {action}"
             ),
             OpportunityType.TARGET_PRICING: ProofPointContext(
                 opportunity=OpportunityType.TARGET_PRICING,
-                hypothesis="High price variance indicates opportunity to use best price as negotiation target",
-                high_threshold="Price variance >25% - best price can be target",
-                medium_threshold="Price variance 10-25% - moderate negotiation opportunity",
-                low_threshold="Price variance <10% - limited target pricing opportunity",
-                insight_template="Best-in-class price is {best_price_pct}% below average - use as target for negotiations"
+                hypothesis="Above-market pricing indicates negotiation leverage using market benchmarks",
+                high_threshold="≥3 months >+10% OR ≥5 months >+5% OR any month >+20% (strong negotiation opportunity)",
+                medium_threshold="1-2 months >+10% OR 3-4 months +5% to +10% (moderate opportunity)",
+                low_threshold="Majority at/below market (already competitive - limited target pricing opportunity)",
+                insight_template="Current price {deviation_pct}% vs market - use market rate as negotiation target"
             ),
             OpportunityType.RESPEC_PACK: ProofPointContext(
                 opportunity=OpportunityType.RESPEC_PACK,
@@ -159,19 +159,19 @@ PROOF_POINTS: Dict[str, ProofPointDefinition] = {
 
     "PP_AVG_SPEND_SUPPLIER": ProofPointDefinition(
         id="PP_AVG_SPEND_SUPPLIER",
-        name="Average Spend per Supplier vs. Industry Benchmarks",
+        name="Average Spend per Supplier (Share-Based)",
         code="PP_AVG_SPEND_SUPPLIER",
         category=ProofPointCategory.CLIENT_DATA,
-        description="Compares average supplier spend against industry benchmarks",
+        description="Evaluates supplier fragmentation using share-based formula (scalable, not absolute dollars)",
         required_data_fields=["supplier", "spend"],
         contexts={
             OpportunityType.VOLUME_BUNDLING: ProofPointContext(
                 opportunity=OpportunityType.VOLUME_BUNDLING,
-                hypothesis="Low average spend per supplier indicates too many suppliers - consolidation opportunity",
-                high_threshold="Average spend per supplier <$100K (too fragmented)",
-                medium_threshold="Average spend per supplier $100K-$500K",
-                low_threshold="Average spend per supplier >$500K (already consolidated)",
-                insight_template="Average spend of ${avg_spend} per supplier is below benchmark - consolidation recommended"
+                hypothesis="High fragmentation (many suppliers with low average share) indicates consolidation opportunity",
+                high_threshold="Average share < 5% per supplier (>20 suppliers) - highly fragmented",
+                medium_threshold="Average share 5-15% per supplier (7-20 suppliers) - moderately fragmented",
+                low_threshold="Average share > 15% per supplier (<7 suppliers) - already consolidated",
+                insight_template="Average share of {avg_share_pct}% per supplier ({supplier_count} suppliers) - {fragmentation_level}"
             )
         }
     ),

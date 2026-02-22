@@ -4,7 +4,7 @@ Version 1 of the API endpoints.
 """
 
 from fastapi import APIRouter
-from app.api.v1 import auth, health, portfolio, session, opportunities, upload, chat, analysis, documents, analyze, data
+from app.api.v1 import auth, health, portfolio, session, opportunities, upload, chat, analysis, documents, analyze, data, organization, admin, users
 
 # Create main v1 router
 api_router = APIRouter()
@@ -64,4 +64,22 @@ api_router.include_router(
 api_router.include_router(
     data.router,
     tags=["Data Pipeline"]
+)
+# Organization/Department/Role management (Multi-tenant)
+api_router.include_router(
+    organization.router,
+    prefix="/org",
+    tags=["Organization Management"]
+)
+# Super Admin dashboard and platform management
+api_router.include_router(
+    admin.router,
+    prefix="/admin",
+    tags=["Admin Dashboard"]
+)
+# User management (for Org Admins)
+api_router.include_router(
+    users.router,
+    prefix="/users",
+    tags=["User Management"]
 )

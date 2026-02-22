@@ -4,7 +4,7 @@ Handle file uploads for spend data and documents.
 """
 
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import uuid
@@ -20,7 +20,8 @@ from app.models.user import User
 from app.models.session import AnalysisSession, SessionStatus
 from app.models.spend_data import SpendData, SpendDataRow
 from app.models.document import Document
-from app.api.v1.auth import get_current_user
+from app.api.v1.dependencies import get_tenant_context, TenantContext
+from app.services.activity_service import log_file_upload, get_client_ip
 
 router = APIRouter()
 
@@ -66,20 +67,22 @@ async def save_upload_file(file: UploadFile, session_id: uuid.UUID) -> str:
 
 @router.post("/spend-data")
 async def upload_spend_data(
+    request: Request,
     session_id: uuid.UUID = Form(...),
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Upload spend data CSV/Excel file for analysis.
     """
+    tenant.require_permission("categories", "create")
     # Verify session belongs to user
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -228,6 +231,16 @@ async def upload_spend_data(
     session.status = SessionStatus.UPLOADING
     session.add_log("System", f"Spend data uploaded: {file.filename} ({len(df)} rows)")
 
+    # Log activity
+    await log_file_upload(
+        db=db,
+        user=tenant.user,
+        file_name=file.filename,
+        file_type="spend_data",
+        file_size=len(content),
+        ip_address=get_client_ip(request)
+    )
+
     await db.commit()
 
     return {
@@ -315,21 +328,23 @@ async def validate_file(
 
 @router.post("/document")
 async def upload_document(
+    request: Request,
     session_id: uuid.UUID = Form(...),
     document_type: str = Form("other"),
     file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user),
+    tenant: TenantContext = Depends(get_tenant_context),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Upload a document (PDF, DOCX) for analysis.
     """
+    tenant.require_permission("analyses", "create")
     # Verify session
     result = await db.execute(
         select(AnalysisSession)
         .where(
             AnalysisSession.id == session_id,
-            AnalysisSession.user_id == current_user.id
+            AnalysisSession.user_id == tenant.user_id
         )
     )
     session = result.scalar_one_or_none()
@@ -367,6 +382,17 @@ async def upload_document(
 
     db.add(document)
     session.add_log("System", f"Document uploaded: {file.filename}")
+
+    # Log activity
+    await log_file_upload(
+        db=db,
+        user=tenant.user,
+        file_name=file.filename,
+        file_type=document_type,
+        file_size=len(content),
+        ip_address=get_client_ip(request)
+    )
+
     await db.commit()
     await db.refresh(document)
 
