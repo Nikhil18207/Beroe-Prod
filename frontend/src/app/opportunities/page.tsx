@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation } from "framer-motion";
 import {
   Plus,
   ChevronDown,
@@ -15,7 +15,7 @@ import {
   Mic,
   ArrowLeft
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
@@ -70,12 +70,12 @@ function OpportunitiesContent() {
   const [activeTab, setActiveTab] = useState("All");
   const [chatInput, setChatInput] = useState("");
 
-  const handleChatSubmit = (e: React.FormEvent) => {
+  const handleChatSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (chatInput.trim()) {
       router.push(`/chat?q=${encodeURIComponent(chatInput)}`);
     }
-  };
+  }, [chatInput, router]);
 
   // Get data from context
   const savingsSummary = state.savingsSummary;
@@ -236,10 +236,10 @@ function OpportunitiesContent() {
     return opportunities;
   }, [setupOpportunities, categoryName, totalSpend, opportunityMetrics, goals, computedMetrics]);
 
-  // Calculate totals
-  const totalSavingsLow = savingsSummary?.total_savings_low ||
+  // Calculate totals - use nullish coalescing to handle 0 values correctly
+  const totalSavingsLow = savingsSummary?.total_savings_low ??
     generatedOpportunities.reduce((sum, o) => sum + (o.savings_low || 0), 0);
-  const totalSavingsHigh = savingsSummary?.total_savings_high ||
+  const totalSavingsHigh = savingsSummary?.total_savings_high ??
     generatedOpportunities.reduce((sum, o) => sum + (o.savings_high || 0), 0);
 
   const avgConfidence = generatedOpportunities.length > 0
@@ -517,7 +517,7 @@ export default function OpportunitiesPage() {
   );
 }
 
-function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; variant: "qualified" | "potential" }) {
+const OpportunityCard = memo(function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; variant: "qualified" | "potential" }) {
   const router = useRouter();
   const isPotential = variant === "potential";
   const isResilience = opp.type === "Resilience";
@@ -525,10 +525,10 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
   const validatedCount = proofPoints.filter((pp: any) => pp.isValidated).length;
   const totalPoints = proofPoints.length;
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     // Navigate to the opportunity details page with the opportunity ID
     router.push(`/opportunities/details?opp=${opp.id}`);
-  };
+  }, [router, opp.id]);
 
   // Format savings for display
   const formatSavings = (low: number, high: number) => {
@@ -668,4 +668,4 @@ function OpportunityCard({ opportunity: opp, variant }: { opportunity: any; vari
       </div>
     </motion.div>
   );
-}
+});

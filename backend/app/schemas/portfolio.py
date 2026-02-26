@@ -34,23 +34,23 @@ class PortfolioLocationResponse(BaseModel):
 class PortfolioCategoryCreate(BaseModel):
     """Create a new portfolio category."""
     name: str = Field(..., min_length=1, max_length=255)
-    spend: float = Field(..., gt=0, description="Annual spend in USD")
+    spend: float = Field(default=0, ge=0, description="Annual spend in USD (can be 0 if calculated from CSV)")
     currency: str = Field(default="USD", max_length=10)
     description: Optional[str] = Field(None, max_length=500)
     industry: Optional[str] = Field(None, max_length=100)
-    locations: Optional[List[str]] = Field(default=None, max_length=10)
-    # List of location names to add
+    locations: Optional[List[str]] = Field(default=None)
+    # List of location names to add (max 10 enforced in endpoint)
 
 
 class PortfolioCategoryUpdate(BaseModel):
     """Update a portfolio category."""
     name: Optional[str] = Field(None, min_length=1, max_length=255)
-    spend: Optional[float] = Field(None, gt=0)
+    spend: Optional[float] = Field(None, ge=0)
     currency: Optional[str] = Field(None, max_length=10)
     description: Optional[str] = Field(None, max_length=500)
     industry: Optional[str] = Field(None, max_length=100)
-    locations: Optional[List[str]] = Field(None, max_length=10)
-    # If provided, replaces all locations
+    locations: Optional[List[str]] = Field(default=None)
+    # If provided, replaces all locations (max 10 enforced in endpoint)
 
 
 class PortfolioCategoryResponse(BaseModel):

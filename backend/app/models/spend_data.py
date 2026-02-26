@@ -6,7 +6,7 @@ Stores uploaded spend data and parsed rows.
 import uuid
 from datetime import datetime
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, DateTime, Float, ForeignKey, Integer, Text, Boolean, JSON
+from sqlalchemy import String, DateTime, Float, ForeignKey, Integer, Text, Boolean, JSON, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -96,9 +96,29 @@ class SpendData(Base):
 
 
 class SpendDataRow(Base):
-    """Individual spend data row (stored for analysis)."""
+    """Individual spend data row (stored for analysis).
+
+    Optimized for large datasets (1M+ rows) with:
+    - Composite indices for common query patterns
+    - Efficient pagination via row_number
+    - Covering indices for filtering + sorting
+    """
 
     __tablename__ = "spend_data_rows"
+
+    # Composite indices for efficient large dataset queries
+    __table_args__ = (
+        # Composite index for pagination (most common query)
+        Index('idx_spend_rows_data_id_row_num', 'spend_data_id', 'row_number'),
+        # Composite index for supplier filtering + sorting
+        Index('idx_spend_rows_data_id_supplier', 'spend_data_id', 'supplier_name'),
+        # Composite index for country filtering + sorting
+        Index('idx_spend_rows_data_id_country', 'spend_data_id', 'country'),
+        # Composite index for category filtering + sorting
+        Index('idx_spend_rows_data_id_category', 'spend_data_id', 'category'),
+        # Composite index for spend amount sorting (for top spend queries)
+        Index('idx_spend_rows_data_id_spend', 'spend_data_id', 'spend_amount'),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -112,14 +132,14 @@ class SpendDataRow(Base):
         index=True
     )
 
-    # Core Fields (normalized)
-    supplier_name: Mapped[Optional[str]] = mapped_column(String(500), nullable=True, index=True)
-    category: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    # Core Fields (normalized) - individual indices removed, using composite indices above
+    supplier_name: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    category: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     spend_amount: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     currency: Mapped[str] = mapped_column(String(10), default="USD")
 
-    # Location Fields
-    country: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, index=True)
+    # Location Fields - individual indices removed, using composite indices
+    country: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     region: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     city: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 

@@ -323,6 +323,46 @@ const OPPORTUNITY_TESTS: Record<string, string[]> = {
   ]
 };
 
+// Proof Point configuration for page flip UI
+// Each opportunity has a list of proof points with their display info
+const PROOF_POINT_CONFIG: Record<string, Array<{
+  id: string;
+  name: string;
+  icon: string;
+  index: number;
+}>> = {
+  "volume-bundling": [
+    { id: "vb-pp-1", name: "Regional Spend", icon: "🌍", index: 0 },
+    { id: "vb-pp-2", name: "Tail Spend", icon: "📊", index: 1 },
+    { id: "vb-pp-3", name: "Volume Leverage", icon: "👥", index: 2 },
+    { id: "vb-pp-4", name: "Price Variance", icon: "💰", index: 3 },
+    { id: "vb-pp-5", name: "Avg Spend Per Supplier", icon: "📈", index: 4 },
+    { id: "vb-pp-6", name: "Market Consolidation (HHI)", icon: "🏢", index: 5 },
+    { id: "vb-pp-7", name: "Supplier Location", icon: "📍", index: 6 },
+    { id: "vb-pp-8", name: "Supplier Risk Rating", icon: "⚠️", index: 7 },
+  ],
+  "target-pricing": [
+    { id: "tp-pp-1", name: "Price Variance", icon: "💰", index: 0 },
+    { id: "tp-pp-2", name: "Tariff Rate", icon: "🏛️", index: 1 },
+    { id: "tp-pp-3", name: "Cost Structure", icon: "📊", index: 2 },
+    { id: "tp-pp-4", name: "Unit Price", icon: "💲", index: 3 },
+  ],
+  "risk-management": [
+    { id: "rm-pp-1", name: "Single Sourcing", icon: "🎯", index: 0 },
+    { id: "rm-pp-2", name: "Supplier Concentration", icon: "📊", index: 1 },
+    { id: "rm-pp-3", name: "Category Risk", icon: "⚠️", index: 2 },
+    { id: "rm-pp-4", name: "Inflation", icon: "📈", index: 3 },
+    { id: "rm-pp-5", name: "Exchange Rate", icon: "💱", index: 4 },
+    { id: "rm-pp-6", name: "Geo Political", icon: "🌍", index: 5 },
+    { id: "rm-pp-7", name: "Supplier Risk Rating", icon: "⚠️", index: 6 },
+  ],
+  "respec-pack": [
+    { id: "rp-pp-1", name: "Price Variance", icon: "💰", index: 0 },
+    { id: "rp-pp-2", name: "Export Data", icon: "📦", index: 1 },
+    { id: "rp-pp-3", name: "Cost Structure", icon: "📊", index: 2 },
+  ],
+};
+
 // Format currency helper
 const formatCurrency = (amount: number): string => {
   if (amount >= 1000000) {
@@ -1092,6 +1132,15 @@ export default function OpportunityDetailPage() {
   const [recommendationPage, setRecommendationPage] = useState(0);
   const RECS_PER_PAGE = 2; // Book-like: 2 cards per page
   const hasLoadedRecommendationsRef = React.useRef(false); // Prevent re-fetching once loaded
+
+  // Proof Point page flip state - 1 proof point per page
+  const [proofPointPage, setProofPointPage] = useState(0);
+  const PROOF_POINTS_PER_PAGE = 1; // One proof point per page for detailed view
+
+  // Reset proof point page when opportunity changes
+  React.useEffect(() => {
+    setProofPointPage(0);
+  }, [oppId]);
 
   // LLM Proof Point Evaluation state
   const [llmEvaluations, setLlmEvaluations] = useState<{
@@ -3947,13 +3996,27 @@ Only respond with the JSON array, no other text.`,
                                 </span>
                               )}
                             </h4>
+                            {/* Page indicator */}
+                            <div className="flex items-center gap-2 ml-auto">
+                              <span className="text-[11px] text-gray-500">
+                                {proofPointPage + 1} / {PROOF_POINT_CONFIG[oppId]?.length || 1}
+                              </span>
+                            </div>
                           </div>
-                          <div className="p-4 space-y-4">
+                          <div className="p-4">
+                            {/* Page Flip Container - 1 proof point per page */}
+                            <div className="min-h-[450px]">
                             {/* Proof Points for Volume Bundling */}
                             {oppId === 'volume-bundling' && (
                               <>
-                                {/* Regional Spend - vb-pp-1 */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Regional Spend - vb-pp-1 (Page 0) */}
+                                {proofPointPage === 0 && (
+                                <motion.div
+                                  key="vb-pp-1"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🌍</span>
@@ -4068,10 +4131,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Tail Spend - vb-pp-2 */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Tail Spend - vb-pp-2 (Page 1) */}
+                                {proofPointPage === 1 && (
+                                <motion.div
+                                  key="vb-pp-2"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">📊</span>
@@ -4203,10 +4273,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Volume Leverage (Supplier Count + Top 3 Concentration) */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Volume Leverage (Supplier Count + Top 3 Concentration) - Page 2 */}
+                                {proofPointPage === 2 && (
+                                <motion.div
+                                  key="vb-pp-3"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">👥</span>
@@ -4340,11 +4417,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Price Variance */}
-                                {/* Price Variance vs Market */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Price Variance vs Market - Page 3 */}
+                                {proofPointPage === 3 && (
+                                <motion.div
+                                  key="vb-pp-4"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">💰</span>
@@ -4491,10 +4574,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Average Spend per Supplier (Share-Based) */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Average Spend per Supplier (Share-Based) - Page 4 */}
+                                {proofPointPage === 4 && (
+                                <motion.div
+                                  key="vb-pp-5"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">📈</span>
@@ -4649,10 +4739,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Market Consolidation (HHI) */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Market Consolidation (HHI) - Page 5 */}
+                                {proofPointPage === 5 && (
+                                <motion.div
+                                  key="vb-pp-6"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🏢</span>
@@ -4835,10 +4932,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Supplier Location (vb-pp-7) */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Supplier Location (vb-pp-7) - Page 6 */}
+                                {proofPointPage === 6 && (
+                                <motion.div
+                                  key="vb-pp-7"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🌍</span>
@@ -5036,10 +5140,17 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Supplier Risk Rating (vb-pp-8) */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Supplier Risk Rating (vb-pp-8) - Page 7 */}
+                                {proofPointPage === 7 && (
+                                <motion.div
+                                  key="vb-pp-8"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🛡️</span>
@@ -5371,15 +5482,22 @@ Only respond with the JSON array, no other text.`,
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
                               </>
                             )}
 
                             {/* Proof Points for Target Pricing */}
                             {oppId === 'target-pricing' && (
                               <>
-                                {/* Price Variance */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Price Variance - tp-pp-1 (Page 0) */}
+                                {proofPointPage === 0 && (
+                                <motion.div
+                                  key="tp-pp-1"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">💰</span>
@@ -5387,13 +5505,20 @@ Only respond with the JSON array, no other text.`,
                                     </div>
                                     {(() => {
                                       const variance = computedMetrics?.priceVariance || 15;
-                                      const level = variance > 25 ? 'HIGH' : variance >= 10 ? 'MEDIUM' : 'LOW';
+                                      const { level, isLLM } = getImpactLevel('tp-pp-1', variance, { high: 25, medium: 10 });
                                       const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
-                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                      return (
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>
+                                          {level} {isLLM && '✨'}
+                                        </span>
+                                      );
                                     })()}
                                   </div>
                                   {(() => {
                                     const variance = computedMetrics?.priceVariance || 15;
+                                    const llmEval = getLLMEvaluation('tp-pp-1');
+                                    const minPrice = totalSpend > 0 ? totalSpend * (1 - variance/100) / (topSuppliers.length || 1) : 0;
+                                    const maxPrice = totalSpend > 0 ? totalSpend * (1 + variance/100) / (topSuppliers.length || 1) : 0;
                                     return (
                                       <>
                                         <GaugeChart
@@ -5401,71 +5526,449 @@ Only respond with the JSON array, no other text.`,
                                           max={50}
                                           thresholds={{ low: 10, medium: 25 }}
                                           label="Price Variance"
+                                          showLegend={false}
                                         />
-                                        <p className="text-[11px] text-gray-600 mt-2">
-                                          Best-in-class price is {variance.toFixed(0)}% below average.
-                                          {variance > 25 ? ' Strong negotiation target using benchmark data.' : variance >= 10 ? ' Moderate negotiation opportunity.' : ' Limited target pricing potential.'}
+                                        <p className="text-[14px] text-gray-700 mt-3 font-medium">
+                                          {llmEval ? (
+                                            <span className="text-purple-600">{llmEval.reasoning}</span>
+                                          ) : (
+                                            variance > 25 ? `${variance.toFixed(0)}% variance indicates strong negotiation potential using best-price benchmarks.` :
+                                            variance >= 10 ? `${variance.toFixed(0)}% variance shows moderate opportunity for price harmonization.` :
+                                            `${variance.toFixed(0)}% variance - prices are already well-standardized.`
+                                          )}
                                         </p>
+
+                                        {/* Price by Supplier Table */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Price Analysis by Supplier</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Supplier</th>
+                                                <th className="text-right py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Spend</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Price Index</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">vs Best</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                const priceIndex = 100 + (idx === 0 ? 0 : idx === 1 ? Math.round(variance * 0.4) : idx === 2 ? Math.round(variance * 0.7) : Math.round(variance));
+                                                const vsBest = priceIndex - 100;
+                                                return (
+                                                  <tr key={idx} className="hover:bg-gray-50">
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-gray-800">{supplier.name}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-right text-gray-800">{formatCurrency(supplier.spend)}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">{priceIndex}</td>
+                                                    <td className={`py-1.5 px-2 border border-gray-200 text-center font-medium ${vsBest > 10 ? 'text-red-600' : vsBest > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                                                      {vsBest > 0 ? `+${vsBest}%` : vsBest === 0 ? 'Best' : `${vsBest}%`}
+                                                    </td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Threshold Legend */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Impact Thresholds</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Impact</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Threshold</th>
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;25%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Strong target pricing opportunity</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">10-25%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Moderate harmonization potential</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;10%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Prices already standardized</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Tariff Rate */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* Tariff Rate - tp-pp-2 (Page 1) */}
+                                {proofPointPage === 1 && (
+                                <motion.div
+                                  key="tp-pp-2"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🚢</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Tariff Rate Impact</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">MEDIUM</span>
+                                    {(() => {
+                                      const tariffDiff = 12; // Estimated tariff differential
+                                      const { level, isLLM } = getImpactLevel('tp-pp-2', tariffDiff, { high: 15, medium: 8 });
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return (
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>
+                                          {level} {isLLM && '✨'}
+                                        </span>
+                                      );
+                                    })()}
                                   </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Estimated: 8-12% tariff differential</span> — Sourcing mix optimization can reduce landed costs. Consider regional sourcing shifts.
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const llmEval = getLLMEvaluation('tp-pp-2');
+                                    const regions = categoryLocations.length > 0 ? categoryLocations : ['Asia', 'Europe', 'Americas'];
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={12}
+                                          max={30}
+                                          thresholds={{ low: 8, medium: 15 }}
+                                          label="Tariff Differential"
+                                          unit="%"
+                                          showLegend={false}
+                                        />
+                                        <p className="text-[14px] text-gray-700 mt-3 font-medium">
+                                          {llmEval ? (
+                                            <span className="text-purple-600">{llmEval.reasoning}</span>
+                                          ) : (
+                                            `Estimated 8-12% tariff differential across sourcing regions. Optimizing sourcing mix can reduce landed costs.`
+                                          )}
+                                        </p>
 
-                                {/* Cost Structure */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                        {/* Regional Tariff Table */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Regional Tariff Analysis</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Region</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Est. Tariff</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Landed Cost Impact</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Opportunity</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {regions.slice(0, 4).map((region, idx) => {
+                                                const tariff = idx === 0 ? 5 : idx === 1 ? 8 : idx === 2 ? 12 : 15;
+                                                const opportunity = tariff > 10 ? 'High' : tariff > 6 ? 'Medium' : 'Low';
+                                                const oppColor = opportunity === 'High' ? 'text-emerald-600' : opportunity === 'Medium' ? 'text-amber-600' : 'text-gray-600';
+                                                return (
+                                                  <tr key={idx} className="hover:bg-gray-50">
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-gray-800">{region}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-center">{tariff}%</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-center">+{(tariff * 0.8).toFixed(1)}%</td>
+                                                    <td className={`py-1.5 px-2 border border-gray-200 text-center font-medium ${oppColor}`}>{opportunity}</td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Threshold Legend */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Impact Thresholds</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Impact</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Differential</th>
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Significant sourcing shift opportunity</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">8-15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Consider regional optimization</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;8%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Tariffs well-optimized</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* Cost Structure - tp-pp-3 (Page 2) */}
+                                {proofPointPage === 2 && (
+                                <motion.div
+                                  key="tp-pp-3"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">📊</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Cost Structure</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">HIGH</span>
+                                    {(() => {
+                                      const rawMaterialPct = 55;
+                                      const { level, isLLM } = getImpactLevel('tp-pp-3', rawMaterialPct, { high: 60, medium: 40 });
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return (
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>
+                                          {level} {isLLM && '✨'}
+                                        </span>
+                                      );
+                                    })()}
                                   </div>
-                                  <div className="flex gap-2 mb-2">
-                                    <div className="flex-1 h-3 bg-blue-400 rounded" style={{ flex: '55' }} title="Raw Materials 55%" />
-                                    <div className="flex-1 h-3 bg-purple-400 rounded" style={{ flex: '25' }} title="Manufacturing 25%" />
-                                    <div className="flex-1 h-3 bg-amber-400 rounded" style={{ flex: '12' }} title="Logistics 12%" />
-                                    <div className="flex-1 h-3 bg-emerald-400 rounded" style={{ flex: '8' }} title="Margin 8%" />
-                                  </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Raw material: 55% of cost</span> — Commodity-driven cost structure enables index-linked pricing strategies.
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const llmEval = getLLMEvaluation('tp-pp-3');
+                                    const costBreakdown = [
+                                      { name: 'Raw Materials', pct: 55, color: 'bg-blue-500', amount: totalSpend * 0.55 },
+                                      { name: 'Manufacturing', pct: 25, color: 'bg-purple-500', amount: totalSpend * 0.25 },
+                                      { name: 'Logistics', pct: 12, color: 'bg-amber-500', amount: totalSpend * 0.12 },
+                                      { name: 'Margin', pct: 8, color: 'bg-emerald-500', amount: totalSpend * 0.08 },
+                                    ];
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={55}
+                                          max={100}
+                                          thresholds={{ low: 40, medium: 60 }}
+                                          label="Raw Material %"
+                                          showLegend={false}
+                                        />
+                                        <p className="text-[14px] text-gray-700 mt-3 font-medium">
+                                          {llmEval ? (
+                                            <span className="text-purple-600">{llmEval.reasoning}</span>
+                                          ) : (
+                                            `55% raw material cost indicates commodity-driven pricing. Index-linked contracts can capture market movements.`
+                                          )}
+                                        </p>
 
-                                {/* Unit Price */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                        {/* Cost Breakdown Table */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Should-Cost Model Breakdown</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Component</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">%</th>
+                                                <th className="text-right py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Est. Amount</th>
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Lever</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {costBreakdown.map((item, idx) => (
+                                                <tr key={idx} className="hover:bg-gray-50">
+                                                  <td className="py-1.5 px-2 border border-gray-200">
+                                                    <div className="flex items-center gap-2">
+                                                      <div className={`w-3 h-3 rounded ${item.color}`}></div>
+                                                      <span className="text-gray-800">{item.name}</span>
+                                                    </div>
+                                                  </td>
+                                                  <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">{item.pct}%</td>
+                                                  <td className="py-1.5 px-2 border border-gray-200 text-right text-gray-800">{formatCurrency(item.amount)}</td>
+                                                  <td className="py-1.5 px-2 border border-gray-200 text-gray-600 text-[10px]">
+                                                    {idx === 0 ? 'Index-linked pricing' : idx === 1 ? 'Process efficiency' : idx === 2 ? 'Logistics optimization' : 'Margin negotiation'}
+                                                  </td>
+                                                </tr>
+                                              ))}
+                                              <tr className="bg-gray-100 font-semibold">
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-800">Total</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">100%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right text-gray-800">{formatCurrency(totalSpend)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200"></td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Threshold Legend */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Impact Thresholds (Raw Material %)</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Impact</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Raw Material %</th>
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Strategy</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;60%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Strong index-linking opportunity</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">40-60%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Balanced should-cost approach</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;40%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Focus on process/service costs</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* Unit Price - tp-pp-4 (Page 3) */}
+                                {proofPointPage === 3 && (
+                                <motion.div
+                                  key="tp-pp-4"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🎯</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Unit Price vs Benchmark</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">MEDIUM</span>
+                                    {(() => {
+                                      const aboveBenchmark = 10;
+                                      const { level, isLLM } = getImpactLevel('tp-pp-4', aboveBenchmark, { high: 15, medium: 5 });
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return (
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>
+                                          {level} {isLLM && '✨'}
+                                        </span>
+                                      );
+                                    })()}
                                   </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Current: ~10% above market benchmark</span> — Should-cost analysis can identify negotiation levers worth {formatCurrency(totalSpend * 0.05)}.
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const llmEval = getLLMEvaluation('tp-pp-4');
+                                    const aboveBenchmark = 10;
+                                    const savingsPotential = totalSpend * (aboveBenchmark / 100) * 0.5;
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={aboveBenchmark}
+                                          max={30}
+                                          thresholds={{ low: 5, medium: 15 }}
+                                          label="Above Benchmark"
+                                          unit="%"
+                                          showLegend={false}
+                                        />
+                                        <p className="text-[14px] text-gray-700 mt-3 font-medium">
+                                          {llmEval ? (
+                                            <span className="text-purple-600">{llmEval.reasoning}</span>
+                                          ) : (
+                                            `Current prices ~${aboveBenchmark}% above market benchmark. Should-cost analysis can unlock ${formatCurrency(savingsPotential)} in savings.`
+                                          )}
+                                        </p>
+
+                                        {/* Benchmark Comparison Table */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Supplier Benchmark Analysis</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Supplier</th>
+                                                <th className="text-right py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Current Spend</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">vs Benchmark</th>
+                                                <th className="text-right py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Savings Potential</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                const vsBench = idx === 0 ? 5 : idx === 1 ? 8 : idx === 2 ? 12 : idx === 3 ? 15 : 10;
+                                                const savings = supplier.spend * (vsBench / 100) * 0.5;
+                                                return (
+                                                  <tr key={idx} className="hover:bg-gray-50">
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-gray-800">{supplier.name}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-right text-gray-800">{formatCurrency(supplier.spend)}</td>
+                                                    <td className={`py-1.5 px-2 border border-gray-200 text-center font-medium ${vsBench > 10 ? 'text-red-600' : vsBench > 5 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                                                      +{vsBench}%
+                                                    </td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-right text-emerald-600 font-medium">{formatCurrency(savings)}</td>
+                                                  </tr>
+                                                );
+                                              })}
+                                              <tr className="bg-gray-100 font-semibold">
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-800" colSpan={3}>Total Savings Potential</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right text-emerald-600">{formatCurrency(savingsPotential)}</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Threshold Legend */}
+                                        <div className="mt-4">
+                                          <h5 className="text-[11px] font-semibold text-gray-700 mb-2">Impact Thresholds</h5>
+                                          <table className="w-full text-[11px] border-collapse">
+                                            <thead>
+                                              <tr className="bg-gray-50">
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Impact</th>
+                                                <th className="text-center py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Above Benchmark</th>
+                                                <th className="text-left py-1.5 px-2 border border-gray-200 font-semibold text-gray-700">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Immediate renegotiation needed</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">5-15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Schedule benchmark review</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;5%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Competitive pricing achieved</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
                               </>
                             )}
 
                             {/* Proof Points for Risk Management */}
                             {oppId === 'risk-management' && (
                               <>
-                                {/* Single Sourcing */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* rm-pp-1: Single Sourcing Risk (Page 0) */}
+                                {proofPointPage === 0 && (
+                                <motion.div
+                                  key="rm-pp-1"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">⚠️</span>
@@ -5480,19 +5983,93 @@ Only respond with the JSON array, no other text.`,
                                   </div>
                                   {(() => {
                                     const topPct = totalSpend > 0 && topSuppliers[0] ? (topSuppliers[0].spend / totalSpend * 100) : 35;
+                                    const llmEval = getLLMEvaluation('rm-pp-1');
                                     return (
-                                      <p className="text-[11px] text-gray-600">
-                                        <span className="font-semibold">Top supplier: {topPct.toFixed(0)}% of spend ({topSuppliers[0]?.name || 'N/A'})</span> —
-                                        {topPct > 50 ? ' Critical single-source dependency - immediate backup qualification needed.' :
-                                          topPct >= 30 ? ' Moderate dependency - consider dual-sourcing strategy.' :
-                                            ' Diversified supply base - low dependency risk.'}
-                                      </p>
+                                      <>
+                                        <GaugeChart
+                                          value={topPct}
+                                          max={100}
+                                          thresholds={{ low: 30, medium: 50 }}
+                                          label="Top Supplier %"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (topPct > 50
+                                            ? `Critical dependency: ${topSuppliers[0]?.name || 'Top supplier'} controls ${topPct.toFixed(0)}% of spend. Immediate backup qualification needed.`
+                                            : topPct >= 30
+                                              ? `Moderate dependency on ${topSuppliers[0]?.name || 'top supplier'} at ${topPct.toFixed(0)}%. Consider dual-sourcing strategy.`
+                                              : `Well-diversified: Top supplier at ${topPct.toFixed(0)}% indicates healthy supply base.`)}
+                                        </p>
+
+                                        {/* Single Sourcing Analysis Table */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Supplier</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Share</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Risk</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                const share = totalSpend > 0 ? (supplier.spend / totalSpend * 100) : 0;
+                                                const riskLvl = share > 50 ? 'Critical' : share > 30 ? 'High' : share > 15 ? 'Medium' : 'Low';
+                                                const riskColor = share > 50 ? 'text-red-600' : share > 30 ? 'text-orange-600' : share > 15 ? 'text-amber-600' : 'text-green-600';
+                                                return (
+                                                  <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                    <td className="py-1.5 px-2 border border-gray-200 font-medium">{supplier.name}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-center">{share.toFixed(1)}%</td>
+                                                    <td className={`py-1.5 px-2 border border-gray-200 text-center font-semibold ${riskColor}`}>{riskLvl}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-gray-600">
+                                                      {share > 50 ? 'Qualify backups' : share > 30 ? 'Dual-source' : 'Monitor'}
+                                                    </td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Single Sourcing Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Single Sourcing Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;50%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Immediate backup qualification</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">30-50%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Implement dual-sourcing</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;30%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Maintain diversified base</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Supplier Concentration */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* rm-pp-2: Supplier Concentration (Page 1) */}
+                                {proofPointPage === 1 && (
+                                <motion.div
+                                  key="rm-pp-2"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🎯</span>
@@ -5507,116 +6084,1066 @@ Only respond with the JSON array, no other text.`,
                                   </div>
                                   {(() => {
                                     const top3Pct = totalSpend > 0 ? (topSuppliers.slice(0, 3).reduce((sum, s) => sum + s.spend, 0) / totalSpend * 100) : 65;
+                                    const top3Spend = topSuppliers.slice(0, 3).reduce((sum, s) => sum + s.spend, 0);
+                                    const llmEval = getLLMEvaluation('rm-pp-2');
                                     return (
-                                      <p className="text-[11px] text-gray-600">
-                                        <span className="font-semibold">Top 3 control: {top3Pct.toFixed(0)}% ({formatCurrency(topSuppliers.slice(0, 3).reduce((sum, s) => sum + s.spend, 0))})</span> —
-                                        {top3Pct > 80 ? ' High concentration risk - diversification recommended.' :
-                                          top3Pct >= 50 ? ' Moderate concentration - monitor and maintain alternatives.' :
-                                            ' Well diversified supply base.'}
-                                      </p>
+                                      <>
+                                        <GaugeChart
+                                          value={top3Pct}
+                                          max={100}
+                                          thresholds={{ low: 50, medium: 80 }}
+                                          label="Top 3 Share"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (top3Pct > 80
+                                            ? `High concentration: Top 3 suppliers control ${top3Pct.toFixed(0)}% (${formatCurrency(top3Spend)}). Diversification critical.`
+                                            : top3Pct >= 50
+                                              ? `Moderate concentration at ${top3Pct.toFixed(0)}%. Monitor supplier health and maintain alternatives.`
+                                              : `Healthy diversification: Top 3 at ${top3Pct.toFixed(0)}% indicates robust supply base.`)}
+                                        </p>
+
+                                        {/* Concentration Analysis Table */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Rank</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Supplier</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-amber-800 border-b border-gray-200">Spend</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Cumulative</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {(() => {
+                                                let cumulative = 0;
+                                                return topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                  const share = totalSpend > 0 ? (supplier.spend / totalSpend * 100) : 0;
+                                                  cumulative += share;
+                                                  return (
+                                                    <tr key={idx} className={idx < 3 ? 'bg-amber-50/30' : 'bg-white'}>
+                                                      <td className="py-1.5 px-2 border border-gray-200 font-medium">#{idx + 1}</td>
+                                                      <td className="py-1.5 px-2 border border-gray-200">{supplier.name}</td>
+                                                      <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(supplier.spend)}</td>
+                                                      <td className="py-1.5 px-2 border border-gray-200 text-center font-semibold">{cumulative.toFixed(1)}%</td>
+                                                    </tr>
+                                                  );
+                                                });
+                                              })()}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Concentration Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Concentration Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;80%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Active diversification needed</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">50-80%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Monitor and maintain alternatives</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;50%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Well-diversified supply base</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Geographic Risk */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* rm-pp-3: Category Risk (Page 2) */}
+                                {proofPointPage === 2 && (
+                                <motion.div
+                                  key="rm-pp-3"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">📋</span>
+                                      <span className="text-[12px] font-semibold text-gray-900">Category Risk Profile</span>
+                                    </div>
+                                    {(() => {
+                                      const riskScore = state.spendAnalysis?.categoryPlaybook?.risk_factor ||
+                                        (categoryName.toLowerCase().includes('chemical') || categoryName.toLowerCase().includes('raw') ? 75 : 55);
+                                      const level = riskScore >= 70 ? 'HIGH' : riskScore >= 40 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
+                                  </div>
+                                  {(() => {
+                                    const riskScore = state.spendAnalysis?.categoryPlaybook?.risk_factor ||
+                                      (categoryName.toLowerCase().includes('chemical') || categoryName.toLowerCase().includes('raw') ? 75 : 55);
+                                    const llmEval = getLLMEvaluation('rm-pp-3');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={riskScore}
+                                          max={100}
+                                          thresholds={{ low: 40, medium: 70 }}
+                                          label="Category Risk"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (riskScore >= 70
+                                            ? `High-risk category: ${categoryName} has inherent supply chain vulnerabilities requiring active risk mitigation.`
+                                            : riskScore >= 40
+                                              ? `Moderate risk profile for ${categoryName}. Standard risk management practices recommended.`
+                                              : `Low-risk category: ${categoryName} has stable supply dynamics.`)}
+                                        </p>
+
+                                        {/* Category Risk Factors */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Risk Factor</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Status</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Impact</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Supply Complexity</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${topSuppliers.length > 8 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                                                    {topSuppliers.length > 8 ? 'Complex' : 'Manageable'}
+                                                  </span>
+                                                </td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">{topSuppliers.length} suppliers</td>
+                                              </tr>
+                                              <tr className="bg-gray-50">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Market Volatility</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${(computedMetrics?.priceVariance || 15) > 20 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                                                    {(computedMetrics?.priceVariance || 15) > 20 ? 'Volatile' : 'Stable'}
+                                                  </span>
+                                                </td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">{(computedMetrics?.priceVariance || 15).toFixed(0)}% variance</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Geographic Spread</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${categoryLocations.length >= 3 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                    {categoryLocations.length >= 3 ? 'Diversified' : 'Concentrated'}
+                                                  </span>
+                                                </td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">{categoryLocations.length || 1} regions</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Category Risk Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Category Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">≥70</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Strategic risk mitigation plan</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">40-69</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Standard monitoring</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;40</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Routine oversight</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* rm-pp-4: Inflation Risk (Page 3) */}
+                                {proofPointPage === 3 && (
+                                <motion.div
+                                  key="rm-pp-4"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">📈</span>
+                                      <span className="text-[12px] font-semibold text-gray-900">Inflation Exposure</span>
+                                    </div>
+                                    {(() => {
+                                      const inflationRate = computedMetrics?.priceVariance ? Math.min(computedMetrics.priceVariance * 0.6, 15) : 6;
+                                      const level = inflationRate > 8 ? 'HIGH' : inflationRate >= 4 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
+                                  </div>
+                                  {(() => {
+                                    const inflationRate = computedMetrics?.priceVariance ? Math.min(computedMetrics.priceVariance * 0.6, 15) : 6;
+                                    const inflationImpact = totalSpend * (inflationRate / 100);
+                                    const llmEval = getLLMEvaluation('rm-pp-4');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={inflationRate}
+                                          max={20}
+                                          thresholds={{ low: 4, medium: 8 }}
+                                          label="Inflation Rate"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (inflationRate > 8
+                                            ? `High inflation exposure: ${inflationRate.toFixed(1)}% impacts ${formatCurrency(inflationImpact)} annually. Index-based pricing recommended.`
+                                            : inflationRate >= 4
+                                              ? `Moderate inflation at ${inflationRate.toFixed(1)}%. Monitor commodity indices and negotiate escalation caps.`
+                                              : `Low inflation: ${inflationRate.toFixed(1)}% rate. Standard contract terms appropriate.`)}
+                                        </p>
+
+                                        {/* Inflation Scenario Analysis */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Scenario</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Rate</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-amber-800 border-b border-gray-200">Impact</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Action</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              <tr className="bg-green-50/30">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Best Case</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">{Math.max(inflationRate * 0.5, 1).toFixed(1)}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right text-green-600">{formatCurrency(totalSpend * Math.max(inflationRate * 0.5, 1) / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Lock rates</td>
+                                              </tr>
+                                              <tr className="bg-amber-50/30">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Current</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-semibold">{inflationRate.toFixed(1)}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right font-semibold text-amber-600">{formatCurrency(inflationImpact)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Index clauses</td>
+                                              </tr>
+                                              <tr className="bg-red-50/30">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Worst Case</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">{Math.min(inflationRate * 1.5, 20).toFixed(1)}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right text-red-600">{formatCurrency(totalSpend * Math.min(inflationRate * 1.5, 20) / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Hedge + caps</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Inflation Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Inflation Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;8%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Index-linked with caps</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">4-8%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Annual review clauses</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;4%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Fixed-price contracts</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* rm-pp-5: Exchange Rate Risk (Page 4) */}
+                                {proofPointPage === 4 && (
+                                <motion.div
+                                  key="rm-pp-5"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">💱</span>
+                                      <span className="text-[12px] font-semibold text-gray-900">Exchange Rate Exposure</span>
+                                    </div>
+                                    {(() => {
+                                      const foreignSuppliers = topSuppliers.filter(s => s.country && !['USA', 'United States', 'US'].includes(s.country));
+                                      const foreignSpend = foreignSuppliers.reduce((sum, s) => sum + s.spend, 0);
+                                      const fxExposure = totalSpend > 0 ? (foreignSpend / totalSpend * 100) : 40;
+                                      const level = fxExposure > 50 ? 'HIGH' : fxExposure >= 25 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
+                                  </div>
+                                  {(() => {
+                                    const foreignSuppliers = topSuppliers.filter(s => s.country && !['USA', 'United States', 'US'].includes(s.country));
+                                    const foreignSpend = foreignSuppliers.reduce((sum, s) => sum + s.spend, 0);
+                                    const fxExposure = totalSpend > 0 ? (foreignSpend / totalSpend * 100) : 40;
+                                    const llmEval = getLLMEvaluation('rm-pp-5');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={fxExposure}
+                                          max={100}
+                                          thresholds={{ low: 25, medium: 50 }}
+                                          label="FX Exposure"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (fxExposure > 50
+                                            ? `High FX exposure: ${fxExposure.toFixed(0)}% (${formatCurrency(foreignSpend)}) in foreign currencies. Hedging recommended.`
+                                            : fxExposure >= 25
+                                              ? `Moderate FX risk at ${fxExposure.toFixed(0)}%. Monitor rates and consider forward contracts.`
+                                              : `Low currency risk: ${fxExposure.toFixed(0)}% foreign exposure. Natural hedge via local sourcing.`)}
+                                        </p>
+
+                                        {/* FX Exposure by Region */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Region</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-amber-800 border-b border-gray-200">Spend</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Share</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Volatility</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {(() => {
+                                                const regionSpend: Record<string, number> = {};
+                                                topSuppliers.forEach(s => {
+                                                  const region = s.country || 'Unknown';
+                                                  regionSpend[region] = (regionSpend[region] || 0) + s.spend;
+                                                });
+                                                return Object.entries(regionSpend)
+                                                  .sort((a, b) => b[1] - a[1])
+                                                  .slice(0, 4)
+                                                  .map(([region, spend], idx) => {
+                                                    const share = totalSpend > 0 ? (spend / totalSpend * 100) : 0;
+                                                    const isDomestic = ['USA', 'United States', 'US'].includes(region);
+                                                    const volatility = isDomestic ? 'Low' : share > 20 ? 'High' : 'Medium';
+                                                    return (
+                                                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                        <td className="py-1.5 px-2 border border-gray-200 font-medium">{region}</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(spend)}</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-center">{share.toFixed(1)}%</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${
+                                                            volatility === 'High' ? 'bg-red-100 text-red-700' :
+                                                            volatility === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                                                          }`}>{volatility}</span>
+                                                        </td>
+                                                      </tr>
+                                                    );
+                                                  });
+                                              })()}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* FX Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Exchange Rate Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;50%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Forward contracts + options</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">25-50%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Selective forward contracts</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;25%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Natural hedge via local</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* rm-pp-6: Geopolitical Risk (Page 5) */}
+                                {proofPointPage === 5 && (
+                                <motion.div
+                                  key="rm-pp-6"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🌍</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Geopolitical Risk</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">MEDIUM</span>
-                                  </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Regions: {categoryLocations.length > 0 ? categoryLocations.join(', ') : 'Multiple regions'}</span> —
-                                    Geographic spread provides some resilience. Consider regional backup suppliers.
-                                  </p>
-                                </div>
-
-                                {/* Price Volatility */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-lg">📈</span>
-                                      <span className="text-[12px] font-semibold text-gray-900">Price Volatility</span>
-                                    </div>
                                     {(() => {
-                                      const variance = computedMetrics?.priceVariance || 15;
-                                      const level = variance > 25 ? 'HIGH' : variance >= 10 ? 'MEDIUM' : 'LOW';
+                                      const highRiskRegions = ['China', 'Russia', 'Middle East', 'Venezuela', 'Iran'];
+                                      const highRiskSuppliers = topSuppliers.filter(s => s.country && highRiskRegions.some(r => s.country?.includes(r)));
+                                      const highRiskSpend = highRiskSuppliers.reduce((sum, s) => sum + s.spend, 0);
+                                      const geoRisk = totalSpend > 0 ? (highRiskSpend / totalSpend * 100) : 15;
+                                      const level = geoRisk > 40 ? 'HIGH' : geoRisk >= 15 ? 'MEDIUM' : 'LOW';
                                       const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
                                       return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
                                     })()}
                                   </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Variance: {(computedMetrics?.priceVariance || 15).toFixed(0)}%</span> —
-                                    {(computedMetrics?.priceVariance || 15) > 20 ? ' High volatility exposure - hedging strategies recommended.' : ' Manageable price volatility.'}
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const highRiskRegions = ['China', 'Russia', 'Middle East', 'Venezuela', 'Iran'];
+                                    const highRiskSuppliers = topSuppliers.filter(s => s.country && highRiskRegions.some(r => s.country?.includes(r)));
+                                    const highRiskSpend = highRiskSuppliers.reduce((sum, s) => sum + s.spend, 0);
+                                    const geoRisk = totalSpend > 0 ? (highRiskSpend / totalSpend * 100) : 15;
+                                    const llmEval = getLLMEvaluation('rm-pp-6');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={geoRisk}
+                                          max={100}
+                                          thresholds={{ low: 15, medium: 40 }}
+                                          label="Geo Risk %"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (geoRisk > 40
+                                            ? `High geopolitical exposure: ${geoRisk.toFixed(0)}% in elevated-risk regions. Develop alternative corridors.`
+                                            : geoRisk >= 15
+                                              ? `Moderate geopolitical risk at ${geoRisk.toFixed(0)}%. Monitor trade policies and maintain backups.`
+                                              : `Low geopolitical exposure: ${geoRisk.toFixed(0)}% in stable regions. Current strategy is resilient.`)}
+                                        </p>
+
+                                        {/* Regional Risk Assessment */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Region</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Suppliers</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-amber-800 border-b border-gray-200">Spend</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Risk</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {(() => {
+                                                const regionData: Record<string, { count: number; spend: number }> = {};
+                                                topSuppliers.forEach(s => {
+                                                  const region = s.country || 'Unknown';
+                                                  if (!regionData[region]) regionData[region] = { count: 0, spend: 0 };
+                                                  regionData[region].count++;
+                                                  regionData[region].spend += s.spend;
+                                                });
+                                                return Object.entries(regionData)
+                                                  .sort((a, b) => b[1].spend - a[1].spend)
+                                                  .slice(0, 4)
+                                                  .map(([region, data], idx) => {
+                                                    const isHighRisk = highRiskRegions.some(r => region.includes(r));
+                                                    const riskLevel = isHighRisk ? 'High' : region.includes('Europe') || region.includes('Japan') ? 'Low' : 'Medium';
+                                                    return (
+                                                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                        <td className="py-1.5 px-2 border border-gray-200 font-medium">{region}</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-center">{data.count}</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(data.spend)}</td>
+                                                        <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${
+                                                            riskLevel === 'High' ? 'bg-red-100 text-red-700' :
+                                                            riskLevel === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                                                          }`}>{riskLevel}</span>
+                                                        </td>
+                                                      </tr>
+                                                    );
+                                                  });
+                                              })()}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Geopolitical Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Geopolitical Risk Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;40%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Diversify supply corridors</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">15-40%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Monitor and maintain backups</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Routine monitoring</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* rm-pp-7: Supplier Risk Rating (Page 6) */}
+                                {proofPointPage === 6 && (
+                                <motion.div
+                                  key="rm-pp-7"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-lg">⭐</span>
+                                      <span className="text-[12px] font-semibold text-gray-900">Supplier Risk Rating</span>
+                                    </div>
+                                    {(() => {
+                                      const avgRisk = topSuppliers.length > 0
+                                        ? topSuppliers.slice(0, 5).reduce((sum, s) => sum + (s.riskRating || 3), 0) / Math.min(topSuppliers.length, 5)
+                                        : 3;
+                                      const level = avgRisk >= 4 ? 'HIGH' : avgRisk >= 2.5 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
+                                  </div>
+                                  {(() => {
+                                    const avgRisk = topSuppliers.length > 0
+                                      ? topSuppliers.slice(0, 5).reduce((sum, s) => sum + (s.riskRating || 3), 0) / Math.min(topSuppliers.length, 5)
+                                      : 3;
+                                    const lowRiskCount = topSuppliers.filter(s => (s.riskRating || 3) <= 2).length;
+                                    const llmEval = getLLMEvaluation('rm-pp-7');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={avgRisk}
+                                          max={5}
+                                          thresholds={{ low: 2.5, medium: 4 }}
+                                          label="Avg Risk (1-5)"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (avgRisk >= 4
+                                            ? `High-risk supplier base: Average ${avgRisk.toFixed(1)}/5. Prioritize supplier development or replacement.`
+                                            : avgRisk >= 2.5
+                                              ? `Moderate supplier risk at ${avgRisk.toFixed(1)}/5. ${lowRiskCount} suppliers rated low-risk. Continue monitoring.`
+                                              : `Strong supplier base: Average ${avgRisk.toFixed(1)}/5 with ${lowRiskCount} low-risk suppliers.`)}
+                                        </p>
+
+                                        {/* Supplier Risk Ratings Table */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-amber-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Supplier</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-amber-800 border-b border-gray-200">Spend</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-amber-800 border-b border-gray-200">Rating</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-amber-800 border-b border-gray-200">Status</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                const rating = supplier.riskRating || 3;
+                                                const status = rating <= 2 ? 'Preferred' : rating <= 3 ? 'Approved' : rating <= 4 ? 'Watch' : 'At Risk';
+                                                const statusColor = rating <= 2 ? 'text-green-600' : rating <= 3 ? 'text-blue-600' : rating <= 4 ? 'text-amber-600' : 'text-red-600';
+                                                return (
+                                                  <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                    <td className="py-1.5 px-2 border border-gray-200 font-medium">{supplier.name}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(supplier.spend)}</td>
+                                                    <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                      <div className="flex items-center justify-center gap-0.5">
+                                                        {[1, 2, 3, 4, 5].map(star => (
+                                                          <span key={star} className={`text-[8px] ${star <= rating ? 'text-amber-400' : 'text-gray-300'}`}>★</span>
+                                                        ))}
+                                                      </div>
+                                                    </td>
+                                                    <td className={`py-1.5 px-2 border border-gray-200 font-medium ${statusColor}`}>{status}</td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Supplier Rating Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Supplier Risk Rating Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">≥4.0</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Replace or develop suppliers</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">2.5-4.0</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Enhanced monitoring</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;2.5</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Low-risk supplier base</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
                               </>
                             )}
 
                             {/* Proof Points for Re-spec Pack */}
                             {oppId === 'respec-pack' && (
                               <>
-                                {/* Price Variance */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* rp-pp-1: Spec-Driven Price Variance (Page 0) */}
+                                {proofPointPage === 0 && (
+                                <motion.div
+                                  key="rp-pp-1"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">💰</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Spec-Driven Price Variance</span>
                                     </div>
+                                    {(() => {
+                                      const variance = computedMetrics?.priceVariance || 20;
+                                      const level = variance > 25 ? 'HIGH' : variance >= 15 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
                                   </div>
                                   {(() => {
                                     const variance = computedMetrics?.priceVariance || 20;
+                                    const standardizationSavings = totalSpend * (variance / 100) * 0.4;
+                                    const llmEval = getLLMEvaluation('rp-pp-1');
                                     return (
                                       <>
                                         <GaugeChart
                                           value={variance}
                                           max={50}
-                                          thresholds={{ low: 15, medium: 30 }}
+                                          thresholds={{ low: 15, medium: 25 }}
                                           label="Spec Variance"
                                         />
-                                        <p className="text-[11px] text-gray-600 mt-2">
-                                          Specification differences driving price variance indicate standardization opportunity worth {formatCurrency(totalSpend * 0.05)}.
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (variance > 25
+                                            ? `High spec variance: ${variance.toFixed(0)}% price spread indicates standardization opportunity worth ${formatCurrency(standardizationSavings)}.`
+                                            : variance >= 15
+                                              ? `Moderate variance at ${variance.toFixed(0)}%. Spec harmonization could capture ${formatCurrency(standardizationSavings)} in savings.`
+                                              : `Low spec variance at ${variance.toFixed(0)}%. Specifications well-standardized across suppliers.`)}
                                         </p>
+
+                                        {/* Spec Variance by Supplier */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-purple-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-purple-800 border-b border-gray-200">Supplier</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-purple-800 border-b border-gray-200">Avg Price</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-purple-800 border-b border-gray-200">vs Benchmark</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-purple-800 border-b border-gray-200">Spec Notes</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              {(() => {
+                                                const avgPrice = topSuppliers.length > 0
+                                                  ? topSuppliers.reduce((sum, s) => sum + (s.avgPrice || s.spend / 1000), 0) / topSuppliers.length
+                                                  : 100;
+                                                return topSuppliers.slice(0, 5).map((supplier, idx) => {
+                                                  const price = supplier.avgPrice || (supplier.spend / 1000);
+                                                  const vsBenchmark = ((price - avgPrice) / avgPrice * 100);
+                                                  const specNote = vsBenchmark > 10 ? 'Premium spec' : vsBenchmark < -10 ? 'Basic spec' : 'Standard';
+                                                  return (
+                                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                                      <td className="py-1.5 px-2 border border-gray-200 font-medium">{supplier.name}</td>
+                                                      <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(price)}</td>
+                                                      <td className="py-1.5 px-2 border border-gray-200 text-center">
+                                                        <span className={vsBenchmark > 0 ? 'text-red-600' : 'text-green-600'}>
+                                                          {vsBenchmark > 0 ? '+' : ''}{vsBenchmark.toFixed(1)}%
+                                                        </span>
+                                                      </td>
+                                                      <td className="py-1.5 px-2 border border-gray-200 text-gray-600">{specNote}</td>
+                                                    </tr>
+                                                  );
+                                                });
+                                              })()}
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Spec Variance Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Spec Variance Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;25%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Major standardization opportunity</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">15-25%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Spec harmonization review</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;15%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Specs well-standardized</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
                                       </>
                                     );
                                   })()}
-                                </div>
+                                </motion.div>
+                                )}
 
-                                {/* Export Data / Alternative Sourcing */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                {/* rp-pp-2: Export Standard Alignment (Page 1) */}
+                                {proofPointPage === 1 && (
+                                <motion.div
+                                  key="rp-pp-2"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">🚢</span>
                                       <span className="text-[12px] font-semibold text-gray-900">Export Standard Alignment</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700">MEDIUM</span>
+                                    {(() => {
+                                      const exportGap = computedMetrics?.priceVariance ? Math.min(computedMetrics.priceVariance * 0.8, 35) : 18;
+                                      const level = exportGap > 20 ? 'HIGH' : exportGap >= 10 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
                                   </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Gap: ~15% premium vs export standards</span> —
-                                    Aligning to export-grade specifications could reduce costs while maintaining quality.
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const exportGap = computedMetrics?.priceVariance ? Math.min(computedMetrics.priceVariance * 0.8, 35) : 18;
+                                    const exportSavings = totalSpend * (exportGap / 100) * 0.5;
+                                    const llmEval = getLLMEvaluation('rp-pp-2');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={exportGap}
+                                          max={50}
+                                          thresholds={{ low: 10, medium: 20 }}
+                                          label="Export Gap %"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (exportGap > 20
+                                            ? `Significant gap: Specs ${exportGap.toFixed(0)}% above export standards. Alignment could save ${formatCurrency(exportSavings)}.`
+                                            : exportGap >= 10
+                                              ? `Moderate gap at ${exportGap.toFixed(0)}% vs export grade. Selective spec adjustment recommended.`
+                                              : `Close to export standards: Only ${exportGap.toFixed(0)}% gap. Specs already cost-optimized.`)}
+                                        </p>
 
-                                {/* Cost Structure */}
-                                <div className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
+                                        {/* Export Standards Comparison */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-purple-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-purple-800 border-b border-gray-200">Specification</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-purple-800 border-b border-gray-200">Current</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-purple-800 border-b border-gray-200">Export Std</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-purple-800 border-b border-gray-200">Gap</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Quality Grade</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Premium</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Standard</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center text-red-600">+{(exportGap * 0.4).toFixed(0)}%</td>
+                                              </tr>
+                                              <tr className="bg-gray-50">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Packaging</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Custom</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Bulk</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center text-red-600">+{(exportGap * 0.35).toFixed(0)}%</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Testing/Cert</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Full</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Basic</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center text-amber-600">+{(exportGap * 0.15).toFixed(0)}%</td>
+                                              </tr>
+                                              <tr className="bg-gray-50">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Lead Time</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Express</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">Standard</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center text-amber-600">+{(exportGap * 0.1).toFixed(0)}%</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Export Gap Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Export Standard Gap Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;20%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Major re-spec opportunity</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">10-20%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Selective spec review</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;10%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Already optimized</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
+
+                                {/* rp-pp-3: Material Cost Structure (Page 2) */}
+                                {proofPointPage === 2 && (
+                                <motion.div
+                                  key="rp-pp-3"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  className="rounded-lg border border-gray-100 p-3 bg-white hover:shadow-sm transition-shadow">
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-lg">📊</span>
-                                      <span className="text-[12px] font-semibold text-gray-900">Material Cost Ratio</span>
+                                      <span className="text-[12px] font-semibold text-gray-900">Material Cost Structure</span>
                                     </div>
-                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">HIGH</span>
+                                    {(() => {
+                                      const materialPct = 62;
+                                      const level = materialPct > 60 ? 'HIGH' : materialPct >= 45 ? 'MEDIUM' : 'LOW';
+                                      const color = level === 'HIGH' ? 'bg-red-100 text-red-700' : level === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
+                                      return <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${color}`}>{level}</span>;
+                                    })()}
                                   </div>
-                                  <p className="text-[11px] text-gray-600">
-                                    <span className="font-semibold">Raw material: ~60% of cost</span> —
-                                    High material component means spec changes directly impact costs. Value engineering can unlock {formatCurrency(totalSpend * 0.04)}.
-                                  </p>
-                                </div>
+                                  {(() => {
+                                    const materialPct = 62;
+                                    const laborPct = 18;
+                                    const overheadPct = 12;
+                                    const marginPct = 8;
+                                    const valueEngSavings = totalSpend * (materialPct / 100) * 0.08;
+                                    const llmEval = getLLMEvaluation('rp-pp-3');
+                                    return (
+                                      <>
+                                        <GaugeChart
+                                          value={materialPct}
+                                          max={100}
+                                          thresholds={{ low: 45, medium: 60 }}
+                                          label="Material %"
+                                        />
+                                        <p className="text-[11px] text-gray-600 mt-2 italic">
+                                          {llmEval || (materialPct > 60
+                                            ? `High material component: ${materialPct}% raw material cost means spec changes directly impact pricing. Value engineering could unlock ${formatCurrency(valueEngSavings)}.`
+                                            : materialPct >= 45
+                                              ? `Moderate material ratio at ${materialPct}%. Some spec-driven savings opportunity through value engineering.`
+                                              : `Low material ratio: ${materialPct}% indicates limited spec change impact. Focus on process efficiency.`)}
+                                        </p>
+
+                                        {/* Should-Cost Breakdown */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <table className="w-full text-[10px]">
+                                            <thead>
+                                              <tr className="bg-purple-50">
+                                                <th className="py-1.5 px-2 text-left font-semibold text-purple-800 border-b border-gray-200">Cost Element</th>
+                                                <th className="py-1.5 px-2 text-center font-semibold text-purple-800 border-b border-gray-200">Share</th>
+                                                <th className="py-1.5 px-2 text-right font-semibold text-purple-800 border-b border-gray-200">Est. Value</th>
+                                                <th className="py-1.5 px-2 text-left font-semibold text-purple-800 border-b border-gray-200">Spec Impact</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody className="bg-white">
+                                              <tr className="bg-purple-50/30">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-semibold">Raw Materials</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-semibold">{materialPct}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right font-semibold">{formatCurrency(totalSpend * materialPct / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200">
+                                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-red-100 text-red-700">High</span>
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Labor/Processing</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">{laborPct}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(totalSpend * laborPct / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200">
+                                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-100 text-amber-700">Medium</span>
+                                                </td>
+                                              </tr>
+                                              <tr className="bg-gray-50">
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Overhead/Logistics</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">{overheadPct}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(totalSpend * overheadPct / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200">
+                                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-green-100 text-green-700">Low</span>
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200 font-medium">Supplier Margin</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center">{marginPct}%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-right">{formatCurrency(totalSpend * marginPct / 100)}</td>
+                                                <td className="py-1.5 px-2 border border-gray-200">
+                                                  <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-100 text-amber-700">Negotiable</span>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+
+                                        {/* Cost Structure Thresholds */}
+                                        <div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+                                          <div className="bg-gray-100 px-2 py-1 border-b border-gray-200">
+                                            <span className="text-[10px] font-semibold text-gray-700">Material Cost Ratio Thresholds</span>
+                                          </div>
+                                          <table className="w-full text-[10px]">
+                                            <tbody>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold text-[10px]">HIGH</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&gt;60%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Strong value engineering impact</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px]">MEDIUM</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">45-60%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Moderate spec change benefit</td>
+                                              </tr>
+                                              <tr>
+                                                <td className="py-1.5 px-2 border border-gray-200"><span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">LOW</span></td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-center font-medium">&lt;45%</td>
+                                                <td className="py-1.5 px-2 border border-gray-200 text-gray-600">Focus on process efficiency</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </motion.div>
+                                )}
                               </>
                             )}
+                            </div>
 
-                            <p className="text-[10px] text-gray-400 pt-2 border-t border-gray-100">
+                            {/* Page Flip Navigation */}
+                            {(() => {
+                              const ppConfig = PROOF_POINT_CONFIG[oppId];
+                              const totalPages = ppConfig?.length || 1;
+                              if (totalPages <= 1) return null;
+                              return (
+                                <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-gray-100">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setProofPointPage(p => Math.max(0, p - 1));
+                                    }}
+                                    disabled={proofPointPage === 0}
+                                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-medium transition-all ${
+                                      proofPointPage === 0
+                                        ? 'text-gray-300 cursor-not-allowed'
+                                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                                    }`}
+                                  >
+                                    <ChevronLeft className="h-4 w-4" />
+                                    Prev
+                                  </button>
+
+                                  <div className="flex items-center gap-2">
+                                    {Array.from({ length: totalPages }).map((_, idx) => (
+                                      <button
+                                        key={idx}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setProofPointPage(idx);
+                                        }}
+                                        className={`h-8 w-8 rounded-full text-[12px] font-semibold transition-all ${
+                                          idx === proofPointPage
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                        }`}
+                                      >
+                                        {idx + 1}
+                                      </button>
+                                    ))}
+                                  </div>
+
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setProofPointPage(p => Math.min(totalPages - 1, p + 1));
+                                    }}
+                                    disabled={proofPointPage === totalPages - 1}
+                                    className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-medium transition-all ${
+                                      proofPointPage === totalPages - 1
+                                        ? 'text-gray-300 cursor-not-allowed'
+                                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                                    }`}
+                                  >
+                                    Next
+                                    <ChevronRight className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              );
+                            })()}
+
+                            <p className="text-[10px] text-gray-400 pt-2 border-t border-gray-100 mt-4">
                               💡 Thresholds based on Beroe procurement benchmarks. HIGH = Significant opportunity, MEDIUM = Moderate opportunity, LOW = Limited opportunity.
                             </p>
                           </div>

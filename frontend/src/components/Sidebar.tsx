@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -23,8 +23,9 @@ interface SidebarProps {
 /**
  * Unified Sidebar Component
  * Matches the clean, minimal design from setup/review page
+ * Memoized to prevent unnecessary re-renders
  */
-export function Sidebar({ user }: SidebarProps) {
+export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
 
   const userIsSuperAdmin = isSuperAdmin(user || null);
@@ -139,6 +140,6 @@ export function Sidebar({ user }: SidebarProps) {
       </div>
     </div>
   );
-}
+});
 
 export default Sidebar;

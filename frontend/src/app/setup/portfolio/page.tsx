@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronLeft,
@@ -175,6 +175,7 @@ function PortfolioSetupContent() {
   const [newLocation, setNewLocation] = useState("");
   const [locationSearchResults, setLocationSearchResults] = useState<string[]>([]);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
+  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(0);
 
   // Close location dropdown when clicking outside
   useEffect(() => {
@@ -194,45 +195,79 @@ function PortfolioSetupContent() {
     return uuidRegex.test(id);
   };
 
-  // Fetch portfolio data on mount (only if not already loaded)
+  // Check if user is in demo mode (demo tokens start with "demo-token-")
+  const isDemoMode = () => {
+    if (typeof window === 'undefined') return true;
+    const token = localStorage.getItem('beroe_auth_token');
+    // No token = demo, or token starts with "demo-token-" = demo
+    return !token || token.startsWith('demo-token-');
+  };
+
+  // Track if we've already fetched to prevent infinite loops
+  const hasFetchedRef = useRef(false);
+
+  // Fetch portfolio data on mount (only once)
   useEffect(() => {
     const fetchPortfolio = async () => {
-      // Skip if already loaded from context
-      if (state.portfolioLoaded && state.portfolioItems.length > 0) {
+      // Skip if already loaded from context OR if we've already fetched this session
+      if (state.portfolioLoaded || hasFetchedRef.current) {
         setIsLoading(false);
         return;
       }
 
+      // Mark as fetched to prevent re-fetching
+      hasFetchedRef.current = true;
+
+      // Check demo mode status
+      const isDemo = isDemoMode();
+
       try {
         setIsLoading(true);
         setError(null);
-        const response = await procurementApi.getPortfolio();
-        if (response.success && response.data && response.data.categories.length > 0) {
-          actions.setPortfolioItems(response.data.categories);
-        } else {
-          // API returned empty - use default data for demo
+
+        // Only call API if not in demo mode
+        if (!isDemo) {
+          const response = await procurementApi.getPortfolio();
+          if (response.success && response.data && response.data.categories.length > 0) {
+            actions.setPortfolioItems(response.data.categories);
+            return;
+          }
+        }
+
+        // Demo mode OR API returned empty for real user
+        if (isDemo) {
+          // Demo user: show sample data
           const defaultItems: PortfolioItem[] = [
             { id: "1", name: "Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
             { id: "2", name: "Grains", locations: ["Europe", "North America"], spend: 25000000 },
           ];
           actions.setPortfolioItems(defaultItems);
+        } else {
+          // Real user with empty portfolio: show empty state
+          actions.setPortfolioItems([]);
         }
       } catch (err) {
         console.error("Failed to fetch portfolio:", err);
-        setError("Failed to load portfolio. Using default data.");
-        // Fallback to default data if API fails
-        const defaultItems: PortfolioItem[] = [
-          { id: "1", name: "Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
-          { id: "2", name: "Grains", locations: ["Europe", "North America"], spend: 25000000 },
-        ];
-        actions.setPortfolioItems(defaultItems);
+        const isDemo = isDemoMode();
+        if (isDemo) {
+          // Demo mode: show sample data on error
+          const defaultItems: PortfolioItem[] = [
+            { id: "1", name: "Oils", locations: ["Europe", "India", "Asia Pacific"], spend: 50000000 },
+            { id: "2", name: "Grains", locations: ["Europe", "North America"], spend: 25000000 },
+          ];
+          actions.setPortfolioItems(defaultItems);
+        } else {
+          // Real user: show empty state on error
+          actions.setPortfolioItems([]);
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchPortfolio();
-  }, [state.portfolioLoaded, state.portfolioItems.length, actions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.portfolioLoaded]); // Only re-run when portfolioLoaded changes
 
   const handleContinue = async () => {
     // Get all selected categories with their sub-categories
@@ -408,9 +443,11 @@ function PortfolioSetupContent() {
       ).slice(0, 6); // Show max 6 results
       setLocationSearchResults(filtered);
       setIsLocationDropdownOpen(filtered.length > 0);
+      setHighlightedLocationIndex(0); // Reset highlight when results change
     } else {
       setLocationSearchResults([]);
       setIsLocationDropdownOpen(false);
+      setHighlightedLocationIndex(0);
     }
   };
 
@@ -524,7 +561,11 @@ function PortfolioSetupContent() {
         };
 
         try {
-          const response = await procurementApi.addCategory(newItem);
+          const response = await procurementApi.addCategory({
+            name: newItem.name,
+            spend: newItem.spend,
+            locations: newItem.locations,
+          });
           // Update with real ID from backend if successful
           if (response?.data?.id) {
             newItem.id = response.data.id;
@@ -629,10 +670,14 @@ function PortfolioSetupContent() {
           </Link>
 
           <div className="flex items-center gap-3">
-             <span className="text-[11px] font-bold uppercase tracking-widest text-gray-400">Your Portfolio</span>
-             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
-               {portfolioItems.length}
+             <span className="text-[11px] font-bold uppercase tracking-widest text-gray-400">
+               {portfolioItems.length === 0 ? "Get Started" : "Your Portfolio"}
              </span>
+             {portfolioItems.length > 0 && (
+               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
+                 {portfolioItems.length}
+               </span>
+             )}
              {selectedCategoryIds.size > 0 && (
                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold">
                  <Check className="h-3 w-3" />
@@ -647,7 +692,12 @@ function PortfolioSetupContent() {
               disabled={selectedCategoryIds.size === 0}
               className="h-11 rounded-xl bg-[#1A1C1E] px-6 text-sm font-medium text-white transition-all hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {selectedCategoryIds.size === 0 ? "Select categories" : `Continue with ${selectedCategoryIds.size} ${selectedCategoryIds.size === 1 ? 'category' : 'categories'}`}
+              {portfolioItems.length === 0
+                ? "Add a category to continue"
+                : selectedCategoryIds.size === 0
+                  ? "Select categories"
+                  : `Continue with ${selectedCategoryIds.size} ${selectedCategoryIds.size === 1 ? 'category' : 'categories'}`
+              }
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -718,6 +768,29 @@ function PortfolioSetupContent() {
               <div className="col-span-2 flex items-center justify-center py-20">
                 <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
               </div>
+            ) : portfolioItems.length === 0 ? (
+              // Empty state for new users - prominent Add Category card
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="col-span-2 flex flex-col items-center justify-center rounded-[48px] border-2 border-dashed border-blue-300/60 bg-gradient-to-br from-blue-50/50 to-white p-16 transition-all hover:border-blue-400 hover:shadow-lg group cursor-pointer"
+                onClick={openAddModal}
+              >
+                <div className="mb-8 flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-sky-50 text-blue-500 transition-transform group-hover:scale-110 shadow-lg shadow-blue-100">
+                  <Plus className="h-14 w-14" />
+                </div>
+                <span className="text-3xl font-semibold text-[#1A1C1E] mb-3">Add Your First Category</span>
+                <span className="text-[16px] text-gray-500 text-center max-w-md">
+                  Start by adding a procurement category you want to analyze.
+                  For example: Oils, Packaging, Raw Materials, etc.
+                </span>
+                <Button
+                  className="mt-8 h-12 rounded-xl bg-[#1A1C1E] px-8 text-sm font-medium text-white transition-all hover:bg-black"
+                >
+                  <Plus className="mr-2 h-5 w-5" />
+                  Add Category
+                </Button>
+              </motion.div>
             ) : (
               <>
                 {portfolioItems.map((item, idx) => {
@@ -902,10 +975,26 @@ function PortfolioSetupContent() {
                       value={newLocation}
                       onChange={(e) => handleLocationSearch(e.target.value)}
                       onKeyDown={(e) => {
+                        if (e.key === "ArrowDown") {
+                          e.preventDefault();
+                          if (locationSearchResults.length > 0) {
+                            setHighlightedLocationIndex(prev =>
+                              prev < locationSearchResults.length - 1 ? prev + 1 : 0
+                            );
+                          }
+                        }
+                        if (e.key === "ArrowUp") {
+                          e.preventDefault();
+                          if (locationSearchResults.length > 0) {
+                            setHighlightedLocationIndex(prev =>
+                              prev > 0 ? prev - 1 : locationSearchResults.length - 1
+                            );
+                          }
+                        }
                         if (e.key === "Enter") {
                           e.preventDefault();
                           if (locationSearchResults.length > 0) {
-                            handleSelectLocation(locationSearchResults[0]);
+                            handleSelectLocation(locationSearchResults[highlightedLocationIndex]);
                           } else {
                             handleAddLocationToForm();
                           }
@@ -941,18 +1030,23 @@ function PortfolioSetupContent() {
                         key={location}
                         type="button"
                         onClick={() => handleSelectLocation(location)}
+                        onMouseEnter={() => setHighlightedLocationIndex(idx)}
                         className={`w-full px-4 py-3 text-left text-[14px] transition-colors hover:bg-blue-50 flex items-center gap-3 ${
-                          idx === 0 ? 'bg-blue-50/50' : ''
+                          idx === highlightedLocationIndex ? 'bg-blue-50' : ''
                         }`}
                       >
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
-                          <span className="text-[10px] font-semibold text-gray-500">
+                        <div className={`flex h-6 w-6 items-center justify-center rounded-full ${
+                          idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <span className={`text-[10px] font-semibold ${
+                            idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'
+                          }`}>
                             {location.slice(0, 2).toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-gray-700">{location}</span>
-                        {idx === 0 && (
-                          <span className="ml-auto text-[11px] text-gray-400">Press Enter</span>
+                        <span className={idx === highlightedLocationIndex ? 'text-blue-700 font-medium' : 'text-gray-700'}>{location}</span>
+                        {idx === highlightedLocationIndex && (
+                          <span className="ml-auto text-[11px] text-blue-500">↵ Enter</span>
                         )}
                       </button>
                     ))}

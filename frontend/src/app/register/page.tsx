@@ -1,11 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, User, Building2, CheckCircle2 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
+
+// Faster animation variants
+const fadeInFast = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.2 }
+};
+
+const staggerFast = {
+  initial: { opacity: 0, x: -10 },
+  animate: { opacity: 1, x: 0 },
+};
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,14 +48,17 @@ export default function RegisterPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const togglePassword = useCallback(() => setShowPassword(prev => !prev), []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -115,7 +130,7 @@ export default function RegisterPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, router]);
 
   // Show success screen
   if (success) {
@@ -154,9 +169,9 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex flex-col justify-center px-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.2 }}
           >
             <div className="mb-12">
               <img src="/53700-beroe-logo.webp" alt="Beroe" className="h-16" />
@@ -179,9 +194,9 @@ export default function RegisterPage() {
               ].map((benefit, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + idx * 0.1 }}
+                  transition={{ delay: 0.05 + idx * 0.03, duration: 0.15 }}
                   className="flex items-center gap-3"
                 >
                   <div className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -196,9 +211,9 @@ export default function RegisterPage() {
       {/* Right Side - Register Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.15 }}
           className="w-full max-w-md"
         >
           <div className="lg:hidden flex justify-center mb-4">
@@ -304,7 +319,7 @@ export default function RegisterPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={togglePassword}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -353,7 +368,7 @@ export default function RegisterPage() {
 
             <p className="text-center text-gray-600">
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+              <Link href="/login" prefetch={true} className="text-blue-600 hover:text-blue-700 font-semibold">
                 Sign in
               </Link>
             </p>

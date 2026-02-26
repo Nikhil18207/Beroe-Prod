@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, LazyMotion, domAnimation } from "framer-motion";
 import {
   Plus,
   Mic,
@@ -14,7 +14,7 @@ import {
   Send,
   X
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type ActivityItem } from "@/context/AppContext";
@@ -154,13 +154,13 @@ function DashboardContent() {
     }
   };
 
-  const handleChatSubmit = (e: React.FormEvent) => {
+  const handleChatSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (chatInput.trim()) {
       // Navigate to chat page with the query
       router.push(`/chat?q=${encodeURIComponent(chatInput)}`);
     }
-  };
+  }, [chatInput, router]);
 
   // ============================================================================
   // CALCULATE REAL DATA FROM BACKEND OR SETUP OPPORTUNITIES
@@ -235,9 +235,10 @@ function DashboardContent() {
     return `$${amount.toFixed(0)}`;
   };
 
-  // Calculate potential savings from computed metrics, backend, or fallback
+  // Calculate potential savings using the 10-step methodology
+  // Priority: savingsSummary (10-step result) > opportunityMetrics (10-step per opp) > fallback
   const calculateSavings = () => {
-    // Priority 1: Use savings summary if available (from frontend 7-step calculation OR backend)
+    // Priority 1: Use savings summary if available (from 10-step calculation)
     if (state.savingsSummary) {
       return {
         low: state.savingsSummary.total_savings_low,
@@ -245,39 +246,24 @@ function DashboardContent() {
       };
     }
 
-    // Priority 2: If backend has opportunities with savings, sum them
-    if (hasBackendData) {
-      const low = backendOpportunities.reduce((sum, opp) => sum + (opp.savings_low || 0), 0);
-      const high = backendOpportunities.reduce((sum, opp) => sum + (opp.savings_high || 0), 0);
-      return { low, high };
+    // Priority 2: Sum from opportunityMetrics (10-step calculated per opportunity)
+    const opportunityMetrics = state.opportunityMetrics;
+    if (opportunityMetrics && opportunityMetrics.length > 0) {
+      const totalLow = opportunityMetrics.reduce((sum, m) => sum + m.savingsLow, 0);
+      const totalHigh = opportunityMetrics.reduce((sum, m) => sum + m.savingsHigh, 0);
+      return { low: totalLow, high: totalHigh };
     }
 
-    // Priority 3: Estimate from computed metrics if available
-    if (hasComputedMetrics && totalSpend > 0) {
-      // Use the 7-step calculation methodology estimates
-      const addressableSpend = totalSpend * 0.8; // 80% addressable
-      const baseSavingsPct = 0.05; // 5% base
-
-      // Adjust based on metrics
-      const riskMultiplier = computedMetrics.overallRiskScore > 50 ? 1.2 : 1.0;
-      const concentrationMultiplier = computedMetrics.top3Concentration > 70 ? 1.3 : 1.0;
-
-      const adjustedPct = baseSavingsPct * riskMultiplier * concentrationMultiplier;
-
-      return {
-        low: Math.round(addressableSpend * adjustedPct * 0.6),
-        high: Math.round(addressableSpend * adjustedPct * 1.4),
-      };
-    }
-
-    // Priority 4: Fallback to validated proof points ratio
+    // Priority 3: Fallback - calculate per opportunity using validation ratio
+    // This matches the opportunities page fallback logic
     let totalSavingsLow = 0;
     let totalSavingsHigh = 0;
+    const addressableSpend = totalSpend * 0.8; // 80% addressable
 
     setupOpportunities.forEach(opp => {
       const validatedCount = opp.proofPoints.filter(pp => pp.isValidated).length;
       const totalPoints = opp.proofPoints.length;
-      const validationRatio = validatedCount / totalPoints;
+      const validationRatio = totalPoints > 0 ? validatedCount / totalPoints : 0;
 
       // Parse savings percentage from potentialSavings string (e.g., "0-5%", "1-2%")
       const savingsMatch = opp.potentialSavings.match(/(\d+)-(\d+)%/);
@@ -286,8 +272,8 @@ function DashboardContent() {
         const highPct = parseInt(savingsMatch[2]) / 100;
 
         // Scale savings by validation ratio
-        totalSavingsLow += totalSpend * lowPct * validationRatio;
-        totalSavingsHigh += totalSpend * highPct * validationRatio;
+        totalSavingsLow += addressableSpend * lowPct * validationRatio;
+        totalSavingsHigh += addressableSpend * highPct * validationRatio;
       }
     });
 

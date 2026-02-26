@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Mail,
@@ -55,7 +55,7 @@ export default function LoginPage() {
     checkBackend();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -117,7 +117,7 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [email, password, actions, router]);
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
@@ -133,11 +133,11 @@ export default function LoginPage() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        initial={{ opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{
-          duration: 0.8,
-          ease: [0.25, 0.46, 0.45, 0.94],
+          duration: 0.2,
+          ease: "easeOut",
         }}
         className="relative z-10 w-full max-w-[520px] px-6"
       >
@@ -226,12 +226,12 @@ export default function LoginPage() {
 
               {/* Links */}
               <div className="pt-2 flex flex-col items-center gap-2">
-                <Link href="/forgot-password" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">
+                <Link href="/forgot-password" prefetch={true} className="text-sm font-medium text-gray-600 hover:text-black transition-colors">
                   Forgot password?
                 </Link>
                 <div className="text-sm text-gray-600">
                   New user?{" "}
-                  <Link href="/register" className="font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                  <Link href="/register" prefetch={true} className="font-medium text-blue-600 hover:text-blue-700 transition-colors">
                     Register here
                   </Link>
                 </div>

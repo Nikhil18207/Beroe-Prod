@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
 import {
   ChevronLeft,
   ArrowRight,
@@ -22,14 +22,15 @@ import {
   Wrench,
   Monitor,
   Users,
-  X
+  X,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useApp } from "@/context/AppContext";
 import { authApi } from "@/lib/api";
 
@@ -72,6 +73,7 @@ export default function GoalsSetupPage() {
   const [categoryGoals, setCategoryGoals] = React.useState<CategoryGoal[]>([]);
   const [showCategoryPicker, setShowCategoryPicker] = React.useState(false);
   const [initializedFromSelection, setInitializedFromSelection] = React.useState(false);
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   // Get selected categories from context (set on portfolio page)
   const selectedCategories = state.selectedCategories || [];
@@ -244,7 +246,15 @@ export default function GoalsSetupPage() {
   const categoryName = state.setupData.categoryName || "All Categories";
   const categoryCount = state.portfolioItems.length || 3;
 
-  const handleContinue = async () => {
+  // Prefetch review page for instant navigation
+  React.useEffect(() => {
+    router.prefetch("/setup/review");
+  }, [router]);
+
+  const handleContinue = useCallback(() => {
+    // Show loading state immediately
+    setIsNavigating(true);
+
     // Calculate current goals from categoryGoals
     let finalCost = 34, finalRisk = 33, finalEsg = 33;
 
@@ -263,21 +273,6 @@ export default function GoalsSetupPage() {
       }
     });
 
-    // Save goals to backend
-    try {
-      await authApi.updateSetup({
-        setup_step: 2,
-        goals: {
-          cost: finalCost,
-          risk: finalRisk,
-          esg: finalEsg
-        }
-      });
-      console.log("[Goals] Saved goals to backend");
-    } catch (error) {
-      console.warn("[Goals] Failed to save goals to backend:", error);
-    }
-
     // Record activity for setting goals
     const costLabel = finalCost >= 50 ? 'High' : finalCost >= 25 ? 'Medium' : 'Low';
     const riskLabel = finalRisk >= 50 ? 'High' : finalRisk >= 25 ? 'Medium' : 'Low';
@@ -290,8 +285,22 @@ export default function GoalsSetupPage() {
     });
 
     actions.setSetupStep(2);
+
+    // Navigate immediately - don't wait for API
     router.push("/setup/review");
-  };
+
+    // Save goals to backend in background (fire and forget)
+    authApi.updateSetup({
+      setup_step: 2,
+      goals: {
+        cost: finalCost,
+        risk: finalRisk,
+        esg: finalEsg
+      }
+    }).catch(error => {
+      console.warn("[Goals] Failed to save goals to backend:", error);
+    });
+  }, [categoryGoals, actions, router]);
 
   // 3-point slider: 0 = Low, 50 = Medium, 100 = High
   const getLabel = (val: number) => {
@@ -311,6 +320,7 @@ export default function GoalsSetupPage() {
       {/* Back Button */}
       <Link
         href="/setup/portfolio"
+        prefetch={true}
         className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
       >
         <ArrowLeft className="h-5 w-5" />
@@ -358,7 +368,7 @@ export default function GoalsSetupPage() {
       <div className="relative z-10 flex flex-1 flex-col p-8 lg:p-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-16">
-          <Link href="/setup/portfolio" className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-black">
+          <Link href="/setup/portfolio" prefetch={true} className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-black">
             <ChevronLeft className="h-4 w-4" />
             Go Back
           </Link>
@@ -375,10 +385,20 @@ export default function GoalsSetupPage() {
 
           <Button
             onClick={handleContinue}
-            className="h-11 rounded-xl bg-[#1A1C1E] px-6 text-sm font-medium text-white transition-all hover:bg-black"
+            disabled={isNavigating}
+            className="h-11 rounded-xl bg-[#1A1C1E] px-6 text-sm font-medium text-white transition-all hover:bg-black disabled:opacity-70"
           >
-            Apply & Continue
-            <ArrowRight className="ml-2 h-4 w-4" />
+            {isNavigating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Apply & Continue
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
           </Button>
         </div>
 
@@ -437,10 +457,10 @@ export default function GoalsSetupPage() {
                 return (
                   <motion.div
                     key={catGoal.id}
-                    initial={{ opacity: 0, scale: 0.9, x: 20 }}
+                    initial={{ opacity: 0, scale: 0.95, x: 10 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, x: -20 }}
-                    transition={{ delay: index * 0.1 }}
+                    exit={{ opacity: 0, scale: 0.95, x: -10 }}
+                    transition={{ duration: 0.15, delay: index * 0.03 }}
                     className="w-full max-w-[480px] rounded-[40px] bg-white p-10 shadow-[0_20px_60px_rgba(0,0,0,0.04)] ring-1 ring-black/5"
                   >
                     <div className="flex items-center gap-4 mb-8">
@@ -560,9 +580,9 @@ export default function GoalsSetupPage() {
                 {[0, 1, 2, 3].map((index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: (0.1 + index * 0.1) + categoryGoals.length * 0.1 }}
+                    transition={{ duration: 0.15, delay: index * 0.02 }}
                     onClick={() => setShowCategoryPicker(true)}
                     className="flex min-h-[340px] w-full cursor-pointer flex-col items-center justify-center rounded-[48px] border-2 border-dashed border-gray-200/60 bg-white/50 p-12 transition-all hover:border-blue-400/50 hover:bg-white/90 group"
                   >

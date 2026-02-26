@@ -73,13 +73,26 @@ class Settings(BaseSettings):
     # Serper API for real-time web search in supplier intelligence
     serper_api_key: str = ""
 
-    # File Upload
-    max_upload_size_mb: int = 50
+    # File Upload - Supports large files (N million rows)
+    max_upload_size_mb: int = 2048  # 2GB max for large datasets
     upload_dir: str = "./uploads"
     allowed_extensions: str = ".csv,.xlsx,.xls,.pdf,.docx"
 
-    # CORS - Allow all localhost ports for development
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004", "http://localhost:3014", "http://localhost:3050", "http://localhost:3077", "http://localhost:3078", "http://localhost:3080", "http://localhost:3092", "http://localhost:3098", "http://localhost:3099", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002", "http://127.0.0.1:3003", "http://127.0.0.1:3004", "http://127.0.0.1:3077", "http://127.0.0.1:3078", "http://127.0.0.1:3080", "http://127.0.0.1:3098", "http://127.0.0.1:3099"]
+    # Large File Processing (for N million rows)
+    upload_chunk_size: int = 50000  # Rows per processing chunk
+    upload_batch_size: int = 5000   # Rows per DB transaction
+
+    # CORS - Frontend URLs
+    # Set CORS_ORIGINS env var in Railway with your Vercel URL
+    # Example: ["https://your-app.vercel.app","http://localhost:3000"]
+    cors_origins: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3000"
+    ]
+
+    # Frontend URL (for production - set in Railway env vars)
+    frontend_url: str = "http://localhost:3000"
 
     # Logging
     log_level: str = "INFO"

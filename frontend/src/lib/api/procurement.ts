@@ -154,7 +154,9 @@ export const procurementApi = {
    * Run quick analysis without file upload (uses default data)
    */
   analyzeQuick: (categoryInput: CategoryInput) =>
-    apiClient.post<AnalysisResponse>("/analyze/quick", categoryInput),
+    apiClient.post<AnalysisResponse>("/analyze/quick", categoryInput, {
+      timeout: 120000, // 2 minutes to match file upload analysis
+    }),
 
   // ============================================================================
   // Sessions
@@ -873,8 +875,8 @@ export const procurementApi = {
       proof_points: params.proofPoints || [],
       suppliers: params.suppliers || [],
       metrics: params.metrics || {},
-      savings_low: params.savingsLow || params.totalSpend * 0.03,
-      savings_high: params.savingsHigh || params.totalSpend * 0.08,
+      savings_low: params.savingsLow || (params.totalSpend * 0.8) * 0.03,
+      savings_high: params.savingsHigh || (params.totalSpend * 0.8) * 0.08,
       confidence_score: params.confidenceScore || 0,
       spend_by_region: spendByRegion,
     };
@@ -1001,6 +1003,91 @@ export const procurementApi = {
       category: params.category,
       country: params.country,
     }, { timeout: 180000 }); // 3 min for multiple suppliers
+  },
+
+  // ============================================================================
+  // CLEAN SPEND DATA MANAGEMENT
+  // New upload = Delete old completely, store fresh with pre-computed summary
+  // ============================================================================
+
+  /**
+   * Upload spend data with CLEAN REPLACEMENT
+   * - Deletes ALL previous spend data for this session
+   * - Processes new file on backend (not frontend)
+   * - Returns instant summary (no further processing needed)
+   *
+   * Frontend just displays the response - zero lag!
+   */
+  uploadSpendDataClean: async (params: {
+    sessionId: string;
+    categoryName: string;
+    file: File;
+  }) => {
+    const formData = new FormData();
+    formData.append("session_id", params.sessionId);
+    formData.append("category_name", params.categoryName);
+    formData.append("file", params.file);
+
+    return apiClient.upload<{
+      success: boolean;
+      session_id: string;
+      category_name: string;
+      file_name: string;
+      total_spend: number;
+      row_count: number;
+      supplier_count: number;
+      location_count: number;
+      top_suppliers: Array<{ name: string; spend: number; percentage: number }>;
+      top_locations: Array<{ name: string; spend: number; percentage: number }>;
+      detected_columns: Record<string, string | null>;
+      price_stats?: {
+        min: number;
+        max: number;
+        avg: number;
+        variance: number;
+      };
+      processed_at: string;
+    }>("/data/spend/upload", formData, { timeout: 120000 });
+  },
+
+  /**
+   * Get pre-computed spend summary for instant display
+   * This is what frontend should call on page load
+   * Returns INSTANT data - no processing, just database read
+   */
+  getSpendSummary: async (sessionId: string) => {
+    return apiClient.get<{
+      success: boolean;
+      session_id: string;
+      category_name: string;
+      file_name: string;
+      total_spend: number;
+      row_count: number;
+      supplier_count: number;
+      location_count: number;
+      top_suppliers: Array<{ name: string; spend: number; percentage: number }>;
+      top_locations: Array<{ name: string; spend: number; percentage: number }>;
+      detected_columns: Record<string, string | null>;
+      price_stats?: {
+        min: number;
+        max: number;
+        avg: number;
+        variance: number;
+      };
+      processed_at: string | null;
+    }>(`/data/spend/summary/${sessionId}`);
+  },
+
+  /**
+   * Delete all spend data for a session
+   * Use this when user wants to clear their data completely
+   */
+  deleteSpendData: async (sessionId: string) => {
+    return apiClient.delete<{
+      success: boolean;
+      message: string;
+      rows_deleted: number;
+    }>(`/data/spend/${sessionId}`);
   },
 };
 

@@ -151,13 +151,15 @@ export default function AcceptedOpportunityPage() {
       const confidenceScore = totalPPs > 0 ? (validatedCount / totalPPs) * 100 : 0;
 
       // Parse savings estimate to get low/high values
-      let savingsLow = acceptedData.totalSpend * 0.03;
-      let savingsHigh = acceptedData.totalSpend * 0.08;
+      // Use addressable spend (80% of total) for consistent calculations across the system
+      const addressableSpend = acceptedData.totalSpend * 0.8;
+      let savingsLow = addressableSpend * 0.03;
+      let savingsHigh = addressableSpend * 0.08;
       if (acceptedData.savingsEstimate) {
         const match = acceptedData.savingsEstimate.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/);
         if (match) {
-          savingsLow = acceptedData.totalSpend * (parseFloat(match[1]) / 100);
-          savingsHigh = acceptedData.totalSpend * (parseFloat(match[2]) / 100);
+          savingsLow = addressableSpend * (parseFloat(match[1]) / 100);
+          savingsHigh = addressableSpend * (parseFloat(match[2]) / 100);
         }
       }
 

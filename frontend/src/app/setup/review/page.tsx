@@ -71,7 +71,17 @@ import {
   type OpportunityMetrics,
 } from "@/lib/calculations";
 import { parseFile, getFileCategory, SUPPORTED_FORMATS_STRING } from "@/lib/fileParser";
-import { detectAllColumns, parseNumericValue, calculateRowSpend, getRowLocation, getRowSupplier } from "@/lib/columnMatcher";
+import {
+  detectAllColumns,
+  detectAllColumnsCached,
+  parseNumericValue,
+  calculateRowSpend,
+  getRowLocation,
+  getRowSupplier,
+  aggregateSpendDataFast,
+  formatAggregatedData,
+  clearColumnCache,
+} from "@/lib/columnMatcher";
 import { useSupabaseStorage } from "@/lib/hooks/useSupabaseStorage";
 import { canEdit, canUpload, isViewer } from "@/types/api";
 import { toast } from "sonner";
@@ -195,27 +205,27 @@ const isCategoryMatch = (category1: string, category2: string): boolean => {
 const SPEND_DATA_FIELDS: DataField[] = [
   {
     name: "Spend by Location",
-    requiredColumns: ["country", "region", "location", "supplier_country", "supplier_region", "geography"],
+    requiredColumns: ["buyer_entity_id"],
     description: "Geographic spend distribution"
   },
   {
     name: "Spend by Supplier",
-    requiredColumns: ["supplier", "supplier_name", "supplier_id", "vendor", "vendor_name"],
+    requiredColumns: ["supplier_id"],
     description: "Supplier spend breakdown"
   },
   {
     name: "Volume by Supplier",
-    requiredColumns: ["volume", "quantity", "qty", "units", "volume_kg", "volume_mt"],
+    requiredColumns: ["ordered_quantity"],
     description: "Volume data per supplier"
   },
   {
     name: "Volume by Geography",
-    requiredColumns: ["volume", "quantity", "qty"],
+    requiredColumns: ["ordered_quantity"],
     description: "Volume data by region"
   },
   {
     name: "Price",
-    requiredColumns: ["price", "unit_price", "price_per_unit", "rate", "cost_per_unit"],
+    requiredColumns: ["should_cost_unit_price"],
     description: "Pricing information"
   }
 ];
@@ -640,6 +650,9 @@ export default function ReviewDataPage() {
   const clearAnalysisCache = useCallback(() => {
     console.log('[Review] Clearing analysis cache for fresh calculations...');
 
+    // Clear column detection cache for fresh detection
+    clearColumnCache();
+
     // Clear context state
     actions.setSpendAnalysis(null);
     actions.setOpportunityMetrics(null);
@@ -668,10 +681,18 @@ export default function ReviewDataPage() {
     console.log('[Review] Analysis cache cleared successfully');
   }, [actions, state.setupOpportunities]);
 
-  // Permission checks - VIEWER role is read-only
-  const userIsViewer = isViewer(state.user);
-  const userCanEdit = canEdit(state.user);
-  const userCanUpload = canUpload(state.user);
+  // Hydration fix: only show user-dependent UI after mount
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Permission checks - use safe defaults during SSR to avoid hydration mismatch
+  // During SSR/hydration: assume full permissions (most common case)
+  // After hydration: use actual user permissions
+  const userIsViewer = isMounted ? isViewer(state.user) : false;
+  const userCanEdit = isMounted ? canEdit(state.user) : true;
+  const userCanUpload = isMounted ? canUpload(state.user) : true;
 
   // Supabase storage hook for persistent file storage
   const {
@@ -728,6 +749,26 @@ export default function ReviewDataPage() {
     documentType?: string;
   }
   const [parsedCsvDataStore, setParsedCsvDataStore] = useState<Record<string, ParsedCsvData>>({});
+
+  // Backend spend summary - pre-computed by backend for instant display (no client processing)
+  // When this is set, frontend skips local parsing and uses this directly
+  interface BackendSpendSummary {
+    success: boolean;
+    session_id: string;
+    category_name: string;
+    file_name: string;
+    total_spend: number;
+    row_count: number;
+    supplier_count: number;
+    location_count: number;
+    top_suppliers: Array<{ name: string; spend: number; percentage: number }>;
+    top_locations: Array<{ name: string; spend: number; percentage: number }>;
+    detected_columns: Record<string, string | null>;
+    price_stats?: { min: number; max: number; avg: number; variance: number };
+    processed_at: string | null;
+  }
+  const [backendSpendSummary, setBackendSpendSummary] = useState<BackendSpendSummary | null>(null);
+  const [isUploadingToBackend, setIsUploadingToBackend] = useState(false);
 
   // Get data points from context and add icons for UI
   const contextDataPoints = state.dataPoints;
@@ -973,6 +1014,38 @@ export default function ReviewDataPage() {
     setHasRestoredPersisted(true);
   }, [state.persistedReviewData, hasRestoredPersisted, state.dataPoints, actions]); // Run when persisted data changes
 
+  // BACKEND SUMMARY FETCH - Load pre-computed summary on page load for instant display
+  // This handles page refresh: backend has the data, frontend displays instantly
+  useEffect(() => {
+    // Only fetch if we have a session and no backend summary yet
+    if (!state.sessionId || backendSpendSummary) return;
+
+    const fetchBackendSummary = async () => {
+      try {
+        console.log('[Review] Fetching backend spend summary for session:', state.sessionId);
+        const summary = await procurementApi.getSpendSummary(state.sessionId!);
+
+        if (summary.success && summary.total_spend > 0) {
+          console.log('[Review] Backend summary loaded:', {
+            totalSpend: summary.total_spend,
+            rowCount: summary.row_count,
+          });
+          setBackendSpendSummary(summary);
+
+          // Update context spend if not already set
+          if (!state.setupData.spend || state.setupData.spend === 0) {
+            actions.updateSetupData({ spend: summary.total_spend });
+          }
+        }
+      } catch (err) {
+        // Backend doesn't have data for this session - that's fine, will use local processing
+        console.log('[Review] No backend summary available, using local data');
+      }
+    };
+
+    fetchBackendSummary();
+  }, [state.sessionId, backendSpendSummary, state.setupData.spend, actions]);
+
   // Note: The hasSpendData variable already handles checking both uploadedFile and persistedReviewData
   // so no additional sync effect is needed here
 
@@ -1195,14 +1268,16 @@ export default function ReviewDataPage() {
     }>();
 
     const spendRecords: SpendRecord[] = [];
-    const { headers } = spendData;
+    const { headers, rows } = spendData;
 
-    // Use smart column detection
-    const columns = detectAllColumns(headers);
+    // Use cached column detection for performance (same headers = same result)
+    const sampleRows = rows.slice(0, 50);
+    const columns = detectAllColumnsCached(headers, sampleRows);
 
     // Debug: Log detected columns and headers
-    console.log('[Review] CSV Headers:', headers);
+    console.log('[Review] CSV Headers:', headers.slice(0, 10), '... (total:', headers.length, ')');
     console.log('[Review] Detected columns:', columns);
+    console.log('[Review] Processing', rows.length, 'rows');
     console.log('[Review] Spend column detected:', columns.spend);
     console.log('[Review] Category filter mode:', deferredCategoryFilterMode);
 
@@ -1503,8 +1578,9 @@ export default function ReviewDataPage() {
   }, [parsedCsvDataStore, opportunities, state.setupData.maturityScore, state.setupData.spend, deferredCategoryFilterMode, state.selectedCategories, state.setupData.categoryName]);
 
   // Calculate field availability based on CSV columns (for spend data) - USES FLEXIBLE MATCHING
+  // Note: Check hasSpendData (includes persisted data) instead of uploadedFile (local state lost on navigation)
   const getFieldStatus = (field: DataField): { available: boolean; matchedColumn?: string } => {
-    if (!uploadedFile || csvColumns.length === 0) {
+    if (!hasSpendData || csvColumns.length === 0) {
       return { available: false };
     }
 
@@ -1612,7 +1688,7 @@ export default function ReviewDataPage() {
     return getFileCategory(file.name);
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (!isSupportedFormat(file)) {
@@ -1620,13 +1696,23 @@ export default function ReviewDataPage() {
         return;
       }
 
-      // Clear all cached analysis data for fresh calculations
-      // This ensures consistent confidence scores when re-uploading data
+      // Clear ALL old data for fresh upload - complete replacement
+      // 1. Clear context state (spendAnalysis, opportunityMetrics, etc.)
       clearAnalysisCache();
+
+      // 2. Clear local component state
+      setBackendSpendSummary(null);
+      setParsedCsvDataStore({});
+      setCsvColumns([]);
+      setIsSpendExpanded(false);
+
+      // 3. Clear old session ID to generate fresh one for this upload
+      // This ensures backend treats this as completely new data
+      actions.setSession(null);
 
       setUploadedFile(file);
       setUploadError(null);
-      actions.updateSetupData({ uploadedFile: file });
+      actions.updateSetupData({ uploadedFile: file, spend: 0 });
 
       // Record activity
       actions.addActivity({
@@ -1638,10 +1724,58 @@ export default function ReviewDataPage() {
           categoryName: state.setupData.categoryName,
         },
       });
+
+      // BACKEND CLEAN UPLOAD: Process file on backend with automatic old data deletion
+      // Backend returns pre-computed summary - no client-side processing needed
+      // Always generate fresh UUID for new upload - ensures backend does clean replacement
+      const sessionId = crypto.randomUUID();
+      const categoryName = state.setupData.categoryName || 'Unknown';
+
+      setIsUploadingToBackend(true);
+      try {
+        console.log('[Review] Uploading spend data to backend for clean replacement...');
+        const summary = await procurementApi.uploadSpendDataClean({
+          sessionId,
+          categoryName,
+          file,
+        });
+
+        if (summary.success) {
+          console.log('[Review] Backend processed spend data:', {
+            totalSpend: summary.total_spend,
+            rowCount: summary.row_count,
+            supplierCount: summary.supplier_count,
+            locationCount: summary.location_count,
+          });
+
+          // Store backend summary for instant display
+          setBackendSpendSummary(summary);
+
+          // Update context spend from backend calculation
+          if (summary.total_spend > 0) {
+            actions.updateSetupData({ spend: summary.total_spend });
+          }
+
+          // Store the new session ID
+          actions.setSession(sessionId);
+
+          toast.success('Spend data uploaded successfully', {
+            description: `Processed ${summary.row_count.toLocaleString()} rows, ${summary.supplier_count} suppliers`,
+          });
+        }
+      } catch (err) {
+        // Backend upload is optional - silently fallback to local processing
+        console.log('[Review] Backend unavailable, using local processing');
+        // Store session ID so local processing can use it
+        actions.setSession(sessionId);
+        // Local processing will happen via useEffect - no warning needed
+      } finally {
+        setIsUploadingToBackend(false);
+      }
     }
   };
 
-  const handleRemoveFile = () => {
+  const handleRemoveFile = async () => {
     setUploadedFile(null);
     actions.updateSetupData({ uploadedFile: null, spend: 0 });
     if (fileInputRef.current) {
@@ -1657,12 +1791,25 @@ export default function ReviewDataPage() {
       delete updated.spend;
       return updated;
     });
+    // Clear backend spend summary
+    setBackendSpendSummary(null);
     // Clear persisted spend file data
     actions.updatePersistedSpendFile(undefined);
     // Close validation modal if it's open
     setIsValidationModalOpen(false);
     setParsedData(null);
     setCellErrors([]);
+
+    // Delete from backend database too (clean removal)
+    if (state.sessionId) {
+      try {
+        await procurementApi.deleteSpendData(state.sessionId);
+        console.log('[Review] Deleted spend data from backend');
+      } catch (err) {
+        console.warn('[Review] Failed to delete from backend:', err);
+        // Don't show error to user - local clear succeeded
+      }
+    }
   };
 
   // Handle removing a data point file
@@ -2637,102 +2784,118 @@ export default function ReviewDataPage() {
     });
   }, []);
 
-  // Open validation modal for a data point
-  const openValidationModal = async (dataPointId: string, dataPointName: string) => {
+  // Open validation modal for a data point - INSTANT OPEN, deferred processing
+  const openValidationModal = (dataPointId: string, dataPointName: string) => {
+    // INSTANT: Open modal immediately with loading state
     setValidationDataPoint({ id: dataPointId, name: dataPointName });
     setIsValidationModalOpen(true);
     setParsedData(null);
     setCellErrors([]);
     setEditingCell(null);
     setScrollTop(0);
-    // Clear filter cache when opening new file
     filteredDataCacheRef.current = null;
-    // Keep the user's categoryFilterMode selection - don't reset it
 
-    // Get the file to validate
-    if (dataPointId === "spend") {
-      if (uploadedFile) {
-        setValidationDataPoint({ id: dataPointId, name: dataPointName, file: uploadedFile });
-        await parseAndValidateFile(uploadedFile, dataPointId);
-        return;
-      }
-      // Check persisted spend data (after refresh)
-      const persistedSpend = state.persistedReviewData.spendFile;
-      const storedSpendData = parsedCsvDataStore["spend"];
-      if (storedSpendData || persistedSpend?.parsedData) {
-        const data = storedSpendData || persistedSpend?.parsedData;
-        if (data) {
-          const rows2D = data.rows.map(row =>
-            data.headers.map(h => row[h] || '')
-          );
-          setParsedData({
-            headers: data.headers,
-            rows: rows2D,
-            totalRows: rows2D.length,
-          });
-          // Validate
-          const errors: CellError[] = [];
-          rows2D.forEach((row, rowIdx) => {
-            row.forEach((cell, colIdx) => {
-              const error = validateCell(cell, data.headers[colIdx], rowIdx + 1, colIdx);
-              if (error) errors.push(error);
-            });
-          });
-          setCellErrors(errors);
+    // DEFERRED: Process data on next frame for smooth animation
+    requestAnimationFrame(() => {
+      // Get the file to validate
+      if (dataPointId === "spend") {
+        if (uploadedFile) {
+          setValidationDataPoint({ id: dataPointId, name: dataPointName, file: uploadedFile });
+          parseAndValidateFile(uploadedFile, dataPointId);
+          return;
         }
-        return;
-      }
-    }
-
-    // For other data points, use the stored file if available
-    const storedFile = dataPointFiles[dataPointId];
-    if (storedFile) {
-      setValidationDataPoint({ id: dataPointId, name: dataPointName, file: storedFile });
-      await parseAndValidateFile(storedFile, dataPointId);
-    } else {
-      // No file object, but check if we have persisted parsed data (from refresh)
-      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
-      const storedParsedData = parsedCsvDataStore[dataPointId];
-
-      if (storedParsedData || persistedFileData?.parsedData) {
-        // Use the already parsed/persisted data - no need to re-parse
-        const data = storedParsedData || persistedFileData?.parsedData;
-        if (data) {
-          const isDocument = data.isDocument || persistedFileData?.parsedData?.isDocument ||
-            (data.htmlContent !== undefined || data.rawText !== undefined);
-
-          // Convert rows to 2D array format for the modal
-          const rows2D = data.rows.map(row =>
-            data.headers.map(h => row[h] || '')
-          );
-
-          setParsedData({
-            headers: data.headers,
-            rows: rows2D,
-            totalRows: rows2D.length,
-            htmlContent: data.htmlContent,
-            rawText: data.rawText,
-            isDocument,
-            documentType: data.documentType || persistedFileData?.parsedData?.documentType,
-          });
-
-          // Validate tabular data
-          if (!isDocument) {
-            const errors: CellError[] = [];
-            rows2D.forEach((row, rowIdx) => {
-              row.forEach((cell, colIdx) => {
-                const error = validateCell(cell, data.headers[colIdx], rowIdx + 1, colIdx);
-                if (error) errors.push(error);
+        // Check persisted spend data (after refresh)
+        const persistedSpend = state.persistedReviewData.spendFile;
+        const storedSpendData = parsedCsvDataStore["spend"];
+        if (storedSpendData || persistedSpend?.parsedData) {
+          const data = storedSpendData || persistedSpend?.parsedData;
+          if (data) {
+            // Use setTimeout to chunk the work and keep UI responsive
+            setTimeout(() => {
+              const rows2D = data.rows.map(row =>
+                data.headers.map(h => row[h] || '')
+              );
+              setParsedData({
+                headers: data.headers,
+                rows: rows2D,
+                totalRows: rows2D.length,
               });
-            });
-            setCellErrors(errors);
+              // Validate in next frame
+              requestAnimationFrame(() => {
+                const errors: CellError[] = [];
+                const maxErrorsToShow = 100; // Limit for performance
+                for (let rowIdx = 0; rowIdx < rows2D.length && errors.length < maxErrorsToShow; rowIdx++) {
+                  const row = rows2D[rowIdx];
+                  for (let colIdx = 0; colIdx < row.length && errors.length < maxErrorsToShow; colIdx++) {
+                    const error = validateCell(row[colIdx], data.headers[colIdx], rowIdx + 1, colIdx);
+                    if (error) errors.push(error);
+                  }
+                }
+                setCellErrors(errors);
+              });
+            }, 0);
           }
+          return;
         }
-      } else {
-        // No data available
-        setParsedData(null);
       }
-    }
+
+      // For other data points, use the stored file if available
+      const storedFile = dataPointFiles[dataPointId];
+      if (storedFile) {
+        setValidationDataPoint({ id: dataPointId, name: dataPointName, file: storedFile });
+        parseAndValidateFile(storedFile, dataPointId);
+      } else {
+        // No file object, but check if we have persisted parsed data (from refresh)
+        const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+        const storedParsedData = parsedCsvDataStore[dataPointId];
+
+        if (storedParsedData || persistedFileData?.parsedData) {
+          // Use the already parsed/persisted data - no need to re-parse
+          const data = storedParsedData || persistedFileData?.parsedData;
+          if (data) {
+            // Defer processing for smooth UI
+            setTimeout(() => {
+              const isDocument = data.isDocument || persistedFileData?.parsedData?.isDocument ||
+                (data.htmlContent !== undefined || data.rawText !== undefined);
+
+              // Convert rows to 2D array format for the modal
+              const rows2D = data.rows.map(row =>
+                data.headers.map(h => row[h] || '')
+              );
+
+              setParsedData({
+                headers: data.headers,
+                rows: rows2D,
+                totalRows: rows2D.length,
+                htmlContent: data.htmlContent,
+                rawText: data.rawText,
+                isDocument,
+                documentType: data.documentType || persistedFileData?.parsedData?.documentType,
+              });
+
+              // Validate tabular data in next frame
+              if (!isDocument) {
+                requestAnimationFrame(() => {
+                  const errors: CellError[] = [];
+                  const maxErrorsToShow = 100;
+                  for (let rowIdx = 0; rowIdx < rows2D.length && errors.length < maxErrorsToShow; rowIdx++) {
+                    const row = rows2D[rowIdx];
+                    for (let colIdx = 0; colIdx < row.length && errors.length < maxErrorsToShow; colIdx++) {
+                      const error = validateCell(row[colIdx], data.headers[colIdx], rowIdx + 1, colIdx);
+                      if (error) errors.push(error);
+                    }
+                  }
+                  setCellErrors(errors);
+                });
+              }
+            }, 0);
+          }
+        } else {
+          // No data available
+          setParsedData(null);
+        }
+      }
+    });
   };
 
   // Handle cell edit
@@ -2909,16 +3072,68 @@ export default function ReviewDataPage() {
         }
       }));
 
-      // Auto-validate proof points
-      setTimeout(() => {
+      // Auto-validate proof points with minimal delay
+      requestAnimationFrame(() => {
         autoValidateProofPoints();
-      }, 100);
+      });
       return;
     }
 
-    // Run validation in background (modal already closed)
-    // Use setTimeout to let the modal close animation complete first
-    setTimeout(async () => {
+    // PERFORMANCE OPTIMIZATION: Save data immediately, defer heavy validation
+    // This ensures smooth modal close animation
+
+    const dataPointId = validationDataPoint.id;
+    const allRows = currentData.rows;
+
+    // Convert rows to objects immediately (fast operation)
+    const rowsAsObjects = allRows.map(row => {
+      const rowObj: Record<string, string> = {};
+      currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
+      return rowObj;
+    });
+
+    // Update state IMMEDIATELY for instant UI response
+    if (dataPointId === "spend") {
+      setParsedCsvDataStore(prev => ({
+        ...prev,
+        spend: { headers: currentData.headers, rows: rowsAsObjects }
+      }));
+      // Update columns directly from currentData - NO need to re-parse!
+      setCsvColumns(currentData.headers);
+
+      // Update persisted data
+      const persistedSpend = state.persistedReviewData.spendFile;
+      if (persistedSpend) {
+        actions.updatePersistedSpendFile({
+          ...persistedSpend,
+          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+        });
+      }
+    } else {
+      setParsedCsvDataStore(prev => ({
+        ...prev,
+        [dataPointId]: { headers: currentData.headers, rows: rowsAsObjects }
+      }));
+      // Update columns directly - NO need to re-parse!
+      setDataPointColumns(prev => ({ ...prev, [dataPointId]: currentData.headers }));
+
+      // Update persisted data
+      const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
+      if (persistedFileData) {
+        actions.updatePersistedDataPointFile(dataPointId, {
+          ...persistedFileData,
+          parsedData: { headers: currentData.headers, rows: rowsAsObjects },
+        });
+      }
+    }
+
+    // Auto-validate proof points with minimal delay
+    requestAnimationFrame(() => {
+      autoValidateProofPoints();
+    });
+
+    // DEFER heavy validation to after animation completes (use requestIdleCallback if available)
+    const runDeferredValidation = async () => {
       // Validate ALL rows to catch any hidden errors
       const allErrors = await validateDataAsync(currentData.headers, currentData.rows);
 
@@ -2928,7 +3143,6 @@ export default function ReviewDataPage() {
 
       // If errors exist anywhere in the data, show toast notification
       if (hasErrors) {
-        // If filter was active, check if errors are hidden in non-visible rows
         if (categoryFilterMode === "selected") {
           const filteredRowIndices = new Set(filteredData.rows.map((_, idx) => idx));
           const hiddenErrors = criticalErrors.filter(e => !filteredRowIndices.has(e.row));
@@ -2946,83 +3160,24 @@ export default function ReviewDataPage() {
 
       // No errors - create updated file with edits (only if we have original file)
       const updatedFile = createUpdatedFile();
-
-      // IMPORTANT: Always save ALL rows to preserve original data
-      // The filter toggle is just for display/viewing - we don't permanently filter the data
-      const allRows = currentData.rows;
-
-      // Update parsed data store even if no file (persisted data case)
-      const dataPointId = validationDataPoint.id;
-      const rowsAsObjects = allRows.map(row => {
-        const rowObj: Record<string, string> = {};
-        currentData.headers.forEach((h, i) => rowObj[h] = row[i] || '');
-        return rowObj;
-      });
-
-      if (dataPointId === "spend") {
-        // Update parsed data store for spend
-        setParsedCsvDataStore(prev => ({
-          ...prev,
-          spend: { headers: currentData.headers, rows: rowsAsObjects }
-        }));
-
-        // Update persisted data
-        const persistedSpend = state.persistedReviewData.spendFile;
-        if (persistedSpend) {
-          actions.updatePersistedSpendFile({
-            ...persistedSpend,
-            parsedData: { headers: currentData.headers, rows: rowsAsObjects },
-          });
-        }
-
-        if (updatedFile) {
+      if (updatedFile) {
+        if (dataPointId === "spend") {
           setUploadedFile(updatedFile);
           actions.updateSetupData({ uploadedFile: updatedFile });
-          // Re-parse to update columns
-          parseFile(updatedFile).then((result) => {
-            if (result.success && result.data) {
-              setCsvColumns(result.data.headers);
-            }
-          });
         } else {
-          // No file but update columns from data
-          setCsvColumns(currentData.headers);
-        }
-      } else {
-        // For other data points (supply-master, contracts, playbook)
-        setParsedCsvDataStore(prev => ({
-          ...prev,
-          [dataPointId]: { headers: currentData.headers, rows: rowsAsObjects }
-        }));
-
-        // Update persisted data
-        const persistedFileData = state.persistedReviewData.dataPointFiles[dataPointId];
-        if (persistedFileData) {
-          actions.updatePersistedDataPointFile(dataPointId, {
-            ...persistedFileData,
-            parsedData: { headers: currentData.headers, rows: rowsAsObjects },
-          });
-        }
-
-        if (updatedFile) {
           setDataPointFiles(prev => ({ ...prev, [dataPointId]: updatedFile }));
-          // Re-parse to update columns
-          parseFile(updatedFile).then((result) => {
-            if (result.success && result.data) {
-              setDataPointColumns(prev => ({ ...prev, [dataPointId]: result.data!.headers }));
-            }
-          });
-        } else {
-          // No file but update columns from data
-          setDataPointColumns(prev => ({ ...prev, [dataPointId]: currentData.headers }));
         }
       }
+    };
 
-      // Auto-validate proof points after successful data validation
-      setTimeout(() => {
-        autoValidateProofPoints();
-      }, 100);
-    }, 50); // Small delay to let modal close animation complete
+    // Use requestIdleCallback for heavy work, fallback to setTimeout
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      (window as typeof window & { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(() => {
+        runDeferredValidation();
+      });
+    } else {
+      setTimeout(runDeferredValidation, 300); // Longer delay for smooth animation
+    }
   };
 
   // Handle re-upload in validation modal
@@ -3222,13 +3377,41 @@ export default function ReviewDataPage() {
     return null;
   };
 
-  // Get summary data for display - extracts real data from parsed CSV
+  // Get summary data for display - extracts real data from parsed CSV or backend summary
   const getSummaryData = (dataPointId: string) => {
     const csvData = parsedCsvDataStore[dataPointId];
     const fallbackSpend = state.setupData.spend || 50000000;
 
     // ============================================================================
-    // SPEND DATA EXTRACTION - Using Smart Column Matcher
+    // SPEND DATA - BACKEND SUMMARY FAST PATH (no client processing!)
+    // If backend has pre-computed summary, use it directly for instant display
+    // ============================================================================
+    if (dataPointId === "spend" && backendSpendSummary?.success) {
+      console.log('[getSummaryData] Using backend pre-computed summary (instant!)');
+      return {
+        totalSpend: backendSpendSummary.total_spend,
+        locations: backendSpendSummary.top_locations.length > 0
+          ? backendSpendSummary.top_locations
+          : [{ name: "No location data", spend: 0, percentage: 0 }],
+        suppliers: backendSpendSummary.top_suppliers.length > 0
+          ? backendSpendSummary.top_suppliers
+          : [{ name: "No supplier data", spend: 0, percentage: 0 }],
+        contracts: [],
+        playbook: { category: "", strategy: "", marketTrends: [], risks: [], recommendations: [] },
+        rowCount: backendSpendSummary.row_count,
+        // Extra metadata from backend
+        supplierCount: backendSpendSummary.supplier_count,
+        locationCount: backendSpendSummary.location_count,
+        priceStats: backendSpendSummary.price_stats,
+        detectedColumns: backendSpendSummary.detected_columns,
+        fileName: backendSpendSummary.file_name,
+        processedAt: backendSpendSummary.processed_at,
+      };
+    }
+
+    // ============================================================================
+    // SPEND DATA EXTRACTION - Local fallback using Smart Column Matcher
+    // Used when backend summary not available (offline, error, etc.)
     // ============================================================================
     if (dataPointId === "spend" && csvData && csvData.rows.length > 0) {
       const { headers } = csvData;
@@ -3301,41 +3484,29 @@ export default function ReviewDataPage() {
         console.log('[getSummaryData] Filter mode is "original" - using all rows');
       }
 
-      // Use smart column detection
-      const columns = detectAllColumns(headers);
+      // Use smart column detection with caching for performance
+      // First call computes, subsequent calls use cache for same headers
+      const sampleRows = rows.slice(0, 50); // Sample for content-based detection
+      const columns = detectAllColumnsCached(headers, sampleRows);
 
-      // Single pass: calculate totalSpend and aggregate by location/supplier simultaneously
-      const locationMap = new Map<string, number>();
-      const supplierMap = new Map<string, number>();
-      let totalSpend = 0;
+      // Debug: Log detected columns for troubleshooting
+      console.log('[getSummaryData] Detected columns:', {
+        country: columns.country,
+        supplier: columns.supplier,
+        spend: columns.spend,
+        price: columns.price,
+        quantity: columns.quantity,
+        category: columns.category,
+        rowCount: rows.length,
+      });
 
-      const rowCount = rows.length;
-      for (let i = 0; i < rowCount; i++) {
-        const row = rows[i];
-        const spend = calculateRowSpend(row, columns);
+      // Use optimized single-pass aggregation for large datasets
+      const aggregated = aggregateSpendDataFast(rows, columns);
+      const formatted = formatAggregatedData(aggregated, 6);
 
-        if (spend > 0) {
-          totalSpend += spend;
-
-          const location = getRowLocation(row, columns);
-          const supplier = getRowSupplier(row, columns);
-
-          if (location) {
-            locationMap.set(location, (locationMap.get(location) || 0) + spend);
-          }
-          if (supplier) {
-            supplierMap.set(supplier, (supplierMap.get(supplier) || 0) + spend);
-          }
-        }
-      }
-
-      const locations = Array.from(locationMap.entries())
-        .map(([name, spend]) => ({ name, spend, percentage: totalSpend > 0 ? Math.round((spend / totalSpend) * 100) : 0 }))
-        .sort((a, b) => b.spend - a.spend).slice(0, 6);
-
-      const suppliers = Array.from(supplierMap.entries())
-        .map(([name, spend]) => ({ name, spend, percentage: totalSpend > 0 ? Math.round((spend / totalSpend) * 100) : 0 }))
-        .sort((a, b) => b.spend - a.spend).slice(0, 6);
+      const { totalSpend } = aggregated;
+      const locations = formatted.locations;
+      const suppliers = formatted.suppliers;
 
       return {
         totalSpend,
@@ -3661,7 +3832,8 @@ export default function ReviewDataPage() {
     }
 
     // PERFORMANCE: Call getSummaryData ONCE and reuse result
-    const spendSummary = uploadedFile && parsedData ? getSummaryData("spend") : null;
+    // Note: Use hasSpendData (includes persisted data) and parsedCsvDataStore (persisted store) instead of uploadedFile/parsedData
+    const spendSummary = hasSpendData && parsedCsvDataStore["spend"] ? getSummaryData("spend") : null;
 
     // Store spend analysis data in context
     if (spendSummary && spendSummary.totalSpend > 0) {
@@ -3683,8 +3855,9 @@ export default function ReviewDataPage() {
       let priceData: { prices: number[]; avgPrice: number; priceVariance: number } | undefined;
       const spendCsvData = parsedCsvDataStore["spend"];
       if (spendCsvData && spendCsvData.rows.length > 0) {
-        const { headers } = spendCsvData;
-        const columns = detectAllColumns(headers);
+        const { headers, rows: spendRows } = spendCsvData;
+        // Use cached column detection for performance
+        const columns = detectAllColumnsCached(headers, spendRows.slice(0, 50));
 
         if (columns.price) {
           // Use filteredData.rows if in selected mode, otherwise use all rows
@@ -4162,14 +4335,6 @@ export default function ReviewDataPage() {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-[#F8FBFE]">
-      {/* Viewer Read-Only Banner */}
-      {userIsViewer && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white shadow-md">
-          <Eye className="inline-block h-4 w-4 mr-2" />
-          You are viewing in read-only mode. Contact your administrator for edit access.
-        </div>
-      )}
-
       {/* Back Button */}
       <Link
         href="/setup/goals"
@@ -4177,6 +4342,14 @@ export default function ReviewDataPage() {
       >
         <ArrowLeft className="h-5 w-5" />
       </Link>
+
+      {/* Viewer Read-Only Banner - userIsViewer is false during SSR to avoid hydration mismatch */}
+      {state.user && userIsViewer && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white shadow-md">
+          <Eye className="inline-block h-4 w-4 mr-2" />
+          You are viewing in read-only mode. Contact your administrator for edit access.
+        </div>
+      )}
 
       {/* Background Decor - matching the goals page style */}
       <div className="absolute inset-0 z-0">
@@ -4651,7 +4824,8 @@ export default function ReviewDataPage() {
                                           </button>
                                           {hasSpendData && (
                                              <>
-                                                {uploadedFile && (
+                                                {/* Show Validate button when data exists but not fully validated, or when user wants to re-validate */}
+                                                {(uploadedFile || (hasSpendData && !isDataPointFullyValidated("spend"))) && (
                                                    <button
                                                       onClick={() => openValidationModal("spend", `Spend Data (${categoryName})`)}
                                                       className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
@@ -4660,6 +4834,7 @@ export default function ReviewDataPage() {
                                                       <ArrowRight className="h-4 w-4" />
                                                    </button>
                                                 )}
+                                                {/* Show Summary button when data is fully validated */}
                                                 {isDataPointFullyValidated("spend") && (
                                                    <button
                                                       onClick={() => openSummaryModal("spend")}
@@ -4723,11 +4898,6 @@ export default function ReviewDataPage() {
                                     <tr key={sIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
                                        <td className="py-4 pl-14">
                                           <span className="text-[14px] text-gray-600">{field.name}</span>
-                                          {status.available && status.matchedColumn && (
-                                             <span className="ml-2 text-[11px] text-gray-400">
-                                                (from: {status.matchedColumn})
-                                             </span>
-                                          )}
                                        </td>
                                        <td className="py-4">
                                           {isParsingCsv ? (
@@ -4765,11 +4935,6 @@ export default function ReviewDataPage() {
                                           <tr key={fIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
                                              <td className="py-4 pl-14">
                                                 <span className="text-[14px] text-gray-600">{field.name}</span>
-                                                {status.available && status.matchedColumn && (
-                                                   <span className="ml-2 text-[11px] text-gray-400">
-                                                      (from: {status.matchedColumn})
-                                                   </span>
-                                                )}
                                              </td>
                                              <td className="py-4">
                                                 {isParsing ? (
@@ -5057,36 +5222,56 @@ export default function ReviewDataPage() {
                 </div>
               </div>
 
-              {/* Category Filter Toggle - only show for Spend Data, not for other data points */}
+              {/* Category Filter Toggle - Butter smooth with sliding indicator */}
               {parsedData && validationDataPoint?.id === "spend" && !parsedData.isDocument && (
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1 p-1 rounded-full bg-gray-100">
+                  <div className="relative flex items-center p-1 rounded-full bg-gray-100">
+                    {/* Sliding background indicator - using left position for proper animation */}
+                    <motion.div
+                      className="absolute top-1 bottom-1 rounded-full bg-indigo-500 shadow-sm"
+                      initial={false}
+                      animate={{
+                        left: categoryFilterMode === "selected" ? 4 : 142,
+                        width: categoryFilterMode === "selected" ? 138 : 80,
+                      }}
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
                     <button
                       onClick={() => setCategoryFilterMode("selected")}
-                      className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 ease-out ${
+                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${
                         categoryFilterMode === "selected"
-                          ? "bg-indigo-500 text-white shadow-sm"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+                          ? "text-white"
+                          : "text-gray-600 hover:text-gray-900"
                       }`}
                     >
                       Selected Categories
                     </button>
                     <button
                       onClick={() => setCategoryFilterMode("original")}
-                      className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-all duration-150 ease-out ${
+                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${
                         categoryFilterMode === "original"
-                          ? "bg-indigo-500 text-white shadow-sm"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
+                          ? "text-white"
+                          : "text-gray-600 hover:text-gray-900"
                       }`}
                     >
                       All Data
                     </button>
                   </div>
-                  {categoryFilterMode === "selected" && parsedData && (
-                    <span className="text-[11px] text-gray-500">
-                      {visibleRows.totalFilteredRows || 0} of {parsedData.rows.length} rows
-                    </span>
-                  )}
+                  {/* Row count with smooth fade */}
+                  <AnimatePresence mode="wait">
+                    {categoryFilterMode === "selected" && parsedData && (
+                      <motion.span
+                        key="row-count"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ duration: 0.15 }}
+                        className="text-[11px] text-gray-500"
+                      >
+                        {visibleRows.totalFilteredRows || 0} of {parsedData.rows.length} rows
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
 
@@ -5147,11 +5332,6 @@ export default function ReviewDataPage() {
                           <span className={`text-[12px] ${isAvailable ? 'text-gray-600' : 'text-amber-600'}`}>
                             {field.name}
                           </span>
-                          {isAvailable && matchedColumn && (
-                            <span className="text-[10px] text-gray-400 ml-auto">
-                              {matchedColumn}
-                            </span>
-                          )}
                         </div>
                       );
                     })}
@@ -5361,15 +5541,22 @@ export default function ReviewDataPage() {
                   </div>
                 </div>
               ) : parsedData ? (
-                <div
+                <motion.div
                   ref={tableContainerRef}
                   className="border border-gray-200 rounded-xl overflow-auto flex-1 relative smooth-scroll"
                   onScroll={handleTableScroll}
                   style={{ willChange: 'scroll-position' }}
+                  initial={false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.15 }}
+                  key={`table-${categoryFilterMode}`}
                 >
                   {/* Virtual scrolling container - use filtered row count */}
-                  <div
+                  <motion.div
                     style={{ height: (visibleRows.totalFilteredRows || parsedData.rows.length) * ROW_HEIGHT + 48, position: 'relative' }}
+                    initial={{ opacity: 0.5 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <table className="text-left text-[13px] border-collapse" style={{ minWidth: 'max-content' }}>
                       <thead className="bg-gray-50 sticky top-0 z-10">
@@ -5487,8 +5674,8 @@ export default function ReviewDataPage() {
                         })()}
                       </tbody>
                     </table>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               ) : (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">

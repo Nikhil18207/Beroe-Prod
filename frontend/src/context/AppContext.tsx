@@ -754,7 +754,18 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Provider
 // ============================================================================
 
-// Local storage keys for persistence (used as fallback and for immediate UI updates)
+// Storage Strategy:
+// - sessionStorage: For session data (cleared when browser closes)
+//   - Spend data, analysis results, setup data, etc.
+//   - User gets fresh start on new browser session
+// - localStorage: Only for auth token (user stays logged in)
+//
+// This ensures:
+// - Data persists when navigating between pages (sessionStorage persists across page loads)
+// - Data is cleared when browser is closed (fresh start)
+// - Re-upload always clears and replaces old data
+
+// Session storage keys (cleared on browser close)
 const ACTIVITY_STORAGE_KEY = "beroe_activity_history";
 const REVIEW_DATA_STORAGE_KEY = "beroe_review_data";
 const SETUP_DATA_STORAGE_KEY = "beroe_setup_data";
@@ -765,17 +776,26 @@ const SETUP_OPPORTUNITIES_STORAGE_KEY = "beroe_setup_opportunities";
 const ACCEPTED_RECOMMENDATIONS_STORAGE_KEY = "beroe_accepted_recommendations";
 const LLM_EVALUATIONS_STORAGE_KEY = "beroe_llm_evaluations";
 const COMPUTED_METRICS_STORAGE_KEY = "beroe_computed_metrics";
+const PORTFOLIO_ITEMS_STORAGE_KEY = "beroe_portfolio_items";
+const SELECTED_CATEGORIES_STORAGE_KEY = "beroe_selected_categories";
+
+// Helper to get the correct storage (sessionStorage for session data)
+const getSessionStorage = () => {
+  if (typeof window === "undefined") return null;
+  return window.sessionStorage;
+};
 
 // Track if Supabase sync is enabled
 // Set NEXT_PUBLIC_SUPABASE_SYNC=true in production to enable
-// Disabled by default - app works fully with localStorage
+// Disabled by default - app works fully with sessionStorage
 const SUPABASE_SYNC_ENABLED = process.env.NEXT_PUBLIC_SUPABASE_SYNC === 'true';
 
-// Load activity history from localStorage
+// Load activity history from sessionStorage (clears on browser close)
 const loadActivityHistory = (): ActivityItem[] => {
-  if (typeof window === "undefined") return [];
+  const storage = getSessionStorage();
+  if (!storage) return [];
   try {
-    const saved = localStorage.getItem(ACTIVITY_STORAGE_KEY);
+    const saved = storage.getItem(ACTIVITY_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -785,21 +805,23 @@ const loadActivityHistory = (): ActivityItem[] => {
   return [];
 };
 
-// Save activity history to localStorage
+// Save activity history to sessionStorage
 const saveActivityHistory = (activities: ActivityItem[]) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
-    localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activities));
+    storage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activities));
   } catch (error) {
     console.error("Error saving activity history:", error);
   }
 };
 
-// Load review data from localStorage
+// Load review data from sessionStorage
 const loadPersistedReviewData = (): PersistedReviewData => {
-  if (typeof window === "undefined") return { spendFile: undefined, dataPointFiles: {} };
+  const storage = getSessionStorage();
+  if (!storage) return { spendFile: undefined, dataPointFiles: {} };
   try {
-    const saved = localStorage.getItem(REVIEW_DATA_STORAGE_KEY);
+    const saved = storage.getItem(REVIEW_DATA_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
       // Ensure dataPointFiles is always an object (handle corrupted/old data)
@@ -814,11 +836,12 @@ const loadPersistedReviewData = (): PersistedReviewData => {
   return { spendFile: undefined, dataPointFiles: {} };
 };
 
-// Save review data to localStorage
+// Save review data to sessionStorage
 const savePersistedReviewData = (data: PersistedReviewData) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
-    localStorage.setItem(REVIEW_DATA_STORAGE_KEY, JSON.stringify(data));
+    storage.setItem(REVIEW_DATA_STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     console.error("Error saving review data:", error);
   }
@@ -839,11 +862,12 @@ interface PersistedSetupData {
   };
 }
 
-// Load setup data from localStorage
+// Load setup data from sessionStorage
 const loadPersistedSetupData = (): Partial<PersistedSetupData> | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(SETUP_DATA_STORAGE_KEY);
+    const saved = storage.getItem(SETUP_DATA_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -853,9 +877,10 @@ const loadPersistedSetupData = (): Partial<PersistedSetupData> | null => {
   return null;
 };
 
-// Save setup data to localStorage (excluding File objects)
+// Save setup data to sessionStorage (excluding File objects)
 const savePersistedSetupData = (data: AppState["setupData"]) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     // Don't persist File objects - they can't be serialized
     const persistable: PersistedSetupData = {
@@ -867,17 +892,18 @@ const savePersistedSetupData = (data: AppState["setupData"]) => {
       maturityScore: data.maturityScore,
       goals: data.goals,
     };
-    localStorage.setItem(SETUP_DATA_STORAGE_KEY, JSON.stringify(persistable));
+    storage.setItem(SETUP_DATA_STORAGE_KEY, JSON.stringify(persistable));
   } catch (error) {
     console.error("Error saving setup data:", error);
   }
 };
 
-// Load spend analysis from localStorage
+// Load spend analysis from sessionStorage
 const loadSpendAnalysis = (): SpendAnalysis | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(SPEND_ANALYSIS_STORAGE_KEY);
+    const saved = storage.getItem(SPEND_ANALYSIS_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -887,25 +913,27 @@ const loadSpendAnalysis = (): SpendAnalysis | null => {
   return null;
 };
 
-// Save spend analysis to localStorage
+// Save spend analysis to sessionStorage
 const saveSpendAnalysis = (data: SpendAnalysis | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data) {
-      localStorage.setItem(SPEND_ANALYSIS_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(SPEND_ANALYSIS_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
+      storage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving spend analysis:", error);
   }
 };
 
-// Load opportunity metrics from localStorage
+// Load opportunity metrics from sessionStorage
 const loadOpportunityMetrics = (): OpportunityMetricsData[] | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+    const saved = storage.getItem(OPPORTUNITY_METRICS_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -915,25 +943,27 @@ const loadOpportunityMetrics = (): OpportunityMetricsData[] | null => {
   return null;
 };
 
-// Save opportunity metrics to localStorage
+// Save opportunity metrics to sessionStorage
 const saveOpportunityMetrics = (data: OpportunityMetricsData[] | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data && data.length > 0) {
-      localStorage.setItem(OPPORTUNITY_METRICS_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(OPPORTUNITY_METRICS_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+      storage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving opportunity metrics:", error);
   }
 };
 
-// Load savings summary from localStorage
+// Load savings summary from sessionStorage
 const loadSavingsSummary = (): SavingsSummary | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(SAVINGS_SUMMARY_STORAGE_KEY);
+    const saved = storage.getItem(SAVINGS_SUMMARY_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -943,25 +973,27 @@ const loadSavingsSummary = (): SavingsSummary | null => {
   return null;
 };
 
-// Save savings summary to localStorage
+// Save savings summary to sessionStorage
 const saveSavingsSummary = (data: SavingsSummary | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data) {
-      localStorage.setItem(SAVINGS_SUMMARY_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(SAVINGS_SUMMARY_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
+      storage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving savings summary:", error);
   }
 };
 
-// Load setup opportunities from localStorage
+// Load setup opportunities from sessionStorage
 const loadSetupOpportunities = (): SetupOpportunity[] | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
+    const saved = storage.getItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -971,21 +1003,23 @@ const loadSetupOpportunities = (): SetupOpportunity[] | null => {
   return null;
 };
 
-// Save setup opportunities to localStorage
+// Save setup opportunities to sessionStorage
 const saveSetupOpportunities = (data: SetupOpportunity[]) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
-    localStorage.setItem(SETUP_OPPORTUNITIES_STORAGE_KEY, JSON.stringify(data));
+    storage.setItem(SETUP_OPPORTUNITIES_STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     console.error("Error saving setup opportunities:", error);
   }
 };
 
-// Load accepted recommendations from localStorage
+// Load accepted recommendations from sessionStorage
 const loadAcceptedRecommendations = (): AcceptedRecommendationsData | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+    const saved = storage.getItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -995,25 +1029,27 @@ const loadAcceptedRecommendations = (): AcceptedRecommendationsData | null => {
   return null;
 };
 
-// Save accepted recommendations to localStorage
+// Save accepted recommendations to sessionStorage
 const saveAcceptedRecommendations = (data: AcceptedRecommendationsData | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data) {
-      localStorage.setItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+      storage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving accepted recommendations:", error);
   }
 };
 
-// Load LLM proof point evaluations from localStorage
+// Load LLM proof point evaluations from sessionStorage
 const loadLlmEvaluations = (): LlmProofPointEvaluations | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(LLM_EVALUATIONS_STORAGE_KEY);
+    const saved = storage.getItem(LLM_EVALUATIONS_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -1023,25 +1059,27 @@ const loadLlmEvaluations = (): LlmProofPointEvaluations | null => {
   return null;
 };
 
-// Save LLM proof point evaluations to localStorage
+// Save LLM proof point evaluations to sessionStorage
 const saveLlmEvaluations = (data: LlmProofPointEvaluations | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data) {
-      localStorage.setItem(LLM_EVALUATIONS_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(LLM_EVALUATIONS_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
+      storage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving LLM evaluations:", error);
   }
 };
 
-// Load computed metrics from localStorage
+// Load computed metrics from sessionStorage
 const loadComputedMetrics = (): Record<string, number> | null => {
-  if (typeof window === "undefined") return null;
+  const storage = getSessionStorage();
+  if (!storage) return null;
   try {
-    const saved = localStorage.getItem(COMPUTED_METRICS_STORAGE_KEY);
+    const saved = storage.getItem(COMPUTED_METRICS_STORAGE_KEY);
     if (saved) {
       return JSON.parse(saved);
     }
@@ -1051,17 +1089,70 @@ const loadComputedMetrics = (): Record<string, number> | null => {
   return null;
 };
 
-// Save computed metrics to localStorage
+// Save computed metrics to sessionStorage
 const saveComputedMetrics = (data: Record<string, number> | null) => {
-  if (typeof window === "undefined") return;
+  const storage = getSessionStorage();
+  if (!storage) return;
   try {
     if (data) {
-      localStorage.setItem(COMPUTED_METRICS_STORAGE_KEY, JSON.stringify(data));
+      storage.setItem(COMPUTED_METRICS_STORAGE_KEY, JSON.stringify(data));
     } else {
-      localStorage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
+      storage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Error saving computed metrics:", error);
+  }
+};
+
+// Load portfolio items from sessionStorage
+const loadPortfolioItems = (): PortfolioItem[] => {
+  const storage = getSessionStorage();
+  if (!storage) return [];
+  try {
+    const saved = storage.getItem(PORTFOLIO_ITEMS_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading portfolio items:", error);
+  }
+  return [];
+};
+
+// Save portfolio items to sessionStorage
+const savePortfolioItems = (data: PortfolioItem[]) => {
+  const storage = getSessionStorage();
+  if (!storage) return;
+  try {
+    storage.setItem(PORTFOLIO_ITEMS_STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving portfolio items:", error);
+  }
+};
+
+// Load selected categories from sessionStorage
+const loadSelectedCategories = (): string[] => {
+  const storage = getSessionStorage();
+  if (!storage) return [];
+  try {
+    const saved = storage.getItem(SELECTED_CATEGORIES_STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (error) {
+    console.error("Error loading selected categories:", error);
+  }
+  return [];
+};
+
+// Save selected categories to sessionStorage
+const saveSelectedCategories = (data: string[]) => {
+  const storage = getSessionStorage();
+  if (!storage) return;
+  try {
+    storage.setItem(SELECTED_CATEGORIES_STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving selected categories:", error);
   }
 };
 
@@ -1144,6 +1235,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const savedSetupData = loadPersistedSetupData();
       if (savedSetupData && savedSetupData.categoryName) {
         dispatch({ type: "UPDATE_SETUP_DATA", payload: savedSetupData });
+      }
+
+      // Load portfolio items (for goals page)
+      const savedPortfolioItems = loadPortfolioItems();
+      if (savedPortfolioItems.length > 0) {
+        dispatch({ type: "SET_PORTFOLIO_ITEMS", payload: savedPortfolioItems });
+      }
+
+      // Load selected categories (for goals page)
+      const savedSelectedCategories = loadSelectedCategories();
+      if (savedSelectedCategories.length > 0) {
+        dispatch({ type: "SET_SELECTED_CATEGORIES", payload: savedSelectedCategories });
       }
 
       // Load setup opportunities (proof points validation status)
@@ -1350,6 +1453,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     saveLlmEvaluations(state.llmProofPointEvaluations);
   }, [state.llmProofPointEvaluations]);
 
+  // Save portfolio items to sessionStorage whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    savePortfolioItems(state.portfolioItems);
+  }, [state.portfolioItems]);
+
+  // Save selected categories to sessionStorage whenever it changes
+  React.useEffect(() => {
+    if (isInitialLoadRef.current) return;
+    saveSelectedCategories(state.selectedCategories);
+  }, [state.selectedCategories]);
+
   const actions = {
     setUser: useCallback(
       (user: User | null) => dispatch({ type: "SET_USER", payload: user }),
@@ -1471,9 +1586,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearActivityHistory: useCallback(
       () => {
         dispatch({ type: "CLEAR_ACTIVITY_HISTORY" });
-        // Also clear from localStorage
-        if (typeof window !== "undefined") {
-          localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        // Also clear from sessionStorage
+        const storage = getSessionStorage();
+        if (storage) {
+          storage.removeItem(ACTIVITY_STORAGE_KEY);
         }
       },
       []
@@ -1496,9 +1612,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearPersistedReviewData: useCallback(
       () => {
         dispatch({ type: "CLEAR_PERSISTED_REVIEW_DATA" });
-        // Also clear from localStorage
-        if (typeof window !== "undefined") {
-          localStorage.removeItem(REVIEW_DATA_STORAGE_KEY);
+        // Also clear from sessionStorage
+        const storage = getSessionStorage();
+        if (storage) {
+          storage.removeItem(REVIEW_DATA_STORAGE_KEY);
         }
       },
       []
@@ -1530,18 +1647,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     ),
     resetState: useCallback(() => dispatch({ type: "RESET_STATE" }), []),
     logout: useCallback(() => {
-      // Clear all persisted data from localStorage
+      // Clear session data from sessionStorage
+      const storage = getSessionStorage();
+      if (storage) {
+        storage.removeItem(ACTIVITY_STORAGE_KEY);
+        storage.removeItem(REVIEW_DATA_STORAGE_KEY);
+        storage.removeItem(SETUP_DATA_STORAGE_KEY);
+        storage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
+        storage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
+        storage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
+        storage.removeItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
+        storage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
+        storage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
+        storage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
+        storage.removeItem(PORTFOLIO_ITEMS_STORAGE_KEY);
+        storage.removeItem(SELECTED_CATEGORIES_STORAGE_KEY);
+      }
+      // Clear auth token from localStorage
       if (typeof window !== "undefined") {
-        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
-        localStorage.removeItem(REVIEW_DATA_STORAGE_KEY);
-        localStorage.removeItem(SETUP_DATA_STORAGE_KEY);
-        localStorage.removeItem(SPEND_ANALYSIS_STORAGE_KEY);
-        localStorage.removeItem(OPPORTUNITY_METRICS_STORAGE_KEY);
-        localStorage.removeItem(SAVINGS_SUMMARY_STORAGE_KEY);
-        localStorage.removeItem(SETUP_OPPORTUNITIES_STORAGE_KEY);
-        localStorage.removeItem(ACCEPTED_RECOMMENDATIONS_STORAGE_KEY);
-        localStorage.removeItem(LLM_EVALUATIONS_STORAGE_KEY);
-        localStorage.removeItem(COMPUTED_METRICS_STORAGE_KEY);
         localStorage.removeItem("beroe_auth_token");
         // Also clear the Supabase demo session ID to start fresh
         localStorage.removeItem("beroe_demo_session_id");

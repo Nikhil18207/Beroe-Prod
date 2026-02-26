@@ -1,13 +1,20 @@
 /**
  * API Client for Beroe Procurement Engine
+ * Optimized for performance with caching and connection reuse
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 const TOKEN_KEY = "beroe_auth_token";
 
+// Simple in-memory cache for GET requests
+const requestCache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 30000; // 30 seconds cache for frequently accessed data
+
 interface RequestOptions extends RequestInit {
   timeout?: number;
-  skipAuth?: boolean; // Skip adding auth header for public endpoints
+  skipAuth?: boolean;
+  cache?: boolean; // Enable caching for GET requests
+  cacheTTL?: number; // Custom cache TTL in ms
 }
 
 class ApiError extends Error {
@@ -32,6 +39,7 @@ function getAuthToken(): string | null {
 function buildHeaders(options: RequestOptions): HeadersInit {
   const headers: HeadersInit = {
     "Content-Type": "application/json",
+    "Connection": "keep-alive", // Reuse connections
     ...options.headers,
   };
 
@@ -46,11 +54,52 @@ function buildHeaders(options: RequestOptions): HeadersInit {
   return headers;
 }
 
+// Check if cached data is still valid
+function getCachedData<T>(key: string, ttl: number): T | null {
+  const cached = requestCache.get(key);
+  if (cached && Date.now() - cached.timestamp < ttl) {
+    return cached.data as T;
+  }
+  return null;
+}
+
+// Store data in cache
+function setCachedData(key: string, data: unknown): void {
+  // Limit cache size to prevent memory issues
+  if (requestCache.size > 100) {
+    const firstKey = requestCache.keys().next().value;
+    if (firstKey) requestCache.delete(firstKey);
+  }
+  requestCache.set(key, { data, timestamp: Date.now() });
+}
+
+// Clear cache for a specific endpoint pattern
+export function clearApiCache(pattern?: string): void {
+  if (!pattern) {
+    requestCache.clear();
+    return;
+  }
+  for (const key of requestCache.keys()) {
+    if (key.includes(pattern)) {
+      requestCache.delete(key);
+    }
+  }
+}
+
 async function request<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 30000, skipAuth, ...fetchOptions } = options;
+  const { timeout = 15000, skipAuth, cache = false, cacheTTL = CACHE_TTL, ...fetchOptions } = options;
+
+  // Check cache for GET requests
+  if (cache && options.method === "GET") {
+    const cacheKey = `${endpoint}:${getAuthToken() || 'anon'}`;
+    const cachedData = getCachedData<T>(cacheKey, cacheTTL);
+    if (cachedData) {
+      return cachedData;
+    }
+  }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -60,6 +109,8 @@ async function request<T>(
       ...fetchOptions,
       signal: controller.signal,
       headers: buildHeaders({ ...options, skipAuth }),
+      // Enable keep-alive for connection reuse
+      keepalive: true,
     });
 
     clearTimeout(timeoutId);
@@ -73,7 +124,15 @@ async function request<T>(
       );
     }
 
-    return response.json();
+    const data = await response.json();
+
+    // Cache successful GET responses
+    if (cache && options.method === "GET") {
+      const cacheKey = `${endpoint}:${getAuthToken() || 'anon'}`;
+      setCachedData(cacheKey, data);
+    }
+
+    return data;
   } catch (error) {
     clearTimeout(timeoutId);
     if (error instanceof ApiError) throw error;
@@ -92,7 +151,7 @@ async function uploadFile<T>(
   formData: FormData,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 60000, skipAuth, ...fetchOptions } = options;
+  const { timeout = 120000, skipAuth, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -112,7 +171,6 @@ async function uploadFile<T>(
       body: formData,
       signal: controller.signal,
       ...fetchOptions,
-      // Don't set Content-Type - browser will set it with boundary for FormData
       headers: uploadHeaders,
     });
 
@@ -141,6 +199,10 @@ async function uploadFile<T>(
 export const apiClient = {
   get: <T>(endpoint: string, options?: RequestOptions) =>
     request<T>(endpoint, { ...options, method: "GET" }),
+
+  // Cached GET - use for frequently accessed, rarely changing data
+  getCached: <T>(endpoint: string, options?: RequestOptions) =>
+    request<T>(endpoint, { ...options, method: "GET", cache: true }),
 
   post: <T>(endpoint: string, data?: unknown, options?: RequestOptions) =>
     request<T>(endpoint, {
