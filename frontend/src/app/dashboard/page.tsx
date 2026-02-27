@@ -13,7 +13,7 @@ import {
   Send,
   X
 } from "lucide-react";
-import React, { useState, useMemo, useCallback, memo } from "react";
+import React, { useState, useMemo, useCallback, memo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp, type ActivityItem } from "@/context/AppContext";
@@ -56,6 +56,12 @@ function DashboardContent() {
   const router = useRouter();
   const [chatInput, setChatInput] = useState("");
   const [selectedActivityGroup, setSelectedActivityGroup] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch - only render data-dependent content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const userName = state.user?.name || "User";
 
@@ -533,8 +539,10 @@ function DashboardContent() {
               </div>
 
               {/* Grid of bento cards - each group gets a card */}
-              {displayedGroups.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Always use grid layout to prevent hydration layout shift */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mounted && displayedGroups.length > 0 ? (
+                <>
                   {displayedGroups.map((group, index) => (
                     <motion.div
                       key={group.main.id}
@@ -588,7 +596,7 @@ function DashboardContent() {
                       )}
                     </motion.div>
                   ))}
-                </div>
+                </>
               ) : (
                 // Fallback when no activities
                 <motion.div
@@ -600,7 +608,7 @@ function DashboardContent() {
                     y: -8,
                     transition: { type: "spring", stiffness: 300, damping: 20 }
                   }}
-                  className="group rounded-3xl glass-card p-6 ring-1 ring-white/20 hover:shadow-2xl hover:shadow-blue-500/10 hover:ring-white/40 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/30 max-w-sm"
+                  className="group rounded-3xl glass-card p-6 ring-1 ring-white/20 hover:shadow-2xl hover:shadow-blue-500/10 hover:ring-white/40 transition-all duration-300 cursor-pointer border border-white/10 hover:border-white/30"
                   onClick={() => router.push("/setup")}
                 >
                   <div className="flex items-center justify-between mb-5">
@@ -623,6 +631,7 @@ function DashboardContent() {
                   </p>
                 </motion.div>
               )}
+              </div>
 
               {/* Popup Modal for related activities */}
               <AnimatePresence>
