@@ -12,8 +12,7 @@ import {
   Pencil,
   AlertTriangle,
   Send,
-  Mic,
-  ArrowLeft
+  Mic
 } from "lucide-react";
 import React, { useState, useMemo, useCallback, memo } from "react";
 import Link from "next/link";
@@ -309,14 +308,6 @@ function OpportunitiesContent() {
 
         {/* Top Header Bar */}
         <header className="flex h-16 items-center justify-between px-6 bg-transparent">
-          {/* Back Button */}
-          <Link
-            href="/dashboard"
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100 mr-3 shrink-0"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-
           <form onSubmit={handleChatSubmit} className="flex items-center gap-3 flex-1">
             {/* Gradient Orb */}
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[2px] shadow-md shrink-0">

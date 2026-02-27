@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronLeft,
   ArrowRight,
   Pencil,
   Check,
@@ -43,8 +42,7 @@ import {
   Building2,
   FileCheck,
   Filter,
-  ListFilter,
-  ArrowLeft
+  ListFilter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -4380,8 +4378,7 @@ export default function ReviewDataPage() {
       <div className="relative z-10 flex flex-1 flex-col p-8 lg:p-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
-          <Link href="/setup/goals" className="flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-black">
-            <ChevronLeft className="h-4 w-4" />
+          <Link href="/setup/goals" className="text-sm font-medium text-gray-500 transition-colors hover:text-black">
             Go Back
           </Link>
 
