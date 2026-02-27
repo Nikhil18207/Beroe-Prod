@@ -42,6 +42,7 @@ export type LeverTheme =
   | "ESG Compliance";
 
 export interface Opportunity {
+  opportunity_id: string;
   id: string;
   name: string;
   lever_theme: LeverTheme;
@@ -413,7 +414,7 @@ export function canExport(user: User | null): boolean {
  * Check if user is a viewer (read-only)
  */
 export function isViewer(user: User | null): boolean {
-  if (!user) return true; // No user = read-only
+  if (!user) return false; // No user = not authenticated, not a viewer role
   const roleName = user.role_name?.toUpperCase() || 'ANALYST';
   return roleName === 'VIEWER';
 }

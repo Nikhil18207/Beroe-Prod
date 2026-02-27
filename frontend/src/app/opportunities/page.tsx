@@ -155,7 +155,7 @@ function OpportunitiesContent() {
       // Use impact from 7-step calculation, or fallback to validation ratio
       const impact: "High" | "Medium" | "Low" = realMetrics?.impactBucket ||
         (validationRatio >= 0.7 ? "High" :
-        validationRatio >= 0.4 ? "Medium" : "Low");
+          validationRatio >= 0.4 ? "Medium" : "Low");
 
       // Use real savings from 7-step calculation if available
       let savings_low: number;
@@ -197,7 +197,7 @@ function OpportunitiesContent() {
 
       // Calculate weighted priority score based on user goals
       // Pass neutral ESG impact since we're only showing Risk
-      const neutralEsgImpact = { score: 0, normalizedScore: 50, esgLevel: 'Medium' as const, label: '0', description: '', breakdown: { environmental: { score: 0, weighted: 0, proofPoints: [] }, social: { score: 0, weighted: 0, proofPoints: [] }, governance: { score: 0, weighted: 0, proofPoints: [] } } };
+      const neutralEsgImpact = { score: 0, normalizedScore: 50, esgLevel: 'Medium' as const, label: '0', description: '', breakdown: { environmental: 0, social: 0, governance: 0 } };
       const priorityResult = calculateWeightedPriorityScore(
         goals,
         savingsEstimate,
@@ -435,9 +435,8 @@ function OpportunitiesContent() {
                   <button
                     key={tab.name}
                     onClick={() => setActiveTab(tab.name)}
-                    className={`relative text-lg font-medium transition-colors ${
-                      activeTab === tab.name ? "text-gray-900" : "text-gray-300 hover:text-gray-500"
-                    }`}
+                    className={`relative text-lg font-medium transition-colors ${activeTab === tab.name ? "text-gray-900" : "text-gray-300 hover:text-gray-500"
+                      }`}
                   >
                     {tab.name}
                     <sup className="ml-0.5 text-xs opacity-70">{tab.count}</sup>
@@ -563,9 +562,8 @@ const OpportunityCard = memo(function OpportunityCard({ opportunity: opp, varian
       <div className="flex items-start justify-between mb-3 mt-1">
         <div className="flex items-center gap-2">
           {/* Icon */}
-          <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${
-            isPotential ? 'bg-gray-100' : 'bg-emerald-50'
-          }`}>
+          <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${isPotential ? 'bg-gray-100' : 'bg-emerald-50'
+            }`}>
             {isPotential ? (
               <div className="h-4 w-4 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center">
                 <div className="h-1 w-1 bg-gray-400 rounded-full" />
@@ -581,11 +579,10 @@ const OpportunityCard = memo(function OpportunityCard({ opportunity: opp, varian
           <div className="rounded-md px-2.5 py-1 text-[10px] font-semibold bg-gray-100 text-gray-600">
             {isResilience ? "Resilience" : "Savings"}
           </div>
-          <div className={`rounded-md px-2.5 py-1 text-[10px] font-semibold ${
-            isPotential
-              ? 'bg-orange-100 text-orange-600 ring-1 ring-orange-200'
-              : 'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-200'
-          }`}>
+          <div className={`rounded-md px-2.5 py-1 text-[10px] font-semibold ${isPotential
+            ? 'bg-orange-100 text-orange-600 ring-1 ring-orange-200'
+            : 'bg-emerald-100 text-emerald-600 ring-1 ring-emerald-200'
+            }`}>
             {opp.status}
           </div>
         </div>
@@ -639,9 +636,8 @@ const OpportunityCard = memo(function OpportunityCard({ opportunity: opp, varian
             initial={{ width: 0 }}
             whileInView={{ width: `${opp.confidence}%` }}
             viewport={{ once: true }}
-            className={`h-full rounded-full ${
-              opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
-            }`}
+            className={`h-full rounded-full ${opp.confidence >= 70 ? 'bg-emerald-400' : opp.confidence >= 40 ? 'bg-amber-400' : 'bg-gray-300'
+              }`}
           />
         </div>
       </div>

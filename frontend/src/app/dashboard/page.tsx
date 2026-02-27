@@ -303,10 +303,10 @@ function DashboardContent() {
     ? Math.round(state.savingsSummary.confidence_score * 100)
     : opportunityStatuses.length > 0
       ? Math.round(
-          // Average confidence across all opportunities (same as opportunities page)
-          opportunityStatuses.reduce((sum, opp) => sum + opp.confidence, 0) /
-          opportunityStatuses.length
-        )
+        // Average confidence across all opportunities (same as opportunities page)
+        opportunityStatuses.reduce((sum, opp) => sum + opp.confidence, 0) /
+        opportunityStatuses.length
+      )
       : Math.round((totalValidatedProofPoints / Math.max(totalProofPoints, 1)) * 100);
 
   // Determine portfolio health message based on validation, computed metrics, and backend data
@@ -584,9 +584,8 @@ function DashboardContent() {
                             {group.related.slice(0, 3).map((activity, idx) => (
                               <div
                                 key={activity.id}
-                                className={`h-5 w-5 rounded-full border-2 border-white flex items-center justify-center ${
-                                  activity.type === "upload" ? "bg-purple-100" : activity.type === "goals" ? "bg-amber-100" : activity.type === "analysis" ? "bg-emerald-100" : "bg-blue-100"
-                                }`}
+                                className={`h-5 w-5 rounded-full border-2 border-white flex items-center justify-center ${activity.type === "upload" ? "bg-purple-100" : activity.type === "goals" ? "bg-amber-100" : activity.type === "analysis" ? "bg-emerald-100" : "bg-blue-100"
+                                  }`}
                                 style={{ zIndex: 3 - idx }}
                               >
                                 {getActivityIcon(activity.type, true)}
@@ -672,38 +671,37 @@ function DashboardContent() {
                           {groupedActivities
                             .find(g => g.main.id === selectedActivityGroup)
                             ?.related.map((activity, index) => (
-                            <motion.div
-                              key={activity.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.2, delay: index * 0.1 }}
-                              className="group rounded-2xl p-4 ring-1 ring-gray-200/50 hover:ring-gray-300/50 hover:shadow-lg transition-all duration-200 bg-white/50"
-                            >
-                              <div className="flex items-center justify-between mb-3">
-                                <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${
-                                  activity.type === "upload"
+                              <motion.div
+                                key={activity.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2, delay: index * 0.1 }}
+                                className="group rounded-2xl p-4 ring-1 ring-gray-200/50 hover:ring-gray-300/50 hover:shadow-lg transition-all duration-200 bg-white/50"
+                              >
+                                <div className="flex items-center justify-between mb-3">
+                                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${activity.type === "upload"
                                     ? "bg-purple-500/10 border-purple-400/30"
                                     : activity.type === "goals"
-                                    ? "bg-amber-500/10 border-amber-400/30"
-                                    : activity.type === "analysis"
-                                    ? "bg-emerald-500/10 border-emerald-400/30"
-                                    : "bg-blue-500/10 border-blue-400/30"
-                                }`}>
-                                  {getActivityIcon(activity.type, false)}
+                                      ? "bg-amber-500/10 border-amber-400/30"
+                                      : activity.type === "analysis"
+                                        ? "bg-emerald-500/10 border-emerald-400/30"
+                                        : "bg-blue-500/10 border-blue-400/30"
+                                    }`}>
+                                    {getActivityIcon(activity.type, false)}
+                                  </div>
+                                  <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
+                                    <Clock className="h-3 w-3" />
+                                    {formatRelativeTime(activity.timestamp)}
+                                  </div>
                                 </div>
-                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider">
-                                  <Clock className="h-3 w-3" />
-                                  {formatRelativeTime(activity.timestamp)}
-                                </div>
-                              </div>
-                              <h4 className="text-sm font-medium text-gray-800 mb-1">
-                                {activity.title}
-                              </h4>
-                              <p className="text-xs text-gray-500">
-                                {activity.description}
-                              </p>
-                            </motion.div>
-                          ))}
+                                <h4 className="text-sm font-medium text-gray-800 mb-1">
+                                  {activity.title}
+                                </h4>
+                                <p className="text-xs text-gray-500">
+                                  {activity.description}
+                                </p>
+                              </motion.div>
+                            ))}
                         </div>
                       </div>
                     </motion.div>

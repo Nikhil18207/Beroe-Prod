@@ -731,7 +731,7 @@ export default function ReviewDataPage() {
   const getDataPointFileName = (dataPointId: string): string => {
     return dataPointFiles[dataPointId]?.name || state.persistedReviewData.dataPointFiles[dataPointId]?.fileName || "";
   };
-  
+
   // Track parsed columns and files for each data point
   const [dataPointColumns, setDataPointColumns] = useState<Record<string, string[]>>({});
   const [dataPointFiles, setDataPointFiles] = useState<Record<string, File>>({});
@@ -1652,7 +1652,7 @@ export default function ReviewDataPage() {
   const getDataPointFieldCounts = (dataPointId: string): { available: number; total: number } => {
     const fields = getFieldsForDataPoint(dataPointId);
     if (fields.length === 0) return { available: 0, total: 0 };
-    
+
     const available = fields.filter(field => getDataPointFieldStatus(dataPointId, field).available).length;
     return { available, total: fields.length };
   };
@@ -2074,7 +2074,7 @@ export default function ReviewDataPage() {
   // Validate cell data - SIMPLE: just check for empty/missing values
   const validateCell = (value: string, columnName: string, rowIndex: number, colIndex: number): CellError | null => {
     const trimmedValue = value?.trim() || '';
-    
+
     // Check for empty cells
     if (!trimmedValue || trimmedValue === '') {
       return {
@@ -2086,7 +2086,7 @@ export default function ReviewDataPage() {
         severity: "error"
       };
     }
-    
+
     // Check for Excel formula errors
     const excelErrors = ['#REF!', '#N/A', '#VALUE!', '#DIV/0!', '#NAME?', '#NULL!', '#NUM!', '#ERROR!'];
     if (excelErrors.some(err => trimmedValue.toUpperCase().includes(err))) {
@@ -2275,43 +2275,43 @@ export default function ReviewDataPage() {
     let leftover = '';
     let isFirstLine = true;
     const maxRowsToStore = 10000;
-    
+
     const reader = file.stream().getReader();
     let bytesRead = 0;
-    
+
     try {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        
+
         bytesRead += value?.length || 0;
         setParseProgress(Math.round((bytesRead / file.size) * 100));
-        
+
         const chunk = leftover + decoder.decode(value, { stream: true });
         const lines = chunk.split('\n');
-        
+
         // Keep last incomplete line for next chunk
         leftover = lines.pop() || '';
-        
+
         for (const line of lines) {
           if (!line.trim()) continue;
-          
+
           if (isFirstLine) {
             headers = parseCSVLine(line);
             isFirstLine = false;
             continue;
           }
-          
+
           totalRows++;
           if (rows.length < maxRowsToStore) {
             rows.push(parseCSVLine(line));
           }
         }
-        
+
         // Yield to UI every chunk
         await new Promise(resolve => setTimeout(resolve, 0));
       }
-      
+
       // Process leftover
       if (leftover.trim()) {
         totalRows++;
@@ -2319,7 +2319,7 @@ export default function ReviewDataPage() {
           rows.push(parseCSVLine(leftover));
         }
       }
-      
+
       setParsedData({ headers, rows, totalRows });
       setParseProgress(100);
 
@@ -2396,12 +2396,12 @@ export default function ReviewDataPage() {
         }
       });
     }
-    
+
     // ========== SIMPLE VALIDATION ==========
     // Only check for:
     // 1. Duplicate rows (excluding first column which is usually ID)
     // 2. Empty/missing cells anywhere
-    
+
     // Track for duplicate detection (use ALL columns EXCEPT the first one which is ID)
     const rowHashes = new Map<string, number>();
 
@@ -3203,7 +3203,7 @@ export default function ReviewDataPage() {
           });
         }
       }
-      
+
       setValidationDataPoint({ ...validationDataPoint, file });
       await parseAndValidateFile(file, validationDataPoint.id);
 
@@ -3923,8 +3923,8 @@ export default function ReviewDataPage() {
     const totalSpend = filteredSpend > 0
       ? filteredSpend
       : (state.portfolioItems.length > 0
-          ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
-          : state.setupData.spend || 50000000);
+        ? state.portfolioItems.reduce((sum, item) => sum + item.spend, 0)
+        : state.setupData.spend || 50000000);
 
     try {
       let response;
@@ -4086,7 +4086,7 @@ export default function ReviewDataPage() {
             const proofPointsData = opp?.proofPoints?.map(pp => ({
               id: pp.id,
               name: pp.name,
-              value: pp.score,
+              value: pp.isValidated ? 1 : 0,
               data: { isValidated: pp.isValidated },
             })) || [];
 
@@ -4230,7 +4230,7 @@ export default function ReviewDataPage() {
     } else {
       // Check if all required fields are available
       const { available, total } = getDataPointFieldCounts("spend");
-      
+
       if (available === total) {
         items.push({
           id: "spend",
@@ -4245,12 +4245,12 @@ export default function ReviewDataPage() {
         });
       }
     }
-    
+
     // Check other data points with the same validation logic
     contextDataPoints.filter(dp => !dp.isSpendData).forEach(dp => {
       const fields = getFieldsForDataPoint(dp.id);
       const hasFields = fields.length > 0;
-      
+
       if (dp.items.length === 0) {
         items.push({
           id: dp.id,
@@ -4261,7 +4261,7 @@ export default function ReviewDataPage() {
         // Has field definitions - validate columns
         const { available, total } = getDataPointFieldCounts(dp.id);
         const columns = dataPointColumns[dp.id];
-        
+
         if (!columns || columns.length === 0) {
           // File uploaded but not parsed yet (non-CSV or still parsing)
           items.push({
@@ -4291,7 +4291,7 @@ export default function ReviewDataPage() {
         });
       }
     });
-    
+
     return items;
   };
 
@@ -4335,14 +4335,6 @@ export default function ReviewDataPage() {
 
   return (
     <div className="relative flex min-h-screen w-full overflow-hidden bg-[#F8FBFE]">
-      {/* Back Button */}
-      <Link
-        href="/setup/goals"
-        className="absolute top-6 left-6 z-20 flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 transition-colors shadow-sm ring-1 ring-gray-100"
-      >
-        <ArrowLeft className="h-5 w-5" />
-      </Link>
-
       {/* Viewer Read-Only Banner - userIsViewer is false during SSR to avoid hydration mismatch */}
       {state.user && userIsViewer && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white shadow-md">
@@ -4354,14 +4346,14 @@ export default function ReviewDataPage() {
       {/* Background Decor - matching the goals page style */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-b from-[#E0F2FE]/40 via-[#F8FBFE] to-white" />
-        
+
         {/* Yellow Building Detail - matching image */}
         <div className="absolute bottom-[-15%] left-[-5%] z-0 h-[60%] w-[50%] rotate-[-10deg] overflow-hidden border-t-[12px] border-white/40 bg-[#EAB308] shadow-2xl">
-           <div className="absolute inset-0 flex flex-col space-y-8 pt-16">
-             {Array.from({ length: 20 }).map((_, i) => (
-               <div key={i} className="h-[1px] w-full bg-black/5" />
-             ))}
-           </div>
+          <div className="absolute inset-0 flex flex-col space-y-8 pt-16">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div key={i} className="h-[1px] w-full bg-black/5" />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -4370,17 +4362,17 @@ export default function ReviewDataPage() {
         <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/5 overflow-hidden">
           <img src="/beroe cut.jpg" alt="Beroe" className="h-8 w-8 object-contain" />
         </div>
-        
+
         <div className="flex flex-col gap-8 text-gray-400">
-           <Home className="h-6 w-6" />
-           <Activity className="h-6 w-6 text-blue-600" />
-           <ShieldCheck className="h-6 w-6" />
+          <Home className="h-6 w-6" />
+          <Activity className="h-6 w-6 text-blue-600" />
+          <ShieldCheck className="h-6 w-6" />
         </div>
 
         <div className="mt-auto flex flex-col gap-8 text-gray-400">
-           <Search className="h-6 w-6" />
-           <User className="h-6 w-6" />
-           <LogOut className="h-6 w-6 text-red-400/60" />
+          <Search className="h-6 w-6" />
+          <User className="h-6 w-6" />
+          <LogOut className="h-6 w-6 text-red-400/60" />
         </div>
       </div>
 
@@ -4392,7 +4384,7 @@ export default function ReviewDataPage() {
             <ChevronLeft className="h-4 w-4" />
             Go Back
           </Link>
-          
+
           <Button
             onClick={handleContinue}
             disabled={isUploading}
@@ -4432,12 +4424,12 @@ export default function ReviewDataPage() {
 
             {/* Profile Avatar stack - like in image */}
             <div className="flex items-center gap-2">
-               <div className="h-8 w-8 rounded-full border-2 border-white bg-blue-100 shadow-sm overflow-hidden">
-                  <div className="h-full w-full bg-gradient-to-tr from-blue-400 to-indigo-600" />
-               </div>
-               <div className="h-8 w-8 -ml-3 rounded-full border-2 border-white bg-purple-100 shadow-sm overflow-hidden">
-                  <div className="h-full w-full bg-gradient-to-tr from-purple-400 to-pink-600 opacity-50" />
-               </div>
+              <div className="h-8 w-8 rounded-full border-2 border-white bg-blue-100 shadow-sm overflow-hidden">
+                <div className="h-full w-full bg-gradient-to-tr from-blue-400 to-indigo-600" />
+              </div>
+              <div className="h-8 w-8 -ml-3 rounded-full border-2 border-white bg-purple-100 shadow-sm overflow-hidden">
+                <div className="h-full w-full bg-gradient-to-tr from-purple-400 to-pink-600 opacity-50" />
+              </div>
             </div>
 
             {/* Checklist Card */}
@@ -4445,7 +4437,7 @@ export default function ReviewDataPage() {
               <div className="p-7 pb-4">
                 <h2 className="text-[15px] font-semibold text-[#1A1C1E]">Complete your profile setup</h2>
               </div>
-              
+
               <div className="space-y-1 p-2">
                 {steps.map((step, idx) => (
                   <div key={idx} className="space-y-1">
@@ -4458,8 +4450,8 @@ export default function ReviewDataPage() {
                       </div>
                       <span className={`text-[14px] font-medium ${step.completed ? 'text-emerald-600' : 'text-[#1A1C1E]'}`}>{step.name}</span>
                       {step.active && step.subItems && (
-                        <ChevronDown 
-                          className={`ml-auto h-4 w-4 text-gray-400 transition-transform duration-200 ${isReviewDataExpanded ? 'rotate-0' : '-rotate-90'}`} 
+                        <ChevronDown
+                          className={`ml-auto h-4 w-4 text-gray-400 transition-transform duration-200 ${isReviewDataExpanded ? 'rotate-0' : '-rotate-90'}`}
                         />
                       )}
                     </button>
@@ -4473,27 +4465,27 @@ export default function ReviewDataPage() {
                             return { bar: "bg-red-400", text: "text-red-500" }; // Not Uploaded
                           };
                           const colors = getStatusColor();
-                          
+
                           return (
                             <div key={i} className="flex items-center justify-between py-1.5">
-                               <div className="flex items-center gap-3 flex-1 min-w-0">
-                                  <div className={`h-1.5 w-4 rounded-full flex-shrink-0 ${colors.bar}`} />
-                                  <span className="text-[13px] font-medium text-gray-600 truncate">{item.name}</span>
-                               </div>
-                               {item.status === "Needs Review" ? (
-                                 <button
-                                   onClick={() => openValidationModal(item.id, item.name)}
-                                   className="text-[11px] font-bold text-amber-500 hover:text-amber-600 hover:underline transition-colors flex-shrink-0 ml-2"
-                                 >
-                                   Review
-                                 </button>
-                               ) : item.status === "Not Uploaded" ? (
-                                 <span className="text-[11px] font-bold text-red-500 flex-shrink-0 ml-2">Not Uploaded</span>
-                               ) : (
-                                 <span className="text-[11px] font-bold text-emerald-500 flex-shrink-0 ml-2 flex items-center gap-1">
-                                   <Check className="h-3 w-3" /> Good
-                                 </span>
-                               )}
+                              <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className={`h-1.5 w-4 rounded-full flex-shrink-0 ${colors.bar}`} />
+                                <span className="text-[13px] font-medium text-gray-600 truncate">{item.name}</span>
+                              </div>
+                              {item.status === "Needs Review" ? (
+                                <button
+                                  onClick={() => openValidationModal(item.id, item.name)}
+                                  className="text-[11px] font-bold text-amber-500 hover:text-amber-600 hover:underline transition-colors flex-shrink-0 ml-2"
+                                >
+                                  Review
+                                </button>
+                              ) : item.status === "Not Uploaded" ? (
+                                <span className="text-[11px] font-bold text-red-500 flex-shrink-0 ml-2">Not Uploaded</span>
+                              ) : (
+                                <span className="text-[11px] font-bold text-emerald-500 flex-shrink-0 ml-2 flex items-center gap-1">
+                                  <Check className="h-3 w-3" /> Good
+                                </span>
+                              )}
                             </div>
                           );
                         })}
@@ -4505,19 +4497,19 @@ export default function ReviewDataPage() {
 
               <div className="mt-2 border-t border-gray-100 p-6 pt-5">
                 <div className="flex items-center justify-between mb-3">
-                   <span className="text-[12px] font-semibold text-gray-400">
-                     {allDataGood && notUploadedCount === 0 ? "3 of 3 complete" : "2 of 3 complete"}
-                   </span>
-                   {(needsReviewCount > 0 || notUploadedCount > 0) && (
-                     <span className="text-[11px] font-medium text-gray-500">
-                       {needsReviewCount > 0 && <span className="text-amber-500">{needsReviewCount} needs review</span>}
-                       {needsReviewCount > 0 && notUploadedCount > 0 && " · "}
-                       {notUploadedCount > 0 && <span className="text-red-500">{notUploadedCount} missing</span>}
-                     </span>
-                   )}
+                  <span className="text-[12px] font-semibold text-gray-400">
+                    {allDataGood && notUploadedCount === 0 ? "3 of 3 complete" : "2 of 3 complete"}
+                  </span>
+                  {(needsReviewCount > 0 || notUploadedCount > 0) && (
+                    <span className="text-[11px] font-medium text-gray-500">
+                      {needsReviewCount > 0 && <span className="text-amber-500">{needsReviewCount} needs review</span>}
+                      {needsReviewCount > 0 && notUploadedCount > 0 && " · "}
+                      {notUploadedCount > 0 && <span className="text-red-500">{notUploadedCount} missing</span>}
+                    </span>
+                  )}
                 </div>
                 <div className="h-[4px] w-full rounded-full bg-gray-50">
-                  <div 
+                  <div
                     className={`h-full rounded-full transition-all duration-700 ${allDataGood && notUploadedCount === 0 ? "bg-emerald-500" : "bg-[#1A1C1E]"}`}
                     style={{ width: allDataGood && notUploadedCount === 0 ? "100%" : "66%" }}
                   />
@@ -4530,96 +4522,93 @@ export default function ReviewDataPage() {
           <div className="space-y-8">
             {/* Top Stats Cards */}
             <div className="grid grid-cols-5 gap-4">
-               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03]">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Spend</span>
-                  <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-xl font-semibold text-[#1A1C1E]">
-                      {(() => {
-                        // Only show spend from actual uploaded CSV data - not from hardcoded portfolio defaults
-                        const spendCsvData = parsedCsvDataStore["spend"];
-                        if (spendCsvData && spendCsvData.rows.length > 0) {
-                          const summaryData = getSummaryData("spend");
-                          return summaryData.totalSpend > 0 ? formatCurrency(summaryData.totalSpend) : '-';
-                        }
-                        // No data uploaded yet - show placeholder
-                        return <span className="text-gray-400">Upload Data</span>;
-                      })()}
-                    </span>
-                  </div>
-               </div>
+              <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03]">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Spend</span>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-xl font-semibold text-[#1A1C1E]">
+                    {(() => {
+                      // Only show spend from actual uploaded CSV data - not from hardcoded portfolio defaults
+                      const spendCsvData = parsedCsvDataStore["spend"];
+                      if (spendCsvData && spendCsvData.rows.length > 0) {
+                        const summaryData = getSummaryData("spend");
+                        return summaryData.totalSpend > 0 ? formatCurrency(summaryData.totalSpend) : '-';
+                      }
+                      // No data uploaded yet - show placeholder
+                      return <span className="text-gray-400">Upload Data</span>;
+                    })()}
+                  </span>
+                </div>
+              </div>
 
-               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Cost</span>
-                  <div className="mt-2">
-                    <span className={`text-xl font-semibold ${
-                      state.setupData.goals.cost >= 66 ? 'text-emerald-500' :
+              <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Cost</span>
+                <div className="mt-2">
+                  <span className={`text-xl font-semibold ${state.setupData.goals.cost >= 66 ? 'text-emerald-500' :
                       state.setupData.goals.cost >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.cost >= 66 ? 'High' :
-                       state.setupData.goals.cost >= 33 ? 'Medium' : 'Low'}
-                    </span>
-                  </div>
-                  <Link
-                    href="/setup/goals"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
-               </div>
+                    {state.setupData.goals.cost >= 66 ? 'High' :
+                      state.setupData.goals.cost >= 33 ? 'Medium' : 'Low'}
+                  </span>
+                </div>
+                <Link
+                  href="/setup/goals"
+                  className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Link>
+              </div>
 
-               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Risk</span>
-                  <div className="mt-2">
-                    <span className={`text-xl font-semibold ${
-                      state.setupData.goals.risk >= 66 ? 'text-emerald-500' :
+              <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Risk</span>
+                <div className="mt-2">
+                  <span className={`text-xl font-semibold ${state.setupData.goals.risk >= 66 ? 'text-emerald-500' :
                       state.setupData.goals.risk >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.risk >= 66 ? 'High' :
-                       state.setupData.goals.risk >= 33 ? 'Medium' : 'Low'}
-                    </span>
-                  </div>
-                  <Link
-                    href="/setup/goals"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
-               </div>
+                    {state.setupData.goals.risk >= 66 ? 'High' :
+                      state.setupData.goals.risk >= 33 ? 'Medium' : 'Low'}
+                  </span>
+                </div>
+                <Link
+                  href="/setup/goals"
+                  className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Link>
+              </div>
 
-               <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">ESG</span>
-                  <div className="mt-2">
-                    <span className={`text-xl font-semibold ${
-                      state.setupData.goals.esg >= 66 ? 'text-emerald-500' :
+              <div className="rounded-[32px] bg-white p-5 shadow-sm ring-1 ring-black/[0.03] relative group">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">ESG</span>
+                <div className="mt-2">
+                  <span className={`text-xl font-semibold ${state.setupData.goals.esg >= 66 ? 'text-emerald-500' :
                       state.setupData.goals.esg >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
-                      {state.setupData.goals.esg >= 66 ? 'High' :
-                       state.setupData.goals.esg >= 33 ? 'Medium' : 'Low'}
-                    </span>
-                  </div>
-                  <Link
-                    href="/setup/goals"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
-               </div>
+                    {state.setupData.goals.esg >= 66 ? 'High' :
+                      state.setupData.goals.esg >= 33 ? 'Medium' : 'Low'}
+                  </span>
+                </div>
+                <Link
+                  href="/setup/goals"
+                  className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-400 opacity-0 group-hover:opacity-100 transition-all group-hover:bg-blue-100 group-hover:text-blue-500"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Link>
+              </div>
 
-               <button
-                  onClick={() => setIsOpportunitiesListOpen(true)}
-                  className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all duration-200 ease-out hover:shadow-xl hover:shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] text-left"
-               >
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Opportunities</span>
-                  <div className="mt-2 flex items-center gap-2">
-                    <span className="text-xl font-semibold text-white">
-                      {qualifiedCount + potentialCount}
-                    </span>
-                    <span className="text-[12px] text-blue-100">available</span>
-                  </div>
-                  <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <ArrowRight className="h-4 w-4" />
-                  </div>
-               </button>
+              <button
+                onClick={() => setIsOpportunitiesListOpen(true)}
+                className="rounded-[32px] bg-gradient-to-br from-blue-500 to-indigo-600 p-5 shadow-sm ring-1 ring-black/[0.03] relative group cursor-pointer transition-all duration-200 ease-out hover:shadow-xl hover:shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] text-left"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Opportunities</span>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="text-xl font-semibold text-white">
+                    {qualifiedCount + potentialCount}
+                  </span>
+                  <span className="text-[12px] text-blue-100">available</span>
+                </div>
+                <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white">
+                  <ArrowRight className="h-4 w-4" />
+                </div>
+              </button>
             </div>
 
             {/* Hidden file input */}
@@ -4635,368 +4624,367 @@ export default function ReviewDataPage() {
 
             {/* Data Points Table Section */}
             <div className="rounded-[40px] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.02)] ring-1 ring-black/5">
-               <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-xl font-semibold text-[#1A1C1E]">Data Points</h3>
-                  <div className="flex items-center gap-1 rounded-2xl bg-gray-50 p-1.5">
-                     <button className="rounded-xl bg-white px-5 py-2 text-[13px] font-medium text-[#1A1C1E] shadow-sm ring-1 ring-black/5">All</button>
-                     <button className="flex items-center gap-2 px-5 py-2 text-[13px] font-medium text-gray-500 transition-colors hover:text-black">
-                        Has Data
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-600">{needsValidationCount}</span>
-                     </button>
-                     <button className="flex items-center gap-2 px-5 py-2 text-[13px] font-medium text-gray-500 transition-colors hover:text-black">
-                        Not Available
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-200 text-[11px] font-bold text-gray-600">{notAvailableCount}</span>
-                     </button>
-                  </div>
-               </div>
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-xl font-semibold text-[#1A1C1E]">Data Points</h3>
+                <div className="flex items-center gap-1 rounded-2xl bg-gray-50 p-1.5">
+                  <button className="rounded-xl bg-white px-5 py-2 text-[13px] font-medium text-[#1A1C1E] shadow-sm ring-1 ring-black/5">All</button>
+                  <button className="flex items-center gap-2 px-5 py-2 text-[13px] font-medium text-gray-500 transition-colors hover:text-black">
+                    Has Data
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-600">{needsValidationCount}</span>
+                  </button>
+                  <button className="flex items-center gap-2 px-5 py-2 text-[13px] font-medium text-gray-500 transition-colors hover:text-black">
+                    Not Available
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-200 text-[11px] font-bold text-gray-600">{notAvailableCount}</span>
+                  </button>
+                </div>
+              </div>
 
-               {/* Table */}
-               <div className="w-full overflow-hidden">
-                  <table className="w-full text-left">
-                     <thead>
-                        <tr className="border-b border-gray-100 text-[12px] font-medium uppercase tracking-widest text-gray-400">
-                           <th className="pb-4 pl-4 font-medium">Data</th>
-                           <th className="pb-4 font-medium">Status</th>
-                           <th className="pb-4 font-medium text-center">Last Updated</th>
-                           <th className="pb-4 pr-4 text-right font-medium">Action</th>
-                        </tr>
-                     </thead>
-                     <tbody className="divide-y divide-gray-50">
-                        {dataPointsWithIcons.map((dataPoint) => (
-                           <React.Fragment key={dataPoint.id}>
-                              <tr className="group transition-colors hover:bg-gray-50/50">
-                                 <td className="py-6 pl-4">
-                                    <div className="flex items-center gap-3">
-                                       {/* Expand/collapse for spend data or items */}
-                                       {((dataPoint.isSpendData && hasSpendData) || (!dataPoint.isSpendData && dataPoint.items.length > 0)) && (
-                                          <button
-                                             onClick={(e) => {
-                                                e.stopPropagation();
-                                                dataPoint.isSpendData ? setIsSpendExpanded(!isSpendExpanded) : toggleRowExpansion(dataPoint.id);
-                                             }}
-                                             className="flex items-center justify-center transition-transform duration-200 hover:bg-gray-100 active:bg-gray-100 focus:outline-none rounded p-1 -ml-1"
-                                             style={{ transform: (dataPoint.isSpendData ? isSpendExpanded : expandedRows.has(dataPoint.id)) ? 'rotate(0deg)' : 'rotate(-90deg)' }}
-                                          >
-                                             <ChevronDown className="h-4 w-4 text-gray-400" />
-                                          </button>
-                                       )}
-                                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-400">
-                                          {dataPoint.icon}
-                                       </div>
-                                       <span className="text-[15px] font-medium text-[#1A1C1E]">
-                                          {dataPoint.name}
-                                          {!dataPoint.isSpendData && dataPoint.items.length > 0 && (
-                                             <span className="ml-2 text-gray-400 font-normal">{dataPoint.items.length}</span>
-                                          )}
-                                       </span>
-                                       {dataPoint.isSpendData && hasSpendData && (
-                                          <span className="ml-2 text-[13px] text-gray-500">
-                                             ({spendFileName})
-                                          </span>
-                                       )}
-                                       {/* Show field counts for spend data */}
-                                       {dataPoint.isSpendData && hasSpendData && !isParsingCsv && (
-                                          <span className="ml-2 text-[11px] font-medium text-gray-400">
-                                             {availableFieldsCount}/{DATA_FIELDS.length} fields available
-                                          </span>
-                                       )}
-                                       {/* Show file name for other data points with files */}
-                                       {!dataPoint.isSpendData && dataPoint.items.length > 0 && dataPoint.items[0]?.fileName && (
-                                          <span className="ml-2 text-[13px] text-gray-500">
-                                             ({dataPoint.items[0].fileName})
-                                          </span>
-                                       )}
-                                       {/* Show field counts for other data points with validation */}
-                                       {!dataPoint.isSpendData && dataPoint.items.length > 0 && getFieldsForDataPoint(dataPoint.id).length > 0 && (
-                                          (() => {
-                                             const { available, total } = getDataPointFieldCounts(dataPoint.id);
-                                             const isParsing = parsingDataPoints.has(dataPoint.id);
-                                             if (isParsing) {
-                                                return (
-                                                   <span className="ml-2 text-[11px] font-medium text-gray-400 flex items-center gap-1">
-                                                      <Loader2 className="h-3 w-3 animate-spin" />
-                                                      Analyzing...
-                                                   </span>
-                                                );
-                                             }
-                                             return (
-                                                <span className={`ml-2 text-[11px] font-medium ${available === total ? 'text-emerald-500' : 'text-amber-500'}`}>
-                                                   {available}/{total} fields available
-                                                </span>
-                                             );
-                                          })()
-                                       )}
-                                    </div>
-                                 </td>
-                                 <td className="py-6">
-                                    <div className="flex items-center gap-2 text-[14px] text-gray-600 font-medium">
-                                       {(() => {
-                                          const hasFile = dataPoint.isSpendData ? !!hasSpendData : dataPoint.items.length > 0;
-                                          const fields = getFieldsForDataPoint(dataPoint.id);
-                                          const hasFieldDefs = fields.length > 0;
-                                          
-                                          if (!hasFile) {
-                                             return (
-                                                <>
-                                                   <div className="h-4 w-4 rounded-full border border-dashed border-gray-300" />
-                                                   <span className="text-gray-400">Not Uploaded</span>
-                                                </>
-                                             );
-                                          }
-                                          
-                                          if (!hasFieldDefs) {
-                                             // No validation required
-                                             return (
-                                                <>
-                                                   <Check className="h-4 w-4 text-emerald-500" />
-                                                   <span className="text-emerald-600">Uploaded</span>
-                                                </>
-                                             );
-                                          }
-                                          
-                                          // Has field definitions - check validation status
-                                          const { available, total } = getDataPointFieldCounts(dataPoint.id);
-                                          const isParsing = dataPoint.isSpendData ? isParsingCsv : parsingDataPoints.has(dataPoint.id);
-                                          
-                                          if (isParsing) {
-                                             return (
-                                                <>
-                                                   <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-                                                   <span className="text-gray-400">Analyzing...</span>
-                                                </>
-                                             );
-                                          }
-                                          
-                                          if (available === total) {
-                                             return (
-                                                <>
-                                                   <Check className="h-4 w-4 text-emerald-500" />
-                                                   <span className="text-emerald-600">All Good</span>
-                                                </>
-                                             );
-                                          }
-                                          
-                                          return (
-                                             <>
-                                                <AlertCircle className="h-4 w-4 text-amber-500" />
-                                                <span className="text-amber-600">Needs Review</span>
-                                             </>
-                                          );
-                                       })()}
-                                    </div>
-                                 </td>
-                                 <td className="py-6 text-[14px] text-center">
-                                    {(() => {
-                                       const lastUpdated = getLastUpdatedDate(dataPoint);
-                                       if (!lastUpdated) return <span className="text-gray-400">-</span>;
-                                       const { date, time } = formatDateTime(lastUpdated);
-                                       return (
-                                          <div className="flex flex-col items-center">
-                                             <span className="text-gray-600 font-medium">{date}</span>
-                                             <span className="text-gray-400 text-[12px]">{time}</span>
-                                          </div>
-                                       );
-                                    })()}
-                                 </td>
-                                 <td className="py-6 pr-4 text-right">
-                                    {dataPoint.isSpendData ? (
-                                       <div className="flex items-center justify-end gap-2">
-                                          {hasSpendData && userCanEdit && (
-                                             <button
-                                                onClick={handleRemoveFile}
-                                                className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
-                                             >
-                                                <X className="h-4 w-4" />
-                                             </button>
-                                          )}
-                                          <button
-                                             onClick={() => fileInputRef.current?.click()}
-                                             disabled={!userCanUpload}
-                                             className={`inline-flex items-center gap-2 text-[14px] font-semibold transition-colors ${
-                                               userCanUpload
-                                                 ? "text-gray-900 hover:text-blue-600"
-                                                 : "text-gray-400 cursor-not-allowed"
-                                             }`}
-                                             title={!userCanUpload ? "Viewers cannot upload files" : undefined}
-                                          >
-                                             {hasSpendData ? "Change" : "Upload"}
-                                             <Upload className="h-4 w-4" />
-                                          </button>
-                                          {hasSpendData && (
-                                             <>
-                                                {/* Show Validate button when data exists but not fully validated, or when user wants to re-validate */}
-                                                {(uploadedFile || (hasSpendData && !isDataPointFullyValidated("spend"))) && (
-                                                   <button
-                                                      onClick={() => openValidationModal("spend", `Spend Data (${categoryName})`)}
-                                                      className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
-                                                   >
-                                                      Validate
-                                                      <ArrowRight className="h-4 w-4" />
-                                                   </button>
-                                                )}
-                                                {/* Show Summary button when data is fully validated */}
-                                                {isDataPointFullyValidated("spend") && (
-                                                   <button
-                                                      onClick={() => openSummaryModal("spend")}
-                                                      className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-emerald-600"
-                                                   >
-                                                      Summary
-                                                      <BarChart3 className="h-4 w-4" />
-                                                   </button>
-                                                )}
-                                             </>
-                                          )}
-                                       </div>
-                                    ) : (
-                                       <div className="flex items-center justify-end gap-2">
-                                          {/* X button to remove file */}
-                                          {dataPoint.items.length > 0 && (
-                                             <button
-                                                onClick={() => handleRemoveDataPointFile(dataPoint.id)}
-                                                className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
-                                             >
-                                                <X className="h-4 w-4" />
-                                             </button>
-                                          )}
-                                          {dataPoint.canUpload && (
-                                             <button
-                                                onClick={() => triggerDataPointUpload(dataPoint.id)}
-                                                className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-all duration-150 ease-out hover:text-blue-600 hover:scale-105 active:scale-95"
-                                             >
-                                                {dataPoint.items.length > 0 ? "Change" : "Upload"}
-                                                <Upload className="h-4 w-4" />
-                                             </button>
-                                          )}
-                                          {/* Validate button for data points with validation and files */}
-                                          {dataPoint.items.length > 0 && getFieldsForDataPoint(dataPoint.id).length > 0 && (
-                                             <button
-                                                onClick={() => openValidationModal(dataPoint.id, dataPoint.name)}
-                                                className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-blue-600 hover:scale-[1.02] hover:shadow-md hover:shadow-blue-500/30 active:scale-[0.98]"
-                                             >
-                                                Validate
-                                                <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
-                                             </button>
-                                          )}
-                                          {/* Summary button for validated data points */}
-                                          {dataPoint.items.length > 0 && dataPoint.id !== "other" && isDataPointFullyValidated(dataPoint.id) && (
-                                             <button
-                                                onClick={() => openSummaryModal(dataPoint.id)}
-                                                className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-emerald-600 hover:scale-[1.02] hover:shadow-md hover:shadow-emerald-500/30 active:scale-[0.98]"
-                                             >
-                                                Summary
-                                                <BarChart3 className="h-4 w-4" />
-                                             </button>
-                                          )}
-                                       </div>
-                                    )}
-                                 </td>
-                              </tr>
-                              {/* Collapsible sub-items for spend data */}
-                              {dataPoint.isSpendData && hasSpendData && isSpendExpanded && DATA_FIELDS.map((field, sIdx) => {
-                                 const status = getFieldStatus(field);
-                                 return (
-                                    <tr key={sIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
-                                       <td className="py-4 pl-14">
-                                          <span className="text-[14px] text-gray-600">{field.name}</span>
-                                       </td>
-                                       <td className="py-4">
-                                          {isParsingCsv ? (
-                                             <div className="flex items-center gap-2 text-[13px] text-gray-400">
-                                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                                Checking...
-                                             </div>
-                                          ) : status.available ? (
-                                             <div className="flex items-center gap-2 text-[13px] text-emerald-600">
-                                                <Check className="h-3.5 w-3.5 text-emerald-500" />
-                                                Available
-                                             </div>
-                                          ) : (
-                                             <div className="flex items-center gap-2 text-[13px] text-amber-600">
-                                                <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
-                                                Missing
-                                             </div>
-                                          )}
-                                       </td>
-                                       <td className="py-4 text-[13px] text-gray-400"></td>
-                                       <td className="py-4 pr-4 text-right"></td>
-                                    </tr>
-                                 );
-                              })}
-                              {/* Collapsible sub-items for other data points - show field validation */}
-                              {!dataPoint.isSpendData && expandedRows.has(dataPoint.id) && (() => {
-                                 const fields = getFieldsForDataPoint(dataPoint.id);
-                                 const isParsing = parsingDataPoints.has(dataPoint.id);
-                                 
-                                 // If has field definitions, show field status
-                                 if (fields.length > 0) {
-                                    return fields.map((field, fIdx) => {
-                                       const status = getDataPointFieldStatus(dataPoint.id, field);
-                                       return (
-                                          <tr key={fIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
-                                             <td className="py-4 pl-14">
-                                                <span className="text-[14px] text-gray-600">{field.name}</span>
-                                             </td>
-                                             <td className="py-4">
-                                                {isParsing ? (
-                                                   <div className="flex items-center gap-2 text-[13px] text-gray-400">
-                                                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                                      Checking...
-                                                   </div>
-                                                ) : status.available ? (
-                                                   <div className="flex items-center gap-2 text-[13px] text-emerald-600">
-                                                      <Check className="h-3.5 w-3.5 text-emerald-500" />
-                                                      Available
-                                                   </div>
-                                                ) : (
-                                                   <div className="flex items-center gap-2 text-[13px] text-amber-600">
-                                                      <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
-                                                      Missing
-                                                   </div>
-                                                )}
-                                             </td>
-                                             <td className="py-4 text-[13px] text-gray-400"></td>
-                                             <td className="py-4 pr-4 text-right"></td>
-                                          </tr>
-                                       );
-                                    });
-                                 }
-                                 
-                                 // Otherwise show uploaded files
-                                 return dataPoint.items.map((item) => (
-                                    <tr key={item.id} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
-                                       <td className="py-4 pl-14">
-                                          <div className="flex items-center gap-3">
-                                             <FileText className="h-4 w-4 text-gray-400" />
-                                             <span className="text-[14px] text-gray-600">{item.name}</span>
-                                             {item.fileName && (
-                                                <span className="text-[11px] text-gray-400">({item.fileName})</span>
-                                             )}
-                                          </div>
-                                       </td>
-                                       <td className="py-4">
-                                          <div className="flex items-center gap-2 text-[13px] text-emerald-600">
-                                             <Check className="h-3.5 w-3.5 text-emerald-500" />
-                                             Uploaded
-                                          </div>
-                                       </td>
-                                       <td className="py-4 text-[13px] text-gray-400">{formatDate(item.uploadedAt)}</td>
-                                       <td className="py-4 pr-4 text-right">
-                                          <button
-                                             onClick={() => removeDataPointItem(dataPoint.id, item.id)}
-                                             className="inline-flex items-center gap-1 text-[13px] font-medium text-gray-400 transition-colors hover:text-red-500"
-                                          >
-                                             <X className="h-3.5 w-3.5" />
-                                             Remove
-                                          </button>
-                                       </td>
-                                    </tr>
-                                 ));
+              {/* Table */}
+              <div className="w-full overflow-hidden">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="border-b border-gray-100 text-[12px] font-medium uppercase tracking-widest text-gray-400">
+                      <th className="pb-4 pl-4 font-medium">Data</th>
+                      <th className="pb-4 font-medium">Status</th>
+                      <th className="pb-4 font-medium text-center">Last Updated</th>
+                      <th className="pb-4 pr-4 text-right font-medium">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {dataPointsWithIcons.map((dataPoint) => (
+                      <React.Fragment key={dataPoint.id}>
+                        <tr className="group transition-colors hover:bg-gray-50/50">
+                          <td className="py-6 pl-4 max-w-[300px]">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {/* Expand/collapse for spend data or items */}
+                              {((dataPoint.isSpendData && hasSpendData) || (!dataPoint.isSpendData && dataPoint.items.length > 0)) && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    dataPoint.isSpendData ? setIsSpendExpanded(!isSpendExpanded) : toggleRowExpansion(dataPoint.id);
+                                  }}
+                                  className="flex items-center justify-center transition-transform duration-200 hover:bg-gray-100 active:bg-gray-100 focus:outline-none rounded p-1 -ml-1"
+                                  style={{ transform: (dataPoint.isSpendData ? isSpendExpanded : expandedRows.has(dataPoint.id)) ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                                >
+                                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                                </button>
+                              )}
+                              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-50 text-gray-400">
+                                {dataPoint.icon}
+                              </div>
+                              <span className="text-[15px] font-medium text-[#1A1C1E]">
+                                {dataPoint.name}
+                                {!dataPoint.isSpendData && dataPoint.items.length > 0 && (
+                                  <span className="ml-2 text-gray-400 font-normal">{dataPoint.items.length}</span>
+                                )}
+                              </span>
+                              {dataPoint.isSpendData && hasSpendData && (
+                                <span className="ml-2 text-[13px] text-gray-500 truncate max-w-[150px]" title={spendFileName}>
+                                  ({spendFileName})
+                                </span>
+                              )}
+                              {/* Show field counts for spend data */}
+                              {dataPoint.isSpendData && hasSpendData && !isParsingCsv && (
+                                <span className="ml-2 text-[11px] font-medium text-gray-400">
+                                  {availableFieldsCount}/{DATA_FIELDS.length} fields available
+                                </span>
+                              )}
+                              {/* Show file name for other data points with files */}
+                              {!dataPoint.isSpendData && dataPoint.items.length > 0 && dataPoint.items[0]?.fileName && (
+                                <span className="ml-2 text-[13px] text-gray-500 truncate max-w-[150px]" title={dataPoint.items[0].fileName}>
+                                  ({dataPoint.items[0].fileName})
+                                </span>
+                              )}
+                              {/* Show field counts for other data points with validation */}
+                              {!dataPoint.isSpendData && dataPoint.items.length > 0 && getFieldsForDataPoint(dataPoint.id).length > 0 && (
+                                (() => {
+                                  const { available, total } = getDataPointFieldCounts(dataPoint.id);
+                                  const isParsing = parsingDataPoints.has(dataPoint.id);
+                                  if (isParsing) {
+                                    return (
+                                      <span className="ml-2 text-[11px] font-medium text-gray-400 flex items-center gap-1">
+                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                        Analyzing...
+                                      </span>
+                                    );
+                                  }
+                                  return (
+                                    <span className={`ml-2 text-[11px] font-medium ${available === total ? 'text-emerald-500' : 'text-amber-500'}`}>
+                                      {available}/{total} fields available
+                                    </span>
+                                  );
+                                })()
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-6">
+                            <div className="flex items-center gap-2 text-[14px] text-gray-600 font-medium">
+                              {(() => {
+                                const hasFile = dataPoint.isSpendData ? !!hasSpendData : dataPoint.items.length > 0;
+                                const fields = getFieldsForDataPoint(dataPoint.id);
+                                const hasFieldDefs = fields.length > 0;
+
+                                if (!hasFile) {
+                                  return (
+                                    <>
+                                      <div className="h-4 w-4 rounded-full border border-dashed border-gray-300" />
+                                      <span className="text-gray-400">Not Uploaded</span>
+                                    </>
+                                  );
+                                }
+
+                                if (!hasFieldDefs) {
+                                  // No validation required
+                                  return (
+                                    <>
+                                      <Check className="h-4 w-4 text-emerald-500" />
+                                      <span className="text-emerald-600">Uploaded</span>
+                                    </>
+                                  );
+                                }
+
+                                // Has field definitions - check validation status
+                                const { available, total } = getDataPointFieldCounts(dataPoint.id);
+                                const isParsing = dataPoint.isSpendData ? isParsingCsv : parsingDataPoints.has(dataPoint.id);
+
+                                if (isParsing) {
+                                  return (
+                                    <>
+                                      <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                                      <span className="text-gray-400">Analyzing...</span>
+                                    </>
+                                  );
+                                }
+
+                                if (available === total) {
+                                  return (
+                                    <>
+                                      <Check className="h-4 w-4 text-emerald-500" />
+                                      <span className="text-emerald-600">All Good</span>
+                                    </>
+                                  );
+                                }
+
+                                return (
+                                  <>
+                                    <AlertCircle className="h-4 w-4 text-amber-500" />
+                                    <span className="text-amber-600">Needs Review</span>
+                                  </>
+                                );
                               })()}
-                           </React.Fragment>
-                        ))}
-                     </tbody>
-                  </table>
-               </div>
+                            </div>
+                          </td>
+                          <td className="py-6 text-[14px] text-center">
+                            {(() => {
+                              const lastUpdated = getLastUpdatedDate(dataPoint);
+                              if (!lastUpdated) return <span className="text-gray-400">-</span>;
+                              const { date, time } = formatDateTime(lastUpdated);
+                              return (
+                                <div className="flex flex-col items-center">
+                                  <span className="text-gray-600 font-medium">{date}</span>
+                                  <span className="text-gray-400 text-[12px]">{time}</span>
+                                </div>
+                              );
+                            })()}
+                          </td>
+                          <td className="py-6 pr-4 text-right">
+                            {dataPoint.isSpendData ? (
+                              <div className="flex items-center justify-end gap-2">
+                                {hasSpendData && userCanEdit && (
+                                  <button
+                                    onClick={handleRemoveFile}
+                                    className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => fileInputRef.current?.click()}
+                                  disabled={!userCanUpload}
+                                  className={`inline-flex items-center gap-2 text-[14px] font-semibold transition-colors ${userCanUpload
+                                      ? "text-gray-900 hover:text-blue-600"
+                                      : "text-gray-400 cursor-not-allowed"
+                                    }`}
+                                  title={!userCanUpload ? "Viewers cannot upload files" : undefined}
+                                >
+                                  {hasSpendData ? "Change" : "Upload"}
+                                  <Upload className="h-4 w-4" />
+                                </button>
+                                {hasSpendData && (
+                                  <>
+                                    {/* Show Validate button when data exists but not fully validated, or when user wants to re-validate */}
+                                    {(uploadedFile || (hasSpendData && !isDataPointFullyValidated("spend"))) && (
+                                      <button
+                                        onClick={() => openValidationModal("spend", `Spend Data (${categoryName})`)}
+                                        className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-blue-600"
+                                      >
+                                        Validate
+                                        <ArrowRight className="h-4 w-4" />
+                                      </button>
+                                    )}
+                                    {/* Show Summary button when data is fully validated */}
+                                    {isDataPointFullyValidated("spend") && (
+                                      <button
+                                        onClick={() => openSummaryModal("spend")}
+                                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-emerald-600"
+                                      >
+                                        Summary
+                                        <BarChart3 className="h-4 w-4" />
+                                      </button>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-end gap-2">
+                                {/* X button to remove file */}
+                                {dataPoint.items.length > 0 && (
+                                  <button
+                                    onClick={() => handleRemoveDataPointFile(dataPoint.id)}
+                                    className="inline-flex items-center gap-1 text-[14px] font-medium text-gray-400 transition-colors hover:text-red-500"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                )}
+                                {dataPoint.canUpload && (
+                                  <button
+                                    onClick={() => triggerDataPointUpload(dataPoint.id)}
+                                    className="inline-flex items-center gap-2 text-[14px] font-semibold text-gray-900 transition-all duration-150 ease-out hover:text-blue-600 hover:scale-105 active:scale-95"
+                                  >
+                                    {dataPoint.items.length > 0 ? "Change" : "Upload"}
+                                    <Upload className="h-4 w-4" />
+                                  </button>
+                                )}
+                                {/* Validate button for data points with validation and files */}
+                                {dataPoint.items.length > 0 && getFieldsForDataPoint(dataPoint.id).length > 0 && (
+                                  <button
+                                    onClick={() => openValidationModal(dataPoint.id, dataPoint.name)}
+                                    className="ml-2 inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-blue-600 hover:scale-[1.02] hover:shadow-md hover:shadow-blue-500/30 active:scale-[0.98]"
+                                  >
+                                    Validate
+                                    <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
+                                  </button>
+                                )}
+                                {/* Summary button for validated data points */}
+                                {dataPoint.items.length > 0 && dataPoint.id !== "other" && isDataPointFullyValidated(dataPoint.id) && (
+                                  <button
+                                    onClick={() => openSummaryModal(dataPoint.id)}
+                                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-150 ease-out hover:bg-emerald-600 hover:scale-[1.02] hover:shadow-md hover:shadow-emerald-500/30 active:scale-[0.98]"
+                                  >
+                                    Summary
+                                    <BarChart3 className="h-4 w-4" />
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                        {/* Collapsible sub-items for spend data */}
+                        {dataPoint.isSpendData && hasSpendData && isSpendExpanded && DATA_FIELDS.map((field, sIdx) => {
+                          const status = getFieldStatus(field);
+                          return (
+                            <tr key={sIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
+                              <td className="py-4 pl-14">
+                                <span className="text-[14px] text-gray-600">{field.name}</span>
+                              </td>
+                              <td className="py-4">
+                                {isParsingCsv ? (
+                                  <div className="flex items-center gap-2 text-[13px] text-gray-400">
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                    Checking...
+                                  </div>
+                                ) : status.available ? (
+                                  <div className="flex items-center gap-2 text-[13px] text-emerald-600">
+                                    <Check className="h-3.5 w-3.5 text-emerald-500" />
+                                    Available
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2 text-[13px] text-amber-600">
+                                    <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                                    Missing
+                                  </div>
+                                )}
+                              </td>
+                              <td className="py-4 text-[13px] text-gray-400"></td>
+                              <td className="py-4 pr-4 text-right"></td>
+                            </tr>
+                          );
+                        })}
+                        {/* Collapsible sub-items for other data points - show field validation */}
+                        {!dataPoint.isSpendData && expandedRows.has(dataPoint.id) && (() => {
+                          const fields = getFieldsForDataPoint(dataPoint.id);
+                          const isParsing = parsingDataPoints.has(dataPoint.id);
+
+                          // If has field definitions, show field status
+                          if (fields.length > 0) {
+                            return fields.map((field, fIdx) => {
+                              const status = getDataPointFieldStatus(dataPoint.id, field);
+                              return (
+                                <tr key={fIdx} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
+                                  <td className="py-4 pl-14">
+                                    <span className="text-[14px] text-gray-600">{field.name}</span>
+                                  </td>
+                                  <td className="py-4">
+                                    {isParsing ? (
+                                      <div className="flex items-center gap-2 text-[13px] text-gray-400">
+                                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        Checking...
+                                      </div>
+                                    ) : status.available ? (
+                                      <div className="flex items-center gap-2 text-[13px] text-emerald-600">
+                                        <Check className="h-3.5 w-3.5 text-emerald-500" />
+                                        Available
+                                      </div>
+                                    ) : (
+                                      <div className="flex items-center gap-2 text-[13px] text-amber-600">
+                                        <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                                        Missing
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td className="py-4 text-[13px] text-gray-400"></td>
+                                  <td className="py-4 pr-4 text-right"></td>
+                                </tr>
+                              );
+                            });
+                          }
+
+                          // Otherwise show uploaded files
+                          return dataPoint.items.map((item) => (
+                            <tr key={item.id} className="bg-gray-50/30 group transition-colors hover:bg-gray-50/50">
+                              <td className="py-4 pl-14">
+                                <div className="flex items-center gap-3">
+                                  <FileText className="h-4 w-4 text-gray-400" />
+                                  <span className="text-[14px] text-gray-600">{item.name}</span>
+                                  {item.fileName && (
+                                    <span className="text-[11px] text-gray-400">({item.fileName})</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="py-4">
+                                <div className="flex items-center gap-2 text-[13px] text-emerald-600">
+                                  <Check className="h-3.5 w-3.5 text-emerald-500" />
+                                  Uploaded
+                                </div>
+                              </td>
+                              <td className="py-4 text-[13px] text-gray-400">{formatDate(item.uploadedAt)}</td>
+                              <td className="py-4 pr-4 text-right">
+                                <button
+                                  onClick={() => removeDataPointItem(dataPoint.id, item.id)}
+                                  className="inline-flex items-center gap-1 text-[13px] font-medium text-gray-400 transition-colors hover:text-red-500"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                  Remove
+                                </button>
+                              </td>
+                            </tr>
+                          ));
+                        })()}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -5007,16 +4995,14 @@ export default function ReviewDataPage() {
         <DialogContent className="sm:max-w-[600px] rounded-[24px] p-0 overflow-hidden">
           <DialogHeader className="p-6 pb-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
                   ? 'bg-emerald-100'
                   : 'bg-amber-100'
-              }`}>
-                <Zap className={`h-5 w-5 ${
-                  selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
+                }`}>
+                <Zap className={`h-5 w-5 ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
                     ? 'text-emerald-600'
                     : 'text-amber-600'
-                }`} />
+                  }`} />
               </div>
               <div>
                 <DialogTitle className="text-xl font-semibold text-[#1A1C1E]">
@@ -5032,11 +5018,10 @@ export default function ReviewDataPage() {
             <div className="grid grid-cols-3 gap-4">
               <div className="rounded-xl bg-gray-50 p-4">
                 <span className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Status</span>
-                <p className={`text-lg font-bold ${
-                  selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
+                <p className={`text-lg font-bold ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
                     ? 'text-emerald-600'
                     : 'text-amber-600'
-                }`}>
+                  }`}>
                   {selectedOpportunity && isQualifiedOpportunity(selectedOpportunity) ? 'Qualified' : 'Potential'}
                 </p>
               </div>
@@ -5070,35 +5055,32 @@ export default function ReviewDataPage() {
                             setSelectedOpportunity(prev =>
                               prev
                                 ? {
-                                    ...prev,
-                                    proofPoints: prev.proofPoints.map(pp =>
-                                      pp.id === proofPoint.id ? { ...pp, isValidated: !pp.isValidated } : pp
-                                    ),
-                                  }
+                                  ...prev,
+                                  proofPoints: prev.proofPoints.map(pp =>
+                                    pp.id === proofPoint.id ? { ...pp, isValidated: !pp.isValidated } : pp
+                                  ),
+                                }
                                 : null
                             );
                           }
                         }}
-                        className={`flex h-6 w-6 items-center justify-center rounded-full transition-all ${
-                          proofPoint.isValidated
+                        className={`flex h-6 w-6 items-center justify-center rounded-full transition-all ${proofPoint.isValidated
                             ? 'bg-emerald-500 text-white'
                             : 'border-2 border-gray-300 text-transparent hover:border-emerald-400'
-                        }`}
+                          }`}
                       >
                         <Check className="h-3.5 w-3.5" />
                       </button>
                       <div>
-                        <p className={`text-[14px] font-medium ${
-                          proofPoint.isValidated ? 'text-[#1A1C1E]' : 'text-gray-500'
-                        }`}>
+                        <p className={`text-[14px] font-medium ${proofPoint.isValidated ? 'text-[#1A1C1E]' : 'text-gray-500'
+                          }`}>
                           {proofPoint.name}
                         </p>
                         <p className="text-[12px] text-gray-400">{proofPoint.description}</p>
                       </div>
                     </div>
-                    <span className={`text-[12px] font-medium ${
-                      proofPoint.isValidated ? 'text-emerald-600' : 'text-gray-400'
-                    }`}>
+                    <span className={`text-[12px] font-medium ${proofPoint.isValidated ? 'text-emerald-600' : 'text-gray-400'
+                      }`}>
                       {proofPoint.isValidated ? 'Validated' : 'Pending'}
                     </span>
                   </div>
@@ -5204,7 +5186,7 @@ export default function ReviewDataPage() {
             onChange={handleValidationReupload}
             className="hidden"
           />
-          
+
           {/* Header */}
           <DialogHeader className="p-4 pb-3 border-b border-gray-100 flex-shrink-0 bg-white">
             <div className="flex items-center justify-between">
@@ -5238,21 +5220,19 @@ export default function ReviewDataPage() {
                     />
                     <button
                       onClick={() => setCategoryFilterMode("selected")}
-                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${
-                        categoryFilterMode === "selected"
+                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${categoryFilterMode === "selected"
                           ? "text-white"
                           : "text-gray-600 hover:text-gray-900"
-                      }`}
+                        }`}
                     >
                       Selected Categories
                     </button>
                     <button
                       onClick={() => setCategoryFilterMode("original")}
-                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${
-                        categoryFilterMode === "original"
+                      className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${categoryFilterMode === "original"
                           ? "text-white"
                           : "text-gray-600 hover:text-gray-900"
-                      }`}
+                        }`}
                     >
                       All Data
                     </button>
@@ -5343,7 +5323,7 @@ export default function ReviewDataPage() {
                 <h3 className="text-[14px] font-semibold text-gray-900">Issues Found</h3>
                 <p className="text-[12px] text-gray-500 mt-1">Click to navigate to issue</p>
               </div>
-              
+
               <div className="flex-1 overflow-y-auto p-3 space-y-2">
                 {isValidating ? (
                   <div className="flex items-center justify-center py-12">
@@ -5604,13 +5584,12 @@ export default function ReviewDataPage() {
                                   <td
                                     key={colIdx}
                                     id={`cell-${displayRowNum}-${colIdx}`}
-                                    className={`px-4 py-2 border-r border-b border-gray-100 whitespace-nowrap max-w-[300px] truncate ${
-                                      error
+                                    className={`px-4 py-2 border-r border-b border-gray-100 whitespace-nowrap max-w-[300px] truncate ${error
                                         ? error.severity === "error"
                                           ? "bg-red-50"
                                           : "bg-amber-50"
                                         : ""
-                                    }`}
+                                      }`}
                                     style={{ contain: 'layout style paint' }}
                                   >
                                     {isEditing ? (
@@ -5828,19 +5807,17 @@ export default function ReviewDataPage() {
                       key={opportunity.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`rounded-3xl border-2 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out overflow-hidden ${
-                        isQualified
+                      className={`rounded-3xl border-2 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out overflow-hidden ${isQualified
                           ? 'border-emerald-200 hover:shadow-emerald-100'
                           : 'border-amber-200 hover:shadow-amber-100'
-                      }`}
+                        }`}
                     >
                       {/* Card Header */}
                       <div className={`p-6 ${isQualified ? 'bg-gradient-to-r from-emerald-50 to-white' : 'bg-gradient-to-r from-amber-50 to-white'}`}>
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-4">
-                            <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${
-                              isQualified ? 'bg-emerald-100' : 'bg-amber-100'
-                            }`}>
+                            <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isQualified ? 'bg-emerald-100' : 'bg-amber-100'
+                              }`}>
                               <Zap className={`h-7 w-7 ${isQualified ? 'text-emerald-600' : 'text-amber-600'}`} />
                             </div>
                             <div>
@@ -5848,11 +5825,10 @@ export default function ReviewDataPage() {
                               <p className="text-[14px] text-gray-500 mt-1">{opportunity.description}</p>
                             </div>
                           </div>
-                          <div className={`px-4 py-2 rounded-full text-[13px] font-bold ${
-                            isQualified
+                          <div className={`px-4 py-2 rounded-full text-[13px] font-bold ${isQualified
                               ? 'bg-emerald-100 text-emerald-700'
                               : 'bg-amber-100 text-amber-700'
-                          }`}>
+                            }`}>
                             {isQualified ? 'Qualified' : 'Potential'}
                           </div>
                         </div>
@@ -5883,9 +5859,8 @@ export default function ReviewDataPage() {
                             {opportunity.proofPoints.map((pp) => (
                               <div
                                 key={pp.id}
-                                className={`flex items-center gap-2 p-3 rounded-xl ${
-                                  pp.isValidated ? 'bg-emerald-50' : 'bg-gray-50'
-                                }`}
+                                className={`flex items-center gap-2 p-3 rounded-xl ${pp.isValidated ? 'bg-emerald-50' : 'bg-gray-50'
+                                  }`}
                               >
                                 {pp.isValidated ? (
                                   <CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0" />
@@ -5927,8 +5902,8 @@ export default function ReviewDataPage() {
             const summaryData = getSummaryData(summaryDataPointId);
             const dataPointName = summaryDataPointId === "spend" ? "Spend Data" :
               summaryDataPointId === "supply-master" ? "Supply Master" :
-              summaryDataPointId === "contracts" ? "Contracts" :
-              summaryDataPointId === "playbook" ? "Category Playbook" : "Data";
+                summaryDataPointId === "contracts" ? "Contracts" :
+                  summaryDataPointId === "playbook" ? "Category Playbook" : "Data";
 
             return (
               <>
@@ -5969,306 +5944,301 @@ export default function ReviewDataPage() {
                 {/* Content */}
                 <div className="flex-1 p-8 overflow-y-auto bg-gray-50/30">
                   <div className="max-w-7xl mx-auto">
-                  {/* Spend Data Summary */}
-                  {summaryDataPointId === "spend" && (
-                    <div className="space-y-6">
-                      {/* Total Spend Card */}
-                      <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Total Spend</span>
-                            <p className="text-4xl font-bold text-[#1A1C1E] mt-2">{formatCurrency(summaryData.totalSpend)}</p>
-                          </div>
-                          <div className="flex items-center gap-8">
-                            <div className="text-right">
-                              <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Period</span>
-                              <p className="text-xl font-semibold text-gray-700 mt-2">Jun '24 - May '25</p>
+                    {/* Spend Data Summary */}
+                    {summaryDataPointId === "spend" && (
+                      <div className="space-y-6">
+                        {/* Total Spend Card */}
+                        <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Total Spend</span>
+                              <p className="text-4xl font-bold text-[#1A1C1E] mt-2">{formatCurrency(summaryData.totalSpend)}</p>
                             </div>
-                            <div className="text-right border-l border-blue-200 pl-8">
-                              <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Last Updated</span>
-                              <p className="text-xl font-semibold text-gray-700 mt-2">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                            <div className="flex items-center gap-8">
+                              <div className="text-right">
+                                <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Period</span>
+                                <p className="text-xl font-semibold text-gray-700 mt-2">Jun '24 - May '25</p>
+                              </div>
+                              <div className="text-right border-l border-blue-200 pl-8">
+                                <span className="text-[13px] font-bold uppercase tracking-widest text-gray-500">Last Updated</span>
+                                <p className="text-xl font-semibold text-gray-700 mt-2">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Two Column Grid */}
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Spend by Location */}
+                          <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                                <MapPin className="h-5 w-5 text-blue-500" />
+                              </div>
+                              <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Location</h4>
+                            </div>
+                            <div className="space-y-3">
+                              {summaryData.locations.map((loc, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-3 h-3 rounded-full bg-blue-500" style={{ opacity: 1 - (idx * 0.12) }} />
+                                    <span className="text-[15px] font-medium text-gray-800">{loc.name}</span>
+                                  </div>
+                                  <div className="flex items-center gap-4">
+                                    <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(loc.spend)}</span>
+                                    <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{loc.percentage}%</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Spend by Supplier */}
+                          <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
+                                <Building2 className="h-5 w-5 text-purple-500" />
+                              </div>
+                              <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Supplier</h4>
+                            </div>
+                            <div className="space-y-3">
+                              {summaryData.suppliers.map((supplier, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-3 h-3 rounded-full bg-purple-500" style={{ opacity: 1 - (idx * 0.12) }} />
+                                    <span className="text-[15px] font-medium text-gray-800">{supplier.name}</span>
+                                  </div>
+                                  <div className="flex items-center gap-4">
+                                    <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
+                                    <span className="text-[15px] font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         </div>
                       </div>
+                    )}
 
-                      {/* Two Column Grid */}
-                      <div className="grid grid-cols-2 gap-6">
-                        {/* Spend by Location */}
-                        <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                          <div className="flex items-center gap-3 mb-6">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-                              <MapPin className="h-5 w-5 text-blue-500" />
-                            </div>
-                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Location</h4>
+                    {/* Supply Master Summary */}
+                    {summaryDataPointId === "supply-master" && (
+                      <div className="space-y-6">
+                        {/* Stats Row */}
+                        <div className="grid grid-cols-4 gap-4">
+                          <div className="rounded-2xl bg-blue-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-blue-600">Total Suppliers</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).supplierCount || summaryData.suppliers.length}</p>
                           </div>
-                          <div className="space-y-3">
-                            {summaryData.locations.map((loc, idx) => (
-                              <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-3 h-3 rounded-full bg-blue-500" style={{ opacity: 1 - (idx * 0.12) }} />
-                                  <span className="text-[15px] font-medium text-gray-800">{loc.name}</span>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                  <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(loc.spend)}</span>
-                                  <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{loc.percentage}%</span>
-                                </div>
-                              </div>
-                            ))}
+                          <div className="rounded-2xl bg-emerald-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Active</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).activeCount || summaryData.suppliers.length - 1}</p>
+                          </div>
+                          <div className="rounded-2xl bg-purple-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-purple-600">Regions</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).regionCount || summaryData.locations.length}</p>
+                          </div>
+                          <div className="rounded-2xl bg-amber-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-amber-600">Categories</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).categoryCount || 1}</p>
                           </div>
                         </div>
 
-                        {/* Spend by Supplier */}
+                        {/* Supplier List */}
                         <div className="rounded-2xl border border-gray-100 bg-white p-6">
                           <div className="flex items-center gap-3 mb-6">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
-                              <Building2 className="h-5 w-5 text-purple-500" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                              <Users className="h-5 w-5 text-blue-500" />
                             </div>
-                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Spend by Supplier</h4>
+                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Top Suppliers by Spend</h4>
                           </div>
                           <div className="space-y-3">
                             {summaryData.suppliers.map((supplier, idx) => (
-                              <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-3 h-3 rounded-full bg-purple-500" style={{ opacity: 1 - (idx * 0.12) }} />
-                                  <span className="text-[15px] font-medium text-gray-800">{supplier.name}</span>
-                                </div>
+                              <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                                 <div className="flex items-center gap-4">
+                                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[14px] font-bold text-gray-600 shadow-sm">
+                                    {idx + 1}
+                                  </div>
+                                  <span className="text-[15px] font-medium text-gray-900">{supplier.name}</span>
+                                </div>
+                                <div className="flex items-center gap-5">
                                   <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
-                                  <span className="text-[15px] font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
+                                  <div className="w-32 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                                    <div
+                                      className="h-full bg-blue-500 rounded-full"
+                                      style={{ width: `${supplier.percentage}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
                                 </div>
                               </div>
                             ))}
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  )}
 
-                  {/* Supply Master Summary */}
-                  {summaryDataPointId === "supply-master" && (
-                    <div className="space-y-6">
-                      {/* Stats Row */}
-                      <div className="grid grid-cols-4 gap-4">
-                        <div className="rounded-2xl bg-blue-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-blue-600">Total Suppliers</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).supplierCount || summaryData.suppliers.length}</p>
-                        </div>
-                        <div className="rounded-2xl bg-emerald-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Active</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).activeCount || summaryData.suppliers.length - 1}</p>
-                        </div>
-                        <div className="rounded-2xl bg-purple-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-purple-600">Regions</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).regionCount || summaryData.locations.length}</p>
-                        </div>
-                        <div className="rounded-2xl bg-amber-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-amber-600">Categories</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{(summaryData as any).categoryCount || 1}</p>
-                        </div>
-                      </div>
-
-                      {/* Supplier List */}
-                      <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-                            <Users className="h-5 w-5 text-blue-500" />
-                          </div>
-                          <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Top Suppliers by Spend</h4>
-                        </div>
-                        <div className="space-y-3">
-                          {summaryData.suppliers.map((supplier, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                              <div className="flex items-center gap-4">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[14px] font-bold text-gray-600 shadow-sm">
-                                  {idx + 1}
-                                </div>
-                                <span className="text-[15px] font-medium text-gray-900">{supplier.name}</span>
-                              </div>
-                              <div className="flex items-center gap-5">
-                                <span className="text-[15px] font-semibold text-gray-900">{formatCurrency(supplier.spend)}</span>
-                                <div className="w-32 h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                                  <div
-                                    className="h-full bg-blue-500 rounded-full"
-                                    style={{ width: `${supplier.percentage}%` }}
-                                  />
-                                </div>
-                                <span className="text-[15px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg min-w-[65px] text-center">{supplier.percentage}%</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Geographic Distribution */}
-                      <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
-                            <MapPin className="h-5 w-5 text-emerald-500" />
-                          </div>
-                          <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Supplier Geographic Distribution</h4>
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
-                          {summaryData.locations.slice(0, 6).map((loc, idx) => (
-                            <div key={idx} className="p-4 rounded-xl bg-gray-50">
-                              <p className="text-[14px] font-medium text-gray-900">{loc.name}</p>
-                              <p className="text-[12px] text-gray-500 mt-1">{loc.spend} supplier{loc.spend !== 1 ? 's' : ''}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Contracts Summary */}
-                  {summaryDataPointId === "contracts" && (
-                    <div className="space-y-6">
-                      {/* Stats Row */}
-                      <div className="grid grid-cols-4 gap-4">
-                        <div className="rounded-2xl bg-blue-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-blue-600">Total Contracts</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.length}</p>
-                        </div>
-                        <div className="rounded-2xl bg-emerald-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Active</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.filter(c => c.status === "Active").length}</p>
-                        </div>
-                        <div className="rounded-2xl bg-amber-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-amber-600">Expiring Soon</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.filter(c => c.status === "Expiring").length}</p>
-                        </div>
-                        <div className="rounded-2xl bg-purple-50 p-5">
-                          <span className="text-[11px] font-bold uppercase tracking-widest text-purple-600">Total Value</span>
-                          <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{formatCurrency(summaryData.totalSpend)}</p>
-                        </div>
-                      </div>
-
-                      {/* Contracts List */}
-                      <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-                            <FileCheck className="h-5 w-5 text-blue-500" />
-                          </div>
-                          <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Contract Portfolio</h4>
-                        </div>
-                        <div className="space-y-3">
-                          {summaryData.contracts.map((contract, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                              <div className="flex items-center gap-4">
-                                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                                  contract.status === "Active" ? "bg-emerald-100" : "bg-amber-100"
-                                }`}>
-                                  <FileText className={`h-5 w-5 ${
-                                    contract.status === "Active" ? "text-emerald-600" : "text-amber-600"
-                                  }`} />
-                                </div>
-                                <div>
-                                  <p className="text-[14px] font-medium text-gray-900">{contract.name}</p>
-                                  <p className="text-[12px] text-gray-500 mt-0.5">Expires: {contract.expiry}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-4">
-                                <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
-                                  contract.status === "Active"
-                                    ? "bg-emerald-100 text-emerald-700"
-                                    : "bg-amber-100 text-amber-700"
-                                }`}>
-                                  {contract.status}
-                                </span>
-                                <span className="text-[15px] font-bold text-gray-900">{formatCurrency(contract.value)}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Category Playbook Summary */}
-                  {summaryDataPointId === "playbook" && (
-                    <div className="space-y-6">
-                      {/* Category Header */}
-                      <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 p-6">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Category</span>
-                            <p className="text-2xl font-bold text-[#1A1C1E] mt-1">{summaryData.playbook.category}</p>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Strategy</span>
-                            <p className="text-lg font-semibold text-gray-700 mt-1">{summaryData.playbook.strategy}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-6">
-                        {/* Market Trends */}
-                        <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                          <div className="flex items-center gap-3 mb-6">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-                              <TrendingUp className="h-5 w-5 text-blue-500" />
-                            </div>
-                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Market Trends</h4>
-                          </div>
-                          <div className="space-y-3">
-                            {summaryData.playbook.marketTrends.map((trend, idx) => (
-                              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-blue-50/50">
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
-                                <p className="text-[14px] text-gray-700">{trend}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Recommendations */}
+                        {/* Geographic Distribution */}
                         <div className="rounded-2xl border border-gray-100 bg-white p-6">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
-                              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                              <MapPin className="h-5 w-5 text-emerald-500" />
                             </div>
-                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Recommendations</h4>
+                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Supplier Geographic Distribution</h4>
                           </div>
-                          <div className="space-y-3">
-                            {summaryData.playbook.recommendations.map((rec, idx) => (
-                              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-emerald-50/50">
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <p className="text-[14px] text-gray-700">{rec}</p>
+                          <div className="grid grid-cols-3 gap-4">
+                            {summaryData.locations.slice(0, 6).map((loc, idx) => (
+                              <div key={idx} className="p-4 rounded-xl bg-gray-50">
+                                <p className="text-[14px] font-medium text-gray-900">{loc.name}</p>
+                                <p className="text-[12px] text-gray-500 mt-1">{loc.spend} supplier{loc.spend !== 1 ? 's' : ''}</p>
                               </div>
                             ))}
                           </div>
                         </div>
                       </div>
+                    )}
 
-                      {/* Risk Assessment */}
-                      <div className="rounded-2xl border border-gray-100 bg-white p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
-                            <AlertTriangle className="h-5 w-5 text-amber-500" />
+                    {/* Contracts Summary */}
+                    {summaryDataPointId === "contracts" && (
+                      <div className="space-y-6">
+                        {/* Stats Row */}
+                        <div className="grid grid-cols-4 gap-4">
+                          <div className="rounded-2xl bg-blue-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-blue-600">Total Contracts</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.length}</p>
                           </div>
-                          <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Risk Assessment</h4>
+                          <div className="rounded-2xl bg-emerald-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Active</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.filter(c => c.status === "Active").length}</p>
+                          </div>
+                          <div className="rounded-2xl bg-amber-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-amber-600">Expiring Soon</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{summaryData.contracts.filter(c => c.status === "Expiring").length}</p>
+                          </div>
+                          <div className="rounded-2xl bg-purple-50 p-5">
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-purple-600">Total Value</span>
+                            <p className="text-2xl font-bold text-[#1A1C1E] mt-2">{formatCurrency(summaryData.totalSpend)}</p>
+                          </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
-                          {summaryData.playbook.risks.map((risk, idx) => (
-                            <div key={idx} className={`p-4 rounded-xl ${
-                              risk.level === "High" ? "bg-red-50" :
-                              risk.level === "Medium" ? "bg-amber-50" : "bg-emerald-50"
-                            }`}>
-                              <div className="flex items-center justify-between mb-2">
-                                <p className="text-[14px] font-semibold text-gray-900">{risk.name}</p>
-                                <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
-                                  risk.level === "High" ? "bg-red-100 text-red-700" :
-                                  risk.level === "Medium" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
-                                }`}>
-                                  {risk.level}
-                                </span>
-                              </div>
-                              <p className="text-[12px] text-gray-600">{risk.description}</p>
+
+                        {/* Contracts List */}
+                        <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                              <FileCheck className="h-5 w-5 text-blue-500" />
                             </div>
-                          ))}
+                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Contract Portfolio</h4>
+                          </div>
+                          <div className="space-y-3">
+                            {summaryData.contracts.map((contract, idx) => (
+                              <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                                <div className="flex items-center gap-4">
+                                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${contract.status === "Active" ? "bg-emerald-100" : "bg-amber-100"
+                                    }`}>
+                                    <FileText className={`h-5 w-5 ${contract.status === "Active" ? "text-emerald-600" : "text-amber-600"
+                                      }`} />
+                                  </div>
+                                  <div>
+                                    <p className="text-[14px] font-medium text-gray-900">{contract.name}</p>
+                                    <p className="text-[12px] text-gray-500 mt-0.5">Expires: {contract.expiry}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                  <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${contract.status === "Active"
+                                      ? "bg-emerald-100 text-emerald-700"
+                                      : "bg-amber-100 text-amber-700"
+                                    }`}>
+                                    {contract.status}
+                                  </span>
+                                  <span className="text-[15px] font-bold text-gray-900">{formatCurrency(contract.value)}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+
+                    {/* Category Playbook Summary */}
+                    {summaryDataPointId === "playbook" && (
+                      <div className="space-y-6">
+                        {/* Category Header */}
+                        <div className="rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 p-6">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Category</span>
+                              <p className="text-2xl font-bold text-[#1A1C1E] mt-1">{summaryData.playbook.category}</p>
+                            </div>
+                            <div className="text-right">
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-indigo-600">Strategy</span>
+                              <p className="text-lg font-semibold text-gray-700 mt-1">{summaryData.playbook.strategy}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Market Trends */}
+                          <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                                <TrendingUp className="h-5 w-5 text-blue-500" />
+                              </div>
+                              <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Market Trends</h4>
+                            </div>
+                            <div className="space-y-3">
+                              {summaryData.playbook.marketTrends.map((trend, idx) => (
+                                <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-blue-50/50">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
+                                  <p className="text-[14px] text-gray-700">{trend}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Recommendations */}
+                          <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                            <div className="flex items-center gap-3 mb-6">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+                                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                              </div>
+                              <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Recommendations</h4>
+                            </div>
+                            <div className="space-y-3">
+                              {summaryData.playbook.recommendations.map((rec, idx) => (
+                                <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-emerald-50/50">
+                                  <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                                  <p className="text-[14px] text-gray-700">{rec}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Risk Assessment */}
+                        <div className="rounded-2xl border border-gray-100 bg-white p-6">
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
+                              <AlertTriangle className="h-5 w-5 text-amber-500" />
+                            </div>
+                            <h4 className="text-[15px] font-semibold text-[#1A1C1E]">Risk Assessment</h4>
+                          </div>
+                          <div className="grid grid-cols-3 gap-4">
+                            {summaryData.playbook.risks.map((risk, idx) => (
+                              <div key={idx} className={`p-4 rounded-xl ${risk.level === "High" ? "bg-red-50" :
+                                  risk.level === "Medium" ? "bg-amber-50" : "bg-emerald-50"
+                                }`}>
+                                <div className="flex items-center justify-between mb-2">
+                                  <p className="text-[14px] font-semibold text-gray-900">{risk.name}</p>
+                                  <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${risk.level === "High" ? "bg-red-100 text-red-700" :
+                                      risk.level === "Medium" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
+                                    }`}>
+                                    {risk.level}
+                                  </span>
+                                </div>
+                                <p className="text-[12px] text-gray-600">{risk.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
