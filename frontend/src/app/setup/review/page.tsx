@@ -4544,7 +4544,7 @@ export default function ReviewDataPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Cost</span>
                 <div className="mt-2">
                   <span className={`text-xl font-semibold ${state.setupData.goals.cost >= 66 ? 'text-emerald-500' :
-                      state.setupData.goals.cost >= 33 ? 'text-blue-500' : 'text-amber-500'
+                    state.setupData.goals.cost >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
                     {state.setupData.goals.cost >= 66 ? 'High' :
                       state.setupData.goals.cost >= 33 ? 'Medium' : 'Low'}
@@ -4562,7 +4562,7 @@ export default function ReviewDataPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Risk</span>
                 <div className="mt-2">
                   <span className={`text-xl font-semibold ${state.setupData.goals.risk >= 66 ? 'text-emerald-500' :
-                      state.setupData.goals.risk >= 33 ? 'text-blue-500' : 'text-amber-500'
+                    state.setupData.goals.risk >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
                     {state.setupData.goals.risk >= 66 ? 'High' :
                       state.setupData.goals.risk >= 33 ? 'Medium' : 'Low'}
@@ -4580,7 +4580,7 @@ export default function ReviewDataPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">ESG</span>
                 <div className="mt-2">
                   <span className={`text-xl font-semibold ${state.setupData.goals.esg >= 66 ? 'text-emerald-500' :
-                      state.setupData.goals.esg >= 33 ? 'text-blue-500' : 'text-amber-500'
+                    state.setupData.goals.esg >= 33 ? 'text-blue-500' : 'text-amber-500'
                     }`}>
                     {state.setupData.goals.esg >= 66 ? 'High' :
                       state.setupData.goals.esg >= 33 ? 'Medium' : 'Low'}
@@ -4802,8 +4802,8 @@ export default function ReviewDataPage() {
                                   onClick={() => fileInputRef.current?.click()}
                                   disabled={!userCanUpload}
                                   className={`inline-flex items-center gap-2 text-[14px] font-semibold transition-colors ${userCanUpload
-                                      ? "text-gray-900 hover:text-blue-600"
-                                      : "text-gray-400 cursor-not-allowed"
+                                    ? "text-gray-900 hover:text-blue-600"
+                                    : "text-gray-400 cursor-not-allowed"
                                     }`}
                                   title={!userCanUpload ? "Viewers cannot upload files" : undefined}
                                 >
@@ -4996,12 +4996,12 @@ export default function ReviewDataPage() {
           <DialogHeader className="p-6 pb-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
-                  ? 'bg-emerald-100'
-                  : 'bg-amber-100'
+                ? 'bg-emerald-100'
+                : 'bg-amber-100'
                 }`}>
                 <Zap className={`h-5 w-5 ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
-                    ? 'text-emerald-600'
-                    : 'text-amber-600'
+                  ? 'text-emerald-600'
+                  : 'text-amber-600'
                   }`} />
               </div>
               <div>
@@ -5019,8 +5019,8 @@ export default function ReviewDataPage() {
               <div className="rounded-xl bg-gray-50 p-4">
                 <span className="text-[11px] font-medium uppercase tracking-wider text-gray-400">Status</span>
                 <p className={`text-lg font-bold ${selectedOpportunity && isQualifiedOpportunity(selectedOpportunity)
-                    ? 'text-emerald-600'
-                    : 'text-amber-600'
+                  ? 'text-emerald-600'
+                  : 'text-amber-600'
                   }`}>
                   {selectedOpportunity && isQualifiedOpportunity(selectedOpportunity) ? 'Qualified' : 'Potential'}
                 </p>
@@ -5065,8 +5065,8 @@ export default function ReviewDataPage() {
                           }
                         }}
                         className={`flex h-6 w-6 items-center justify-center rounded-full transition-all ${proofPoint.isValidated
-                            ? 'bg-emerald-500 text-white'
-                            : 'border-2 border-gray-300 text-transparent hover:border-emerald-400'
+                          ? 'bg-emerald-500 text-white'
+                          : 'border-2 border-gray-300 text-transparent hover:border-emerald-400'
                           }`}
                       >
                         <Check className="h-3.5 w-3.5" />
@@ -5221,8 +5221,8 @@ export default function ReviewDataPage() {
                     <button
                       onClick={() => setCategoryFilterMode("selected")}
                       className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${categoryFilterMode === "selected"
-                          ? "text-white"
-                          : "text-gray-600 hover:text-gray-900"
+                        ? "text-white"
+                        : "text-gray-600 hover:text-gray-900"
                         }`}
                     >
                       Selected Categories
@@ -5230,8 +5230,8 @@ export default function ReviewDataPage() {
                     <button
                       onClick={() => setCategoryFilterMode("original")}
                       className={`relative z-10 px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors duration-200 ${categoryFilterMode === "original"
-                          ? "text-white"
-                          : "text-gray-600 hover:text-gray-900"
+                        ? "text-white"
+                        : "text-gray-600 hover:text-gray-900"
                         }`}
                     >
                       All Data
@@ -5585,10 +5585,10 @@ export default function ReviewDataPage() {
                                     key={colIdx}
                                     id={`cell-${displayRowNum}-${colIdx}`}
                                     className={`px-4 py-2 border-r border-b border-gray-100 whitespace-nowrap max-w-[300px] truncate ${error
-                                        ? error.severity === "error"
-                                          ? "bg-red-50"
-                                          : "bg-amber-50"
-                                        : ""
+                                      ? error.severity === "error"
+                                        ? "bg-red-50"
+                                        : "bg-amber-50"
+                                      : ""
                                       }`}
                                     style={{ contain: 'layout style paint' }}
                                   >
@@ -5808,8 +5808,8 @@ export default function ReviewDataPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       className={`rounded-3xl border-2 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 ease-out overflow-hidden ${isQualified
-                          ? 'border-emerald-200 hover:shadow-emerald-100'
-                          : 'border-amber-200 hover:shadow-amber-100'
+                        ? 'border-emerald-200 hover:shadow-emerald-100'
+                        : 'border-amber-200 hover:shadow-amber-100'
                         }`}
                     >
                       {/* Card Header */}
@@ -5826,8 +5826,8 @@ export default function ReviewDataPage() {
                             </div>
                           </div>
                           <div className={`px-4 py-2 rounded-full text-[13px] font-bold ${isQualified
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-amber-100 text-amber-700'
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : 'bg-amber-100 text-amber-700'
                             }`}>
                             {isQualified ? 'Qualified' : 'Potential'}
                           </div>
@@ -6142,8 +6142,8 @@ export default function ReviewDataPage() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                   <span className={`px-3 py-1 rounded-full text-[12px] font-semibold ${contract.status === "Active"
-                                      ? "bg-emerald-100 text-emerald-700"
-                                      : "bg-amber-100 text-amber-700"
+                                    ? "bg-emerald-100 text-emerald-700"
+                                    : "bg-amber-100 text-amber-700"
                                     }`}>
                                     {contract.status}
                                   </span>
@@ -6222,12 +6222,12 @@ export default function ReviewDataPage() {
                           <div className="grid grid-cols-3 gap-4">
                             {summaryData.playbook.risks.map((risk, idx) => (
                               <div key={idx} className={`p-4 rounded-xl ${risk.level === "High" ? "bg-red-50" :
-                                  risk.level === "Medium" ? "bg-amber-50" : "bg-emerald-50"
+                                risk.level === "Medium" ? "bg-amber-50" : "bg-emerald-50"
                                 }`}>
                                 <div className="flex items-center justify-between mb-2">
                                   <p className="text-[14px] font-semibold text-gray-900">{risk.name}</p>
                                   <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${risk.level === "High" ? "bg-red-100 text-red-700" :
-                                      risk.level === "Medium" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
+                                    risk.level === "Medium" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
                                     }`}>
                                     {risk.level}
                                   </span>
