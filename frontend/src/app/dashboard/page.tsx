@@ -421,7 +421,7 @@ function DashboardContent() {
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
-          <main className="px-16 py-12 pb-32">
+          <main className="px-6 py-12 pb-32">
 
             {/* Welcome Section */}
             <div className="mb-12">
