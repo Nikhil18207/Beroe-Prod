@@ -14,7 +14,7 @@ import {
   Send,
   Mic
 } from "lucide-react";
-import React, { useState, useMemo, useCallback, memo } from "react";
+import React, { useState, useMemo, useCallback, memo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
@@ -68,6 +68,12 @@ function OpportunitiesContent() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
   const [chatInput, setChatInput] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch - only render data-dependent content after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChatSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -371,7 +377,7 @@ function OpportunitiesContent() {
                 {/* Qualified Badge */}
                 <div className="flex items-center gap-2 bg-emerald-50/80 rounded-full px-4 py-2 ring-1 ring-emerald-100">
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                  <span className="text-2xl font-semibold text-gray-800">{displayQualified.length} Qualified opportunities,</span>
+                  <span className="text-2xl font-semibold text-gray-800">{mounted ? displayQualified.length : 0} Qualified opportunities,</span>
                 </div>
 
                 <span className="text-2xl text-gray-700">&</span>
@@ -381,15 +387,15 @@ function OpportunitiesContent() {
                   <div className="h-5 w-5 rounded-full border-2 border-dashed border-gray-400 flex items-center justify-center">
                     <div className="h-1.5 w-1.5 bg-gray-400 rounded-full" />
                   </div>
-                  <span className="text-2xl font-semibold text-gray-800">{displayPotential.length} Potential opportunities,</span>
+                  <span className="text-2xl font-semibold text-gray-800">{mounted ? displayPotential.length : 0} Potential opportunities,</span>
                 </div>
               </div>
 
               {/* Savings Line */}
               <div className="flex items-baseline gap-3 mb-3">
                 <span className="text-2xl text-gray-700">Based on this your savings:</span>
-                <span className="text-2xl font-bold text-gray-900">{formatCurrency(totalSavingsLow)} - {formatCurrency(totalSavingsHigh)} USD</span>
-                <span className="text-lg text-gray-400">{savingsPercentageLow}% - {savingsPercentageHigh}%</span>
+                <span className="text-2xl font-bold text-gray-900">{mounted ? `${formatCurrency(totalSavingsLow)} - ${formatCurrency(totalSavingsHigh)}` : '$0 - $0'} USD</span>
+                <span className="text-lg text-gray-400">{mounted ? `${savingsPercentageLow}% - ${savingsPercentageHigh}%` : '0% - 0%'}</span>
               </div>
 
               {/* Help Text */}
@@ -457,7 +463,7 @@ function OpportunitiesContent() {
               <div className="flex items-center gap-3 mb-6">
                 <h2 className="text-base font-semibold text-gray-900">Qualified</h2>
                 <div className="bg-gray-900 text-white text-xs font-bold h-6 w-6 flex items-center justify-center rounded-full">
-                  {displayQualified.length}
+                  {mounted ? displayQualified.length : 0}
                 </div>
                 <ChevronDown className="h-4 w-4 text-gray-400" />
               </div>
@@ -466,7 +472,7 @@ function OpportunitiesContent() {
               <div className="border-t border-dashed border-gray-200 mb-6" />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {displayQualified.map((opp, idx) => (
+                {mounted && displayQualified.map((opp, idx) => (
                   <OpportunityCard key={idx} opportunity={opp} variant="qualified" />
                 ))}
               </div>
@@ -477,7 +483,7 @@ function OpportunitiesContent() {
               <div className="flex items-center gap-3 mb-6">
                 <h2 className="text-base font-semibold text-gray-900">Potential</h2>
                 <div className="bg-gray-900 text-white text-xs font-bold h-6 w-6 flex items-center justify-center rounded-full">
-                  {displayPotential.length}
+                  {mounted ? displayPotential.length : 0}
                 </div>
                 <ChevronDown className="h-4 w-4 text-gray-400" />
               </div>
@@ -486,7 +492,7 @@ function OpportunitiesContent() {
               <div className="border-t border-dashed border-gray-200 mb-6" />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {displayPotential.map((opp, idx) => (
+                {mounted && displayPotential.map((opp, idx) => (
                   <OpportunityCard key={idx} opportunity={opp} variant="potential" />
                 ))}
               </div>

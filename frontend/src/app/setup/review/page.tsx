@@ -4523,7 +4523,7 @@ export default function ReviewDataPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Spend</span>
                 <div className="mt-2 flex items-baseline gap-2">
                   <span className="text-xl font-semibold text-[#1A1C1E]">
-                    {(() => {
+                    {isMounted ? (() => {
                       // Only show spend from actual uploaded CSV data - not from hardcoded portfolio defaults
                       const spendCsvData = parsedCsvDataStore["spend"];
                       if (spendCsvData && spendCsvData.rows.length > 0) {
@@ -4532,7 +4532,7 @@ export default function ReviewDataPage() {
                       }
                       // No data uploaded yet - show placeholder
                       return <span className="text-gray-400">Upload Data</span>;
-                    })()}
+                    })() : <span className="text-gray-400">-</span>}
                   </span>
                 </div>
               </div>
@@ -4598,7 +4598,7 @@ export default function ReviewDataPage() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-blue-100">Opportunities</span>
                 <div className="mt-2 flex items-center gap-2">
                   <span className="text-xl font-semibold text-white">
-                    {qualifiedCount + potentialCount}
+                    {isMounted ? qualifiedCount + potentialCount : 0}
                   </span>
                   <span className="text-[12px] text-blue-100">available</span>
                 </div>
@@ -5773,18 +5773,18 @@ export default function ReviewDataPage() {
                     Opportunities
                   </DialogTitle>
                   <p className="text-[14px] text-gray-500 mt-1">
-                    {qualifiedCount} Qualified · {potentialCount} Potential · Based on your data analysis
+                    {isMounted ? qualifiedCount : 0} Qualified · {isMounted ? potentialCount : 0} Potential · Based on your data analysis
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-100">
                   <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                  <span className="text-[14px] font-semibold text-emerald-700">{qualifiedCount} Qualified</span>
+                  <span className="text-[14px] font-semibold text-emerald-700">{isMounted ? qualifiedCount : 0} Qualified</span>
                 </div>
                 <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-amber-50 border border-amber-100">
                   <Circle className="h-5 w-5 text-amber-500" />
-                  <span className="text-[14px] font-semibold text-amber-700">{potentialCount} Potential</span>
+                  <span className="text-[14px] font-semibold text-amber-700">{isMounted ? potentialCount : 0} Potential</span>
                 </div>
               </div>
             </div>
