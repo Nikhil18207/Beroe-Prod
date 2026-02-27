@@ -29,6 +29,59 @@ import {
   calculateDeterministicConfidence,
   type ProofPointResult
 } from "@/lib/calculations/procurement-metrics";
+// Inline column detection helpers (to avoid SSR module issues)
+const LOCATION_PATTERNS = [
+  'supplier_region', 'supplierregion', 'supplier_country', 'suppliercountry',
+  'region', 'country', 'location', 'geography', 'geo', 'territory',
+  'supplier_location', 'supplierlocation', 'origin', 'source_country',
+  'sourcecountry', 'ship_from', 'shipfrom', 'origin_country'
+];
+
+const SPEND_PATTERNS = [
+  'total_spend', 'totalspend', 'spend', 'spend_amount', 'spendamount',
+  'amount', 'value', 'total', 'cost', 'price', 'usd', 'dollar',
+  'total spend', 'spend_usd', 'amount_usd', 'total_amount'
+];
+
+const findMatchingColumn = (headers: string[], patterns: string[]): string | null => {
+  const normalizedHeaders = headers.map(h => h?.toLowerCase().replace(/[^a-z0-9]/g, '') || '');
+  for (const pattern of patterns) {
+    const normalizedPattern = pattern.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const idx = normalizedHeaders.findIndex(h => h.includes(normalizedPattern) || normalizedPattern.includes(h));
+    if (idx !== -1) return headers[idx];
+  }
+  return null;
+};
+
+const getLocation = (row: Record<string, unknown>, headers: string[]): string => {
+  const col = findMatchingColumn(headers, LOCATION_PATTERNS);
+  if (col && row[col]) return String(row[col]);
+  // Fallback: try common column names directly
+  for (const key of Object.keys(row)) {
+    const lower = key.toLowerCase();
+    if (lower.includes('region') || lower.includes('country') || lower.includes('location')) {
+      if (row[key]) return String(row[key]);
+    }
+  }
+  return '';
+};
+
+const getSpend = (row: Record<string, unknown>, headers: string[]): number => {
+  const col = findMatchingColumn(headers, SPEND_PATTERNS);
+  if (col && row[col]) {
+    const val = parseFloat(String(row[col]).replace(/[^0-9.-]/g, ''));
+    if (!isNaN(val)) return val;
+  }
+  // Fallback: try common column names directly
+  for (const key of Object.keys(row)) {
+    const lower = key.toLowerCase();
+    if (lower.includes('spend') || lower.includes('amount') || lower.includes('total') || lower.includes('value')) {
+      const val = parseFloat(String(row[key]).replace(/[^0-9.-]/g, ''));
+      if (!isNaN(val) && val > 0) return val;
+    }
+  }
+  return 0;
+};
 import {
   BarChart,
   Bar,
@@ -4949,16 +5002,18 @@ Only respond with the JSON array, no other text.`,
                                       <span className="text-[12px] font-semibold text-gray-900">Supplier Geographic Concentration</span>
                                     </div>
                                     {(() => {
-                                      // Calculate from spend data
+                                      // Calculate from spend data using inline column detection
                                       const spendFile = state.persistedReviewData?.spendFile;
                                       let regionData: Record<string, number> = {};
                                       let totalRegionSpend = 0;
 
                                       if (spendFile?.parsedData?.rows && Array.isArray(spendFile.parsedData.rows)) {
+                                        const headers = spendFile.parsedData.headers || spendFile.columns || [];
+
                                         spendFile.parsedData.rows.forEach((row: Record<string, unknown>) => {
-                                          const region = String(row.Supplier_Region || row.supplier_region || row.Supplier_Country || row.supplier_country || row.region || row.Region || row.country || row.Country || '');
-                                          const spend = parseFloat(String(row['Total Spend _USD_Mn/metric ton'] || row.total_spend || row.spend || row.Spend || row.amount || 0));
-                                          if (region && !isNaN(spend) && spend > 0) {
+                                          const region = getLocation(row, headers);
+                                          const spend = getSpend(row, headers);
+                                          if (region && spend > 0) {
                                             regionData[region] = (regionData[region] || 0) + spend;
                                             totalRegionSpend += spend;
                                           }
@@ -4976,16 +5031,18 @@ Only respond with the JSON array, no other text.`,
                                     })()}
                                   </div>
                                   {(() => {
-                                    // Calculate geographic concentration from spend data
+                                    // Calculate geographic concentration from spend data using inline detection
                                     const spendFile = state.persistedReviewData?.spendFile;
                                     let regionData: Record<string, number> = {};
                                     let totalRegionSpend = 0;
 
                                     if (spendFile?.parsedData?.rows && Array.isArray(spendFile.parsedData.rows)) {
+                                      const headers = spendFile.parsedData.headers || spendFile.columns || [];
+
                                       spendFile.parsedData.rows.forEach((row: Record<string, unknown>) => {
-                                        const region = String(row.Supplier_Region || row.supplier_region || row.Supplier_Country || row.supplier_country || row.region || row.Region || row.country || row.Country || '');
-                                        const spend = parseFloat(String(row['Total Spend _USD_Mn/metric ton'] || row.total_spend || row.spend || row.Spend || row.amount || 0));
-                                        if (region && !isNaN(spend) && spend > 0) {
+                                        const region = getLocation(row, headers);
+                                        const spend = getSpend(row, headers);
+                                        if (region && spend > 0) {
                                           regionData[region] = (regionData[region] || 0) + spend;
                                           totalRegionSpend += spend;
                                         }

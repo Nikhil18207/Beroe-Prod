@@ -356,7 +356,7 @@ function OpportunitiesContent() {
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
-          <main className="px-16 py-8 pb-32">
+          <main className="px-6 py-12 pb-32">
 
             {/* Opportunities Header */}
             <div className="mb-10">
