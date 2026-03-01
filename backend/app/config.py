@@ -85,10 +85,10 @@ class Settings(BaseSettings):
     # CORS - Frontend URLs
     # Set CORS_ORIGINS env var in Railway with your Vercel URL
     # Example: "https://your-app.vercel.app,http://localhost:3000"
-    cors_origins: str = "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000"
+    cors_origins: str = "https://beroe1.vercel.app,http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000"
 
     # Frontend URL (for production - set in Railway env vars)
-    frontend_url: str = "http://localhost:3000"
+    frontend_url: str = "https://beroe1.vercel.app"
 
     # Logging
     log_level: str = "INFO"
@@ -100,9 +100,9 @@ class Settings(BaseSettings):
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS origins into a list."""
-        if self.cors_origins == "*":
+        if not self.cors_origins or self.cors_origins.strip() == "*":
             return ["*"]
-        return [origin.strip() for origin in self.cors_origins.split(",")]
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
     @property
     def allowed_extensions_list(self) -> List[str]:
