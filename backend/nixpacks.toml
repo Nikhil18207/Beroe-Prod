@@ -1,9 +1,3 @@
-# Nixpacks configuration for Railway
-[phases.setup]
-nixPkgs = ["python311"]
-
-[phases.install]
-cmds = ["python -m pip install -r requirements.txt"]
-
+# Simplified Nixpacks configuration for Railway
 [start]
 cmd = "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
