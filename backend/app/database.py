@@ -1,59 +1,68 @@
 """
 Database Configuration
-PostgreSQL with SQLAlchemy async support and pgvector for embeddings.
+PostgreSQL with SQLAlchemy async support.
+Engine is created lazily to prevent startup crashes if DB is misconfigured.
 """
 
-from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from typing import AsyncGenerator, Optional
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker, AsyncEngine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+import logging
 
-from app.config import settings
-
-# Async engine for FastAPI
-# statement_cache_size=0 is required for Supabase connection pooler compatibility
-async_engine = create_async_engine(
-    settings.database_url,
-    echo=settings.debug,
-    future=True,
-    pool_size=10,
-    max_overflow=20,
-    pool_pre_ping=True,
-    connect_args={
-        "statement_cache_size": 0,
-        "prepared_statement_cache_size": 0,
-    },
-)
-
-# Async session factory
-AsyncSessionLocal = async_sessionmaker(
-    bind=async_engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autocommit=False,
-    autoflush=False,
-)
-
-# Alias for use outside of FastAPI dependency injection (e.g., WebSockets)
-async_session_factory = AsyncSessionLocal
-
-# Sync engine for Alembic migrations
-sync_engine = create_engine(
-    settings.database_sync_url,
-    echo=settings.debug,
-    pool_pre_ping=True,
-)
-
-# Sync session factory
-SyncSessionLocal = sessionmaker(
-    bind=sync_engine,
-    autocommit=False,
-    autoflush=False,
-)
+logger = logging.getLogger(__name__)
 
 # Base class for models
 Base = declarative_base()
+
+# Engine and session factory - created lazily
+_async_engine: Optional[AsyncEngine] = None
+_AsyncSessionLocal: Optional[async_sessionmaker] = None
+
+
+def _get_settings():
+    """Import settings lazily to avoid circular imports."""
+    from app.config import settings
+    return settings
+
+
+def get_engine() -> AsyncEngine:
+    """Get or create the async engine (lazy initialization)."""
+    global _async_engine
+    if _async_engine is None:
+        settings = _get_settings()
+        _async_engine = create_async_engine(
+            settings.database_url,
+            echo=settings.debug,
+            future=True,
+            pool_size=5,
+            max_overflow=10,
+            pool_pre_ping=True,
+            pool_timeout=30,
+            connect_args={
+                "statement_cache_size": 0,
+                "prepared_statement_cache_size": 0,
+            },
+        )
+    return _async_engine
+
+
+def get_session_factory() -> async_sessionmaker:
+    """Get or create the async session factory (lazy initialization)."""
+    global _AsyncSessionLocal
+    if _AsyncSessionLocal is None:
+        _AsyncSessionLocal = async_sessionmaker(
+            bind=get_engine(),
+            class_=AsyncSession,
+            expire_on_commit=False,
+            autocommit=False,
+            autoflush=False,
+        )
+    return _AsyncSessionLocal
+
+
+def async_session_factory():
+    """Return a new async session (callable alias for use in WebSockets/chat). Usage: async with async_session_factory() as db:"""
+    return get_session_factory()()
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -61,7 +70,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     Dependency to get database session.
     Usage: db: AsyncSession = Depends(get_db)
     """
-    async with AsyncSessionLocal() as session:
+    session_factory = get_session_factory()
+    async with session_factory() as session:
         try:
             yield session
             await session.commit()
@@ -74,7 +84,8 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db() -> None:
     """Initialize database tables."""
-    async with async_engine.begin() as conn:
+    engine = get_engine()
+    async with engine.begin() as conn:
         # Import all models here to ensure they're registered
         from app.models import (
             user, session, portfolio, opportunity, proof_point,
@@ -87,4 +98,7 @@ async def init_db() -> None:
 
 async def close_db() -> None:
     """Close database connections."""
-    await async_engine.dispose()
+    global _async_engine
+    if _async_engine is not None:
+        await _async_engine.dispose()
+        _async_engine = None
