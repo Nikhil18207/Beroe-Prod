@@ -41,9 +41,14 @@ async def lifespan(app: FastAPI):
 
     # Initialize database (optional - allows running without DB for demo endpoints)
     try:
-        await init_db()
+        import asyncio
+        # Add a timeout to prevent hanging the whole startup if DB is unreachable
+        await asyncio.wait_for(init_db(), timeout=10.0)
         logger.info("Database initialized successfully")
         app.state.db_available = True
+    except asyncio.TimeoutError:
+        logger.error("Database initialization timed out - running in demo mode")
+        app.state.db_available = False
     except Exception as e:
         logger.warning("Database not available - running in demo mode", error=str(e))
         app.state.db_available = False
