@@ -15,7 +15,7 @@ import {
   AlertCircle,
   Loader2
 } from "lucide-react";
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApp } from "@/context/AppContext";
@@ -1155,7 +1155,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export default function OpportunityDetailPage() {
+function OpportunityDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { state, actions } = useApp();
@@ -8166,5 +8166,20 @@ Only respond with the JSON array, no other text.`,
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function OpportunityDetailPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-[#000C2A]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-[#E5B800]"></div>
+          <p className="text-[#E5B800] animate-pulse font-medium">Loading Opportunity Analytics...</p>
+        </div>
+      </div>
+    }>
+      <OpportunityDetailContent />
+    </Suspense>
   );
 }
