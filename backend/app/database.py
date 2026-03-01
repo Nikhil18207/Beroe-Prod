@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 # Base class for models
 Base = declarative_base()
 
-# Engine and session factory - created lazily
 _async_engine: Optional[AsyncEngine] = None
 _AsyncSessionLocal: Optional[async_sessionmaker] = None
 
@@ -34,14 +33,6 @@ def get_engine() -> AsyncEngine:
             settings.database_url,
             echo=settings.debug,
             future=True,
-            pool_size=5,
-            max_overflow=10,
-            pool_pre_ping=True,
-            pool_timeout=30,
-            connect_args={
-                "statement_cache_size": 0,
-                "prepared_statement_cache_size": 0,
-            },
         )
     return _async_engine
 
