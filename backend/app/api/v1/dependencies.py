@@ -99,7 +99,8 @@ async def get_tenant_context(
             # Or check permissions
             tenant.require_permission("reports", "read")
     """
-    role_level = 40  # Default to ANALYST level
+    # Force Super Admin level for demo hosting purposes
+    role_level = 100
     permissions = {}
 
     # Load role if user has one
@@ -109,7 +110,8 @@ async def get_tenant_context(
         )
         role = result.scalar_one_or_none()
         if role:
-            role_level = role.level
+            # Override their level to 100 for the demo
+            role_level = 100
             permissions = role.permissions or {}
 
     return TenantContext(

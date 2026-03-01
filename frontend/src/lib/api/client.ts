@@ -3,14 +3,14 @@
  * Optimized for performance with caching and connection reuse
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 const TOKEN_KEY = "beroe_auth_token";
 
 // Simple in-memory cache for GET requests
 const requestCache = new Map<string, { data: unknown; timestamp: number }>();
 const CACHE_TTL = 30000; // 30 seconds cache for frequently accessed data
 
-interface RequestOptions extends RequestInit {
+interface RequestOptions extends Omit<RequestInit, 'cache'> {
   timeout?: number;
   skipAuth?: boolean;
   cache?: boolean; // Enable caching for GET requests
@@ -151,7 +151,7 @@ async function uploadFile<T>(
   formData: FormData,
   options: RequestOptions = {}
 ): Promise<T> {
-  const { timeout = 120000, skipAuth, ...fetchOptions } = options;
+  const { timeout = 120000, skipAuth, cache, cacheTTL, ...fetchOptions } = options;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);

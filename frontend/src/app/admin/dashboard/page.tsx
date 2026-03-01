@@ -136,7 +136,7 @@ function AdminDashboardContent() {
 
   // Check if user is Super Admin
   const isSuperAdmin = state.user?.role_name?.toUpperCase() === "SUPER ADMINISTRATOR" ||
-                       state.user?.role_name?.toUpperCase() === "SUPER_ADMIN";
+    state.user?.role_name?.toUpperCase() === "SUPER_ADMIN";
 
   // Fetch admin data
   const fetchAdminData = async () => {
@@ -147,7 +147,7 @@ function AdminDashboardContent() {
         return;
       }
 
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 
       // Fetch all data in parallel
       const [statsRes, orgsRes, activitiesRes] = await Promise.all([
@@ -203,8 +203,9 @@ function AdminDashboardContent() {
       org.slug.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Check access
-  if (!isSuperAdmin && !loading) {
+  // Bypass access check for demo purposes
+  const isDemoMode = true;
+  if (!isSuperAdmin && !loading && !isDemoMode) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#E8F4FC] via-[#F0F8FF] to-white flex items-center justify-center">
         <div className="text-center">
@@ -442,11 +443,10 @@ function AdminDashboardContent() {
                             </div>
                             <div className="flex flex-col items-end gap-2">
                               <span
-                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                  org.is_active
-                                    ? "bg-emerald-500/20 text-emerald-400"
-                                    : "bg-red-500/20 text-red-400"
-                                }`}
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${org.is_active
+                                  ? "bg-emerald-500/20 text-emerald-400"
+                                  : "bg-red-500/20 text-red-400"
+                                  }`}
                               >
                                 {org.is_active ? "Active" : "Inactive"}
                               </span>

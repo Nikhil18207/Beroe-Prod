@@ -35,7 +35,7 @@ function ResetPasswordContent() {
 
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/auth/verify-reset-token/${token}`
+          `${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/v1/auth/verify-reset-token/${token}`
         );
         const data = await response.json();
 
@@ -75,7 +75,7 @@ function ResetPasswordContent() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/auth/reset-password`,
+        `${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/v1/auth/reset-password`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

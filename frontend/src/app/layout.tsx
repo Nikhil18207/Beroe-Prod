@@ -28,8 +28,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Preconnect to API for faster requests */}
-        <link rel="preconnect" href="http://localhost:8000" />
-        <link rel="dns-prefetch" href="http://localhost:8000" />
+        <link rel="preconnect" href="http://127.0.0.1:8000" />
+        <link rel="dns-prefetch" href="http://127.0.0.1:8000" />
         {/* Preload critical fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

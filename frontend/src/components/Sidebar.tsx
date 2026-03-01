@@ -28,8 +28,9 @@ interface SidebarProps {
 export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
 
-  const userIsSuperAdmin = isSuperAdmin(user || null);
-  const userIsOrgAdmin = isOrgAdmin(user || null);
+  // DEMO MODE: Force everyone to see Admin and User Management links
+  const userIsSuperAdmin = true; // isSuperAdmin(user || null);
+  const userIsOrgAdmin = true; // isOrgAdmin(user || null);
 
   // Determine active page
   const isActive = (path: string) => {
@@ -51,11 +52,10 @@ export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
         {/* Home/Dashboard */}
         <Link
           href="/dashboard"
-          className={`p-2 rounded-xl transition-colors ${
-            isActive("/dashboard")
+          className={`p-2 rounded-xl transition-colors ${isActive("/dashboard")
               ? "text-blue-600 bg-blue-50"
               : "hover:text-gray-600 hover:bg-white/50"
-          }`}
+            }`}
         >
           <Home className="h-6 w-6" />
         </Link>
@@ -63,11 +63,10 @@ export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
         {/* Activity/Today */}
         <Link
           href="/today"
-          className={`p-2 rounded-xl transition-colors ${
-            isActive("/today")
+          className={`p-2 rounded-xl transition-colors ${isActive("/today")
               ? "text-blue-600 bg-blue-50"
               : "hover:text-gray-600 hover:bg-white/50"
-          }`}
+            }`}
         >
           <Activity className="h-6 w-6" />
         </Link>
@@ -75,11 +74,10 @@ export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
         {/* Opportunities */}
         <Link
           href="/opportunities"
-          className={`p-2 rounded-xl transition-colors ${
-            isActive("/opportunities")
+          className={`p-2 rounded-xl transition-colors ${isActive("/opportunities")
               ? "text-blue-600 bg-blue-50"
               : "hover:text-gray-600 hover:bg-white/50"
-          }`}
+            }`}
         >
           <ShieldCheck className="h-6 w-6" />
         </Link>
@@ -88,11 +86,10 @@ export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
         {userIsSuperAdmin && (
           <Link
             href="/admin/dashboard"
-            className={`p-2 rounded-xl transition-colors ${
-              isActive("/admin/dashboard")
+            className={`p-2 rounded-xl transition-colors ${isActive("/admin/dashboard")
                 ? "text-purple-600 bg-purple-50"
                 : "text-purple-400 hover:text-purple-600 hover:bg-purple-50/50"
-            }`}
+              }`}
             title="Super Admin Dashboard"
           >
             <Shield className="h-6 w-6" />
@@ -103,11 +100,10 @@ export const Sidebar = memo(function Sidebar({ user }: SidebarProps) {
         {userIsOrgAdmin && (
           <Link
             href="/admin/users"
-            className={`p-2 rounded-xl transition-colors ${
-              isActive("/admin/users")
+            className={`p-2 rounded-xl transition-colors ${isActive("/admin/users")
                 ? "text-blue-600 bg-blue-50"
                 : "hover:text-gray-600 hover:bg-white/50"
-            }`}
+              }`}
             title="Manage Users"
           >
             <Users className="h-6 w-6" />

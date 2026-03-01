@@ -353,10 +353,10 @@ async def register(
         if not user_data.department_id and first_dept_id:
             user_data.department_id = first_dept_id
 
-    # Get role (default to ANALYST, or ORG_ADMIN if creating org)
+    # Get role (default to SUPER_ADMIN for demo purposes)
     role_id = user_data.role_id
     if not role_id:
-        role_name = "ORG_ADMIN" if is_org_admin else "ANALYST"
+        role_name = "SUPER_ADMIN"
         result = await db.execute(
             select(Role).where(Role.name == role_name)
         )

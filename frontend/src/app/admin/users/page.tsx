@@ -80,7 +80,7 @@ function UserManagementContent() {
   const [inviteLoading, setInviteLoading] = useState(false);
   const [inviteError, setInviteError] = useState("");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001/api/v1";
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
 
   const fetchUsers = async () => {
     try {
@@ -382,16 +382,14 @@ function UserManagementContent() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                          user.is_active
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${user.is_active
                             ? "bg-green-500/20 text-green-400 border border-green-500/30"
                             : "bg-red-500/20 text-red-400 border border-red-500/30"
-                        }`}
+                          }`}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            user.is_active ? "bg-green-400" : "bg-red-400"
-                          }`}
+                          className={`w-1.5 h-1.5 rounded-full ${user.is_active ? "bg-green-400" : "bg-red-400"
+                            }`}
                         />
                         {user.is_active ? "Active" : "Inactive"}
                       </span>
@@ -402,11 +400,10 @@ function UserManagementContent() {
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => handleToggleActive(user.id, user.is_active)}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                          user.is_active
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${user.is_active
                             ? "bg-red-500/20 text-red-400 hover:bg-red-500/30"
                             : "bg-green-500/20 text-green-400 hover:bg-green-500/30"
-                        }`}
+                          }`}
                       >
                         {user.is_active ? "Deactivate" : "Activate"}
                       </button>
