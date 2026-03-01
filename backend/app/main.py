@@ -150,6 +150,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(api_router, prefix="/api/v1")
 
 
+@api_router.get("/", tags=["Health"])
+async def api_root():
+    """API Root endpoint."""
+    return {"status": "ok", "message": "Beroe AI API v1 is running"}
+
+
 # Root endpoint
 @app.get("/")
 async def root():
