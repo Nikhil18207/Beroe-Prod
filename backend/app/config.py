@@ -99,10 +99,27 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> List[str]:
-        """Parse CORS origins into a list."""
-        if not self.cors_origins or self.cors_origins.strip() == "*":
+        """Parse CORS origins into a list. Handles comma-separated strings and JSON-style lists."""
+        if not self.cors_origins:
             return ["*"]
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+            
+        raw = self.cors_origins.strip()
+        if raw == "*":
+            return ["*"]
+            
+        # Handle JSON-style list if present
+        if raw.startswith("[") and raw.endswith("]"):
+            import json
+            try:
+                origins = json.loads(raw)
+                if isinstance(origins, list):
+                    return [str(o).strip() for o in origins if str(o).strip()]
+            except Exception:
+                # Fallback to string cleaning if JSON parse fails
+                raw = raw.strip("[]").replace('"', "").replace("'", "")
+        
+        # Standard comma-separated parsing
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
     @property
     def allowed_extensions_list(self) -> List[str]:
