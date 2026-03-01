@@ -12,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from app.config import settings
 
 # Async engine for FastAPI
+# statement_cache_size=0 is required for Supabase connection pooler compatibility
 async_engine = create_async_engine(
     settings.database_url,
     echo=settings.debug,
@@ -19,6 +20,10 @@ async_engine = create_async_engine(
     pool_size=10,
     max_overflow=20,
     pool_pre_ping=True,
+    connect_args={
+        "statement_cache_size": 0,
+        "prepared_statement_cache_size": 0,
+    },
 )
 
 # Async session factory
